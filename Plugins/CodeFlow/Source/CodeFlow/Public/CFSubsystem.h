@@ -30,8 +30,18 @@ public:
 	bool IsTickable() const override { return true; }
 	bool IsTickableWhenPaused() const override { return true; }
 
-	template<typename T>
-	uint64 AddNode(UObject* InOwner, TUniqueFunction<void(T*)>&& CustomSettings);
+	template<typename T, typename ... Ts>
+	uint64 AddNode(UObject* InOwner, Ts&& ... Args)
+	{
+		T* NewNode = NewObject<T>(this);
+		NewNode->Owner = InOwner;
+		NewNode->HandleId = NextHandleId++;
+		NewNode->Setup(Forward<Ts>(Args)...);
+		NewNode->Init();
+		Nodes.Add(NewNode);
+
+		return NewNode->HandleId;
+	}
 
 	void RemoveNode(uint64 HandleId);
 

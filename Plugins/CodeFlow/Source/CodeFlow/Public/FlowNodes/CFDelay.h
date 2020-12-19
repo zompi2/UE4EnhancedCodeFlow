@@ -35,4 +35,10 @@ public:
 	{
 		return Super::IsValid() && Func;
 	}
+
+	void Setup(float InDelayTime, TUniqueFunction<void()>&& InFunc)
+	{
+		DelayTime = InDelayTime;
+		Func = MoveTemp(InFunc);
+	}
 };

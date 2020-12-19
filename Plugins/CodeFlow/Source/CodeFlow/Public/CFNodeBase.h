@@ -14,6 +14,7 @@ class CODEFLOW_API UCFNodeBase : public UObject
 
 public:
 
+	void Setup() {}
 	virtual void Init() {}
 	virtual void Tick(float DeltaTime) {}
 

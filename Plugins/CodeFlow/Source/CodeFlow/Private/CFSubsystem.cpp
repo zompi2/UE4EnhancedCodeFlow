@@ -46,19 +46,6 @@ void UCFSubsystem::Tick(float DeltaTime)
 	}
 }
 
-template<typename T>
-uint64 UCFSubsystem::AddNode(UObject* InOwner, TUniqueFunction<void(T*)>&& CustomSettings)
-{
-	T* NewNode = NewObject<T>(this);
-	NewNode->Owner = InOwner;
-	NewNode->HandleId = NextHandleId++;
-	CustomSettings(NewNode);
-	NewNode->Init();
-	Nodes.Add(NewNode);
-
-	return NewNode->HandleId;
-}
-
 void UCFSubsystem::RemoveNode(uint64 HandleId)
 {
 	if (UCFNodeBase** NodeFound = Nodes.FindByPredicate([&](UCFNodeBase* Node) {return Node->HandleId; }))

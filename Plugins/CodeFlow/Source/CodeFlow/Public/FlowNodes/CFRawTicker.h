@@ -23,4 +23,9 @@ public:
 	{
 		return Super::IsValid() && Func;
 	}
+
+	void Setup(TUniqueFunction<void(float)>&& InFunc) 
+	{
+		Func = MoveTemp(InFunc);
+	}
 };

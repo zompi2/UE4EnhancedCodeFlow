@@ -19,6 +19,6 @@ void AFlowTestGameModeBase::BeginPlay()
 
 	UFlow::Delay(this, 2.f, [this]()
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, TEXT("DELAYED FUNCTION!"));
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("DELAYED FUNCTION!"));
 	});
 }
