@@ -12,7 +12,7 @@ void UECFSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 		checkf(Singleton == nullptr, TEXT("There can be only one Code Flow Subsystem!"));
 		Singleton = this;
 
-		NextHandleId = 0;
+		LastHandleId.Invalidate();
 	}
 }
 
@@ -46,9 +46,9 @@ void UECFSubsystem::Tick(float DeltaTime)
 	}
 }
 
-void UECFSubsystem::RemoveNode(uint64 HandleId)
+void UECFSubsystem::RemoveNode(FECFNodeHandle HandleId)
 {
-	if (UECFNodeBase** NodeFound = Nodes.FindByPredicate([&](UECFNodeBase* Node) { return Node->HandleId == HandleId; }))
+	if (UECFNodeBase** NodeFound = Nodes.FindByPredicate([&](UECFNodeBase* Node) { return Node->GetHandleId() == HandleId; }))
 	{
 		Nodes.Remove(*NodeFound);
 	}

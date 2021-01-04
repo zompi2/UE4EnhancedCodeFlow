@@ -10,6 +10,10 @@ class ENHANCEDCODEFLOW_API UECFRawTicker : public UECFNodeBase
 {
 	GENERATED_BODY()
 
+protected:
+
+	TUniqueFunction<void(float)> Func;
+
 public:
 
 	void Tick(float DeltaTime) override 
@@ -17,15 +21,21 @@ public:
 		Func(DeltaTime);
 	}
 
-	TUniqueFunction<void(float)> Func;
-
 	bool IsValid() override
 	{
 		return Super::IsValid() && Func;
 	}
 
-	void Setup(TUniqueFunction<void(float)>&& InFunc) 
+	bool Setup(TUniqueFunction<void(float)>&& InFunc) 
 	{
 		Func = MoveTemp(InFunc);
+		if (Func)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 };

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Tickable.h"
+#include "ECFNodeHandle.h"
 #include "ECFSubsystem.generated.h"
 
 class UECFNodeBase;
@@ -14,15 +15,13 @@ class ENHANCEDCODEFLOW_API UECFSubsystem : public UGameInstanceSubsystem, public
 {
 	GENERATED_BODY()
 
-public:
+	friend class UEnhancedCodeFlow;
 
-	/** Implement this for initialization of instances of the system */
+protected:
+
+	/** UGameInstanceSubsystem interface implementation */
 	void Initialize(FSubsystemCollectionBase& Collection) override;
-
-	/** Implement this for deinitialization of instances of the system */
 	void Deinitialize() override;
-
-	static UECFSubsystem* Get();
 
 	/** FTickableGameObject interface implementation */
 	void Tick(float DeltaTime) override;
@@ -30,27 +29,32 @@ public:
 	bool IsTickable() const override { return true; }
 	bool IsTickableWhenPaused() const override { return true; }
 
+	// Add Node of async task to list. Returns the task id.
 	template<typename T, typename ... Ts>
-	uint64 AddNode(UObject* InOwner, Ts&& ... Args)
+	FECFNodeHandle AddNode(UObject* InOwner, Ts&& ... Args)
 	{
 		T* NewNode = NewObject<T>(this);
-		NewNode->Owner = InOwner;
-		NewNode->HandleId = NextHandleId++;
-		NewNode->Setup(Forward<Ts>(Args)...);
-		NewNode->Init();
-		Nodes.Add(NewNode);
-
-		return NewNode->HandleId;
+		NewNode->SetOwner(InOwner, ++LastHandleId);
+		if (NewNode->Setup(Forward<Ts>(Args)...))
+		{
+			NewNode->Init();
+			Nodes.Add(NewNode);
+			return NewNode->GetHandleId();
+		}
+		return FECFNodeHandle();
 	}
 
-	void RemoveNode(uint64 HandleId);
-
-private:
-
-	static UECFSubsystem* Singleton;
-
+	// Remove Node of async task from list.
+	void RemoveNode(FECFNodeHandle HandleId);
+	
+	// List of active nodes.
 	UPROPERTY()
 	TArray<UECFNodeBase*> Nodes;
 
-	uint64 NextHandleId;
+	// Id of the last created node.
+	FECFNodeHandle LastHandleId;
+	
+	/** Singleton handling */
+	static UECFSubsystem* Singleton;
+	static UECFSubsystem* Get();
 };

@@ -10,7 +10,28 @@ class ENHANCEDCODEFLOW_API UECFDelay : public UECFNodeBase
 {
 	GENERATED_BODY()
 
+protected:
+
+	TUniqueFunction<void()> Func;
+	float DelayTime;
+	float CurrentTime;
+
 public:
+
+	bool Setup(float InDelayTime, TUniqueFunction<void()>&& InFunc)
+	{
+		DelayTime = InDelayTime;
+		Func = MoveTemp(InFunc);
+
+		if (Func && DelayTime >= 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	void Init() override 
 	{
@@ -23,22 +44,12 @@ public:
 		if (CurrentTime > DelayTime)
 		{
 			Func();
-			bHasFinished = true;
+			MarkAsFinished();
 		}
 	}
-
-	TUniqueFunction<void()> Func;
-	float DelayTime;
-	float CurrentTime;
 
 	bool IsValid() override
 	{
 		return Super::IsValid() && Func;
-	}
-
-	void Setup(float InDelayTime, TUniqueFunction<void()>&& InFunc)
-	{
-		DelayTime = InDelayTime;
-		Func = MoveTemp(InFunc);
 	}
 };

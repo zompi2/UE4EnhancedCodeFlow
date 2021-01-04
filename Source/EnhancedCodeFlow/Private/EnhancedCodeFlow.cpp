@@ -1,8 +1,22 @@
 // Copyright (c) 2021 Damian Nowakowski. All rights reserved.
 
-#include "Modules/ModuleInterface.h"
+#include "EnhancedCodeFlow.h"
+#include "ECFSubsystem.h"
 
-class FEnhancedCodeFlow : public IModuleInterface
-{};
+#include "CodeFlowNodes/ECFRawTicker.h"
+#include "CodeFlowNodes/ECFDelay.h"
 
-IMPLEMENT_MODULE(FEnhancedCodeFlow, EnhancedCodeFlow)
+void UEnhancedCodeFlow::StopTask(FECFNodeHandle Handle)
+{
+	UECFSubsystem::Get()->RemoveNode(Handle);
+}
+
+FECFNodeHandle UEnhancedCodeFlow::AddRawTicker(UObject* InOwner, TUniqueFunction<void(float)>&& InFunc)
+{
+	return UECFSubsystem::Get()->AddNode<UECFRawTicker>(InOwner, MoveTemp(InFunc));
+}
+
+FECFNodeHandle UEnhancedCodeFlow::Delay(UObject* InOwner, float InDelayTime, TUniqueFunction<void()>&& InFunc)
+{
+	return UECFSubsystem::Get()->AddNode<UECFDelay>(InOwner, InDelayTime, MoveTemp(InFunc));
+}
