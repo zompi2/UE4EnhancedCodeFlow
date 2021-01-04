@@ -1,11 +1,11 @@
-// Copyright (c) 2020 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2021 Damian Nowakowski. All rights reserved.
 
-#include "CFSubsystem.h"
-#include "CFNodeBase.h"
+#include "ECFSubsystem.h"
+#include "ECFNodeBase.h"
 
-UCFSubsystem* UCFSubsystem::Singleton = nullptr;
+UECFSubsystem* UECFSubsystem::Singleton = nullptr;
 
-void UCFSubsystem::Initialize(FSubsystemCollectionBase& Collection)
+void UECFSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	if (HasAnyFlags(RF_ClassDefaultObject) == false)
 	{
@@ -16,7 +16,7 @@ void UCFSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	}
 }
 
-void UCFSubsystem::Deinitialize()
+void UECFSubsystem::Deinitialize()
 {
 	if (HasAnyFlags(RF_ClassDefaultObject) == false)
 	{
@@ -26,7 +26,7 @@ void UCFSubsystem::Deinitialize()
 	}
 }
 
-UCFSubsystem* UCFSubsystem::Get()
+UECFSubsystem* UECFSubsystem::Get()
 {
 	// Use pointer to itself as game instance subsystem works like singletons and we can use
 	// cached pointer to it without passing a pointer to world object.
@@ -34,10 +34,10 @@ UCFSubsystem* UCFSubsystem::Get()
 	return Singleton;
 }	
 
-void UCFSubsystem::Tick(float DeltaTime)
+void UECFSubsystem::Tick(float DeltaTime)
 {
-	Nodes.RemoveAll([](UCFNodeBase* Node){ return Node->IsValid() == false; });
-	for (UCFNodeBase* Node : Nodes)
+	Nodes.RemoveAll([](UECFNodeBase* Node){ return Node->IsValid() == false; });
+	for (UECFNodeBase* Node : Nodes)
 	{
 		if (Node->IsValid())
 		{
@@ -46,9 +46,9 @@ void UCFSubsystem::Tick(float DeltaTime)
 	}
 }
 
-void UCFSubsystem::RemoveNode(uint64 HandleId)
+void UECFSubsystem::RemoveNode(uint64 HandleId)
 {
-	if (UCFNodeBase** NodeFound = Nodes.FindByPredicate([&](UCFNodeBase* Node) {return Node->HandleId; }))
+	if (UECFNodeBase** NodeFound = Nodes.FindByPredicate([&](UECFNodeBase* Node) { return Node->HandleId == HandleId; }))
 	{
 		Nodes.Remove(*NodeFound);
 	}

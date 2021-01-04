@@ -1,14 +1,14 @@
-// Copyright (c) 2020 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2021 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Tickable.h"
-#include "CFNodeBase.generated.h"
+#include "ECFNodeBase.generated.h"
 
 UCLASS()
-class CODEFLOW_API UCFNodeBase : public UObject
+class ENHANCEDCODEFLOW_API UECFNodeBase : public UObject
 {
 	GENERATED_BODY()
 

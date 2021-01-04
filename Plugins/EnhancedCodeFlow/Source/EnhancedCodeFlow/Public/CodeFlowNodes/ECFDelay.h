@@ -1,12 +1,12 @@
-// Copyright (c) 2020 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2021 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
-#include "CFNodeBase.h"
-#include "CFDelay.generated.h"
+#include "ECFNodeBase.h"
+#include "ECFDelay.generated.h"
 
 UCLASS()
-class CODEFLOW_API UCFDelay : public UCFNodeBase
+class ENHANCEDCODEFLOW_API UECFDelay : public UECFNodeBase
 {
 	GENERATED_BODY()
 

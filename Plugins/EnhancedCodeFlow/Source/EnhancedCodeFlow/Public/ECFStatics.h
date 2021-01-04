@@ -1,13 +1,13 @@
-// Copyright (c) 2020 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2021 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "CFStatics.generated.h"
+#include "ECFStatics.generated.h"
 
 UCLASS()
-class CODEFLOW_API UCFStatics : public UBlueprintFunctionLibrary
+class ENHANCEDCODEFLOW_API UECFStatics : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
@@ -17,4 +17,4 @@ public:
 	static uint64 Delay(UObject* InOwner, float InDelayTime, TUniqueFunction<void()>&& InFunc);
 };
 
-using UFlow = UCFStatics;
+using UFlow = UECFStatics;

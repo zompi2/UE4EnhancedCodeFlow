@@ -1,12 +1,12 @@
-// Copyright (c) 2020 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2021 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
-#include "CFNodeBase.h"
-#include "CFRawTicker.generated.h"
+#include "ECFNodeBase.h"
+#include "ECFRawTicker.generated.h"
 
 UCLASS()
-class CODEFLOW_API UCFRawTicker : public UCFNodeBase
+class ENHANCEDCODEFLOW_API UECFRawTicker : public UECFNodeBase
 {
 	GENERATED_BODY()
 

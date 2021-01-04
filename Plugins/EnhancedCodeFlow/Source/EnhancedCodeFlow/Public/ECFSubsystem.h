@@ -1,16 +1,16 @@
-// Copyright (c) 2020 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2021 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Tickable.h"
-#include "CFSubsystem.generated.h"
+#include "ECFSubsystem.generated.h"
 
-class UCFNodeBase;
+class UECFNodeBase;
 
 UCLASS()
-class CODEFLOW_API UCFSubsystem : public UGameInstanceSubsystem, public FTickableGameObject
+class ENHANCEDCODEFLOW_API UECFSubsystem : public UGameInstanceSubsystem, public FTickableGameObject
 {
 	GENERATED_BODY()
 
@@ -22,11 +22,11 @@ public:
 	/** Implement this for deinitialization of instances of the system */
 	void Deinitialize() override;
 
-	static UCFSubsystem* Get();
+	static UECFSubsystem* Get();
 
 	/** FTickableGameObject interface implementation */
 	void Tick(float DeltaTime) override;
-	TStatId GetStatId() const override { RETURN_QUICK_DECLARE_CYCLE_STAT(CFSubsystem, STATGROUP_Tickables); }
+	TStatId GetStatId() const override { RETURN_QUICK_DECLARE_CYCLE_STAT(ECFSubsystem, STATGROUP_Tickables); }
 	bool IsTickable() const override { return true; }
 	bool IsTickableWhenPaused() const override { return true; }
 
@@ -47,10 +47,10 @@ public:
 
 private:
 
-	static UCFSubsystem* Singleton;
+	static UECFSubsystem* Singleton;
 
 	UPROPERTY()
-	TArray<UCFNodeBase*> Nodes;
+	TArray<UECFNodeBase*> Nodes;
 
 	uint64 NextHandleId;
 };

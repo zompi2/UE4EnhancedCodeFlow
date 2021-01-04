@@ -2,8 +2,8 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "1.0",
-	"FriendlyName": "CodeFlow",
-	"Description": "",
+	"FriendlyName": "EnhancedCodeFlow",
+	"Description": "Provides extra methods for enhancing the flow ot the game using code",
 	"Category": "Other",
 	"CreatedBy": "Damian Nowakowski",
 	"CreatedByURL": "",
@@ -16,7 +16,7 @@
 	"Installed": false,
 	"Modules": [
 		{
-			"Name": "CodeFlow",
+			"Name": "EnhancedCodeFlow",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}

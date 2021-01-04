@@ -2,7 +2,7 @@
 
 
 #include "FlowTestGameModeBase.h"
-#include "CFStatics.h"
+#include "ECFStatics.h"
 
 void AFlowTestGameModeBase::BeginPlay()
 {
@@ -17,8 +17,10 @@ void AFlowTestGameModeBase::BeginPlay()
 	});
 	*/
 
+	/*
 	UFlow::Delay(this, 2.f, [this]()
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("DELAYED FUNCTION!"));
 	});
+	*/
 }
