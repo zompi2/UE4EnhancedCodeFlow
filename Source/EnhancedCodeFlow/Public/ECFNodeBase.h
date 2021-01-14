@@ -35,16 +35,16 @@ public:
 		return HandleId;
 	}
 
+	void MarkAsFinished()
+	{
+		bHasFinished = true;
+	}
+
 private:
 
 	bool bHasFinished = false;
 
 protected:
-
-	void MarkAsFinished()
-	{
-		bHasFinished = true;
-	}
 
 	UPROPERTY()
 	TWeakObjectPtr<UObject> Owner;

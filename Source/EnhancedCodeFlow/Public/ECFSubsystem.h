@@ -38,7 +38,7 @@ protected:
 		if (NewNode->Setup(Forward<Ts>(Args)...))
 		{
 			NewNode->Init();
-			Nodes.Add(NewNode);
+			PendingAddNodes.Add(NewNode);
 			return NewNode->GetHandleId();
 		}
 		return FECFNodeHandle();
@@ -50,6 +50,10 @@ protected:
 	// List of active nodes.
 	UPROPERTY()
 	TArray<UECFNodeBase*> Nodes;
+
+	// List of nodes to be add in the future.
+	UPROPERTY()
+	TArray<UECFNodeBase*> PendingAddNodes;
 
 	// Id of the last created node.
 	FECFNodeHandle LastHandleId;

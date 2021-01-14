@@ -36,7 +36,14 @@ UECFSubsystem* UECFSubsystem::Get()
 
 void UECFSubsystem::Tick(float DeltaTime)
 {
+	// Remove all expired nodes first
 	Nodes.RemoveAll([](UECFNodeBase* Node){ return Node->IsValid() == false; });
+	
+	// Add all pending nodes
+	Nodes.Append(PendingAddNodes);
+	PendingAddNodes.Empty();
+
+	// Tick all active nodes
 	for (UECFNodeBase* Node : Nodes)
 	{
 		if (Node->IsValid())
@@ -50,6 +57,6 @@ void UECFSubsystem::RemoveNode(FECFNodeHandle HandleId)
 {
 	if (UECFNodeBase** NodeFound = Nodes.FindByPredicate([&](UECFNodeBase* Node) { return Node->GetHandleId() == HandleId; }))
 	{
-		Nodes.Remove(*NodeFound);
+		(*NodeFound)->MarkAsFinished();
 	}
 }
