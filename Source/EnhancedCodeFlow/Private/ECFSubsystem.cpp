@@ -53,10 +53,14 @@ void UECFSubsystem::Tick(float DeltaTime)
 	}
 }
 
-void UECFSubsystem::RemoveNode(FECFHandle HandleId)
+void UECFSubsystem::RemoveNode(FECFHandle& HandleId)
 {
-	if (UECFNodeBase** NodeFound = Nodes.FindByPredicate([&](UECFNodeBase* Node) { return Node->GetHandleId() == HandleId; }))
+	if (HandleId.IsValid())
 	{
-		(*NodeFound)->MarkAsFinished();
+		if (UECFNodeBase** NodeFound = Nodes.FindByPredicate([&](UECFNodeBase* Node) { return Node->GetHandleId() == HandleId; }))
+		{
+			(*NodeFound)->MarkAsFinished();
+			HandleId.Invalidate();
+		}
 	}
 }

@@ -45,7 +45,7 @@ protected:
 	}
 
 	// Remove Node of async task from list.
-	void RemoveNode(FECFHandle HandleId);
+	void RemoveNode(FECFHandle& HandleId);
 	
 	// List of active nodes.
 	UPROPERTY()

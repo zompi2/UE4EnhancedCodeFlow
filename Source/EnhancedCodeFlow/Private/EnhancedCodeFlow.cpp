@@ -7,12 +7,12 @@
 #include "CodeFlowNodes/ECFDelay.h"
 #include "CodeFlowNodes/ECFWaitAndExecute.h"
 
-void UEnhancedCodeFlow::StopTask(FECFHandle Handle)
+void UEnhancedCodeFlow::StopTask(FECFHandle& Handle)
 {
 	UECFSubsystem::Get()->RemoveNode(Handle);
 }
 
-FECFHandle UEnhancedCodeFlow::AddTicker(UObject* InOwner, TUniqueFunction<void(float, UECFNodeBase*)>&& InFunc)
+FECFHandle UEnhancedCodeFlow::AddTicker(UObject* InOwner, TUniqueFunction<void(float)>&& InFunc)
 {
 	return UECFSubsystem::Get()->AddNode<UECFTicker>(InOwner, MoveTemp(InFunc));
 }

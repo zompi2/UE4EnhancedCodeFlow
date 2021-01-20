@@ -21,9 +21,9 @@ public:
 
 protected:
 
-	TUniqueFunction<void(float, UECFNodeBase*)> Func;
+	TUniqueFunction<void(float)> Func;
 
-	bool Setup(TUniqueFunction<void(float, UECFNodeBase*)>&& InFunc)
+	bool Setup(TUniqueFunction<void(float)>&& InFunc)
 	{
 		Func = MoveTemp(InFunc);
 		if (Func)
@@ -38,7 +38,7 @@ protected:
 
 	void Tick(float DeltaTime) override
 	{
-		Func(DeltaTime, this);
+		Func(DeltaTime);
 	}
 
 };
