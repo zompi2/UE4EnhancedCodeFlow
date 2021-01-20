@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 
-class FECFNodeHandle
+class FECFHandle
 {
 
 public:
 
-	FECFNodeHandle()
+	FECFHandle()
 	: Handle(0)
 	{
 	}
@@ -24,17 +24,17 @@ public:
 		Handle = 0;
 	}
 
-	bool operator==(const FECFNodeHandle& Other) const
+	bool operator==(const FECFHandle& Other) const
 	{
 		return Handle == Other.Handle;
 	}
 
-	bool operator!=(const FECFNodeHandle& Other) const
+	bool operator!=(const FECFHandle& Other) const
 	{
 		return Handle != Other.Handle;
 	}
 
-	FECFNodeHandle& operator++()
+	FECFHandle& operator++()
 	{
 		Handle++;
 		return *this;

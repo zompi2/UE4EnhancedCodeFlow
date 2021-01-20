@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Tickable.h"
-#include "ECFNodeHandle.h"
+#include "ECFHandle.h"
 #include "ECFNodeBase.generated.h"
 
 UCLASS()
@@ -13,24 +13,16 @@ class ENHANCEDCODEFLOW_API UECFNodeBase : public UObject
 {
 	GENERATED_BODY()
 
+	friend class UECFSubsystem;
+
 public:
 
-	bool Setup() { return true; }
-	virtual void Init() {}
-	virtual void Tick(float DeltaTime) {}
-
-	virtual bool IsValid()
+	virtual bool IsValid() const
 	{
 		return bHasFinished == false && Owner.IsValid();
 	}
 
-	void SetOwner(const TWeakObjectPtr<UObject>& InOwner, const FECFNodeHandle& InHandleId)
-	{
-		Owner = InOwner;
-		HandleId = InHandleId;
-	}
-
-	FECFNodeHandle GetHandleId() const
+	FECFHandle GetHandleId() const
 	{
 		return HandleId;
 	}
@@ -40,14 +32,24 @@ public:
 		bHasFinished = true;
 	}
 
-private:
-
-	bool bHasFinished = false;
-
 protected:
+
+	bool Setup() { return true; }
+	virtual void Init() {}
+	virtual void Tick(float DeltaTime) {}
+
+	void SetOwner(const TWeakObjectPtr<UObject>& InOwner, const FECFHandle& InHandleId)
+	{
+		Owner = InOwner;
+		HandleId = InHandleId;
+	}
 
 	UPROPERTY()
 	TWeakObjectPtr<UObject> Owner;
 
-	FECFNodeHandle HandleId;
+	FECFHandle HandleId;
+
+private:
+
+	bool bHasFinished = false;
 };

@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Tickable.h"
-#include "ECFNodeHandle.h"
+#include "ECFHandle.h"
 #include "ECFSubsystem.generated.h"
 
 class UECFNodeBase;
@@ -31,7 +31,7 @@ protected:
 
 	// Add Node of async task to list. Returns the task id.
 	template<typename T, typename ... Ts>
-	FECFNodeHandle AddNode(UObject* InOwner, Ts&& ... Args)
+	FECFHandle AddNode(UObject* InOwner, Ts&& ... Args)
 	{
 		T* NewNode = NewObject<T>(this);
 		NewNode->SetOwner(InOwner, ++LastHandleId);
@@ -41,11 +41,11 @@ protected:
 			PendingAddNodes.Add(NewNode);
 			return NewNode->GetHandleId();
 		}
-		return FECFNodeHandle();
+		return FECFHandle();
 	}
 
 	// Remove Node of async task from list.
-	void RemoveNode(FECFNodeHandle HandleId);
+	void RemoveNode(FECFHandle HandleId);
 	
 	// List of active nodes.
 	UPROPERTY()
@@ -56,7 +56,7 @@ protected:
 	TArray<UECFNodeBase*> PendingAddNodes;
 
 	// Id of the last created node.
-	FECFNodeHandle LastHandleId;
+	FECFHandle LastHandleId;
 	
 	/** Singleton handling */
 	static UECFSubsystem* Singleton;
