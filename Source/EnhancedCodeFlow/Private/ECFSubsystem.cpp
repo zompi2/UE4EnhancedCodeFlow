@@ -48,7 +48,7 @@ void UECFSubsystem::Tick(float DeltaTime)
 	{
 		if (Node->IsValid())
 		{
-			Node->Tick(DeltaTime);
+			Node->DoTick(DeltaTime);
 		}
 	}
 }

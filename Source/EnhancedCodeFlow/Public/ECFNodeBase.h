@@ -51,5 +51,22 @@ protected:
 
 private:
 
+	void DoTick(float DeltaTime)
+	{
+		if (Owner.IsValid())
+		{
+			if (UWorld* World = Owner->GetWorld())
+			{
+				if (AWorldSettings* WorldSettings = World->GetWorldSettings())
+				{
+					Tick(DeltaTime * WorldSettings->TimeDilation);
+					return;
+				}
+			}
+		}
+
+		Tick(DeltaTime);
+	}
+
 	bool bHasFinished = false;
 };
