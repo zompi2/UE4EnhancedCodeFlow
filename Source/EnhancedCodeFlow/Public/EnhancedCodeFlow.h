@@ -17,6 +17,7 @@ public:
 	static void StopTask(FECFHandle& Handle);
 
 	static FECFHandle AddTicker(UObject* InOwner, TUniqueFunction<void(float)>&& InFunc);
+	static FECFHandle AddTicker(UObject* InOwner, TUniqueFunction<void(float, FECFHandle)>&& InFunc);
 	static FECFHandle Delay(UObject* InOwner, float InDelayTime, TUniqueFunction<void()>&& InFunc);
 	static FECFHandle WaitAndExecute(UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void()>&& InFunc);
 };
