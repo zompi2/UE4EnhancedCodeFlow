@@ -6,10 +6,10 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Tickable.h"
 #include "ECFHandle.h"
-#include "ECFNodeBase.generated.h"
+#include "ECFActionBase.generated.h"
 
 UCLASS()
-class ENHANCEDCODEFLOW_API UECFNodeBase : public UObject
+class ENHANCEDCODEFLOW_API UECFActionBase : public UObject
 {
 	GENERATED_BODY()
 

@@ -8,7 +8,7 @@
 #include "ECFHandle.h"
 #include "ECFSubsystem.generated.h"
 
-class UECFNodeBase;
+class UECFActionBase;
 
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFSubsystem : public UGameInstanceSubsystem, public FTickableGameObject
@@ -31,29 +31,32 @@ protected:
 
 	// Add Node of async task to list. Returns the task id.
 	template<typename T, typename ... Ts>
-	FECFHandle AddNode(UObject* InOwner, Ts&& ... Args)
+	FECFHandle AddAction(UObject* InOwner, Ts&& ... Args)
 	{
 		T* NewNode = NewObject<T>(this);
 		NewNode->SetOwner(InOwner, ++LastHandleId);
 		if (NewNode->Setup(Forward<Ts>(Args)...))
 		{
 			NewNode->Init();
-			PendingAddNodes.Add(NewNode);
+			PendingAddActions.Add(NewNode);
 			return NewNode->GetHandleId();
 		}
 		return FECFHandle();
 	}
 
 	// Remove Node of async task from list.
-	void RemoveNode(FECFHandle& HandleId);
+	void RemoveAction(FECFHandle& HandleId);
+
+	// Check if the action is running
+	bool HasAction(const FECFHandle& HandleId) const;
 	
-	// List of active nodes.
+	// List of active actions.
 	UPROPERTY()
-	TArray<UECFNodeBase*> Nodes;
+	TArray<UECFActionBase*> Actions;
 
 	// List of nodes to be add in the future.
 	UPROPERTY()
-	TArray<UECFNodeBase*> PendingAddNodes;
+	TArray<UECFActionBase*> PendingAddActions;
 
 	// Id of the last created node.
 	FECFHandle LastHandleId;

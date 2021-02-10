@@ -2,22 +2,15 @@
 
 #pragma once
 
-#include "ECFNodeBase.h"
+#include "ECFActionBase.h"
 #include "ECFWaitAndExecute.generated.h"
 
 UCLASS()
-class ENHANCEDCODEFLOW_API UECFWaitAndExecute : public UECFNodeBase
+class ENHANCEDCODEFLOW_API UECFWaitAndExecute : public UECFActionBase
 {
 	GENERATED_BODY()
 
 	friend class UECFSubsystem;
-
-public:
-
-	bool IsValid() const override
-	{
-		return Super::IsValid() && Predicate && Func;
-	}
 
 protected:
 

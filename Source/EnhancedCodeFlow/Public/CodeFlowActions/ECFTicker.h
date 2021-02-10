@@ -2,22 +2,15 @@
 
 #pragma once
 
-#include "ECFNodeBase.h"
+#include "ECFActionBase.h"
 #include "ECFTicker.generated.h"
 
 UCLASS()
-class ENHANCEDCODEFLOW_API UECFTicker : public UECFNodeBase
+class ENHANCEDCODEFLOW_API UECFTicker : public UECFActionBase
 {
 	GENERATED_BODY()
 
 	friend class UECFSubsystem;
-
-public:
-
-	bool IsValid() const override
-	{
-		return Super::IsValid() && Func;
-	}
 
 protected:
 

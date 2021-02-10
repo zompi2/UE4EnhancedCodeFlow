@@ -14,12 +14,14 @@ class ENHANCEDCODEFLOW_API UEnhancedCodeFlow : public UBlueprintFunctionLibrary
 
 public:
 
-	static void StopTask(FECFHandle& Handle);
+	static void StopAction(FECFHandle& Handle);
+	static bool IsActionRunning(const FECFHandle& Handle);
 
 	static FECFHandle AddTicker(UObject* InOwner, TUniqueFunction<void(float)>&& InFunc);
 	static FECFHandle AddTicker(UObject* InOwner, TUniqueFunction<void(float, FECFHandle)>&& InFunc);
 	static FECFHandle Delay(UObject* InOwner, float InDelayTime, TUniqueFunction<void()>&& InFunc);
 	static FECFHandle WaitAndExecute(UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void()>&& InFunc);
+	static FECFHandle AddTimeline(UObject* InOwner, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(float)>&& InFunc, float InStartTime, float InStopTime, bool bInLoop);
 };
 
 using UFlow = UEnhancedCodeFlow;
