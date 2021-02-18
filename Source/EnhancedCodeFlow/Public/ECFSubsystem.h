@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Subsystems/GameInstanceSubsystem.h"
+#include "Subsystems/WorldSubsystem.h"
 #include "Tickable.h"
 #include "ECFHandle.h"
 #include "ECFSubsystem.generated.h"
@@ -11,7 +11,7 @@
 class UECFActionBase;
 
 UCLASS()
-class ENHANCEDCODEFLOW_API UECFSubsystem : public UGameInstanceSubsystem, public FTickableGameObject
+class ENHANCEDCODEFLOW_API UECFSubsystem : public UWorldSubsystem, public FTickableGameObject
 {
 	GENERATED_BODY()
 
@@ -47,6 +47,15 @@ protected:
 	// Remove Node of async task from list.
 	void RemoveAction(FECFHandle& HandleId);
 
+	void RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass);
+	template<typename T>
+	void RemoveActionsOfClass()
+	{
+		RemoveActionsOfClass(T::StaticClass());
+	}
+
+	void RemoveAllActions();
+
 	// Check if the action is running
 	bool HasAction(const FECFHandle& HandleId) const;
 	
@@ -61,7 +70,6 @@ protected:
 	// Id of the last created node.
 	FECFHandle LastHandleId;
 	
-	/** Singleton handling */
-	static UECFSubsystem* Singleton;
-	static UECFSubsystem* Get();
+	/** Getter handling */
+	static UECFSubsystem* Get(const UObject* WorldContextObject);
 };

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "ECFActionBase.h"
+#include "ECFTypes.h"
 #include "ECFTimeline.generated.h"
 
 UCLASS()
@@ -16,24 +17,28 @@ protected:
 
 	TUniqueFunction<void(float)> TickFunc;
 	TUniqueFunction<void(float)> Func;
-	float StartTime;
-	float StopTime;
-	bool bLoop;
+	float StartValue;
+	float StopValue;
+	float Time;
+	EECFBlendFunc BlendFunc;
+	float BlendExp;
 
 	float CurrentTime;
-	float TimeFlowDir = 1.f;
+	float CurrentValue;
 
-	bool Setup(TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(float)>&& InFunc, float InStartTime, float InStopTime, bool bInLoop)
+	bool Setup(TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(float)>&& InFunc, float InStartValue, float InStopValue, float InTime, EECFBlendFunc InBlendFunc, float InBlendExp)
 	{
 		TickFunc = MoveTemp(InTickFunc);
 		Func = MoveTemp(InFunc);
-		StartTime = InStartTime;
-		StopTime = InStopTime;
-		bLoop = bInLoop;
-		if (TickFunc && Func && FMath::IsNearlyEqual(StartTime, StopTime) == false)
+		StartValue = InStartValue;
+		StopValue = InStopValue;
+		Time = InTime;
+		BlendFunc = InBlendFunc;
+		BlendExp = InBlendExp;
+
+		if (TickFunc && Func && Time > 0 && BlendExp != 0)
 		{
-			CurrentTime = StartTime;
-			TimeFlowDir = (StopTime > StartTime) ? 1.f : -1.f;
+			CurrentTime = 0.f;
 			return true;
 		}
 		else
@@ -44,45 +49,35 @@ protected:
 
 	void Tick(float DeltaTime) override
 	{
-		CurrentTime += DeltaTime * TimeFlowDir;
-		if (TimeFlowDir == 1.f)
+		CurrentTime += DeltaTime;
+
+		switch (BlendFunc)
 		{
-			if (CurrentTime >= StopTime)
-			{
-				if (bLoop)
-				{
-					while (CurrentTime >= StopTime)
-					{
-						CurrentTime = StartTime + (CurrentTime - StopTime);
-					}
-				}
-				else
-				{
-					Func(StopTime);
-					MarkAsFinished();
-					return;
-				}
-			}
+		case EECFBlendFunc::ECFBlend_Linear:
+			CurrentValue = FMath::Lerp(StartValue, StopValue, CurrentTime / Time);
+			break;
+		case EECFBlendFunc::ECFBlend_Cubic:
+			CurrentValue = FMath::CubicInterp(StartValue, 0.f, StopValue, 0.f, CurrentTime / Time);
+			break;
+		case EECFBlendFunc::ECFBlend_EaseIn:
+			CurrentValue = FMath::Lerp(StartValue, StopValue, FMath::Pow(CurrentTime / Time, BlendExp));
+			break;
+		case EECFBlendFunc::ECFBlend_EaseOut:
+			CurrentValue = FMath::Lerp(StartValue, StopValue, FMath::Pow(CurrentTime / Time, 1.f / BlendExp));
+			break;
+		case EECFBlendFunc::ECFBlend_EaseInOut:
+			CurrentValue = FMath::InterpEaseInOut(StartValue, StopValue, CurrentTime / Time, BlendExp);
+			break;
+		}
+
+		if (FMath::IsNearlyEqual(CurrentValue, StopValue))
+		{
+			Func(CurrentValue);
+			MarkAsFinished();
 		}
 		else
 		{
-			if (CurrentTime <= StopTime)
-			{
-				if (bLoop)
-				{
-					while (CurrentTime <= StopTime)
-					{
-						CurrentTime = StartTime - (StopTime - CurrentTime);
-					}
-				}
-				else
-				{
-					Func(StopTime);
-					MarkAsFinished();
-					return;
-				}
-			}
+			TickFunc(CurrentValue);
 		}
-		Func(CurrentTime);
 	}
 };

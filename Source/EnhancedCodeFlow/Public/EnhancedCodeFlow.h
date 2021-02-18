@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "ECFHandle.h"
+#include "ECFTypes.h"
 #include "EnhancedCodeFlow.generated.h"
 
 UCLASS()
@@ -14,14 +15,22 @@ class ENHANCEDCODEFLOW_API UEnhancedCodeFlow : public UBlueprintFunctionLibrary
 
 public:
 
-	static void StopAction(FECFHandle& Handle);
-	static bool IsActionRunning(const FECFHandle& Handle);
+	static void StopAction(const UObject* WorldContextObject, FECFHandle& Handle);
+	static bool IsActionRunning(const UObject* WorldContextObject, const FECFHandle& Handle);
+	static void StopAllActions(const UObject* WorldContextObject);
 
 	static FECFHandle AddTicker(UObject* InOwner, TUniqueFunction<void(float)>&& InFunc);
 	static FECFHandle AddTicker(UObject* InOwner, TUniqueFunction<void(float, FECFHandle)>&& InFunc);
+	static void RemoveAllTickers(const UObject* WorldContextObject);
+
 	static FECFHandle Delay(UObject* InOwner, float InDelayTime, TUniqueFunction<void()>&& InFunc);
+	static void RemoveAllDelays(const UObject* WorldContextObject);
+
 	static FECFHandle WaitAndExecute(UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void()>&& InFunc);
-	static FECFHandle AddTimeline(UObject* InOwner, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(float)>&& InFunc, float InStartTime, float InStopTime, bool bInLoop);
+	static void RemoveAllWaitAndExecutes(const UObject* WorldContextObject);
+
+	static FECFHandle AddTimeline(UObject* InOwner, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(float)>&& InFunc, float InStartValue, float InStopValue, float InTime, EECFBlendFunc InBlendFunc = EECFBlendFunc::ECFBlend_Linear, float InBlendExp = 1.f);
+	static void RemoveAllTimelines(const UObject* WorldContextObject);
 };
 
 using UFlow = UEnhancedCodeFlow;

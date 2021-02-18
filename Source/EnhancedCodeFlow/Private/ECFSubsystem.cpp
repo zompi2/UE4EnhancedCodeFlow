@@ -3,36 +3,27 @@
 #include "ECFSubsystem.h"
 #include "ECFActionBase.h"
 
-UECFSubsystem* UECFSubsystem::Singleton = nullptr;
-
 void UECFSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
-	if (HasAnyFlags(RF_ClassDefaultObject) == false)
-	{
-		checkf(Singleton == nullptr, TEXT("There can be only one Code Flow Subsystem!"));
-		Singleton = this;
-
-		LastHandleId.Invalidate();
-	}
+	LastHandleId.Invalidate();
 }
 
 void UECFSubsystem::Deinitialize()
 {
-	if (HasAnyFlags(RF_ClassDefaultObject) == false)
-	{
-		Singleton = nullptr;
-
-		Actions.Empty();
-		PendingAddActions.Empty();
-	}
+	Actions.Empty();
+	PendingAddActions.Empty();
 }
 
-UECFSubsystem* UECFSubsystem::Get()
+UECFSubsystem* UECFSubsystem::Get(const UObject* WorldContextObject)
 {
-	// Use pointer to itself as game instance subsystem works like singletons and we can use
-	// cached pointer to it without passing a pointer to world object.
-	checkf(Singleton != nullptr, TEXT("Code Flow Subsystem used before Initialize!"));
-	return Singleton;
+	if (GEngine)
+	{
+		if (UWorld* ThisWorld = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::ReturnNull))
+		{
+			return ThisWorld->GetSubsystem<UECFSubsystem>(ThisWorld);
+		}
+	}
+	return nullptr;
 }	
 
 void UECFSubsystem::Tick(float DeltaTime)
@@ -73,6 +64,38 @@ void UECFSubsystem::RemoveAction(FECFHandle& HandleId)
 			(*PendingActionFound)->MarkAsFinished();
 			HandleId.Invalidate();
 		}
+	}
+}
+
+void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass)
+{
+	for (UECFActionBase* Action : Actions)
+	{
+		if (Action->IsA(ActionClass))
+		{
+			Action->MarkAsFinished();
+		}
+	}
+
+	for (UECFActionBase* PendingAction : PendingAddActions)
+	{
+		if (PendingAction->IsA(ActionClass))
+		{
+			PendingAction->MarkAsFinished();
+		}
+	}
+}
+
+void UECFSubsystem::RemoveAllActions()
+{
+	for (UECFActionBase* Action : Actions)
+	{
+		Action->MarkAsFinished();
+	}
+
+	for (UECFActionBase* PendingAction : PendingAddActions)
+	{
+		PendingAction->MarkAsFinished();
 	}
 }
 
