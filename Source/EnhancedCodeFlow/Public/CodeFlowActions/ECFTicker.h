@@ -14,12 +14,12 @@ class ENHANCEDCODEFLOW_API UECFTicker : public UECFActionBase
 
 protected:
 
-	TUniqueFunction<void(float)> Func;
+	TUniqueFunction<void(float)> TickFunc;
 
-	bool Setup(TUniqueFunction<void(float)>&& InFunc)
+	bool Setup(TUniqueFunction<void(float)>&& InTickFunc)
 	{
-		Func = MoveTemp(InFunc);
-		if (Func)
+		TickFunc = MoveTemp(InTickFunc);
+		if (TickFunc)
 		{
 			return true;
 		}
@@ -31,7 +31,7 @@ protected:
 
 	void Tick(float DeltaTime) override
 	{
-		Func(DeltaTime);
+		TickFunc(DeltaTime);
 	}
 
 };

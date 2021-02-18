@@ -29,7 +29,7 @@ protected:
 	bool IsTickable() const override { return true; }
 	bool IsTickableWhenPaused() const override { return true; }
 
-	// Add Node of async task to list. Returns the task id.
+	// Add Action of async task to list. Returns the task id.
 	template<typename T, typename ... Ts>
 	FECFHandle AddAction(UObject* InOwner, Ts&& ... Args)
 	{
@@ -44,16 +44,20 @@ protected:
 		return FECFHandle();
 	}
 
-	// Remove Node of async task from list.
+	// Remove Action of async task from list of given handle id.
 	void RemoveAction(FECFHandle& HandleId);
 
+	// Remove all Actions of async tasks of given class from list.
 	void RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass);
+
+	// Template version of RemoveActionsOfClass.
 	template<typename T>
 	void RemoveActionsOfClass()
 	{
 		RemoveActionsOfClass(T::StaticClass());
 	}
 
+	// Remove all Actions of async tasks.
 	void RemoveAllActions();
 
 	// Check if the action is running

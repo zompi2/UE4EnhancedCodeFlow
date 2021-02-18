@@ -16,7 +16,7 @@ class ENHANCEDCODEFLOW_API UECFTimeline : public UECFActionBase
 protected:
 
 	TUniqueFunction<void(float)> TickFunc;
-	TUniqueFunction<void(float)> Func;
+	TUniqueFunction<void(float)> CallbackFunc;
 	float StartValue;
 	float StopValue;
 	float Time;
@@ -26,17 +26,19 @@ protected:
 	float CurrentTime;
 	float CurrentValue;
 
-	bool Setup(TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(float)>&& InFunc, float InStartValue, float InStopValue, float InTime, EECFBlendFunc InBlendFunc, float InBlendExp)
+	bool Setup(float InStartValue, float InStopValue, float InTime, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(float)>&& InCallbackFunc, EECFBlendFunc InBlendFunc, float InBlendExp)
 	{
-		TickFunc = MoveTemp(InTickFunc);
-		Func = MoveTemp(InFunc);
 		StartValue = InStartValue;
 		StopValue = InStopValue;
 		Time = InTime;
+
+		TickFunc = MoveTemp(InTickFunc);
+		CallbackFunc = MoveTemp(InCallbackFunc);
+
 		BlendFunc = InBlendFunc;
 		BlendExp = InBlendExp;
 
-		if (TickFunc && Func && Time > 0 && BlendExp != 0)
+		if (TickFunc && Time > 0 && BlendExp != 0)
 		{
 			CurrentTime = 0.f;
 			return true;
@@ -70,14 +72,15 @@ protected:
 			break;
 		}
 
+		TickFunc(CurrentValue);
+
 		if (FMath::IsNearlyEqual(CurrentValue, StopValue))
 		{
-			Func(CurrentValue);
+			if (CallbackFunc)
+			{
+				CallbackFunc(CurrentValue);
+			}
 			MarkAsFinished();
-		}
-		else
-		{
-			TickFunc(CurrentValue);
 		}
 	}
 };
