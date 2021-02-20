@@ -38,7 +38,7 @@ protected:
 		BlendFunc = InBlendFunc;
 		BlendExp = InBlendExp;
 
-		if (TickFunc && Time > 0 && BlendExp != 0)
+		if (TickFunc && Time > 0 && BlendExp != 0 && StartValue != StopValue)
 		{
 			CurrentTime = 0.f;
 			return true;
@@ -74,7 +74,7 @@ protected:
 
 		TickFunc(CurrentValue);
 
-		if (FMath::IsNearlyEqual(CurrentValue, StopValue))
+		if ((StopValue > StartValue && CurrentValue >= StopValue) || (StopValue < StartValue && CurrentValue <= StopValue))
 		{
 			if (CallbackFunc)
 			{

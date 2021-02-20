@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "ECFTypes.generated.h"
 
-UENUM()
+UENUM(BlueprintType)
 enum class EECFBlendFunc : uint8
 {
 	ECFBlend_Linear,
