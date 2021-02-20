@@ -7,6 +7,7 @@
 #include "CodeFlowActions/ECFTicker2.h"
 #include "CodeFlowActions/ECFDelay.h"
 #include "CodeFlowActions/ECFWaitAndExecute.h"
+#include "CodeFlowActions/ECFWhileTrueExecute.h"
 #include "CodeFlowActions/ECFTimeline.h"
 #include "CodeFlowActions/ECFCustomTimeline.h"
 
@@ -66,6 +67,18 @@ FECFHandle UEnhancedCodeFlow::WaitAndExecute(UObject* InOwner, TUniqueFunction<b
 void UEnhancedCodeFlow::RemoveAllWaitAndExecutes(const UObject* WorldContextObject)
 {
 	UECFSubsystem::Get(WorldContextObject)->RemoveActionsOfClass<UECFWaitAndExecute>();
+}
+
+
+
+FECFHandle UEnhancedCodeFlow::WhileTrueExecute(UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc)
+{
+	return UECFSubsystem::Get(InOwner)->AddAction<UECFWhileTrueExecute>(InOwner, MoveTemp(InPredicate), MoveTemp(InTickFunc));
+}
+
+void UEnhancedCodeFlow::RemoveAllWhileTrueExecutes(const UObject* WorldContextObject)
+{
+	UECFSubsystem::Get(WorldContextObject)->RemoveActionsOfClass<UECFWhileTrueExecute>();
 }
 
 

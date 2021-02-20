@@ -15,14 +15,14 @@ class ENHANCEDCODEFLOW_API UECFWhileTrueExecute : public UECFActionBase
 protected:
 
 	TUniqueFunction<bool()> Predicate;
-	TUniqueFunction<void()> Func;
+	TUniqueFunction<void(float)> TickFunc;
 
-	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void()>&& InFunc)
+	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc)
 	{
 		Predicate = MoveTemp(InPredicate);
-		Func = MoveTemp(InFunc);
+		TickFunc = MoveTemp(InTickFunc);
 
-		if (Predicate && Func)
+		if (Predicate && TickFunc)
 		{
 			return true;
 		}
@@ -36,7 +36,7 @@ protected:
 	{
 		if (Predicate())
 		{
-			Func();
+			TickFunc(DeltaTime);
 		}
 		else
 		{

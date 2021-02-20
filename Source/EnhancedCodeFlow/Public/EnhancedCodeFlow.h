@@ -29,6 +29,9 @@ public:
 	static FECFHandle WaitAndExecute(UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void()>&& InCallbackFunc);
 	static void RemoveAllWaitAndExecutes(const UObject* WorldContextObject);
 
+	static FECFHandle WhileTrueExecute(UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc);
+	static void RemoveAllWhileTrueExecutes(const UObject* WorldContextObject);
+
 	static FECFHandle AddTimeline(UObject* InOwner, float InStartValue, float InStopValue, float InTime, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(float)>&& InCallbackFunc = nullptr, EECFBlendFunc InBlendFunc = EECFBlendFunc::ECFBlend_Linear, float InBlendExp = 1.f);
 	static void RemoveAllTimelines(const UObject* WorldContextObject);
 
