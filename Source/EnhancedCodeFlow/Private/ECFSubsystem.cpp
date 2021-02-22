@@ -67,13 +67,16 @@ void UECFSubsystem::RemoveAction(FECFHandle& HandleId)
 	}
 }
 
-void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass)
+void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass, UObject* InOwner/* = nullptr*/)
 {
 	for (UECFActionBase* Action : Actions)
 	{
 		if (Action->IsA(ActionClass))
 		{
-			Action->MarkAsFinished();
+			if (InOwner == nullptr || InOwner == Action->Owner)
+			{
+				Action->MarkAsFinished();
+			}
 		}
 	}
 
@@ -81,7 +84,10 @@ void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass
 	{
 		if (PendingAction->IsA(ActionClass))
 		{
-			PendingAction->MarkAsFinished();
+			if (InOwner == nullptr || InOwner == PendingAction->Owner)
+			{
+				PendingAction->MarkAsFinished();
+			}
 		}
 	}
 }

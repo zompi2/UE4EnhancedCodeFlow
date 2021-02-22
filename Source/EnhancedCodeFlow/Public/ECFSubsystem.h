@@ -15,7 +15,7 @@ class ENHANCEDCODEFLOW_API UECFSubsystem : public UWorldSubsystem, public FTicka
 {
 	GENERATED_BODY()
 
-	friend class UEnhancedCodeFlow;
+	friend class FEnhancedCodeFlow;
 
 protected:
 
@@ -29,7 +29,7 @@ protected:
 	bool IsTickable() const override { return true; }
 	bool IsTickableWhenPaused() const override { return true; }
 
-	// Add Action of async task to list. Returns the task id.
+	// Add Action to list. Returns the Action id.
 	template<typename T, typename ... Ts>
 	FECFHandle AddAction(UObject* InOwner, Ts&& ... Args)
 	{
@@ -44,17 +44,17 @@ protected:
 		return FECFHandle();
 	}
 
-	// Remove Action of async task from list of given handle id.
+	// Remove Action of given HandleId from list.
 	void RemoveAction(FECFHandle& HandleId);
 
 	// Remove all Actions of async tasks of given class from list.
-	void RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass);
+	void RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass, UObject* InOwner = nullptr);
 
 	// Template version of RemoveActionsOfClass.
 	template<typename T>
-	void RemoveActionsOfClass()
+	void RemoveActionsOfClass(UObject* InOwner = nullptr)
 	{
-		RemoveActionsOfClass(T::StaticClass());
+		RemoveActionsOfClass(T::StaticClass(), InOwner);
 	}
 
 	// Remove all Actions of async tasks.
