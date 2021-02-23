@@ -16,15 +16,17 @@ class ENHANCEDCODEFLOW_API UECFCustomTimeline : public UECFActionBase
 
 protected:
 
-	TUniqueFunction<void(float)> TickFunc;
-	TUniqueFunction<void(float)> CallbackFunc;
+	TUniqueFunction<void(float, float)> TickFunc;
+	TUniqueFunction<void(float, float)> CallbackFunc;
 	FTimeline MyTimeline;
+
 	float CurrentValue;
+	float CurrentTime;
 
 	UPROPERTY(Transient)
 	UCurveFloat* CurveFloat;
 
-	bool Setup(UCurveFloat* InCurveFloat, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(float)>&& InCallbackFunc = nullptr)
+	bool Setup(UCurveFloat* InCurveFloat, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc = nullptr)
 	{
 		TickFunc = MoveTemp(InTickFunc);
 		CallbackFunc = MoveTemp(InCallbackFunc);
@@ -61,7 +63,8 @@ private:
 	void HandleProgress(float Value)
 	{
 		CurrentValue = Value;
-		TickFunc(CurrentValue);
+		CurrentTime = MyTimeline.GetPlaybackPosition();
+		TickFunc(CurrentValue, CurrentTime);
 	}
 
 	UFUNCTION()
@@ -69,7 +72,7 @@ private:
 	{
 		if (CallbackFunc)
 		{
-			CallbackFunc(CurrentValue);
+			CallbackFunc(CurrentValue, CurrentTime);
 		}
 		MarkAsFinished();
 	}

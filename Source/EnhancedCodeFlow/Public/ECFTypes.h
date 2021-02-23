@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "ECFTypes.generated.h"
 
+// Possible blend functions for ECF system.
 UENUM(BlueprintType)
 enum class EECFBlendFunc : uint8
 {

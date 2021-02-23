@@ -69,6 +69,7 @@ void UECFSubsystem::RemoveAction(FECFHandle& HandleId)
 
 void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass, UObject* InOwner/* = nullptr*/)
 {
+	// Find running actions of given class assigned to a specific owner (if specified) and set it as finished.
 	for (UECFActionBase* Action : Actions)
 	{
 		if (Action->IsA(ActionClass))
@@ -80,6 +81,7 @@ void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass
 		}
 	}
 
+	// Also check pending actions to prevent from launching it.
 	for (UECFActionBase* PendingAction : PendingAddActions)
 	{
 		if (PendingAction->IsA(ActionClass))
@@ -94,11 +96,11 @@ void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass
 
 void UECFSubsystem::RemoveAllActions()
 {
+	// Just stop all running and pending actions.
 	for (UECFActionBase* Action : Actions)
 	{
 		Action->MarkAsFinished();
 	}
-
 	for (UECFActionBase* PendingAction : PendingAddActions)
 	{
 		PendingAction->MarkAsFinished();

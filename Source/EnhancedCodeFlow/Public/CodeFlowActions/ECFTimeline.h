@@ -15,8 +15,8 @@ class ENHANCEDCODEFLOW_API UECFTimeline : public UECFActionBase
 
 protected:
 
-	TUniqueFunction<void(float)> TickFunc;
-	TUniqueFunction<void(float)> CallbackFunc;
+	TUniqueFunction<void(float, float)> TickFunc;
+	TUniqueFunction<void(float, float)> CallbackFunc;
 	float StartValue;
 	float StopValue;
 	float Time;
@@ -26,7 +26,7 @@ protected:
 	float CurrentTime;
 	float CurrentValue;
 
-	bool Setup(float InStartValue, float InStopValue, float InTime, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(float)>&& InCallbackFunc, EECFBlendFunc InBlendFunc, float InBlendExp)
+	bool Setup(float InStartValue, float InStopValue, float InTime, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc, EECFBlendFunc InBlendFunc, float InBlendExp)
 	{
 		StartValue = InStartValue;
 		StopValue = InStopValue;
@@ -72,13 +72,13 @@ protected:
 			break;
 		}
 
-		TickFunc(CurrentValue);
+		TickFunc(CurrentValue, CurrentTime);
 
 		if ((StopValue > StartValue && CurrentValue >= StopValue) || (StopValue < StartValue && CurrentValue <= StopValue))
 		{
 			if (CallbackFunc)
 			{
-				CallbackFunc(CurrentValue);
+				CallbackFunc(CurrentValue, CurrentTime);
 			}
 			MarkAsFinished();
 		}

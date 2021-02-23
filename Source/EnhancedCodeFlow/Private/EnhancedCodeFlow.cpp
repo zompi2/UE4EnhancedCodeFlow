@@ -26,8 +26,7 @@ void FFlow::StopAllActions(const UObject* WorldContextObject)
 	UECFSubsystem::Get(WorldContextObject)->RemoveAllActions();
 }
 
-
-
+/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 FECFHandle FFlow::AddTicker(UObject* InOwner, TUniqueFunction<void(float)>&& InTickFunc)
 {
@@ -45,7 +44,7 @@ void FFlow::RemoveAllTickers(const UObject* WorldContextObject, UObject* InOwner
 	UECFSubsystem::Get(WorldContextObject)->RemoveActionsOfClass<UECFTicker2>(InOwner);
 }
 
-
+/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 FECFHandle FFlow::Delay(UObject* InOwner, float InDelayTime, TUniqueFunction<void()>&& InCallbackFunc)
 {
@@ -57,7 +56,7 @@ void FFlow::RemoveAllDelays(const UObject* WorldContextObject, UObject* InOwner/
 	UECFSubsystem::Get(WorldContextObject)->RemoveActionsOfClass<UECFDelay>(InOwner);
 }
 
-
+/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 FECFHandle FFlow::WaitAndExecute(UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void()>&& InCallbackFunc)
 {
@@ -69,7 +68,7 @@ void FFlow::RemoveAllWaitAndExecutes(const UObject* WorldContextObject, UObject*
 	UECFSubsystem::Get(WorldContextObject)->RemoveActionsOfClass<UECFWaitAndExecute>(InOwner);
 }
 
-
+/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 FECFHandle FFlow::WhileTrueExecute(UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc)
 {
@@ -81,9 +80,9 @@ void FFlow::RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, UObjec
 	UECFSubsystem::Get(WorldContextObject)->RemoveActionsOfClass<UECFWhileTrueExecute>(InOwner);
 }
 
+/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-
-FECFHandle FFlow::AddTimeline(UObject* InOwner, float InStartValue, float InStopValue, float InTime, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(float)>&& InCallbackFunc/* = nullptr*/, EECFBlendFunc InBlendFunc/* = EECFBlendFunc::ECFBlend_Linear*/, float InBlendExp/* = 0.f*/)
+FECFHandle FFlow::AddTimeline(UObject* InOwner, float InStartValue, float InStopValue, float InTime, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc/* = nullptr*/, EECFBlendFunc InBlendFunc/* = EECFBlendFunc::ECFBlend_Linear*/, float InBlendExp/* = 0.f*/)
 {
 	return UECFSubsystem::Get(InOwner)->AddAction<UECFTimeline>(InOwner, InStartValue, InStopValue, InTime, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc), InBlendFunc, InBlendExp);
 }
@@ -93,9 +92,9 @@ void FFlow::RemoveAllTimelines(const UObject* WorldContextObject, UObject* InOwn
 	UECFSubsystem::Get(WorldContextObject)->RemoveActionsOfClass<UECFTimeline>(InOwner);
 }
 
+/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-
-FECFHandle FFlow::AddCustomTimeline(UObject* InOwner, UCurveFloat* CurveFloat, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(float)>&& InCallbackFunc/* = nullptr*/)
+FECFHandle FFlow::AddCustomTimeline(UObject* InOwner, UCurveFloat* CurveFloat, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc/* = nullptr*/)
 {
 	return UECFSubsystem::Get(InOwner)->AddAction<UECFCustomTimeline>(InOwner, CurveFloat, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc));
 }

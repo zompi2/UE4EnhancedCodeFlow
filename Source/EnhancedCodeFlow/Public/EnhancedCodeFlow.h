@@ -8,9 +8,11 @@
  * if multiple worlds are running in the same editor instance (e.g. when testing multiplayer).
  * Every Action function require it's owner, so it can be properly cleaned up in case the owner
  * might be destroyed.
+ * Launching action will return a handle to it. If the Handle is not valid (check IsValid() function)
+ * it means the action couldn't be launched. Handles will be invalidated after action has finished.
  * Callbacks should be defined using lambdas as they are unique and will be moved into plugin stack.
  * Example of the plugin usage when using Delay Action:
- * FFlow::Delay(this, 2.f, [this](float DeltaTime)
+ * FECFHandle DelayHandle = FFlow::Delay(this, 2.f, [this](float DeltaTime)
  * {
  *     // Stuff to do after 2 seconds delay.
  * });
@@ -77,16 +79,75 @@ public:
 
 	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
+	/**
+	 * Wait until a specific condition occur and then run some logic.
+	 * @param InPredicate -		a function that decides if the action should be launch. If it returns true - it means the action must be launch.
+	 *							Must be: []() -> bool.
+	 * @param InCallbackFunc -	a callback with action to execute. Must be: []() -> void.
+	 */
 	static FECFHandle WaitAndExecute(UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void()>&& InCallbackFunc);
+
+	/**
+	 * Stops "wait and execute" actions. Callbacks will not be executed.
+	 * @param InOwner [optional] -	if defined it will remove "wait and execute" actions only from the given owner. Otherwise
+	 *								it will remove all "wait and execute" actions from everywhere.
+	 */
 	static void RemoveAllWaitAndExecutes(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
+	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * While the specific condition is true the function will tick.
+	 * @param InPredicate -		a function that decides if the action should tick. If it returns true - it means the action will tick.
+	 *							Must be: []() -> bool.
+	 * @param InTickFunc -		a ticking function must be: [](float DeltaTime) -> void.
+	 */
 	static FECFHandle WhileTrueExecute(UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc);
+
+	/**
+	 * Stops "while true execute" actions.
+	 * @param InOwner [optional] -	if defined it will remove "while true execute" actions only from the given owner. Otherwise
+	 *								it will remove all "while true execute" actions from everywhere.
+	 */
 	static void RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
-	static FECFHandle AddTimeline(UObject* InOwner, float InStartValue, float InStopValue, float InTime, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(float)>&& InCallbackFunc = nullptr, EECFBlendFunc InBlendFunc = EECFBlendFunc::ECFBlend_Linear, float InBlendExp = 1.f);
+	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Adds a simple timeline that runs in a given range during a given time.
+	 * @param InStartValue -	the value from which this timeline will start.
+	 * @param InStopValue -		the value to which this timeline will go. Must be different than InStartValue.
+	 * @param InTime -			how long the timeline will be processed? Must be greater than 0.
+	 * @param InTickFunc -		ticking function executed when timeline is processed. It's param represents current value.
+	 *							Must be: [](float CurrentValue) -> void.
+	 * @param InCallbackFunc -	[optional] function which will be launched when timeline reaches end. Must be: [](float CurrentValue) -> void.
+	 * @param InBlendFunc -		a function used to update timeline. By default it is Linear.
+	 * @param InBlendExp -		an exponent, used by certain blend functions (EaseIn, EaseOut, EaseInOut) to control the shape of the timeline curve.
+	 */
+	static FECFHandle AddTimeline(UObject* InOwner, float InStartValue, float InStopValue, float InTime, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc = nullptr, EECFBlendFunc InBlendFunc = EECFBlendFunc::ECFBlend_Linear, float InBlendExp = 1.f);
+
+	/**
+	 * Stops timelines. Will not launch callback functions.
+	 * @param InOwner [optional] -	if defined it will remove timelines only from the given owner. Otherwise
+	 *								it will remove all timelines from everywhere.
+	 */
 	static void RemoveAllTimelines(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
-	static FECFHandle AddCustomTimeline(UObject* InOwner, UCurveFloat* CurveFloat, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(float)>&& InCallbackFunc = nullptr);
+	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Adds a custom timeline defined by a float curve.
+	 * @param CurveFloat - a curve that defines this timeline.
+	 * @param InTickFunc - a ticking executed when timeline is processed. IOt's param represents current value. Must be: [](float CurrentValue) -> void. 
+	 * @param InCallbackFunc - [optional] function which will be launched when timeline reaches end. Must be: [](float CurrentValue) -> void.
+	 */
+	static FECFHandle AddCustomTimeline(UObject* InOwner, UCurveFloat* CurveFloat, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc = nullptr);
+
+	/**
+	 * Stops custom timelines. Will not launch callback functions.
+	 * @param InOwner [optional] -	if defined it will remove custom timelines only from the given owner. Otherwise
+	 *								it will remove all custom timelines from everywhere.
+	 */
 	static void RemoveAllCustomTimelines(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 };
 
