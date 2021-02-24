@@ -16,17 +16,18 @@ void UECFSubsystem::Deinitialize()
 
 UECFSubsystem* UECFSubsystem::Get(const UObject* WorldContextObject)
 {
+	UWorld* ThisWorld = nullptr;
 	if (GEngine)
 	{
-		if (UWorld* ThisWorld = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::ReturnNull))
-		{
-			return ThisWorld->GetSubsystem<UECFSubsystem>(ThisWorld);
-		}
-		else
-		{
-			checkf(false, TEXT("Can't obtain ThisWorld from WorldContextObject in ECF!"));
-		}
+		ThisWorld = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::ReturnNull);
 	}
+
+	ensureAlwaysMsgf(ThisWorld, TEXT("Can't obtain ThisWorld from WorldContextObject in ECF!"));
+	if (ThisWorld)
+	{
+		return ThisWorld->GetSubsystem<UECFSubsystem>(ThisWorld);
+	}
+
 	return nullptr;
 }	
 
