@@ -22,6 +22,10 @@ UECFSubsystem* UECFSubsystem::Get(const UObject* WorldContextObject)
 		{
 			return ThisWorld->GetSubsystem<UECFSubsystem>(ThisWorld);
 		}
+		else
+		{
+			checkf(false, TEXT("Can't obtain ThisWorld from WorldContextObject in ECF!"));
+		}
 	}
 	return nullptr;
 }	

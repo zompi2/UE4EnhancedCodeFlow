@@ -30,12 +30,18 @@ void FFlow::StopAllActions(const UObject* WorldContextObject)
 
 FECFHandle FFlow::AddTicker(UObject* InOwner, TUniqueFunction<void(float)>&& InTickFunc)
 {
-	return UECFSubsystem::Get(InOwner)->AddAction<UECFTicker>(InOwner, MoveTemp(InTickFunc));
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFTicker>(InOwner, MoveTemp(InTickFunc));
+	else
+		return FECFHandle();
 }
 
 FECFHandle FFlow::AddTicker(UObject* InOwner, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc)
 {
-	return UECFSubsystem::Get(InOwner)->AddAction<UECFTicker2>(InOwner, MoveTemp(InTickFunc));
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFTicker2>(InOwner, MoveTemp(InTickFunc));
+	else
+		return FECFHandle();
 }
 
 void FFlow::RemoveAllTickers(const UObject* WorldContextObject, UObject* InOwner/* = nullptr*/)
