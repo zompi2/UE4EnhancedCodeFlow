@@ -24,6 +24,10 @@ protected:
 
 		if (Predicate && TickFunc)
 		{
+			if (Predicate() == false)
+			{
+				return false;
+			}
 			return true;
 		}
 		else

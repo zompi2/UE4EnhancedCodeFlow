@@ -24,6 +24,11 @@ protected:
 
 		if (Predicate && Func)
 		{
+			if (Predicate())
+			{
+				Func();
+				return false;
+			}
 			return true;
 		}
 		else
