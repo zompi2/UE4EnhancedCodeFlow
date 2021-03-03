@@ -99,16 +99,22 @@ void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass
 	}
 }
 
-void UECFSubsystem::RemoveAllActions()
+void UECFSubsystem::RemoveAllActions(UObject* InOwner/* = nullptr*/)
 {
-	// Just stop all running and pending actions.
+	// Stop all running and pending actions.
 	for (UECFActionBase* Action : Actions)
 	{
-		Action->MarkAsFinished();
+		if (InOwner == nullptr || InOwner == Action->Owner)
+		{
+			Action->MarkAsFinished();
+		}
 	}
 	for (UECFActionBase* PendingAction : PendingAddActions)
 	{
-		PendingAction->MarkAsFinished();
+		if (InOwner == nullptr || InOwner == PendingAction->Owner)
+		{
+			PendingAction->MarkAsFinished();
+		}
 	}
 }
 

@@ -25,7 +25,7 @@ bool FFlow::IsActionRunning(const UObject* WorldContextObject, const FECFHandle&
 		return false;
 }
 
-void FFlow::StopAllActions(const UObject* WorldContextObject)
+void FFlow::StopAllActions(const UObject* WorldContextObject, UObject* InOwner/* = nullptr*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
 		ECF->RemoveAllActions();

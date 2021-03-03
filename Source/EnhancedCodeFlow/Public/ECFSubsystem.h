@@ -58,7 +58,7 @@ protected:
 	}
 
 	// Remove all Actions of async tasks.
-	void RemoveAllActions();
+	void RemoveAllActions(UObject* InOwner = nullptr);
 
 	// Check if the action is running
 	bool HasAction(const FECFHandle& HandleId) const;

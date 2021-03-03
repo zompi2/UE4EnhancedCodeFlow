@@ -42,8 +42,10 @@ public:
 	
 	/**
 	 * Stops all running actions.
+	 * If owner is defined it will remove all actions from the given owner.
+	 * Otherwise it will stop all actions from everywhere.
 	 */
-	static void StopAllActions(const UObject* WorldContextObject);
+	static void StopAllActions(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
 	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
