@@ -4,7 +4,7 @@ The goal of this plugin is to provide functionalities that can improve implement
 These are e.g. launching code when specific conditions are made, or running descrete timelines.  
 All functions are described below, in this readme file.
 
-### Installation
+# Installation
 
 This is a code only plugin. It means that to use it you have to:
 1. Put the whole plugin into a Plugins directory in your project
