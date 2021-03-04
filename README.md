@@ -184,4 +184,56 @@ FFlow::RemoveAllCustomTimelines(GetWorld());
 
 If you have a source code of this plugin it can be easily extended! Here's how to add your own custom action to the plugin.
 
-[BIG TODO]
+> Check how other actions are made to easier understand how to extend the plugin.
+
+1. Create a class that inherits from UECFActionBase
+2. Implement **Setup** function, which accepts all parameters you want to pass to this action. **Setup** function must return true if the given parameters are valid.  
+```cpp
+bool Setup(int32 Param1, int32 Param2, TUniqueFunction<void()>&& NewCallbackFunc)
+{
+	CallbackFunc = MoveTemp(NewCallbackFunc);
+	if (CallbackFunc) return true;
+	return false;
+}
+```
+> Any callback must be passed as a r-value reference and moved to the action's variable.
+
+3. Override **Init** and **Tick** functions if needed.
+4. If you want this action to be stopped while ticking - use **MarkAsFinished()** function.
+5. In the **FEnhancedCodeFlow** class implement static function that launches the action using **AddAction** function. The function must receive a pointer to the launching UObject pointer and every other argument that is used in the action's **Setup** function. It must return **FECFHandle**.
+```cpp
+FECFHandle FEnhancedCodeFlow::NewAction(UObject* InOwner, int32 Param1, int32 Param2, TUniqueFunction<void()>&& NewCallbackFunc)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFNewAction>(InOwner, MoveTemp(NewCallbackFunc), Param1, Param2);
+	else
+		return FECFHandle();
+}
+```
+6. You can optionally add static function which will stop this action
+```cpp
+void FFlow::RemoveNewActions(const UObject* WorldContextObject, UObject* InOwner/* = nullptr*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+	{
+		ECF->RemoveActionsOfClass<UECFNewAction>(InOwner);
+	}
+}
+```
+
+It is done! Now you can run your own action:
+
+```cpp
+FFlow::NewAction(this, 1, 2, [this]()
+{
+	// Callback code.
+});
+```
+
+# Contact
+
+If you have any question ask it on forum thread: https://forums.unrealengine.com/unreal-engine/marketplace/1868196-enhanced-code-flow I will try my best to answer it quickly :)
+
+# Thanks
+
+I want to send special thanks to Monica, because she always supports me and believes in me, and to Pawe³, for allowing me to test this plugin on his project. Also, I want to thank You for using this plugin! It is very important for me that my work is useful for someone!
