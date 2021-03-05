@@ -80,12 +80,13 @@ are not sure if the object you want to use is already spawned.
 ``` cpp
 FFlow::WaitAndExecute(this, [this]()
 {
-	// Write your own predicate. Return true when you want to execute the code below.
-	return bIsReadyToUse;
+  // Write your own predicate. 
+  // Return true when you want to execute the code below.
+  return bIsReadyToUse;
 },
 [this]()
 {
-	// Implement code to execute when conditions are met.
+  // Implement code to execute when conditions are met.
 });
 ```
 
@@ -96,12 +97,13 @@ While the specified conditions are true tick the given code. This one is useful 
 ``` cpp
 FFlow::WhileTrueExecute(this, [this]()
 {
-	// Write your own predicate. Return true when you want this action to continue.
-	return bIsRunning;
+  // Write your own predicate. 
+  //Return true when you want this action to continue.
+  return bIsRunning;
 },
 [this](float DeltaTime)
 {
-	// Implement code to tick when conditions are true.
+  // Implement code to tick when conditions are true.
 });
 ```
 
@@ -127,11 +129,11 @@ The function requires the following parameters:
 ``` cpp
 FFlow::AddTimeline(this, 0.f, 1.f, 2.f, [this](float Value, float Time)
 {
-	// Code to run every time the timeline tick
+  // Code to run every time the timeline tick
 }, 
 [this](float Value, float Time)
 {
-	// Code to run when timeline stops
+  // Code to run when timeline stops
 }, 
 EECFBlendFunc::ECFBlend_Linear, 2.f);
 ```
@@ -143,11 +145,11 @@ Creates a descrete timeline which shape is based on a **UCurveFloat**. Works lik
 ``` cpp
 FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
 {
-	// Code to run every time the timeline tick
+  // Code to run every time the timeline tick
 }, 
 [this](float Value, float Time)
 {
-	// Code to run when timeline stops
+  // Code to run when timeline stops
 });
 ```
 
@@ -156,8 +158,8 @@ FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
 Every function described earlier returns a **FECFHandle** which can be used to check if the following action is running and to stop it.
 
 ``` cpp
-FFlow::IsActionRunning(GetWorld(), Handle); // <- checks if the action is running
-FFlow::StopAction(GetWorld(), Handle); // <- stops the action
+FFlow::IsActionRunning(GetWorld(), Handle); // <- is the action running?
+FFlow::StopAction(GetWorld(), Handle); // <- stops the action!
 ```
 
 > Note that this function requires a pointer to the existing **World** in order to work properly.
@@ -166,7 +168,8 @@ You can also stop all of the actions from a specific owner or from everywhere:
 
 ``` cpp
 FFlow::StopAllActions(GetWorld()); // <- stops all of the actions
-FFlow::StopAllActions(GetWorld(), Owner); // <- stops all of the actions started from this specific owner
+FFlow::StopAllActions(GetWorld(), Owner); // <- stops all of the actions 
+                                          //    started from this specific owner
 ```
 
 You can also stop all of the specific actions. In this case you can also optionally specifiy an owner of this actions, or simply stop all of them.
@@ -187,32 +190,43 @@ If you have a source code of this plugin it can be easily extended! Here's how t
 > Check how other actions are made to easier understand how to extend the plugin.
 
 1. Create a class that inherits from UECFActionBase
-2. Implement **Setup** function, which accepts all parameters you want to pass to this action. **Setup** function must return true if the given parameters are valid.  
+2. Implement **Setup** function, which accepts all parameters you want to pass to this action. 
+   **Setup** function must return true if the given parameters are valid.  
 ```cpp
-bool Setup(int32 Param1, int32 Param2, TUniqueFunction<void()>&& NewCallbackFunc)
+bool Setup(int32 Param1, int32 Param2, TUniqueFunction<void()>&& Call)
 {
-	CallbackFunc = MoveTemp(NewCallbackFunc);
-	if (CallbackFunc) return true;
-	return false;
+  CallbackFunc = MoveTemp(Call);
+  if (CallbackFunc) return true;
+  return false;
 }
 ```
 > Any callback must be passed as a r-value reference and moved to the action's variable.
 
 3. Override **Init** and **Tick** functions if needed.
 4. If you want this action to be stopped while ticking - use **MarkAsFinished()** function.
-5. In the **FEnhancedCodeFlow** class implement static function that launches the action using **AddAction** function. The function must receive a pointer to the launching UObject pointer and every other argument that is used in the action's **Setup** function. It must return **FECFHandle**.
+5. In the **FEnhancedCodeFlow** class implement static function that launches the action using **AddAction** function.
+   The function must receive a pointer to the launching UObject pointer and every other argument that is used in the action's **Setup** function.
+   It must return **FECFHandle**.
 ```cpp
-FECFHandle FEnhancedCodeFlow::NewAction(UObject* InOwner, int32 Param1, int32 Param2, TUniqueFunction<void()>&& NewCallbackFunc)
+FECFHandle FEnhancedCodeFlow::NewAction(
+    UObject* InOwner, 
+    int32 Param1, 
+    int32 Param2, 
+    TUniqueFunction<void()>&& Call)
 {
-	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-		return ECF->AddAction<UECFNewAction>(InOwner, MoveTemp(NewCallbackFunc), Param1, Param2);
+  if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+    return ECF->AddAction<UECFNewAction>(
+      InOwner, 
+      MoveTemp(Call), 
+      Param1, 
+      Param2);
 	else
 		return FECFHandle();
 }
 ```
 6. You can optionally add static function which will stop this action
 ```cpp
-void FFlow::RemoveNewActions(const UObject* WorldContextObject, UObject* InOwner/* = nullptr*/)
+void FFlow::RemoveNewActions(const UObject* WorldContextObject, UObject* InOwner)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
 	{
@@ -236,4 +250,4 @@ If you have any question ask it on forum thread: https://forums.unrealengine.com
 
 # Thanks
 
-I want to send special thanks to Monica, because she always supports me and believes in me, and to Pawe³, for allowing me to test this plugin on his project. Also, I want to thank You for using this plugin! It is very important for me that my work is useful for someone!
+I want to send special thanks to Monica, because she always supports me and believes in me, and to Pawel, for allowing me to test this plugin on his project. Also, I want to thank You for using this plugin! It is very important for me that my work is useful for someone!
