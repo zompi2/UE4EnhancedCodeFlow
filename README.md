@@ -237,10 +237,15 @@ FFlow::NewAction(this, 1, 2, [this]()
 
 # Contact
 
-If you have any question ask it on forum thread: https://forums.unrealengine.com/unreal-engine/marketplace/1868196-enhanced-code-flow I will try my best to answer it quickly :)
+If you have any question or suggestion regardles this plugin simply add an **Issue** to the github project or write an e-mail to me: zompi2@gmail.com I will try my best to answer it quickly :)
+
+# Support
+
+If you like what I'm doing and want to support me in maintaining this project and creating new one you can buy me a coffee. Programmers love coffee :D 
+https://ko-fi.com/zompi
 
 # Thanks
 
-I want to send special thanks to Monica, because she always supports me and believes in me, and to Pawel, for allowing me to test this plugin on his project.  
+I want to send special thanks to Monika, because she always supports me and believes in me, and to Pawel, for allowing me to test this plugin on his project.  
 Also, I want to thank You for using this plugin! It is very important for me that my work is useful for someone!  
 Happy coding!
