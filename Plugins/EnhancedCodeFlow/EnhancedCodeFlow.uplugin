@@ -1,0 +1,32 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0.0",
+	"FriendlyName": "Enhanced Code Flow",
+	"Description": "Providing functionalities that improves implementation of game flow using code.",
+	"Category": "Programming",
+	"CreatedBy": "Damian Nowakowski",
+	"CreatedByURL": "https://damnow.blogspot.com",
+	"DocsURL": "https://github.com/zompi2/UE4CodeFlow",
+	"MarketplaceURL": "",
+	"EngineVersion": "4.26.0",
+	"SupportURL": "mailto:zompi2@gmail.com",
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": true,
+	"Modules": [
+		{
+			"Name": "EnhancedCodeFlow",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms": [
+				"Win64",
+				"Linux",
+				"Mac",
+				"IOS",
+				"Android"
+			]
+		}
+	]
+}
