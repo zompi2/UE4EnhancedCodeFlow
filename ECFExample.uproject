@@ -1,0 +1,22 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "4.26",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "ECFExample",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"EnhancedCodeFlow"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "EnhancedCodeFlow",
+			"Enabled": true
+		}
+	]
+}
