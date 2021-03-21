@@ -242,7 +242,7 @@ FFlow::NewAction(this, 1, 2, [this]()
 });
 ```
 
-# Thanks
+# Special thanks
 
 I want to send special thanks to Monika, because she always supports me and believes in me, and to Pawel, for allowing me to test this plugin on his project.  
 Also, I want to thank You for using this plugin! It is very important for me that my work is useful for someone!  
