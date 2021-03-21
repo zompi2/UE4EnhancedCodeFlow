@@ -9,7 +9,7 @@ If you have any question or suggestion regardles this plugin simply add an **Iss
 
 # Support
 
-This code is 100% free, but if you like what I'm doing and want to support me in maintaining this project and creating new one you can buy me a coffee. Programmers love coffee :D https://ko-fi.com/zompi
+This code is 100% free, but if you like what I'm doing and want to support me in maintaining this project and creating new one you can [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/B0B23YVKO). Programmers love coffee :D 
 
 # Example Project
 
