@@ -5,11 +5,11 @@ It works very well with gameplay programming, UI programming with a lot of trans
 
 # Contact
 
-If you have any question or suggestion regardles this plugin simply add an **Issue** to the github project or write an e-mail to me: zompi2@gmail.com I will try my best to answer it quickly :)
+If you have any question or suggestion regardles this plugin simply add an **Issue** to the github project or write an e-mail to me: **zompi2@gmail.com** I will try my best to answer it quickly :)
 
 # Support
 
-This code is 100% free, but if you like what I'm doing and want to support me in maintaining this project and creating new one you can [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/B0B23YVKO). Programmers love coffee :D 
+This code is 100% free, but if you like what I'm doing and want to support me in maintaining this project and creating new one you can buy me a coffe **https://ko-fi.com/zompi**. Programmers love coffee :D 
 
 # Example Project
 
