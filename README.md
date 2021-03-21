@@ -3,6 +3,14 @@
 This code plugin provides functions that drastically improve the quality of life during the implementation of game flow in C++.  
 It works very well with gameplay programming, UI programming with a lot of transitions or in any other situation.
 
+# Contact
+
+If you have any question or suggestion regardles this plugin simply add an **Issue** to the github project or write an e-mail to me: zompi2@gmail.com I will try my best to answer it quickly :)
+
+# Support
+
+This code is 100% free, but if you like what I'm doing and want to support me in maintaining this project and creating new one you can buy me a coffee. Programmers love coffee :D https://ko-fi.com/zompi
+
 # Installation
 
 This is a code only plugin. It means that to use it you have to:
@@ -234,15 +242,6 @@ FFlow::NewAction(this, 1, 2, [this]()
   // Callback code.
 });
 ```
-
-# Contact
-
-If you have any question or suggestion regardles this plugin simply add an **Issue** to the github project or write an e-mail to me: zompi2@gmail.com I will try my best to answer it quickly :)
-
-# Support
-
-If you like what I'm doing and want to support me in maintaining this project and creating new one you can buy me a coffee. Programmers love coffee :D 
-https://ko-fi.com/zompi
 
 # Thanks
 
