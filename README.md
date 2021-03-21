@@ -11,12 +11,11 @@ If you have any question or suggestion regardles this plugin simply add an **Iss
 
 This code is 100% free, but if you like what I'm doing and want to support me in maintaining this project and creating new one you can buy me a coffee. Programmers love coffee :D https://ko-fi.com/zompi
 
-# Installation
+# Example Project
 
-This is a code only plugin. It means that to use it you have to:
-1. Put the whole plugin into a Plugins directory of your project.
-2. Add **"EnhancedCodeFlow"** entry to the **PublicDependencyModuleNames** in your project's **build.cs** file.
-3. Add **#include "EnhancedCodeFlow.h"** to a file in which you want to use the plugin.
+The repository contains an example project which can be used to discover of how to use the plugin. Simply compile and run the project and play with the map.
+
+![ecf](https://user-images.githubusercontent.com/7863125/111898879-0d845280-8a29-11eb-82cb-2953b4069b26.png)
 
 # Usage
 
