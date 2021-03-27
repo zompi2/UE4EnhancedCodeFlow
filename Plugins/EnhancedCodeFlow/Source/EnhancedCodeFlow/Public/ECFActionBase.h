@@ -6,6 +6,7 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Tickable.h"
 #include "ECFHandle.h"
+#include "ECFActionSettings.h"
 #include "ECFActionBase.generated.h"
 
 UCLASS()
@@ -49,6 +50,11 @@ protected:
 	// Ticks this action.
 	virtual void Tick(float DeltaTime) {}
 
+	void SetMaxActionTime(float InMaxActionTime)
+	{
+		MaxActionTime = InMaxActionTime;
+	}
+
 	// Pointer to the owner of this action. Owner must be valid all the time, otherwise
 	// the action will become invalid and will be deleted.
 	UPROPERTY()
@@ -57,34 +63,81 @@ protected:
 	// Current handle of this action
 	FECFHandle HandleId;
 
+	// Settings for this action
+	FECFActionSettings Settings;
+
 private:
 
 	// Sets the owner and handle id of this action.
-	void SetOwner(const TWeakObjectPtr<UObject>& InOwner, const FECFHandle& InHandleId)
+	void SetAction(const TWeakObjectPtr<UObject>& InOwner, const FECFHandle& InHandleId, const FECFActionSettings& InSettings)
 	{
 		Owner = InOwner;
 		HandleId = InHandleId;
+		Settings = InSettings;
+
+		CurrentActionTime = 0.f;
+		AccumulatedTime = 0.f;
 	}
 
 	// Performs a tick. Apply global time dilation to delta time and pass it to the 
 	// virtual tick function.
 	void DoTick(float DeltaTime)
 	{
-		float TimeDilation = 1.f;
-		if (Owner.IsValid())
+		if (Settings.bIgnoreTimeDilation == false)
 		{
-			if (UWorld* World = Owner->GetWorld())
+			float TimeDilation = 1.f;
+			if (Owner.IsValid())
 			{
-				if (AWorldSettings* WorldSettings = World->GetWorldSettings())
+				if (UWorld* World = Owner->GetWorld())
 				{
-					TimeDilation = WorldSettings->TimeDilation;
+					if (AWorldSettings* WorldSettings = World->GetWorldSettings())
+					{
+						TimeDilation = WorldSettings->TimeDilation;
+					}
 				}
 			}
+			DeltaTime *= TimeDilation;
 		}
+	
 
-		Tick(DeltaTime * TimeDilation);
+		CurrentActionTime += DeltaTime;
+		if (MaxActionTime > 0.f && CurrentActionTime >= MaxActionTime)
+		{
+			if (Settings.TickInterval > 0.f)
+			{
+				AccumulatedTime += DeltaTime;
+				Tick(AccumulatedTime);
+			}
+			else
+			{
+				Tick(DeltaTime);
+			}
+		}
+		else
+		{
+			if (Settings.TickInterval > 0.f)
+			{
+				AccumulatedTime += DeltaTime;
+				if (AccumulatedTime >= Settings.TickInterval)
+				{
+					Tick(Settings.TickInterval);
+					while (AccumulatedTime >= Settings.TickInterval)
+					{
+						AccumulatedTime -= Settings.TickInterval;
+					}
+				}
+			}
+			else
+			{
+				Tick(DeltaTime);
+			}
+		}
 	}
 
 	// Indicates if this action has finished and will be deleted soon.
 	bool bHasFinished = false;
+
+	float CurrentActionTime = 0.f;
+	float AccumulatedTime = 0.f;
+	float MaxActionTime = 0.f;
 };

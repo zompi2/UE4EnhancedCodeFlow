@@ -25,6 +25,11 @@ protected:
 		TickingTime = InTickingTime;
 		if (TickFunc && (TickingTime > 0.f || TickingTime == -1.f))
 		{
+			if (TickingTime > 0.f)
+			{
+				SetMaxActionTime(TickingTime);
+			}
+
 			CurrentTime = 0.f;
 			return true;
 		}
