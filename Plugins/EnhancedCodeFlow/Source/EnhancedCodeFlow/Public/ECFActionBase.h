@@ -50,6 +50,10 @@ protected:
 	// Ticks this action.
 	virtual void Tick(float DeltaTime) {}
 
+	// For any action that should last only the given time - set this function
+	// inside the action's Setup step. 
+	// WARNING! This is only to help ticker run ticks with proper delta times.
+	// It will not stop the action itself!
 	void SetMaxActionTime(float InMaxActionTime)
 	{
 		MaxActionTime = InMaxActionTime;
@@ -79,10 +83,11 @@ private:
 		AccumulatedTime = 0.f;
 	}
 
-	// Performs a tick. Apply global time dilation to delta time and pass it to the 
-	// virtual tick function.
+	// Performs a tick. Apply any settings to the time step.
 	void DoTick(float DeltaTime)
 	{
+		// If global time dilation is not ignored (by default it is not) apply
+		// this time dilation to the delta time.
 		if (Settings.bIgnoreTimeDilation == false)
 		{
 			float TimeDilation = 1.f;
@@ -99,14 +104,21 @@ private:
 			DeltaTime *= TimeDilation;
 		}
 	
-
+		// Append current action time with delta
 		CurrentActionTime += DeltaTime;
+
+		// If this action exceeded it's maximum time
 		if (MaxActionTime > 0.f && CurrentActionTime >= MaxActionTime)
 		{
+			// Launch last tick. If this was using time intervals - tick with the proper accumulated time.
+			// If not, simply do a tick.
+			// WARNING! This will not stop the action. Ensure that the action has proper logic in tick function
+			// that will stop it when the time has passed.
 			if (Settings.TickInterval > 0.f)
 			{
 				AccumulatedTime += DeltaTime;
 				Tick(AccumulatedTime);
+				AccumulatedTime = 0;
 			}
 			else
 			{
@@ -115,6 +127,9 @@ private:
 		}
 		else
 		{
+			// If we have specified tick intervals accumulate time until it won't reach the desired interval.
+			// Tick with the given interval and decrease the accumulation with this interval.
+			// Otherwise do a simple tick.
 			if (Settings.TickInterval > 0.f)
 			{
 				AccumulatedTime += DeltaTime;
@@ -137,6 +152,7 @@ private:
 	// Indicates if this action has finished and will be deleted soon.
 	bool bHasFinished = false;
 
+	// Timers for this action
 	float CurrentActionTime = 0.f;
 	float AccumulatedTime = 0.f;
 	float MaxActionTime = 0.f;

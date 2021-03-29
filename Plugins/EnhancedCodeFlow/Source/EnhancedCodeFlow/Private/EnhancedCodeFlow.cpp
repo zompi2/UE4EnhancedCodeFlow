@@ -33,28 +33,28 @@ void FFlow::StopAllActions(const UObject* WorldContextObject, UObject* InOwner/*
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-FECFHandle FFlow::AddTicker(UObject* InOwner, TUniqueFunction<void(float)>&& InTickFunc, const FECFActionSettings& Settings/* = {}*/)
+FECFHandle FFlow::AddTicker(UObject* InOwner, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void()> InCallbackFunc/* = nullptr*/, const FECFActionSettings& Settings/* = {}*/)
 {
-	return FFlow::AddTicker(InOwner, -1.f, MoveTemp(InTickFunc), Settings);
+	return FFlow::AddTicker(InOwner, -1.f, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc), Settings);
 }
 
-FECFHandle FEnhancedCodeFlow::AddTicker(UObject* InOwner, float InTickingTime, TUniqueFunction<void(float)>&& InTickFunc, const FECFActionSettings& Settings/* = {}*/)
+FECFHandle FEnhancedCodeFlow::AddTicker(UObject* InOwner, float InTickingTime, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void()> InCallbackFunc/* = nullptr*/, const FECFActionSettings& Settings/* = {}*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-		return ECF->AddAction<UECFTicker>(InOwner, Settings, MoveTemp(InTickFunc), InTickingTime);
+		return ECF->AddAction<UECFTicker>(InOwner, Settings, InTickingTime, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc));
 	else
 		return FECFHandle();
 }
 
-FECFHandle FFlow::AddTicker(UObject* InOwner, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, const FECFActionSettings& Settings/* = {}*/)
+FECFHandle FFlow::AddTicker(UObject* InOwner, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, TUniqueFunction<void()> InCallbackFunc/* = nullptr*/, const FECFActionSettings& Settings/* = {}*/)
 {
-	return FFlow::AddTicker(InOwner, -1.f, MoveTemp(InTickFunc), Settings);
+	return FFlow::AddTicker(InOwner, -1.f, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc), Settings);
 }
 
-FECFHandle FEnhancedCodeFlow::AddTicker(UObject* InOwner, float InTickingTime, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, const FECFActionSettings& Settings/* = {}*/)
+FECFHandle FEnhancedCodeFlow::AddTicker(UObject* InOwner, float InTickingTime, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, TUniqueFunction<void()> InCallbackFunc/* = nullptr*/, const FECFActionSettings& Settings/* = {}*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-		return ECF->AddAction<UECFTicker2>(InOwner, Settings, MoveTemp(InTickFunc), InTickingTime);
+		return ECF->AddAction<UECFTicker2>(InOwner, Settings, InTickingTime, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc));
 	else
 		return FECFHandle();
 }
