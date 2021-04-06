@@ -18,8 +18,8 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnECFDelayBPComplete OnComplete;
 
-	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay="TickInterval, bIgnorePause, bIgnoreGlobalTimeDilation"))
-	static UECFDelayBP* ECFDelay(UObject* WorldContextObject, float DelayTime, float TickInterval = 0.f, bool bIgnorePause = false, bool bIgnoreGlobalTimeDilation = false);
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay="Settings"))
+	static UECFDelayBP* ECFDelay(UObject* WorldContextObject, float DelayTime, FECFActionSettings Settings);
 
 	void Activate() override;
 

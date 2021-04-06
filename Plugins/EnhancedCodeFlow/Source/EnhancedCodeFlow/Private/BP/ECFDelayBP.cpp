@@ -3,13 +3,13 @@
 #include "ECFDelayBP.h"
 #include "EnhancedCodeFlow.h"
 
-UECFDelayBP* UECFDelayBP::ECFDelay(UObject* WorldContextObject, float DelayTime, float TickInterval, bool bIgnorePause, bool bIgnoreGlobalTimeDilation)
+UECFDelayBP* UECFDelayBP::ECFDelay(UObject* WorldContextObject, float DelayTime, FECFActionSettings Settings)
 {
 	UECFDelayBP* Proxy = NewObject<UECFDelayBP>();
 
 	Proxy->Proxy_WorldContextObject = WorldContextObject;
 	Proxy->Proxy_DelayTime = DelayTime;
-	Proxy->Proxy_Settings = FECFActionSettings(TickInterval, bIgnorePause, bIgnoreGlobalTimeDilation);
+	Proxy->Proxy_Settings = Settings;
 
 	return Proxy;
 }
