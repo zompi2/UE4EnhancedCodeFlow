@@ -17,7 +17,9 @@ This code is 100% free, but if you like what I'm doing and want to support me in
 * Option to set tick interval and to ignore global time dilation when launching each added action. Check `FECFActionSettings`
 * Added additional callback to tickers which will launch when ticker finishes.
 * Fixes to comments.
-          
+
+###### 1.1.1 
+* Ensure the time in timeline is always valid.          
 
 # Example Project
 
