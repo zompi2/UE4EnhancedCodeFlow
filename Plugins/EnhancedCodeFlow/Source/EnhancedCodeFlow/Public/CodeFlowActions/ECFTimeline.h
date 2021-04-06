@@ -56,7 +56,7 @@ protected:
 
 	void Tick(float DeltaTime) override
 	{
-		CurrentTime += DeltaTime;
+		CurrentTime = FMath::Clamp(CurrentTime + DeltaTime, 0.f, Time);
 
 		switch (BlendFunc)
 		{
