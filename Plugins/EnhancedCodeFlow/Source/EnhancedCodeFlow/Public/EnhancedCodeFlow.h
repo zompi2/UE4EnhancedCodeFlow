@@ -16,6 +16,8 @@
  * {
  *     // Stuff to do after 2 seconds delay.
  * });
+ * Every function accepts an optional parameter of FECFActionSettings which can control
+ * tick interval and flag to ignore global time dilation.
  */
 
 #pragma once
@@ -24,6 +26,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "ECFHandle.h"
 #include "ECFTypes.h"
+#include "ECFActionSettings.h"
 
 class ENHANCEDCODEFLOW_API FEnhancedCodeFlow
 {
@@ -51,13 +54,15 @@ public:
 
 	/**
 	 * Creates a ticker. It can tick specified amount of time or until it won't be stopped or when owning object won't be destroyed.
-	 * @param InTickFunc - a ticking function can be: [](float DeltaTime) -> void, or [](float DeltaTime, FECFHandle TickerHandle) -> void.
 	 * @param InTickingTime [optional] - how long the ticker should tick. -1 means it will tick until it is explicitly stopped.
+	 * @param InTickFunc - a ticking function can be: [](float DeltaTime) -> void, or [](float DeltaTime, FECFHandle TickerHandle) -> void.
+	 * @param InCallbackFunc [optional] - a function which will be run after the last tick occurs. Must be: []() -> void.
+	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
-	static FECFHandle AddTicker(UObject* InOwner, TUniqueFunction<void(float)>&& InTickFunc);
-	static FECFHandle AddTicker(UObject* InOwner, float InTickingTime, TUniqueFunction<void(float)>&& InTickFunc);
-	static FECFHandle AddTicker(UObject* InOwner, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc);
-	static FECFHandle AddTicker(UObject* InOwner, float InTickingTime, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc);
+	static FECFHandle AddTicker(UObject* InOwner, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void()> InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
+	static FECFHandle AddTicker(UObject* InOwner, float InTickingTime, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void()> InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
+	static FECFHandle AddTicker(UObject* InOwner, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, TUniqueFunction<void()> InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
+	static FECFHandle AddTicker(UObject* InOwner, float InTickingTime, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, TUniqueFunction<void()> InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Removes all running tickers.
@@ -72,8 +77,9 @@ public:
 	 * Execute specified action after some time.
 	 * @param InDelayTiem - time in seconds to wait before executing action.
 	 * @param InCallbackFunc - a callback with action to execute. Must be: []() -> void. 
+	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
-	static FECFHandle Delay(UObject* InOwner, float InDelayTime, TUniqueFunction<void()>&& InCallbackFunc);
+	static FECFHandle Delay(UObject* InOwner, float InDelayTime, TUniqueFunction<void()>&& InCallbackFunc, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops all delays. Callbacks will not be executed.
@@ -89,8 +95,9 @@ public:
 	 * @param InPredicate -	a function that decides if the action should launch. 
 	 *                      If it returns true it means the action must be launched. Must be: []() -> bool.
 	 * @param InCallbackFunc - a callback with action to execute. Must be: []() -> void.
+	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
-	static FECFHandle WaitAndExecute(UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void()>&& InCallbackFunc);
+	static FECFHandle WaitAndExecute(UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void()>&& InCallbackFunc, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops "wait and execute" actions. Callbacks will not be executed.
@@ -106,8 +113,9 @@ public:
 	 * @param InPredicate - a function that decides if the action should tick. 
 	 *                      If it returns true - it means the action will tick. Must be: []() -> bool.
 	 * @param InTickFunc -  a ticking function must be: [](float DeltaTime) -> void.
+	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
-	static FECFHandle WhileTrueExecute(UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc);
+	static FECFHandle WhileTrueExecute(UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops "while true execute" actions.
@@ -123,13 +131,13 @@ public:
 	 * @param InStartValue -    the value from which this timeline will start.
 	 * @param InStopValue -     the value to which this timeline will go. Must be different than InStartValue.
 	 * @param InTime -          how long the timeline will be processed? Must be greater than 0.
-	 * @param InTickFunc -      ticking function executed when timeline is processed. It's param represents current value.
-	 *                          Must be: [](float CurrentValue) -> void.
-	 * @param InCallbackFunc -  [optional] function which will be launched when timeline reaches end. Must be: [](float CurrentValue) -> void.
+	 * @param InTickFunc -      ticking function executed when timeline is processed. It's param represents current value. Must be: [](float CurrentValue, float CurrentTime) -> void.
+	 * @param InCallbackFunc -  [optional] function which will be launched when timeline reaches end. Must be: [](float CurrentValue, float CurrentTime) -> void.
 	 * @param InBlendFunc -     [optional] a function used to update timeline. By default it is Linear.
 	 * @param InBlendExp -      [optional] an exponent, used by certain blend functions (EaseIn, EaseOut, EaseInOut) to control the shape of the timeline curve.
+	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
-	static FECFHandle AddTimeline(UObject* InOwner, float InStartValue, float InStopValue, float InTime, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc = nullptr, EECFBlendFunc InBlendFunc = EECFBlendFunc::ECFBlend_Linear, float InBlendExp = 1.f);
+	static FECFHandle AddTimeline(UObject* InOwner, float InStartValue, float InStopValue, float InTime, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc = nullptr, EECFBlendFunc InBlendFunc = EECFBlendFunc::ECFBlend_Linear, float InBlendExp = 1.f, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops timelines. Will not launch callback functions.
@@ -143,10 +151,11 @@ public:
 	/**
 	 * Adds a custom timeline defined by a float curve.
 	 * @param CurveFloat - a curve that defines this timeline.
-	 * @param InTickFunc - a ticking executed when timeline is processed. IOt's param represents current value. Must be: [](float CurrentValue) -> void. 
-	 * @param InCallbackFunc - [optional] function which will be launched when timeline reaches end. Must be: [](float CurrentValue) -> void.
+	 * @param InTickFunc - a ticking executed when timeline is processed. IOt's param represents current value. Must be: [](float CurrentValue, float CurrentTime) -> void. 
+	 * @param InCallbackFunc - [optional] function which will be launched when timeline reaches end. Must be: [](float CurrentValue, float CurrentTime) -> void.
+	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
-	static FECFHandle AddCustomTimeline(UObject* InOwner, UCurveFloat* CurveFloat, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc = nullptr);
+	static FECFHandle AddCustomTimeline(UObject* InOwner, UCurveFloat* CurveFloat, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops custom timelines. Will not launch callback functions.

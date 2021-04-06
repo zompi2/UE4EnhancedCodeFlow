@@ -11,6 +11,20 @@ If you have any question or suggestion regardles this plugin simply add an **Iss
 
 This code is 100% free, but if you like what I'm doing and want to support me in maintaining this project and creating new one you can buy me a coffe **https://ko-fi.com/zompi**. Programmers love coffee :D 
 
+# Changelog
+
+###### 1.2.0
+* Ignore game pause extra setting added.
+* Minor code readability improvements. 
+
+###### 1.1.1 
+* Ensure the time in timeline is always valid. 
+
+###### 1.1.0 
+* Option to set tick interval and to ignore global time dilation when launching each added action. Check `FECFActionSettings`
+* Added additional callback to tickers which will launch when ticker finishes.
+* Fixes to comments.    
+
 # Example Project
 
 The repository contains an example project which can be used to discover of how to use the plugin. Simply compile and run the project and play with the map.
@@ -50,12 +64,24 @@ FFlow::AddTicker(this, 10.f, [this](float DeltaTime)
 });
 ```
 
+**Run ticker for 10 seconds and run a callback when it finishes**
+
+``` cpp
+FFlow::AddTicker(this, 10.f, [this](float DeltaTime)
+{
+  // Code to execute every tick
+}, [this]()
+{
+  // Code to execute when ticker finishes ticking
+});
+```
+
 **Run ticker for infinite time and stop it when you want to**
 
 ``` cpp
 FFlow::AddTicker(this, [this](float DeltaTime, FECFHandle TickerHandle)
 {
-  Code to execute in every tick.
+  // Code to execute in every tick.
 
   // Use this to stop the ticker
   FFlow::StopAction(this, TickerHandle);
@@ -160,6 +186,36 @@ FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
 });
 ```
 
+# Extra settings
+
+You can define extra settings at the end of each action launch. Currently the following actions are available:
+* Time Intervals - defines the length of one tick.
+* Ignore Game Pause - it will ignore the game pause.
+* Ignore Global Time Dilation - it will ignore global time dilation when ticking.
+
+``` cpp
+FFlow::AddTicker(this, 10.f, [this](float DeltaTime)
+{
+  // Code to execute every 1 second for 10 seconds.
+}, nullptr, FECFActionSettings(1.f, false, false));
+```
+
+``` cpp
+FFlow::AddTicker(this, 10.f, [this](float DeltaTime)
+{
+  // Code to execute every tick for 10 seconds 
+  // while ignoring global time dilation.
+}, nullptr, FECFActionSettings(0.f, true, false));
+```
+
+``` cpp
+FFlow::AddTicker(this, 10.f, [this](float DeltaTime)
+{
+  // Code to execute every 1 seconds for 10 seconds 
+  // while ignoring global time dilation and pause.
+}, nullptr, FECFActionSettings(1.f, true, true));
+```
+
 # Stopping actions
 
 Every function described earlier returns a **FECFHandle** which can be used to check if the following action is running and to stop it.
@@ -242,7 +298,7 @@ FFlow::NewAction(this, 1, 2, [this]()
 });
 ```
 
-# Thanks
+# Special thanks
 
 I want to send special thanks to Monika, because she always supports me and believes in me, and to Pawel, for allowing me to test this plugin on his project.  
 Also, I want to thank You for using this plugin! It is very important for me that my work is useful for someone!  

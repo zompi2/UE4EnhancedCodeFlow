@@ -32,6 +32,11 @@ protected:
 		StopValue = InStopValue;
 		Time = InTime;
 
+		if (Time > 0.f)
+		{
+			SetMaxActionTime(Time);
+		}
+
 		TickFunc = MoveTemp(InTickFunc);
 		CallbackFunc = MoveTemp(InCallbackFunc);
 
@@ -51,7 +56,7 @@ protected:
 
 	void Tick(float DeltaTime) override
 	{
-		CurrentTime += DeltaTime;
+		CurrentTime = FMath::Clamp(CurrentTime + DeltaTime, 0.f, Time);
 
 		switch (BlendFunc)
 		{

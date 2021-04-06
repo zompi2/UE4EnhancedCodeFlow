@@ -6,6 +6,7 @@
 #include "Subsystems/WorldSubsystem.h"
 #include "Tickable.h"
 #include "ECFHandle.h"
+#include "ECFActionSettings.h"
 #include "ECFSubsystem.generated.h"
 
 class UECFActionBase;
@@ -31,15 +32,15 @@ protected:
 
 	// Add Action to list. Returns the Action id.
 	template<typename T, typename ... Ts>
-	FECFHandle AddAction(UObject* InOwner, Ts&& ... Args)
+	FECFHandle AddAction(UObject* InOwner, const FECFActionSettings& Settings, Ts&& ... Args)
 	{
-		T* NewNode = NewObject<T>(this);
-		NewNode->SetOwner(InOwner, ++LastHandleId);
-		if (NewNode->Setup(Forward<Ts>(Args)...))
+		T* NewAction = NewObject<T>(this);
+		NewAction->SetAction(InOwner, ++LastHandleId, Settings);
+		if (NewAction->Setup(Forward<Ts>(Args)...))
 		{
-			NewNode->Init();
-			PendingAddActions.Add(NewNode);
-			return NewNode->GetHandleId();
+			NewAction->Init();
+			PendingAddActions.Add(NewAction);
+			return NewAction->GetHandleId();
 		}
 		return FECFHandle();
 	}
