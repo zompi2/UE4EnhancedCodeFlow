@@ -11,29 +11,17 @@ struct FECFActionSettings
 	GENERATED_BODY()
 
 	FECFActionSettings() :
-	TickInterval(0.f),
-	bIgnoreTimeDilation(false)
-	{
-
-	}
-
-	FECFActionSettings(float InTickInterval) :
-		TickInterval(InTickInterval),
-		bIgnoreTimeDilation(false)
-	{
-
-	}
-
-	FECFActionSettings(bool InIgnoreTimeDilation) :
 		TickInterval(0.f),
-		bIgnoreTimeDilation(InIgnoreTimeDilation)
+		bIgnorePause(false),
+		bIgnoreGlobalTimeDilation(false)
 	{
 
 	}
 
-	FECFActionSettings(float InTickInterval, bool InIgnoreTimeDilation) :
+	FECFActionSettings(float InTickInterval, bool InIgnorePause, bool InIgnoreTimeDilation) :
 		TickInterval(InTickInterval),
-		bIgnoreTimeDilation(InIgnoreTimeDilation)
+		bIgnorePause(InIgnorePause),
+		bIgnoreGlobalTimeDilation(InIgnoreTimeDilation)
 	{
 
 	}
@@ -42,5 +30,8 @@ struct FECFActionSettings
 	float TickInterval = 0.f;
 
 	UPROPERTY(BlueprintReadWrite)
-	bool bIgnoreTimeDilation = false;
+	bool bIgnorePause = false;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool bIgnoreGlobalTimeDilation = false;
 };

@@ -13,6 +13,10 @@ This code is 100% free, but if you like what I'm doing and want to support me in
 
 # Changelog
 
+###### 1.2.0
+* Ignore game pause extra setting added.
+* Minor code readability improvements. 
+
 ###### 1.1.1 
 * Ensure the time in timeline is always valid. 
 
@@ -186,13 +190,14 @@ FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
 
 You can define extra settings at the end of each action launch. Currently the following actions are available:
 * Time Intervals - defines the length of one tick.
+* Ignore Game Pause - it will ignore the game pause.
 * Ignore Global Time Dilation - it will ignore global time dilation when ticking.
 
 ``` cpp
 FFlow::AddTicker(this, 10.f, [this](float DeltaTime)
 {
   // Code to execute every 1 second for 10 seconds.
-}, nullptr, FECFActionSettings(1.f));
+}, nullptr, FECFActionSettings(1.f, false, false));
 ```
 
 ``` cpp
@@ -200,15 +205,15 @@ FFlow::AddTicker(this, 10.f, [this](float DeltaTime)
 {
   // Code to execute every tick for 10 seconds 
   // while ignoring global time dilation.
-}, nullptr, FECFActionSettings(true));
+}, nullptr, FECFActionSettings(0.f, true, false));
 ```
 
 ``` cpp
 FFlow::AddTicker(this, 10.f, [this](float DeltaTime)
 {
   // Code to execute every 1 seconds for 10 seconds 
-  // while ignoring global time dilation.
-}, nullptr, FECFActionSettings(1.f, true));
+  // while ignoring global time dilation and pause.
+}, nullptr, FECFActionSettings(1.f, true, true));
 ```
 
 # Stopping actions

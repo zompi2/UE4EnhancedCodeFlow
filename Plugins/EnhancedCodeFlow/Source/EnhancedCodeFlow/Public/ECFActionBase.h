@@ -86,19 +86,28 @@ private:
 	// Performs a tick. Apply any settings to the time step.
 	void DoTick(float DeltaTime)
 	{
+		// If game is paused and the action does not ignore this pause - ignore tick.
+		if (Settings.bIgnorePause == false)
+		{
+			if (UWorld* World = GetWorld())
+			{
+				if (World->IsPaused())
+				{
+					return;
+				}
+			}
+		}
+
 		// If global time dilation is not ignored (by default it is not) apply
 		// this time dilation to the delta time.
-		if (Settings.bIgnoreTimeDilation == false)
+		if (Settings.bIgnoreGlobalTimeDilation == false)
 		{
 			float TimeDilation = 1.f;
-			if (Owner.IsValid())
+			if (UWorld* World = GetWorld())
 			{
-				if (UWorld* World = Owner->GetWorld())
+				if (AWorldSettings* WorldSettings = World->GetWorldSettings())
 				{
-					if (AWorldSettings* WorldSettings = World->GetWorldSettings())
-					{
-						TimeDilation = WorldSettings->TimeDilation;
-					}
+					TimeDilation = WorldSettings->TimeDilation;
 				}
 			}
 			DeltaTime *= TimeDilation;
