@@ -6,7 +6,7 @@
 #include "ECFActionSettings.generated.h"
 
 USTRUCT(BlueprintType)
-struct FECFActionSettings
+struct ENHANCEDCODEFLOW_API FECFActionSettings
 {
 	GENERATED_BODY()
 
@@ -40,3 +40,5 @@ struct FECFActionSettings
 	UPROPERTY(BlueprintReadWrite)
 	bool bIgnoreGlobalTimeDilation = false;
 };
+
+#define ECF_IGNOREPAUSE FECFActionSettings(0.f, 0.f, true, false)
