@@ -19,7 +19,7 @@ struct ENHANCEDCODEFLOW_API FECFActionSettings
 
 	}
 
-	FECFActionSettings(float InTickInterval, float InFirstDelay, bool InIgnorePause, bool InIgnoreTimeDilation) :
+	FECFActionSettings(float InTickInterval, float InFirstDelay = 0.f, bool InIgnorePause = false, bool InIgnoreTimeDilation = false) :
 		TickInterval(InTickInterval),
 		FirstDelay(InFirstDelay),
 		bIgnorePause(InIgnorePause),
@@ -41,4 +41,7 @@ struct ENHANCEDCODEFLOW_API FECFActionSettings
 	bool bIgnoreGlobalTimeDilation = false;
 };
 
+#define ECF_TICKINTERVAL(_Interval) FECFActionSettings(_Interval, 0.f, false, false)
+#define ECF_DELAYFIRST(_Delay) FECFActionSettings(0.f, _Delay, false, false)
 #define ECF_IGNOREPAUSE FECFActionSettings(0.f, 0.f, true, false)
+#define ECF_IGNORETIMEDILATION FECFActionSettings(0.f, 0.f, false, true)
