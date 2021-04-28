@@ -33,6 +33,8 @@ class ENHANCEDCODEFLOW_API FEnhancedCodeFlow
 
 public:
 
+	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
 	/**
 	 * Stops the running action pointed by given handle. Invalidates given handle.
 	 */
@@ -163,6 +165,8 @@ public:
 	 *                             Otherwise it will remove all custom timelines from everywhere.
 	 */
 	static void RemoveAllCustomTimelines(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+
+	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 };
 
 using FFlow = FEnhancedCodeFlow;

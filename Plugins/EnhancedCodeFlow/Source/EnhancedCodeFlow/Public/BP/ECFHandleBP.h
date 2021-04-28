@@ -5,9 +5,16 @@
 #include "ECFHandleBP.generated.h"
 
 USTRUCT(BlueprintType)
-struct FECFHandleBP
+struct ENHANCEDCODEFLOW_API FECFHandleBP
 {
 	GENERATED_BODY()
 
 	FECFHandle Handle;
+
+	FECFHandleBP()
+	{}
+
+	FECFHandleBP(FECFHandle InHandle) :
+		Handle(InHandle)
+	{}
 };

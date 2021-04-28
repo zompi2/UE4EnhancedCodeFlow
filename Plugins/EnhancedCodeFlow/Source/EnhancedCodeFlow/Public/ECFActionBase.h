@@ -81,6 +81,10 @@ private:
 
 		CurrentActionTime = 0.f;
 		AccumulatedTime = 0.f;
+
+		ActionDelayLeft = Settings.FirstDelay;
+
+		bFirstTick = true;
 	}
 
 	// Performs a tick. Apply any settings to the time step.
@@ -112,11 +116,18 @@ private:
 			}
 			DeltaTime *= TimeDilation;
 		}
+
+		// Delay first tick if specified in settings.
+		if (ActionDelayLeft > 0.f)
+		{
+			ActionDelayLeft -= DeltaTime;
+			return;
+		}
 	
-		// Append current action time with delta
+		// Append current action time with delta.
 		CurrentActionTime += DeltaTime;
 
-		// If this action exceeded it's maximum time
+		// If this action exceeded it's maximum time.
 		if (MaxActionTime > 0.f && CurrentActionTime >= MaxActionTime)
 		{
 			// Launch last tick. If this was using time intervals - tick with the proper accumulated time.
@@ -136,24 +147,31 @@ private:
 		}
 		else
 		{
-			// If we have specified tick intervals accumulate time until it won't reach the desired interval.
-			// Tick with the given interval and decrease the accumulation with this interval.
-			// Otherwise do a simple tick.
-			if (Settings.TickInterval > 0.f)
+			// We shall perform first tick no matter what.
+			if (bFirstTick)
 			{
-				AccumulatedTime += DeltaTime;
-				if (AccumulatedTime >= Settings.TickInterval)
-				{
-					Tick(Settings.TickInterval);
-					while (AccumulatedTime >= Settings.TickInterval)
-					{
-						AccumulatedTime -= Settings.TickInterval;
-					}
-				}
+				Tick(DeltaTime);
+				bFirstTick = false;
 			}
 			else
 			{
-				Tick(DeltaTime);
+				// If we have specified tick intervals accumulate time until it won't reach the desired interval.
+				// Tick with the given interval, otherwise do a simple tick.
+				// Clear accumulated time (no subtract the interval) as we are interested in ticks 
+				// that happens the exact time after the previous one.
+				if (Settings.TickInterval > 0.f)
+				{
+					AccumulatedTime += DeltaTime;
+					if (AccumulatedTime >= Settings.TickInterval)
+					{
+						Tick(Settings.TickInterval);
+						AccumulatedTime = 0;
+					}
+				}
+				else
+				{
+					Tick(DeltaTime);
+				}
 			}
 		}
 	}
@@ -161,8 +179,13 @@ private:
 	// Indicates if this action has finished and will be deleted soon.
 	bool bHasFinished = false;
 
+	// Indicates if this is a first tick. First tick should be launched as
+	// soon as possible, without consideration of tick interval.
+	bool bFirstTick = false;
+
 	// Timers for this action
 	float CurrentActionTime = 0.f;
+	float ActionDelayLeft = 0.f;
 	float AccumulatedTime = 0.f;
 	float MaxActionTime = 0.f;
 };

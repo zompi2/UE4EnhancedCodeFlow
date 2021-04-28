@@ -12,14 +12,16 @@ struct FECFActionSettings
 
 	FECFActionSettings() :
 		TickInterval(0.f),
+		FirstDelay(0.f),
 		bIgnorePause(false),
 		bIgnoreGlobalTimeDilation(false)
 	{
 
 	}
 
-	FECFActionSettings(float InTickInterval, bool InIgnorePause, bool InIgnoreTimeDilation) :
+	FECFActionSettings(float InTickInterval, float InFirstDelay, bool InIgnorePause, bool InIgnoreTimeDilation) :
 		TickInterval(InTickInterval),
+		FirstDelay(InFirstDelay),
 		bIgnorePause(InIgnorePause),
 		bIgnoreGlobalTimeDilation(InIgnoreTimeDilation)
 	{
@@ -28,6 +30,9 @@ struct FECFActionSettings
 
 	UPROPERTY(BlueprintReadWrite)
 	float TickInterval = 0.f;
+
+	UPROPERTY(BlueprintReadWrite)
+	float FirstDelay = 0.f;
 
 	UPROPERTY(BlueprintReadWrite)
 	bool bIgnorePause = false;
