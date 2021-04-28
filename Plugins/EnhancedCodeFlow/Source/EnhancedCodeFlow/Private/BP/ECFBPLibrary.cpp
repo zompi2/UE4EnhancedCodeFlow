@@ -24,7 +24,7 @@ void UECFBPLibrary::ECFStopAllActions(const UObject* WorldContextObject, UObject
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-FECFHandleBP UECFBPLibrary::ECFTicker(UObject* Owner, FOnECFTick OnTickEvent, FECFActionSettings Settings, float TickingTime/* = -1.f*/)
+FECFHandleBP UECFBPLibrary::ECFTicker(UObject* Owner, const FOnECFTick& OnTickEvent, const FOnECFFinished& OnFinishedEvent, FECFActionSettings Settings, float TickingTime /*= -1.f*/)
 {
 	FECFHandle Handle = FFlow::AddTicker(Owner, TickingTime,
 	[OnTickEvent](float DeltaTime)
@@ -34,25 +34,55 @@ FECFHandleBP UECFBPLibrary::ECFTicker(UObject* Owner, FOnECFTick OnTickEvent, FE
 			OnTickEvent.Execute(DeltaTime);
 		}
 	},
-	nullptr, Settings);
+	[OnFinishedEvent]()
+	{
+		if (OnFinishedEvent.IsBound())
+		{
+			OnFinishedEvent.Execute();
+		}
+	}, Settings);
 	return FECFHandleBP(Handle);
 }
 
-FECFHandleBP UECFBPLibrary::ECFTickerWithFinishCallback(UObject* Owner, FOnECFTick OnTickEvent, FOnECFTickerFinished OnTickerFinishedEvent, FECFActionSettings Settings, float TickingTime /*= -1.f*/)
+/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFHandleBP UECFBPLibrary::ECFTimeline(UObject* Owner, float StartValue, float StopValue, float Time, const FOnECFTimelineTick& OnTickEvent, const FOnECFTimelineTick& OnFinishedEvent, FECFActionSettings Settings, EECFBlendFunc BlendFunc /*= EECFBlendFunc::ECFBlend_Linear*/, float BlendExp /*= 1.f*/)
 {
-	FECFHandle Handle = FFlow::AddTicker(Owner, TickingTime,
-		[OnTickEvent](float DeltaTime)
+	FECFHandle Handle = FFlow::AddTimeline(Owner, StartValue, StopValue, Time, 
+	[OnTickEvent](float Value, float Time)
 	{
 		if (OnTickEvent.IsBound())
 		{
-			OnTickEvent.Execute(DeltaTime);
+			OnTickEvent.Execute(Value, Time);
 		}
 	},
-		[OnTickerFinishedEvent]()
+	[OnFinishedEvent](float Value, float Time)
 	{
-		if (OnTickerFinishedEvent.IsBound())
+		if (OnFinishedEvent.IsBound())
 		{
-			OnTickerFinishedEvent.Execute();
+			OnFinishedEvent.Execute(Value, Time);
+		}
+	}, BlendFunc, BlendExp, Settings);
+	return FECFHandleBP(Handle);
+}
+
+/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFHandleBP UECFBPLibrary::ECFCustomTimeline(UObject* Owner, UCurveFloat* CurveFloat, const FOnECFTimelineTick& OnTickEvent, const FOnECFTimelineTick& OnFinishedEvent, FECFActionSettings Settings)
+{
+	FECFHandle Handle = FFlow::AddCustomTimeline(Owner, CurveFloat,
+		[OnTickEvent](float Value, float Time)
+	{
+		if (OnTickEvent.IsBound())
+		{
+			OnTickEvent.Execute(Value, Time);
+		}
+	},
+		[OnFinishedEvent](float Value, float Time)
+	{
+		if (OnFinishedEvent.IsBound())
+		{
+			OnFinishedEvent.Execute(Value, Time);
 		}
 	}, Settings);
 	return FECFHandleBP(Handle);
