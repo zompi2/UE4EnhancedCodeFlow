@@ -329,15 +329,27 @@ Even though this was originally code only plugin I decided to move it's function
 
 #### Delay
 
+![delaynode](https://user-images.githubusercontent.com/7863125/117880380-5679ba00-b2a8-11eb-9a10-e68e1a0e27e3.png)
+
 #### Add Ticker
+
+![ticker](https://user-images.githubusercontent.com/7863125/117880473-727d5b80-b2a8-11eb-8c5f-31c34a65abbc.png)
 
 #### Wait and Execute
 
+![wee](https://user-images.githubusercontent.com/7863125/117880636-a0fb3680-b2a8-11eb-9bce-76282855d969.png)
+
 #### While True Execute
+
+![wte](https://user-images.githubusercontent.com/7863125/117880678-aeb0bc00-b2a8-11eb-8bd6-3bbed4199d0e.png)
 
 #### Add Timeline
 
+![timel](https://user-images.githubusercontent.com/7863125/117880748-bec89b80-b2a8-11eb-95e7-bf96e5626c5b.png)
+
 #### Add Custom Timeline
+
+![cust](https://user-images.githubusercontent.com/7863125/117880805-cd16b780-b2a8-11eb-9a9f-4f5400a21a05.png)
 
 # Special thanks
 
