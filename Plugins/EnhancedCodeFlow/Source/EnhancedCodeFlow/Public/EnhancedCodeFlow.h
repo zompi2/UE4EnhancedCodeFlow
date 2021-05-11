@@ -33,6 +33,8 @@ class ENHANCEDCODEFLOW_API FEnhancedCodeFlow
 
 public:
 
+	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
 	/**
 	 * Stops the running action pointed by given handle. Invalidates given handle.
 	 */
@@ -59,10 +61,10 @@ public:
 	 * @param InCallbackFunc [optional] - a function which will be run after the last tick occurs. Must be: []() -> void.
 	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
-	static FECFHandle AddTicker(UObject* InOwner, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void()> InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
-	static FECFHandle AddTicker(UObject* InOwner, float InTickingTime, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void()> InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
-	static FECFHandle AddTicker(UObject* InOwner, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, TUniqueFunction<void()> InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
-	static FECFHandle AddTicker(UObject* InOwner, float InTickingTime, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, TUniqueFunction<void()> InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
+	static FECFHandle AddTicker(UObject* InOwner, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
+	static FECFHandle AddTicker(UObject* InOwner, float InTickingTime, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
+	static FECFHandle AddTicker(UObject* InOwner, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
+	static FECFHandle AddTicker(UObject* InOwner, float InTickingTime, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Removes all running tickers.
@@ -163,6 +165,8 @@ public:
 	 *                             Otherwise it will remove all custom timelines from everywhere.
 	 */
 	static void RemoveAllCustomTimelines(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+
+	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 };
 
 using FFlow = FEnhancedCodeFlow;

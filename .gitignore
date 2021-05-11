@@ -1,6 +1,10 @@
 # ECFExample ignores
 enc_temp_folder
 
+# Rider user specific files
+.idea/
+Plugins/Developer/RiderLink
+
 # Visual Studio 2015 user specific files
 .vs/
 
