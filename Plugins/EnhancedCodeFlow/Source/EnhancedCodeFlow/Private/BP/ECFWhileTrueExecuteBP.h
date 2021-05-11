@@ -20,13 +20,13 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnECFWhileTrueExecuteBPCheck OnCheck;
 
-	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings"))
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings"), Category = "ECF")
 	static UECFWhileTrueExecuteBP* ECFWhileTrueExecute(UObject* WorldContextObject, const FOnECFWhileTrueExecuteBPTick& OnTick, FECFActionSettings Settings);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ECF")
 	void Predicate(bool bIsTrue);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ECF")
 	FECFHandleBP GetHandle();
 
 	void Activate() override;
