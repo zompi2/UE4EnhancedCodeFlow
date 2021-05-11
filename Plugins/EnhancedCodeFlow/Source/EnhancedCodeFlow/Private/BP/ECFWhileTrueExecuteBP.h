@@ -7,7 +7,7 @@
 #include "BP/ECFHandleBP.h"
 #include "ECFWhileTrueExecuteBP.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnECFWhileTrueExecuteCheck, class UECFWhileTrueExecuteBP*, ActionHandler);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnECFWhileTrueExecuteBPCheck, class UECFWhileTrueExecuteBP*, ActionHandler);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnECFWhileTrueExecuteBPTick, float, DeltaTime);
 
 UCLASS()
@@ -18,7 +18,7 @@ class ENHANCEDCODEFLOW_API UECFWhileTrueExecuteBP : public UBlueprintAsyncAction
 public:
 
 	UPROPERTY(BlueprintAssignable)
-	FOnECFWhileTrueExecuteCheck OnCheck;
+	FOnECFWhileTrueExecuteBPCheck OnCheck;
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings"))
 	static UECFWhileTrueExecuteBP* ECFWhileTrueExecute(UObject* WorldContextObject, const FOnECFWhileTrueExecuteBPTick& OnTick, FECFActionSettings Settings);

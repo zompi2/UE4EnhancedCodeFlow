@@ -3,12 +3,11 @@
 #include "ECFWaitAndExecuteBP.h"
 #include "EnhancedCodeFlow.h"
 
-UECFWaitAndExecuteBP* UECFWaitAndExecuteBP::ECFWaitAndExecute(UObject* WorldContextObject, const FOnECFWaitAndExecuteBPFinished& OnFinished, FECFActionSettings Settings)
+UECFWaitAndExecuteBP* UECFWaitAndExecuteBP::ECFWaitAndExecute(UObject* WorldContextObject, FECFActionSettings Settings)
 {
 	UECFWaitAndExecuteBP* Proxy = NewObject<UECFWaitAndExecuteBP>();
 
 	Proxy->Proxy_WorldContextObject = WorldContextObject;
-	Proxy->Proxy_OnFinished = OnFinished;
 	Proxy->Proxy_Settings = Settings;
 	Proxy->Proxy_HasFinished = false;
 
@@ -25,7 +24,7 @@ void UECFWaitAndExecuteBP::Activate()
 	},
 	[this]()
 	{
-		Proxy_OnFinished.Execute();
+		OnFinished.Broadcast();
 	}, Proxy_Settings);
 }
 

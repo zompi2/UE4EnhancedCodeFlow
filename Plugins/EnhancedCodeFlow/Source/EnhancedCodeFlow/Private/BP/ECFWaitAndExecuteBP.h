@@ -7,8 +7,8 @@
 #include "BP/ECFHandleBP.h"
 #include "ECFWaitAndExecuteBP.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnECFWaitAndExecuteCheck, class UECFWaitAndExecuteBP*, ActionHandler);
-DECLARE_DYNAMIC_DELEGATE(FOnECFWaitAndExecuteBPFinished);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnECFWaitAndExecuteBPCheck, class UECFWaitAndExecuteBP*, ActionHandler);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnECFWaitAndExecuteBPFinished);
 
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFWaitAndExecuteBP : public UBlueprintAsyncActionBase
@@ -18,10 +18,13 @@ class ENHANCEDCODEFLOW_API UECFWaitAndExecuteBP : public UBlueprintAsyncActionBa
 public:
 
 	UPROPERTY(BlueprintAssignable)
-	FOnECFWaitAndExecuteCheck OnCheck;
+	FOnECFWaitAndExecuteBPCheck OnCheck;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnECFWaitAndExecuteBPFinished OnFinished;
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings"))
-	static UECFWaitAndExecuteBP* ECFWaitAndExecute(UObject* WorldContextObject, const FOnECFWaitAndExecuteBPFinished& OnFinished, FECFActionSettings Settings);
+	static UECFWaitAndExecuteBP* ECFWaitAndExecute(UObject* WorldContextObject, FECFActionSettings Settings);
 
 	UFUNCTION(BlueprintCallable)
 	void Predicate(bool bHasFinished);
@@ -36,7 +39,6 @@ protected:
 	UPROPERTY(Transient)
 	class UObject* Proxy_WorldContextObject;
 
-	FOnECFWaitAndExecuteBPFinished Proxy_OnFinished;
 	FECFActionSettings Proxy_Settings;
 
 	bool Proxy_HasFinished = false;
