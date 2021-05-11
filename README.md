@@ -351,6 +351,10 @@ Even though this was originally code only plugin I decided to move it's function
 
 ![cust](https://user-images.githubusercontent.com/7863125/117880805-cd16b780-b2a8-11eb-9a9f-4f5400a21a05.png)
 
+#### Other functions
+
+![othernodes](https://user-images.githubusercontent.com/7863125/117882987-2b449a00-b2ab-11eb-910a-7bb28c9b2e95.png)
+
 # Special thanks
 
 I want to send special thanks to Monika, because she always supports me and believes in me, and to Pawel, for allowing me to test this plugin on his project.  
