@@ -13,6 +13,12 @@ This code is 100% free, but if you like what I'm doing and want to support me in
 
 # Changelog
 
+###### 1.3.0
+* **Blueprints support** has been added!
+* `First Delay` setting has been added.
+* Settings generating macros have been added.
+* Minor interface fixes.
+
 ###### 1.2.0
 * Ignore game pause extra setting added.
 * Minor code readability improvements. 
@@ -190,6 +196,7 @@ FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
 
 You can define extra settings at the end of each action launch. Currently the following actions are available:
 * Time Intervals - defines the length of one tick.
+* First Delay - defines when the first tick should be performed.
 * Ignore Game Pause - it will ignore the game pause.
 * Ignore Global Time Dilation - it will ignore global time dilation when ticking.
 
@@ -197,7 +204,7 @@ You can define extra settings at the end of each action launch. Currently the fo
 FFlow::AddTicker(this, 10.f, [this](float DeltaTime)
 {
   // Code to execute every 1 second for 10 seconds.
-}, nullptr, FECFActionSettings(1.f, false, false));
+}, nullptr, FECFActionSettings(1.f, 0.f, false, false));
 ```
 
 ``` cpp
@@ -205,15 +212,30 @@ FFlow::AddTicker(this, 10.f, [this](float DeltaTime)
 {
   // Code to execute every tick for 10 seconds 
   // while ignoring global time dilation.
-}, nullptr, FECFActionSettings(0.f, true, false));
+}, nullptr, FECFActionSettings(0.f, 0.f, true, false));
 ```
 
 ``` cpp
 FFlow::AddTicker(this, 10.f, [this](float DeltaTime)
 {
-  // Code to execute every 1 seconds for 10 seconds 
-  // while ignoring global time dilation and pause.
-}, nullptr, FECFActionSettings(1.f, true, true));
+  // Code to execute every 1 seconds for 10 seconds, 
+  // after 5 seconds have passed, while ignoring 
+  // global time dilation and pause.
+}, nullptr, FECFActionSettings(1.f, 5.f, true, true));
+```
+
+To make defining these settings easier there are few macros that creates a settings structure with just one option:
+
+* `ECF_TICKINTERVAL(5.f)` - settings which sets tick interval to 5 second
+* `ECF_DELAYFIRST(1.f)` - settings which makes this action to run after 1 second delay
+* `ECF_IGNOREPAUSE` - settings which makes this action ignore game pause
+* `ECF_IGNORETIMEDILATION` - settings which makes this action ignore global time dilation
+
+``` cpp
+FFlow::Delay(this, 2.f, [this]()
+{
+  // Run this code after 2 seconds, while ignoring game pause.
+}, ECF_IGNOREPAUSE);
 ```
 
 # Stopping actions
@@ -267,13 +289,13 @@ bool Setup(int32 Param1, int32 Param2, TUniqueFunction<void()>&& Callback)
 3. Override **Init** and **Tick** functions if needed.
 4. If you want this action to be stopped while ticking - use **MarkAsFinished()** function.
 5. In the **FEnhancedCodeFlow** class implement static function that launches the action using **AddAction** function.
-   The function must receive a pointer to the launching **UObject** pointer and every other argument that is used in the action's **Setup** function in the same order.
+   The function must receive a pointer to the launching **UObject**, **FECFActionSettings** structure and every other argument that is used in the action's **Setup** function in the same order.
    It must return **FECFHandle**.
 ```cpp
-FECFHandle FEnhancedCodeFlow::NewAction(UObject* InOwner, int32 Param1, int32 Param2, TUniqueFunction<void()>&& Call)
+FECFHandle FEnhancedCodeFlow::NewAction(UObject* InOwner, int32 Param1, int32 Param2, TUniqueFunction<void()>&& Call, const FECFActionSettings& Settings = {})
 {
   if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-    return ECF->AddAction<UECFNewAction>(InOwner, Param1, Param2, MoveTemp(Call));
+    return ECF->AddAction<UECFNewAction>(InOwner, Settings, Param1, Param2, MoveTemp(Call));
   else
     return FECFHandle();
 }
@@ -288,6 +310,9 @@ void FFlow::RemoveNewActions(const UObject* WorldContextObject, UObject* InOwner
   }
 }
 ```
+7. You can optionally run `SetMaxActionTime` in actions **Init** phase to determine the maximum time in seconds this action should run. 
+>IMMPORTANT! SetMaxActionTime is only to help ticker run ticks with proper delta times.  
+   >It will not stop the action itself!
 
 It is done! Now you can run your own action:
 
@@ -295,8 +320,24 @@ It is done! Now you can run your own action:
 FFlow::NewAction(this, 1, 2, [this]()
 {
   // Callback code.
-});
+}, ECF_IGNOREPAUSE);
 ```
+
+# Blueprints support
+
+Even though this was originally code only plugin I decided to move it's functions to Blueprints too:
+
+#### Delay
+
+#### Add Ticker
+
+#### Wait and Execute
+
+#### While True Execute
+
+#### Add Timeline
+
+#### Add Custom Timeline
 
 # Special thanks
 
