@@ -9,7 +9,7 @@ If you have any question or suggestion regardles this plugin simply add an **Iss
 
 # Changelog
 
-###### 1.3.0
+###### 1.3.1
 * **Blueprints support** has been added!
 * `First Delay` setting has been added.
 * Settings generating macros have been added.
