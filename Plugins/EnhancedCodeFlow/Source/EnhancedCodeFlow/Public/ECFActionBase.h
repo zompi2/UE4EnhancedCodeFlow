@@ -50,6 +50,9 @@ protected:
 	// Ticks this action.
 	virtual void Tick(float DeltaTime) {}
 
+	// Function called when the action is requested to be completed before it ends
+	virtual void Complete() {}
+
 	// For any action that should last only the given time - set this function
 	// inside the action's Setup step. 
 	// WARNING! This is only to help ticker run ticks with proper delta times.

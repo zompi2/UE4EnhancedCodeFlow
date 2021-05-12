@@ -37,8 +37,9 @@ public:
 
 	/**
 	 * Stops the running action pointed by given handle. Invalidates given handle.
+	 * bComplete param indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	static void StopAction(const UObject* WorldContextObject, FECFHandle& Handle);
+	static void StopAction(const UObject* WorldContextObject, FECFHandle& Handle, bool bComplete = false);
 
 	/**
 	 * Checks if the action pointed by given handle is running.
@@ -49,8 +50,9 @@ public:
 	 * Stops all running actions.
 	 * If owner is defined it will remove all actions from the given owner.
 	 * Otherwise it will stop all the actions from everywhere.
+	 * bComplete param indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	static void StopAllActions(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+	static void StopAllActions(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
@@ -68,10 +70,11 @@ public:
 
 	/**
 	 * Removes all running tickers.
+	 * @param bComplete			 - indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 * @param InOwner [optional] - if defined it will remove tickers only from the given owner. Otherwise
 	 *                             it will remove tickers from everywhere.
 	 */
-	static void RemoveAllTickers(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+	static void RemoveAllTickers(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
@@ -85,10 +88,11 @@ public:
 
 	/**
 	 * Stops all delays. Callbacks will not be executed.
+	 * @param bComplete			 - indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 * @param InOwner [optional] - if defined it will remove delayed actions only from the given owner. Otherwise
 	 *                             it will remove delayed actions from everywhere.
 	 */
-	static void RemoveAllDelays(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+	static void RemoveAllDelays(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
@@ -103,10 +107,11 @@ public:
 
 	/**
 	 * Stops "wait and execute" actions. Callbacks will not be executed.
+	 * @param bComplete			 - indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 * @param InOwner [optional] - if defined it will remove "wait and execute" actions only from the given owner. 
 	 *                             Otherwise it will remove all "wait and execute" actions from everywhere.
 	 */
-	static void RemoveAllWaitAndExecutes(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+	static void RemoveAllWaitAndExecutes(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
@@ -121,10 +126,11 @@ public:
 
 	/**
 	 * Stops "while true execute" actions.
+	 * @param bComplete			 - indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 * @param InOwner [optional] - if defined it will remove "while true execute" actions only from the given owner. 
-	 * Otherwise it will remove all "while true execute" actions from everywhere.
+	 *							   Otherwise it will remove all "while true execute" actions from everywhere.
 	 */
-	static void RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+	static void RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
@@ -143,10 +149,11 @@ public:
 
 	/**
 	 * Stops timelines. Will not launch callback functions.
+	 * @param bComplete			 - indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 * @param InOwner [optional] - if defined it will remove timelines only from the given owner. 
 	 *                             Otherwise it will remove all timelines from everywhere.
 	 */
-	static void RemoveAllTimelines(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+	static void RemoveAllTimelines(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
@@ -161,10 +168,11 @@ public:
 
 	/**
 	 * Stops custom timelines. Will not launch callback functions.
+	 * @param bComplete			 - indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 * @param InOwner [optional] - if defined it will remove custom timelines only from the given owner. 
 	 *                             Otherwise it will remove all custom timelines from everywhere.
 	 */
-	static void RemoveAllCustomTimelines(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+	static void RemoveAllCustomTimelines(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 };

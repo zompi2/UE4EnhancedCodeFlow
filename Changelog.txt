@@ -1,0 +1,23 @@
+###### 1.4.0
+* Added `bComplete` parm to StopAction functions, which indicates if the Action should complete (run callback) when stopped, or just stopped without any extra action.
+* Fixed bug in `StopAllActions` with `InOwner` defined (it was stopping all actions without checking the Owner).
+* Minor fixes in code comments.
+* Moved Changelog to a separate file to clear up documentation.
+
+###### 1.3.1
+* **Blueprints support** has been added!
+* `First Delay` setting has been added.
+* Settings generating macros have been added.
+* Minor interface fixes.
+
+###### 1.2.0
+* Ignore game pause extra setting added.
+* Minor code readability improvements. 
+
+###### 1.1.1 
+* Ensure the time in timeline is always valid. 
+
+###### 1.1.0 
+* Option to set tick interval and to ignore global time dilation when launching each added action. Check `FECFActionSettings`
+* Added additional callback to tickers which will launch when ticker finishes.
+* Fixes to comments.    

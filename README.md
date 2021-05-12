@@ -9,23 +9,7 @@ If you have any question or suggestion regardles this plugin simply add an **Iss
 
 # Changelog
 
-###### 1.3.1
-* **Blueprints support** has been added!
-* `First Delay` setting has been added.
-* Settings generating macros have been added.
-* Minor interface fixes.
-
-###### 1.2.0
-* Ignore game pause extra setting added.
-* Minor code readability improvements. 
-
-###### 1.1.1 
-* Ensure the time in timeline is always valid. 
-
-###### 1.1.0 
-* Option to set tick interval and to ignore global time dilation when launching each added action. Check `FECFActionSettings`
-* Added additional callback to tickers which will launch when ticker finishes.
-* Fixes to comments.    
+The Changelog has been put into this file: (TODO: PUT LINK)
 
 # Example Project
 
@@ -353,6 +337,6 @@ Even though this was originally code only plugin I decided to move it's function
 
 # Special thanks
 
-I want to send special thanks to Monika, because she always supports me and believes in me, and to Pawel, for allowing me to test this plugin on his project.  
+I want to send special thanks to Monika, because she always supports me and believes in me, to Pawel, for allowing me to test this plugin on his project and to everyone that contributed to this project.  
 Also, I want to thank You for using this plugin! It is very important for me that my work is useful for someone!  
 Happy coding!
