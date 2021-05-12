@@ -44,6 +44,11 @@ FECFHandleBP UECFBPLibrary::ECFTicker(UObject* Owner, const FOnECFTick& OnTickEv
 	return FECFHandleBP(Handle);
 }
 
+void UECFBPLibrary::ECFRemoveAllTickers(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
+{
+	FFlow::RemoveAllTickers(WorldContextObject, InOwner);
+}
+
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 FECFHandleBP UECFBPLibrary::ECFTimeline(UObject* Owner, float StartValue, float StopValue, float Time, const FOnECFTimelineTick& OnTickEvent, const FOnECFTimelineTick& OnFinishedEvent, FECFActionSettings Settings, EECFBlendFunc BlendFunc /*= EECFBlendFunc::ECFBlend_Linear*/, float BlendExp /*= 1.f*/)
@@ -64,6 +69,11 @@ FECFHandleBP UECFBPLibrary::ECFTimeline(UObject* Owner, float StartValue, float 
 		}
 	}, BlendFunc, BlendExp, Settings);
 	return FECFHandleBP(Handle);
+}
+
+void UECFBPLibrary::ECFRemoveAllTimelines(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
+{
+	FFlow::RemoveAllTimelines(WorldContextObject, InOwner);
 }
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -88,5 +98,24 @@ FECFHandleBP UECFBPLibrary::ECFCustomTimeline(UObject* Owner, UCurveFloat* Curve
 	return FECFHandleBP(Handle);
 }
 
-/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+void UECFBPLibrary::ECFRemoveAllCustomTimelines(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
+{
+	FFlow::RemoveAllCustomTimelines(WorldContextObject, InOwner);
+}
 
+void UECFBPLibrary::ECFRemoveAllDelays(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
+{
+	FFlow::RemoveAllDelays(WorldContextObject, InOwner);
+}
+
+void UECFBPLibrary::ECFRemoveAllWaitAndExecutes(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
+{
+	FFlow::RemoveAllWaitAndExecutes(WorldContextObject, InOwner);
+}
+
+void UECFBPLibrary::RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
+{
+	FFlow::RemoveAllWhileTrueExecutes(WorldContextObject, InOwner);
+}
+
+/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/

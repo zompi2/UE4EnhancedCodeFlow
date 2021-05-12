@@ -23,13 +23,13 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnECFWaitAndExecuteBPFinished OnFinished;
 
-	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings"))
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings"), Category = "ECF")
 	static UECFWaitAndExecuteBP* ECFWaitAndExecute(UObject* WorldContextObject, FECFActionSettings Settings);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ECF")
 	void Predicate(bool bHasFinished);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "ECF")
 	FECFHandleBP GetHandle();
 
 	void Activate() override;
