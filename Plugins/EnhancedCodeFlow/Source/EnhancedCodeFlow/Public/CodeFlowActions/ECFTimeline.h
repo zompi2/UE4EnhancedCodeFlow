@@ -81,11 +81,16 @@ protected:
 
 		if ((StopValue > StartValue && CurrentValue >= StopValue) || (StopValue < StartValue && CurrentValue <= StopValue))
 		{
-			if (CallbackFunc)
-			{
-				CallbackFunc(CurrentValue, CurrentTime);
-			}
+			Complete();
 			MarkAsFinished();
+		}
+	}
+
+	void Complete() override
+	{
+		if (CallbackFunc)
+		{
+			CallbackFunc(CurrentValue, CurrentTime);
 		}
 	}
 };

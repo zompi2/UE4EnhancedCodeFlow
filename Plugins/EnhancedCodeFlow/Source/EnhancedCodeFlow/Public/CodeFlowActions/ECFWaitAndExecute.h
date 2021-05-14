@@ -41,8 +41,13 @@ protected:
 	{
 		if (Predicate())
 		{
-			Func();
+			Complete();
 			MarkAsFinished();
 		}
+	}
+
+	void Complete() override
+	{
+		Func();
 	}
 };

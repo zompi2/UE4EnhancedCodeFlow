@@ -48,12 +48,16 @@ protected:
 		CurrentTime += DeltaTime;
 		if (TickingTime > 0.f && CurrentTime >= TickingTime)
 		{
-			if (CallbackFunc)
-			{
-				CallbackFunc();
-			}
+			Complete();
 			MarkAsFinished();
 		}
 	}
 
+	void Complete() override
+	{
+		if (CallbackFunc)
+		{
+			CallbackFunc();
+		}
+	}
 };
