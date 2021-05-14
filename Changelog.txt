@@ -1,6 +1,7 @@
 ###### 1.4.0
 * Added `bComplete` parm to StopAction functions, which indicates if the Action should complete (run callback) when stopped, or just stopped without any extra action.
 * Fixed bug in `StopAllActions` with `InOwner` defined (it was stopping all actions without checking the Owner).
+* ECF_IGNOREPAUSEDILATION settings macro added which will ignore both pause and time dilation.
 * Minor fixes in code comments.
 * Moved Changelog to a separate file to clear up documentation.
 
