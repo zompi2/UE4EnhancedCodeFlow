@@ -45,3 +45,4 @@ struct ENHANCEDCODEFLOW_API FECFActionSettings
 #define ECF_DELAYFIRST(_Delay) FECFActionSettings(0.f, _Delay, false, false)
 #define ECF_IGNOREPAUSE FECFActionSettings(0.f, 0.f, true, false)
 #define ECF_IGNORETIMEDILATION FECFActionSettings(0.f, 0.f, false, true)
+#define ECF_IGNOREPAUSEDILATION FECFActionSettings(0.f, 0.f, true, true)
