@@ -333,7 +333,7 @@ Even though this was originally code only plugin I decided to move it's function
 
 #### Other functions
 
-![othernodes](https://user-images.githubusercontent.com/7863125/117882987-2b449a00-b2ab-11eb-910a-7bb28c9b2e95.png)
+![newbp](https://user-images.githubusercontent.com/7863125/118320999-44dd2000-b4fd-11eb-8081-f280067c0f85.png)
 
 # Special thanks
 
