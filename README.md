@@ -9,7 +9,7 @@ If you have any question or suggestion regardles this plugin simply add an **Iss
 
 # Changelog
 
-The Changelog has been put into this file: (TODO: PUT LINK)
+The Changelog has been put into this file: [Changelog.txt](Changelog.txt)
 
 # Example Project
 
