@@ -7,9 +7,9 @@
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-void UECFBPLibrary::ECFStopAction(const UObject* WorldContextObject, FECFHandleBP& Handle)
+void UECFBPLibrary::ECFStopAction(const UObject* WorldContextObject, FECFHandleBP& Handle, bool bComplete/* = false*/)
 {
-	FFlow::StopAction(WorldContextObject, Handle.Handle);
+	FFlow::StopAction(WorldContextObject, Handle.Handle, bComplete);
 }
 
 bool UECFBPLibrary::ECFIsActionRunning(const UObject* WorldContextObject, const FECFHandleBP& Handle)
@@ -17,9 +17,9 @@ bool UECFBPLibrary::ECFIsActionRunning(const UObject* WorldContextObject, const 
 	return FFlow::IsActionRunning(WorldContextObject, Handle.Handle);	
 }
 
-void UECFBPLibrary::ECFStopAllActions(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
+void UECFBPLibrary::ECFStopAllActions(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
-	FFlow::StopAllActions(WorldContextObject, InOwner);
+	FFlow::StopAllActions(WorldContextObject, bComplete, InOwner);
 }
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -44,9 +44,9 @@ FECFHandleBP UECFBPLibrary::ECFTicker(UObject* Owner, const FOnECFTick& OnTickEv
 	return FECFHandleBP(Handle);
 }
 
-void UECFBPLibrary::ECFRemoveAllTickers(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
+void UECFBPLibrary::ECFRemoveAllTickers(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
-	FFlow::RemoveAllTickers(WorldContextObject, InOwner);
+	FFlow::RemoveAllTickers(WorldContextObject, bComplete, InOwner);
 }
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -71,9 +71,9 @@ FECFHandleBP UECFBPLibrary::ECFTimeline(UObject* Owner, float StartValue, float 
 	return FECFHandleBP(Handle);
 }
 
-void UECFBPLibrary::ECFRemoveAllTimelines(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
+void UECFBPLibrary::ECFRemoveAllTimelines(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
-	FFlow::RemoveAllTimelines(WorldContextObject, InOwner);
+	FFlow::RemoveAllTimelines(WorldContextObject, bComplete, InOwner);
 }
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -98,24 +98,24 @@ FECFHandleBP UECFBPLibrary::ECFCustomTimeline(UObject* Owner, UCurveFloat* Curve
 	return FECFHandleBP(Handle);
 }
 
-void UECFBPLibrary::ECFRemoveAllCustomTimelines(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
+void UECFBPLibrary::ECFRemoveAllCustomTimelines(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
-	FFlow::RemoveAllCustomTimelines(WorldContextObject, InOwner);
+	FFlow::RemoveAllCustomTimelines(WorldContextObject, bComplete, InOwner);
 }
 
-void UECFBPLibrary::ECFRemoveAllDelays(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
+void UECFBPLibrary::ECFRemoveAllDelays(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
-	FFlow::RemoveAllDelays(WorldContextObject, InOwner);
+	FFlow::RemoveAllDelays(WorldContextObject, bComplete, InOwner);
 }
 
-void UECFBPLibrary::ECFRemoveAllWaitAndExecutes(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
+void UECFBPLibrary::ECFRemoveAllWaitAndExecutes(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
-	FFlow::RemoveAllWaitAndExecutes(WorldContextObject, InOwner);
+	FFlow::RemoveAllWaitAndExecutes(WorldContextObject, bComplete, InOwner);
 }
 
-void UECFBPLibrary::RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
+void UECFBPLibrary::RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
-	FFlow::RemoveAllWhileTrueExecutes(WorldContextObject, InOwner);
+	FFlow::RemoveAllWhileTrueExecutes(WorldContextObject, bComplete, InOwner);
 }
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/

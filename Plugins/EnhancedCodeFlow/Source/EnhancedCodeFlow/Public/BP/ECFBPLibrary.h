@@ -27,9 +27,10 @@ public:
 
 	/**
 	 * Stops the running action pointed by given handle. Invalidates given handle.
+	 * bComplete param indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"), Category = "ECF")
-	static void ECFStopAction(const UObject* WorldContextObject, UPARAM(ref) FECFHandleBP& Handle);
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete"), Category = "ECF")
+	static void ECFStopAction(const UObject* WorldContextObject, UPARAM(ref) FECFHandleBP& Handle, bool bComplete = false);
 
 	/**
 	 * Checks if the action pointed by given handle is running.
@@ -41,9 +42,10 @@ public:
 	 * Stops all running actions.
 	 * If owner is defined it will remove all actions from the given owner.
 	 * Otherwise it will stop all the actions from everywhere.
+	 * bComplete param indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"), Category = "ECF")
-	static void ECFStopAllActions(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner"), Category = "ECF")
+	static void ECFStopAllActions(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
@@ -57,9 +59,10 @@ public:
 	 * Removes all running tickers.
 	 * If owner is defined it will remove all tickers from the given owner.
 	 * Otherwise it will stop all the tickers from everywhere.
+	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"), Category = "ECF")
-	static void ECFRemoveAllTickers(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner"), Category = "ECF")
+	static void ECFRemoveAllTickers(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
@@ -73,9 +76,10 @@ public:
 	 * Removes all running timelines.
 	 * If owner is defined it will remove all timelines from the given owner.
 	 * Otherwise it will stop all the timelines from everywhere.
+	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"), Category = "ECF")
-	static void ECFRemoveAllTimelines(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner"), Category = "ECF")
+	static void ECFRemoveAllTimelines(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
@@ -89,9 +93,10 @@ public:
 	 * Removes all running custom timelines.
 	 * If owner is defined it will remove all custom timelines from the given owner.
 	 * Otherwise it will stop all the custom timelines from everywhere.
+	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"), Category = "ECF")
-	static void ECFRemoveAllCustomTimelines(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner"), Category = "ECF")
+	static void ECFRemoveAllCustomTimelines(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
@@ -99,25 +104,28 @@ public:
 	 * Removes all running delays.
 	 * If owner is defined it will remove all delays from the given owner.
 	 * Otherwise it will stop all the delays from everywhere.
+	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"), Category = "ECF")
-	static void ECFRemoveAllDelays(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner"), Category = "ECF")
+	static void ECFRemoveAllDelays(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/**
 	 * Removes all running "wait and execute"s.
 	 * If owner is defined it will remove all "wait and execute"s from the given owner.
 	 * Otherwise it will stop all the "wait and execute"s from everywhere.
+	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"), Category = "ECF")
-	static void ECFRemoveAllWaitAndExecutes(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner"), Category = "ECF")
+	static void ECFRemoveAllWaitAndExecutes(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/**
 	 * Removes all running "while true execute"s.
 	 * If owner is defined it will remove all "while true execute"s from the given owner.
 	 * Otherwise it will stop all the "while true execute"s from everywhere.
+	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"), Category = "ECF")
-	static void RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner"), Category = "ECF")
+	static void RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 };

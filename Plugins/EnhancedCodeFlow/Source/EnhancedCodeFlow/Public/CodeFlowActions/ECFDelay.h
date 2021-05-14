@@ -43,8 +43,13 @@ protected:
 		CurrentTime += DeltaTime;
 		if (CurrentTime > DelayTime)
 		{
-			CallbackFunc();
+			Complete();
 			MarkAsFinished();
 		}
+	}
+
+	void Complete() override
+	{
+		CallbackFunc();
 	}
 };

@@ -13,10 +13,10 @@
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-void FFlow::StopAction(const UObject* WorldContextObject, FECFHandle& Handle)
+void FFlow::StopAction(const UObject* WorldContextObject, FECFHandle& Handle, bool bComplete/* = false*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
-		ECF->RemoveAction(Handle);
+		ECF->RemoveAction(Handle, bComplete);
 }
 
 bool FFlow::IsActionRunning(const UObject* WorldContextObject, const FECFHandle& Handle)
@@ -27,10 +27,10 @@ bool FFlow::IsActionRunning(const UObject* WorldContextObject, const FECFHandle&
 		return false;
 }
 
-void FFlow::StopAllActions(const UObject* WorldContextObject, UObject* InOwner/* = nullptr*/)
+void FFlow::StopAllActions(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner/* = nullptr*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
-		ECF->RemoveAllActions();
+		ECF->RemoveAllActions(bComplete, InOwner);
 }
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -61,12 +61,12 @@ FECFHandle FFlow::AddTicker(UObject* InOwner, float InTickingTime, TUniqueFuncti
 		return FECFHandle();
 }
 
-void FFlow::RemoveAllTickers(const UObject* WorldContextObject, UObject* InOwner/* = nullptr*/)
+void FFlow::RemoveAllTickers(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner/* = nullptr*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
 	{
-		ECF->RemoveActionsOfClass<UECFTicker>(InOwner);
-		ECF->RemoveActionsOfClass<UECFTicker2>(InOwner);
+		ECF->RemoveActionsOfClass<UECFTicker>(bComplete, InOwner);
+		ECF->RemoveActionsOfClass<UECFTicker2>(bComplete, InOwner);
 	}
 }
 
@@ -80,10 +80,10 @@ FECFHandle FFlow::Delay(UObject* InOwner, float InDelayTime, TUniqueFunction<voi
 		return FECFHandle();
 }
 
-void FFlow::RemoveAllDelays(const UObject* WorldContextObject, UObject* InOwner/* = nullptr*/)
+void FFlow::RemoveAllDelays(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner/* = nullptr*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-		ECF->RemoveActionsOfClass<UECFDelay>(InOwner);
+		ECF->RemoveActionsOfClass<UECFDelay>(bComplete, InOwner);
 }
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -96,10 +96,10 @@ FECFHandle FFlow::WaitAndExecute(UObject* InOwner, TUniqueFunction<bool()>&& InP
 		return FECFHandle();
 }
 
-void FFlow::RemoveAllWaitAndExecutes(const UObject* WorldContextObject, UObject* InOwner/* = nullptr*/)
+void FFlow::RemoveAllWaitAndExecutes(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner/* = nullptr*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-		ECF->RemoveActionsOfClass<UECFWaitAndExecute>(InOwner);
+		ECF->RemoveActionsOfClass<UECFWaitAndExecute>(bComplete, InOwner);
 }
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -112,10 +112,10 @@ FECFHandle FFlow::WhileTrueExecute(UObject* InOwner, TUniqueFunction<bool()>&& I
 		return FECFHandle();
 }
 
-void FFlow::RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, UObject* InOwner/* = nullptr*/)
+void FFlow::RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner/* = nullptr*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-		ECF->RemoveActionsOfClass<UECFWhileTrueExecute>(InOwner);
+		ECF->RemoveActionsOfClass<UECFWhileTrueExecute>(bComplete, InOwner);
 }
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -128,10 +128,10 @@ FECFHandle FFlow::AddTimeline(UObject* InOwner, float InStartValue, float InStop
 		return FECFHandle();
 }
 
-void FFlow::RemoveAllTimelines(const UObject* WorldContextObject, UObject* InOwner/* = nullptr*/)
+void FFlow::RemoveAllTimelines(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner/* = nullptr*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-		ECF->RemoveActionsOfClass<UECFTimeline>(InOwner);
+		ECF->RemoveActionsOfClass<UECFTimeline>(bComplete, InOwner);
 }
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -144,10 +144,10 @@ FECFHandle FFlow::AddCustomTimeline(UObject* InOwner, UCurveFloat* CurveFloat, T
 		return FECFHandle();
 }
 
-void FFlow::RemoveAllCustomTimelines(const UObject* WorldContextObject, UObject* InOwner/* = nullptr*/)
+void FFlow::RemoveAllCustomTimelines(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner/* = nullptr*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-		ECF->RemoveActionsOfClass<UECFCustomTimeline>(InOwner);
+		ECF->RemoveActionsOfClass<UECFCustomTimeline>(bComplete, InOwner);
 }
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/

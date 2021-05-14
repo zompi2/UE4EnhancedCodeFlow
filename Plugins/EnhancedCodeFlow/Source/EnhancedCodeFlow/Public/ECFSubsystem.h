@@ -45,21 +45,21 @@ protected:
 		return FECFHandle();
 	}
 
-	// Remove Action of given HandleId from list.
-	void RemoveAction(FECFHandle& HandleId);
+	// Remove Action of given HandleId from list. 
+	void RemoveAction(FECFHandle& HandleId, bool bComplete);
 
 	// Remove all Actions of async tasks of given class from list.
-	void RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass, UObject* InOwner = nullptr);
+	void RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass, bool bComplete, UObject* InOwner);
 
 	// Template version of RemoveActionsOfClass.
 	template<typename T>
-	void RemoveActionsOfClass(UObject* InOwner = nullptr)
+	void RemoveActionsOfClass(bool bComplete, UObject* InOwner)
 	{
-		RemoveActionsOfClass(T::StaticClass(), InOwner);
+		RemoveActionsOfClass(T::StaticClass(), bComplete, InOwner);
 	}
 
 	// Remove all Actions of async tasks.
-	void RemoveAllActions(UObject* InOwner = nullptr);
+	void RemoveAllActions(bool bComplete, UObject* InOwner);
 
 	// Check if the action is running
 	bool HasAction(const FECFHandle& HandleId) const;
@@ -77,4 +77,7 @@ protected:
 	
 	/** Getter handling */
 	static UECFSubsystem* Get(const UObject* WorldContextObject);
+
+	/** Helper function to finish action */
+	void FinishAction(UECFActionBase* Action, bool bComplete);
 };

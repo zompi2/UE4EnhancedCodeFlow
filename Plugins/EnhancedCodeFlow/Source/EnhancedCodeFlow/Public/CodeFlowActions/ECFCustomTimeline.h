@@ -57,6 +57,14 @@ protected:
 		MyTimeline.TickTimeline(DeltaTime);
 	}
 
+	void Complete() override
+	{
+		if (CallbackFunc)
+		{
+			CallbackFunc(CurrentValue, CurrentTime);
+		}
+	}
+
 private:
 
 	UFUNCTION()
@@ -70,10 +78,7 @@ private:
 	UFUNCTION()
 	void HandleFinish()
 	{
-		if (CallbackFunc)
-		{
-			CallbackFunc(CurrentValue, CurrentTime);
-		}
+		Complete();
 		MarkAsFinished();
 	}
 };

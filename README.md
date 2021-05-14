@@ -9,23 +9,7 @@ If you have any question or suggestion regardles this plugin simply add an **Iss
 
 # Changelog
 
-###### 1.3.1
-* **Blueprints support** has been added!
-* `First Delay` setting has been added.
-* Settings generating macros have been added.
-* Minor interface fixes.
-
-###### 1.2.0
-* Ignore game pause extra setting added.
-* Minor code readability improvements. 
-
-###### 1.1.1 
-* Ensure the time in timeline is always valid. 
-
-###### 1.1.0 
-* Option to set tick interval and to ignore global time dilation when launching each added action. Check `FECFActionSettings`
-* Added additional callback to tickers which will launch when ticker finishes.
-* Fixes to comments.    
+The Changelog has been put into this file: **[Changelog.txt](Changelog.txt)**
 
 # Example Project
 
@@ -226,6 +210,7 @@ To make defining these settings easier there are few macros that creates a setti
 * `ECF_DELAYFIRST(1.f)` - settings which makes this action to run after 1 second delay
 * `ECF_IGNOREPAUSE` - settings which makes this action ignore game pause
 * `ECF_IGNORETIMEDILATION` - settings which makes this action ignore global time dilation
+* `ECF_IGNOREPAUSEDILATION` - settings which makes this action ignore pause and global time dilation
 
 ``` cpp
 FFlow::Delay(this, 2.f, [this]()
@@ -245,14 +230,16 @@ FFlow::StopAction(GetWorld(), Handle); // <- stops this action!
 
 > Note that this function requires a pointer to the existing **World** in order to work properly.
 
-You can also stop all of the actions from a specific owner or from everywhere:
+You can also stop all of the actions from a specific owner or from everywhere. Stopped actions can launch their completion callbacks or not, depending on the given argument:
 
 ``` cpp
 FFlow::StopAllActions(GetWorld()); // <- stops all of the actions
-FFlow::StopAllActions(GetWorld(), Owner); // <- stops all of the actions started from this specific owner
+FFlow::StopAllActions(GetWorld(), true); // <- stops all of the actions and launch their callbacks
+FFlow::StopAllActions(GetWorld(), false, Owner); // <- stops all of the actions started from this specific owner
 ```
 
 You can also stop all of the **specific** actions. In this case you can also optionally specifiy an owner of this actions, or simply stop all of them.
+You can also specify if stopped actions should launch their completion callbacks or not.
 
 ``` cpp
 FFlow::RemoveAllDelays(GetWorld());
@@ -269,9 +256,9 @@ If you have a source code of this plugin you can easily extend it's functionalit
 
 > Check how other actions are made to easier understand how to extend the plugin.
 
-1. Create a class that inherits from **UECFActionBase**
-2. Implement **Setup** function, which accepts all parameters you want to pass to this action. 
-   **Setup** function must return true if the given parameters are valid.  
+1. Create a class that inherits from `UECFActionBase`
+2. Implement `Setup` function, which accepts all parameters you want to pass to this action. 
+   `Setup` function must return true if the given parameters are valid.  
 ```cpp
 bool Setup(int32 Param1, int32 Param2, TUniqueFunction<void()>&& Callback)
 {
@@ -282,11 +269,12 @@ bool Setup(int32 Param1, int32 Param2, TUniqueFunction<void()>&& Callback)
 ```
 > Any callback must be passed as an r-value reference and be moved to the action's variable.
 
-3. Override **Init** and **Tick** functions if needed.
-4. If you want this action to be stopped while ticking - use **MarkAsFinished()** function.
-5. In the **FEnhancedCodeFlow** class implement static function that launches the action using **AddAction** function.
-   The function must receive a pointer to the launching **UObject**, **FECFActionSettings** structure and every other argument that is used in the action's **Setup** function in the same order.
-   It must return **FECFHandle**.
+3. Override `Init` and `Tick` functions if needed.
+4. If you want this action to be stopped while ticking - use `MarkAsFinished()` function.
+5. If you want to launch a callback when this action is stopped by `StopAction` method with `bComplete` set to true - override `Complete()` function.
+6. In the `FEnhancedCodeFlow` class implement static function that launches the action using `AddAction` function.
+   The function must receive a pointer to the launching `UObject`, `FECFActionSettings` structure and every other argument that is used in the action's `Setup` function in the same order.
+   It must return `FECFHandle`.
 ```cpp
 FECFHandle FEnhancedCodeFlow::NewAction(UObject* InOwner, int32 Param1, int32 Param2, TUniqueFunction<void()>&& Call, const FECFActionSettings& Settings = {})
 {
@@ -296,17 +284,17 @@ FECFHandle FEnhancedCodeFlow::NewAction(UObject* InOwner, int32 Param1, int32 Pa
     return FECFHandle();
 }
 ```
-6. You can optionally add static function which will stop this action
+7. You can optionally add static function which will stop this action
 ```cpp
-void FFlow::RemoveNewActions(const UObject* WorldContextObject, UObject* InOwner)
+void FFlow::RemoveNewActions(const UObject* WorldContextObject, bool bComplete, UObject* InOwner)
 {
   if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
   {
-    ECF->RemoveActionsOfClass<UECFNewAction>(InOwner);
+    ECF->RemoveActionsOfClass<UECFNewAction>(bComplete, InOwner);
   }
 }
 ```
-7. You can optionally run `SetMaxActionTime` in actions **Init** phase to determine the maximum time in seconds this action should run. 
+8. You can optionally run `SetMaxActionTime` in actions `Init` phase to determine the maximum time in seconds this action should run. 
 >IMMPORTANT! SetMaxActionTime is only to help ticker run ticks with proper delta times.  
    >It will not stop the action itself!
 
@@ -349,10 +337,10 @@ Even though this was originally code only plugin I decided to move it's function
 
 #### Other functions
 
-![othernodes](https://user-images.githubusercontent.com/7863125/117882987-2b449a00-b2ab-11eb-910a-7bb28c9b2e95.png)
+![newbp](https://user-images.githubusercontent.com/7863125/118320999-44dd2000-b4fd-11eb-8081-f280067c0f85.png)
 
 # Special thanks
 
-I want to send special thanks to Monika, because she always supports me and believes in me, and to Pawel, for allowing me to test this plugin on his project.  
+I want to send special thanks to Monika, because she always supports me and believes in me, to Pawel, for allowing me to test this plugin on his project and to everyone that contributed to this project.  
 Also, I want to thank You for using this plugin! It is very important for me that my work is useful for someone!  
 Happy coding!

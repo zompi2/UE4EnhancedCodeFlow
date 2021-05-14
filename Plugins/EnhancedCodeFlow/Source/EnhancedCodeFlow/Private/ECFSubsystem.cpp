@@ -53,26 +53,26 @@ void UECFSubsystem::Tick(float DeltaTime)
 	}
 }
 
-void UECFSubsystem::RemoveAction(FECFHandle& HandleId)
+void UECFSubsystem::RemoveAction(FECFHandle& HandleId, bool bComplete)
 {
 	if (HandleId.IsValid())
 	{
 		// Find running action and set it as finished
 		if (UECFActionBase** ActionFound = Actions.FindByPredicate([&](UECFActionBase* Action) { return Action->GetHandleId() == HandleId; }))
 		{
-			(*ActionFound)->MarkAsFinished();
+			FinishAction(*ActionFound, bComplete);
 			HandleId.Invalidate();
 		}
 		// If not found, ensure user don't want to stop pending action
 		else if (UECFActionBase** PendingActionFound = PendingAddActions.FindByPredicate([&](UECFActionBase* Action) { return Action->GetHandleId() == HandleId; }))
 		{
-			(*PendingActionFound)->MarkAsFinished();
+			FinishAction(*PendingActionFound, bComplete);
 			HandleId.Invalidate();
 		}
 	}
 }
 
-void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass, UObject* InOwner/* = nullptr*/)
+void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass, bool bComplete, UObject* InOwner)
 {
 	// Find running actions of given class assigned to a specific owner (if specified) and set it as finished.
 	for (UECFActionBase* Action : Actions)
@@ -81,7 +81,7 @@ void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass
 		{
 			if (InOwner == nullptr || InOwner == Action->Owner)
 			{
-				Action->MarkAsFinished();
+				FinishAction(Action, bComplete);
 			}
 		}
 	}
@@ -93,27 +93,27 @@ void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass
 		{
 			if (InOwner == nullptr || InOwner == PendingAction->Owner)
 			{
-				PendingAction->MarkAsFinished();
+				FinishAction(PendingAction, bComplete);
 			}
 		}
 	}
 }
 
-void UECFSubsystem::RemoveAllActions(UObject* InOwner/* = nullptr*/)
+void UECFSubsystem::RemoveAllActions(bool bComplete, UObject* InOwner)
 {
 	// Stop all running and pending actions.
 	for (UECFActionBase* Action : Actions)
 	{
 		if (InOwner == nullptr || InOwner == Action->Owner)
 		{
-			Action->MarkAsFinished();
+			FinishAction(Action, bComplete);
 		}
 	}
 	for (UECFActionBase* PendingAction : PendingAddActions)
 	{
 		if (InOwner == nullptr || InOwner == PendingAction->Owner)
 		{
-			PendingAction->MarkAsFinished();
+			FinishAction(PendingAction, bComplete);
 		}
 	}
 }
@@ -135,4 +135,13 @@ bool UECFSubsystem::HasAction(const FECFHandle& HandleId) const
 	}
 
 	return false;
+}
+
+void UECFSubsystem::FinishAction(UECFActionBase* Action, bool bComplete)
+{
+	if (bComplete)
+	{
+		Action->Complete();
+	}
+	Action->MarkAsFinished();
 }
