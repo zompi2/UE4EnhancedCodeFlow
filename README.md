@@ -13,7 +13,7 @@ The Changelog has been put into this file: **[Changelog.txt](Changelog.txt)**
 
 # Example Project
 
-The repository contains an example project which can be used to discover of how to use the plugin. Simply compile and run the project and play with the map.
+The example project wich uses this plugin can be in **[this repository](https://github.com/zompi2/UE4EnhancedCodeFlowExample)**.
 
 ![ecf](https://user-images.githubusercontent.com/7863125/111898879-0d845280-8a29-11eb-82cb-2953b4069b26.png)
 
