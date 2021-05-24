@@ -1,6 +1,3 @@
-Another Test
-Just checking if submodules worsk
-
 ###### 1.4.0
 * Added `bComplete` parm to StopAction functions, which indicates if the Action should complete (run callback) when stopped, or just stopped without any extra action.
 * Fixed bug in `StopAllActions` with `InOwner` defined (it was stopping all actions without checking the Owner).
