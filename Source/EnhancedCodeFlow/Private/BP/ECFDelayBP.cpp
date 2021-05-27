@@ -16,8 +16,9 @@ UECFDelayBP* UECFDelayBP::ECFDelay(UObject* WorldContextObject, float DelayTime,
 
 void UECFDelayBP::Activate()
 {
-	FFlow::Delay(Proxy_WorldContextObject, Proxy_DelayTime, [this]()
+	Proxy_Handle = FFlow::Delay(Proxy_WorldContextObject, Proxy_DelayTime, [this]()
 	{
 		OnComplete.Broadcast();
 	}, Proxy_Settings);
+	OnBegin.Broadcast(FECFHandleBP(Proxy_Handle));
 }

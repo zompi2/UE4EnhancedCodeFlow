@@ -7,7 +7,7 @@
 #include "BP/ECFHandleBP.h"
 #include "ECFWhileTrueExecuteBP.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnECFWhileTrueExecuteBPCheck, class UECFWhileTrueExecuteBP*, ActionHandler);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnECFWhileTrueExecuteBPCheck, class UECFWhileTrueExecuteBP*, Action);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnECFWhileTrueExecuteBPTick, float, DeltaTime);
 
 UCLASS()

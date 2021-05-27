@@ -1,3 +1,8 @@
+###### 1.4.1
+* Added OnBegin exec to ECFDelay BP node, to have a chance to obtain a Handle.
+* Refactored BP names.
+* Optimized a little Handles moving.
+
 ###### 1.4.0
 * Added `bComplete` parm to StopAction functions, which indicates if the Action should complete (run callback) when stopped, or just stopped without any extra action.
 * Fixed bug in `StopAllActions` with `InOwner` defined (it was stopping all actions without checking the Owner).

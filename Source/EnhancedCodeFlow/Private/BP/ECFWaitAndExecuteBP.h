@@ -7,7 +7,7 @@
 #include "BP/ECFHandleBP.h"
 #include "ECFWaitAndExecuteBP.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnECFWaitAndExecuteBPCheck, class UECFWaitAndExecuteBP*, ActionHandler);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnECFWaitAndExecuteBPCheck, class UECFWaitAndExecuteBP*, Action);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnECFWaitAndExecuteBPFinished);
 
 UCLASS()

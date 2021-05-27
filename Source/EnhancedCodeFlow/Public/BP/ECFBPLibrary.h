@@ -36,7 +36,7 @@ public:
 	 * Checks if the action pointed by given handle is running.
 	 */
 	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject"), Category = "ECF")
-	static bool ECFIsActionRunning(const UObject* WorldContextObject, const FECFHandleBP& Handle);
+	static void ECFIsActionRunning(UPARAM(DisplayName = "IsRunning") bool& bIsRunning, const UObject* WorldContextObject, const FECFHandleBP& Handle);
 
 	/**
 	 * Stops all running actions.
@@ -53,7 +53,7 @@ public:
 	 * Creates a ticker. It can tick specified amount of time or until it won't be stopped or when owning object won't be destroyed.
 	 */
 	UFUNCTION(BlueprintCallable, meta = (HidePin = "Owner", DefaultToSelf = "Owner", AutoCreateRefTerm = "OnFinishedEvent", AdvancedDisplay = "OnFinishedEvent, Settings, TickingTime"), Category = "ECF")
-	static FECFHandleBP ECFTicker(UObject* Owner, const FOnECFTick& OnTickEvent, const FOnECFFinished& OnFinishedEvent, FECFActionSettings Settings, float TickingTime = -1.f);
+	static void ECFTicker(UPARAM(DisplayName = "Handle") FECFHandleBP& OutHandle, UObject* Owner, const FOnECFTick& OnTickEvent, const FOnECFFinished& OnFinishedEvent, FECFActionSettings Settings, float TickingTime = -1.f);
 
 	/**
 	 * Removes all running tickers.
@@ -70,7 +70,7 @@ public:
 	 * Adds a simple timeline that runs in a given range during a given time.
 	 */
 	UFUNCTION(BlueprintCallable, meta = (HidePin = "Owner", DefaultToSelf = "Owner", AutoCreateRefTerm = "OnFinishedEvent", AdvancedDisplay = "OnFinishedEvent, Settings, BlendFunc, BlendExp"), Category = "ECF")
-	static FECFHandleBP ECFTimeline(UObject* Owner, float StartValue, float StopValue, float Time, const FOnECFTimelineTick& OnTickEvent, const FOnECFTimelineTick& OnFinishedEvent, FECFActionSettings Settings, EECFBlendFunc BlendFunc = EECFBlendFunc::ECFBlend_Linear, float BlendExp = 1.f);
+	static void ECFTimeline(UPARAM(DisplayName = "Handle") FECFHandleBP& OutHandle, UObject* Owner, float StartValue, float StopValue, float Time, const FOnECFTimelineTick& OnTickEvent, const FOnECFTimelineTick& OnFinishedEvent, FECFActionSettings Settings, EECFBlendFunc BlendFunc = EECFBlendFunc::ECFBlend_Linear, float BlendExp = 1.f);
 
 	/**
 	 * Removes all running timelines.
@@ -87,7 +87,7 @@ public:
 	 * Adds a custom timeline defined by a float curve.
 	 */
 	UFUNCTION(BlueprintCallable, meta = (HidePin = "Owner", DefaultToSelf = "Owner", AutoCreateRefTerm = "OnFinishedEvent", AdvancedDisplay = "OnFinishedEvent, Settings"), Category = "ECF")
-	static FECFHandleBP ECFCustomTimeline(UObject* Owner, UCurveFloat* CurveFloat, const FOnECFTimelineTick& OnTickEvent, const FOnECFTimelineTick& OnFinishedEvent, FECFActionSettings Settings);
+	static void ECFCustomTimeline(UPARAM(DisplayName = "Handle") FECFHandleBP& OutHandle, UObject* Owner, UCurveFloat* CurveFloat, const FOnECFTimelineTick& OnTickEvent, const FOnECFTimelineTick& OnFinishedEvent, FECFActionSettings Settings);
 
 	/**
 	 * Removes all running custom timelines.

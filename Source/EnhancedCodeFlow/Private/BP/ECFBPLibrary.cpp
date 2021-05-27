@@ -12,9 +12,9 @@ void UECFBPLibrary::ECFStopAction(const UObject* WorldContextObject, FECFHandleB
 	FFlow::StopAction(WorldContextObject, Handle.Handle, bComplete);
 }
 
-bool UECFBPLibrary::ECFIsActionRunning(const UObject* WorldContextObject, const FECFHandleBP& Handle)
+void UECFBPLibrary::ECFIsActionRunning(bool& bIsRunning, const UObject* WorldContextObject, const FECFHandleBP& Handle)
 {
-	return FFlow::IsActionRunning(WorldContextObject, Handle.Handle);	
+	bIsRunning = FFlow::IsActionRunning(WorldContextObject, Handle.Handle);
 }
 
 void UECFBPLibrary::ECFStopAllActions(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
@@ -24,7 +24,7 @@ void UECFBPLibrary::ECFStopAllActions(const UObject* WorldContextObject, bool bC
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-FECFHandleBP UECFBPLibrary::ECFTicker(UObject* Owner, const FOnECFTick& OnTickEvent, const FOnECFFinished& OnFinishedEvent, FECFActionSettings Settings, float TickingTime /*= -1.f*/)
+void UECFBPLibrary::ECFTicker(FECFHandleBP& OutHandle, UObject* Owner, const FOnECFTick& OnTickEvent, const FOnECFFinished& OnFinishedEvent, FECFActionSettings Settings, float TickingTime /*= -1.f*/)
 {
 	FECFHandle Handle = FFlow::AddTicker(Owner, TickingTime,
 	[OnTickEvent](float DeltaTime)
@@ -41,7 +41,7 @@ FECFHandleBP UECFBPLibrary::ECFTicker(UObject* Owner, const FOnECFTick& OnTickEv
 			OnFinishedEvent.Execute();
 		}
 	}, Settings);
-	return FECFHandleBP(Handle);
+	OutHandle = FECFHandle(Handle);
 }
 
 void UECFBPLibrary::ECFRemoveAllTickers(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
@@ -51,7 +51,7 @@ void UECFBPLibrary::ECFRemoveAllTickers(const UObject* WorldContextObject, bool 
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-FECFHandleBP UECFBPLibrary::ECFTimeline(UObject* Owner, float StartValue, float StopValue, float Time, const FOnECFTimelineTick& OnTickEvent, const FOnECFTimelineTick& OnFinishedEvent, FECFActionSettings Settings, EECFBlendFunc BlendFunc /*= EECFBlendFunc::ECFBlend_Linear*/, float BlendExp /*= 1.f*/)
+void UECFBPLibrary::ECFTimeline(FECFHandleBP& OutHandle, UObject* Owner, float StartValue, float StopValue, float Time, const FOnECFTimelineTick& OnTickEvent, const FOnECFTimelineTick& OnFinishedEvent, FECFActionSettings Settings, EECFBlendFunc BlendFunc /*= EECFBlendFunc::ECFBlend_Linear*/, float BlendExp /*= 1.f*/)
 {
 	FECFHandle Handle = FFlow::AddTimeline(Owner, StartValue, StopValue, Time, 
 	[OnTickEvent](float Value, float Time)
@@ -68,7 +68,7 @@ FECFHandleBP UECFBPLibrary::ECFTimeline(UObject* Owner, float StartValue, float 
 			OnFinishedEvent.Execute(Value, Time);
 		}
 	}, BlendFunc, BlendExp, Settings);
-	return FECFHandleBP(Handle);
+	OutHandle = FECFHandle(Handle);
 }
 
 void UECFBPLibrary::ECFRemoveAllTimelines(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
@@ -78,7 +78,7 @@ void UECFBPLibrary::ECFRemoveAllTimelines(const UObject* WorldContextObject, boo
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-FECFHandleBP UECFBPLibrary::ECFCustomTimeline(UObject* Owner, UCurveFloat* CurveFloat, const FOnECFTimelineTick& OnTickEvent, const FOnECFTimelineTick& OnFinishedEvent, FECFActionSettings Settings)
+void UECFBPLibrary::ECFCustomTimeline(FECFHandleBP& OutHandle, UObject* Owner, UCurveFloat* CurveFloat, const FOnECFTimelineTick& OnTickEvent, const FOnECFTimelineTick& OnFinishedEvent, FECFActionSettings Settings)
 {
 	FECFHandle Handle = FFlow::AddCustomTimeline(Owner, CurveFloat,
 		[OnTickEvent](float Value, float Time)
@@ -95,7 +95,7 @@ FECFHandleBP UECFBPLibrary::ECFCustomTimeline(UObject* Owner, UCurveFloat* Curve
 			OnFinishedEvent.Execute(Value, Time);
 		}
 	}, Settings);
-	return FECFHandleBP(Handle);
+	OutHandle = FECFHandle(Handle);
 }
 
 void UECFBPLibrary::ECFRemoveAllCustomTimelines(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)

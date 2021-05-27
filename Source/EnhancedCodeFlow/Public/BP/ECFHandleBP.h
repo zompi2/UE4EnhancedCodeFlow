@@ -14,7 +14,11 @@ struct ENHANCEDCODEFLOW_API FECFHandleBP
 	FECFHandleBP()
 	{}
 
-	FECFHandleBP(FECFHandle InHandle) :
+	FECFHandleBP(const FECFHandle& InHandle) :
 		Handle(InHandle)
+	{}
+
+	FECFHandleBP(FECFHandle&& InHandle) :
+		Handle(MoveTemp(InHandle))
 	{}
 };

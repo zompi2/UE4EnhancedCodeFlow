@@ -15,6 +15,17 @@ public:
 	{
 	}
 
+	FECFHandle(const FECFHandle& Other)
+	: Handle(Other.Handle)
+	{
+	}
+
+	FECFHandle(FECFHandle&& Other)
+		: Handle(Other.Handle)
+	{
+		Other.Invalidate();
+	}
+
 	// Checks if the handle is valid.
 	bool IsValid() const
 	{
@@ -39,6 +50,21 @@ public:
 		return Handle != Other.Handle;
 	}
 
+	// Copy.
+	FECFHandle& operator=(const FECFHandle& Other)
+	{
+		Handle = Other.Handle;
+		return *this;
+	}
+
+	// Move.
+	FECFHandle& operator=(FECFHandle&& Other)
+	{
+		Handle = Other.Handle;
+		Other.Invalidate();
+		return *this;
+	}
+
 	// Increase handle.
 	FECFHandle& operator++()
 	{
@@ -52,7 +78,7 @@ public:
 		return FString::Printf(TEXT("%ull"), Handle);
 	}
 
-private:
+protected:
 
 	uint64 Handle;
 };
