@@ -3,6 +3,10 @@
 This code plugin provides functions that drastically improve the quality of life during the implementation of game flow in C++.  
 It works very well with gameplay programming, UI programming with a lot of transitions or in any other situation.
 
+### UE5
+
+This plugin works with Unreal Engine 5 too! Checkout branch **ue5** to get a compatible version. 
+
 # Contact
 
 If you have any question or suggestion regardles this plugin simply add an **Issue** to the github project or write an e-mail to me: **zompi2@gmail.com** I will try my best to answer it quickly :)
