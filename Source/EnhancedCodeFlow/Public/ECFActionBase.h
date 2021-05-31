@@ -21,7 +21,7 @@ public:
 	// Checks if the action is valid
 	virtual bool IsValid() const
 	{
-		return bHasFinished == false && Owner.IsValid();
+		return bHasFinished == false && Owner.IsValid() && (Owner->HasAnyFlags(RF_BeginDestroyed | RF_FinishDestroyed) == false);
 	}
 
 	// Returns this action handle id
