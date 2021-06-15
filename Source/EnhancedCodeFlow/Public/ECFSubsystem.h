@@ -80,4 +80,7 @@ protected:
 
 	/** Helper function to finish action */
 	void FinishAction(UECFActionBase* Action, bool bComplete);
+
+	/** Utility function to check action validity. */
+	static bool IsActionValid(UECFActionBase* Action);
 };

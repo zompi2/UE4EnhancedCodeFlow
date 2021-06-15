@@ -34,11 +34,11 @@ UECFSubsystem* UECFSubsystem::Get(const UObject* WorldContextObject)
 void UECFSubsystem::Tick(float DeltaTime)
 {
 	// Remove all expired actions first
-	Actions.RemoveAll([](UECFActionBase* Action){ return Action->IsValid() == false; });
+	Actions.RemoveAll([](UECFActionBase* Action) { return IsActionValid(Action) == false; });
 
 	// There might be a situation the pending action is invalid too.
-	PendingAddActions.RemoveAll([&](UECFActionBase* Action) { return Action->IsValid() == false; });
-	
+	PendingAddActions.RemoveAll([&](UECFActionBase* PendingAddAction) { return IsActionValid(PendingAddAction) == false; });
+
 	// Add all pending actions
 	Actions.Append(PendingAddActions);
 	PendingAddActions.Empty();
@@ -46,7 +46,7 @@ void UECFSubsystem::Tick(float DeltaTime)
 	// Tick all active actions
 	for (UECFActionBase* Action : Actions)
 	{
-		if (Action->IsValid())
+		if (IsActionValid(Action))
 		{
 			Action->DoTick(DeltaTime);
 		}
@@ -58,15 +58,15 @@ void UECFSubsystem::RemoveAction(FECFHandle& HandleId, bool bComplete)
 	if (HandleId.IsValid())
 	{
 		// Find running action and set it as finished
-		if (UECFActionBase** ActionFound = Actions.FindByPredicate([&](UECFActionBase* Action) { return Action->GetHandleId() == HandleId; }))
+		if (UECFActionBase** ActionFound = Actions.FindByPredicate([&](UECFActionBase* Action) { return (IsActionValid(Action) && (Action->GetHandleId() == HandleId)); }))
 		{
-			FinishAction(*ActionFound, bComplete);
+			(*ActionFound)->MarkAsFinished();
 			HandleId.Invalidate();
 		}
 		// If not found, ensure user don't want to stop pending action
-		else if (UECFActionBase** PendingActionFound = PendingAddActions.FindByPredicate([&](UECFActionBase* Action) { return Action->GetHandleId() == HandleId; }))
+		else if (UECFActionBase** PendingActionFound = PendingAddActions.FindByPredicate([&](UECFActionBase* PendingAddAction) { return (IsActionValid(PendingAddAction) && (PendingAddAction->GetHandleId() == HandleId)); }))
 		{
-			FinishAction(*PendingActionFound, bComplete);
+			(*PendingActionFound)->MarkAsFinished();
 			HandleId.Invalidate();
 		}
 	}
@@ -77,11 +77,14 @@ void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass
 	// Find running actions of given class assigned to a specific owner (if specified) and set it as finished.
 	for (UECFActionBase* Action : Actions)
 	{
-		if (Action->IsA(ActionClass))
+		if (IsActionValid(Action))
 		{
-			if (InOwner == nullptr || InOwner == Action->Owner)
+			if (Action->IsA(ActionClass))
 			{
-				FinishAction(Action, bComplete);
+				if (InOwner == nullptr || InOwner == Action->Owner)
+				{
+					Action->MarkAsFinished();
+				}
 			}
 		}
 	}
@@ -89,11 +92,14 @@ void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass
 	// Also check pending actions to prevent from launching it.
 	for (UECFActionBase* PendingAction : PendingAddActions)
 	{
-		if (PendingAction->IsA(ActionClass))
+		if (IsActionValid(PendingAction))
 		{
-			if (InOwner == nullptr || InOwner == PendingAction->Owner)
+			if (PendingAction->IsA(ActionClass))
 			{
-				FinishAction(PendingAction, bComplete);
+				if (InOwner == nullptr || InOwner == PendingAction->Owner)
+				{
+					PendingAction->MarkAsFinished();
+				}
 			}
 		}
 	}
@@ -104,16 +110,22 @@ void UECFSubsystem::RemoveAllActions(bool bComplete, UObject* InOwner)
 	// Stop all running and pending actions.
 	for (UECFActionBase* Action : Actions)
 	{
-		if (InOwner == nullptr || InOwner == Action->Owner)
+		if (IsActionValid(Action))
 		{
-			FinishAction(Action, bComplete);
+			if (InOwner == nullptr || InOwner == Action->Owner)
+			{
+				Action->MarkAsFinished();
+			}
 		}
 	}
 	for (UECFActionBase* PendingAction : PendingAddActions)
 	{
-		if (InOwner == nullptr || InOwner == PendingAction->Owner)
+		if (IsActionValid(PendingAction))
 		{
-			FinishAction(PendingAction, bComplete);
+			if (InOwner == nullptr || InOwner == PendingAction->Owner)
+			{
+				PendingAction->MarkAsFinished();
+			}
 		}
 	}
 }
@@ -123,14 +135,14 @@ bool UECFSubsystem::HasAction(const FECFHandle& HandleId) const
 	if (HandleId.IsValid())
 	{
 		// Find running action and check if it is a valid one
-		if (UECFActionBase* const* ActionFound = Actions.FindByPredicate([&](UECFActionBase* Action) { return Action->GetHandleId() == HandleId; }))
+		if (UECFActionBase* const* ActionFound = Actions.FindByPredicate([&](UECFActionBase* Action) { return IsActionValid(Action) && Action->GetHandleId() == HandleId; }))
 		{
 			return (*ActionFound)->IsValid();
 		}
 		// If not found, ensure user don't want to check a pending action
-		else if (UECFActionBase* const* PendingActionFound = PendingAddActions.FindByPredicate([&](UECFActionBase* Action) { return Action->GetHandleId() == HandleId; }))
+		else if (UECFActionBase* const* PendingActionFound = PendingAddActions.FindByPredicate([&](UECFActionBase* PendingAction) { return IsActionValid(PendingAction) && PendingAction->GetHandleId() == HandleId; }))
 		{
-			return (*ActionFound)->IsValid();
+			return (*PendingActionFound)->IsValid();
 		}
 	}
 
@@ -139,9 +151,17 @@ bool UECFSubsystem::HasAction(const FECFHandle& HandleId) const
 
 void UECFSubsystem::FinishAction(UECFActionBase* Action, bool bComplete)
 {
-	if (bComplete)
+	if (IsActionValid(Action))
 	{
-		Action->Complete();
+		if (bComplete)
+		{
+			Action->Complete();
+		}
+		Action->MarkAsFinished();
 	}
-	Action->MarkAsFinished();
+}
+
+bool UECFSubsystem::IsActionValid(UECFActionBase* Action)
+{
+	return IsValid(Action) && (Action->HasAnyFlags(RF_BeginDestroyed | RF_FinishDestroyed) == false) && Action->IsValid();
 }
