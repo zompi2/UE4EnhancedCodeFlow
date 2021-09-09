@@ -60,13 +60,13 @@ void UECFSubsystem::RemoveAction(FECFHandle& HandleId, bool bComplete)
 		// Find running action and set it as finished
 		if (UECFActionBase** ActionFound = Actions.FindByPredicate([&](UECFActionBase* Action) { return (IsActionValid(Action) && (Action->GetHandleId() == HandleId)); }))
 		{
-			(*ActionFound)->MarkAsFinished();
+			FinishAction(*ActionFound, bComplete);
 			HandleId.Invalidate();
 		}
 		// If not found, ensure user don't want to stop pending action
 		else if (UECFActionBase** PendingActionFound = PendingAddActions.FindByPredicate([&](UECFActionBase* PendingAddAction) { return (IsActionValid(PendingAddAction) && (PendingAddAction->GetHandleId() == HandleId)); }))
 		{
-			(*PendingActionFound)->MarkAsFinished();
+			FinishAction(*PendingActionFound, bComplete);
 			HandleId.Invalidate();
 		}
 	}
@@ -83,7 +83,7 @@ void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass
 			{
 				if (InOwner == nullptr || InOwner == Action->Owner)
 				{
-					Action->MarkAsFinished();
+					FinishAction(Action, bComplete);
 				}
 			}
 		}
@@ -98,7 +98,7 @@ void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass
 			{
 				if (InOwner == nullptr || InOwner == PendingAction->Owner)
 				{
-					PendingAction->MarkAsFinished();
+					FinishAction(PendingAction, bComplete);
 				}
 			}
 		}
@@ -114,7 +114,7 @@ void UECFSubsystem::RemoveAllActions(bool bComplete, UObject* InOwner)
 		{
 			if (InOwner == nullptr || InOwner == Action->Owner)
 			{
-				Action->MarkAsFinished();
+				FinishAction(Action, bComplete);
 			}
 		}
 	}
@@ -124,7 +124,7 @@ void UECFSubsystem::RemoveAllActions(bool bComplete, UObject* InOwner)
 		{
 			if (InOwner == nullptr || InOwner == PendingAction->Owner)
 			{
-				PendingAction->MarkAsFinished();
+				FinishAction(PendingAction, bComplete);
 			}
 		}
 	}
