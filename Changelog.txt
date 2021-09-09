@@ -1,3 +1,7 @@
+###### 1.4.4
+* Fixed broken by previous version `bComplete` param.
+* Fixed getting WorldContext in static functions, which was obtained by from invalid objects. 
+
 ###### 1.4.3
 * Action validity checks
 * Crash fix
