@@ -30,6 +30,11 @@ public:
 		return HandleId;
 	}
 
+	int64 GetInstanceId() const 
+	{
+		return InstanceId;
+	}
+
 	// Marks this action as finished. It makes it invalid. 
 	// This action will be deleted soon.
 	void MarkAsFinished()
@@ -70,16 +75,19 @@ protected:
 	// Current handle of this action
 	FECFHandle HandleId;
 
+	int64 InstanceId;
+
 	// Settings for this action
 	FECFActionSettings Settings;
 
 private:
 
 	// Sets the owner and handle id of this action.
-	void SetAction(const TWeakObjectPtr<UObject>& InOwner, const FECFHandle& InHandleId, const FECFActionSettings& InSettings)
+	void SetAction(const TWeakObjectPtr<UObject>& InOwner, const FECFHandle& InHandleId, int64 InInstanceId, const FECFActionSettings& InSettings)
 	{
 		Owner = InOwner;
 		HandleId = InHandleId;
+		InstanceId = InInstanceId;
 		Settings = InSettings;
 
 		CurrentActionTime = 0.f;

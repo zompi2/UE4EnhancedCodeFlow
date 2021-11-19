@@ -32,16 +32,23 @@ protected:
 
 	// Add Action to list. Returns the Action id.
 	template<typename T, typename ... Ts>
-	FECFHandle AddAction(UObject* InOwner, const FECFActionSettings& Settings, Ts&& ... Args)
+	FECFHandle AddAction(UObject* InOwner, const FECFActionSettings& Settings, int64 InstanceId, Ts&& ... Args)
 	{
+		FECFHandle PossibleInstancedActionHandle = GetInstancedAction(InstanceId);
+		if (PossibleInstancedActionHandle.IsValid())
+		{
+			return PossibleInstancedActionHandle;
+		}
+
 		T* NewAction = NewObject<T>(this);
-		NewAction->SetAction(InOwner, ++LastHandleId, Settings);
+		NewAction->SetAction(InOwner, ++LastHandleId, InstanceId, Settings);
 		if (NewAction->Setup(Forward<Ts>(Args)...))
 		{
 			NewAction->Init();
 			PendingAddActions.Add(NewAction);
 			return NewAction->GetHandleId();
 		}
+
 		return FECFHandle();
 	}
 
@@ -63,6 +70,9 @@ protected:
 
 	// Check if the action is running
 	bool HasAction(const FECFHandle& HandleId) const;
+
+	//
+	FECFHandle GetInstancedAction(int64 InstanceId);
 	
 	// List of active actions.
 	UPROPERTY()
