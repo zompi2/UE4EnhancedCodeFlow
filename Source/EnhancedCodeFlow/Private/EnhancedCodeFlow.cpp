@@ -20,6 +20,12 @@ void FFlow::StopAction(const UObject* WorldContextObject, FECFHandle& Handle, bo
 		ECF->RemoveAction(Handle, bComplete);
 }
 
+void FEnhancedCodeFlow::StopInstancedAction(const UObject* WorldContextObject, FECFInstanceId InstanceId, bool bComplete /*= false*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		ECF->RemoveInstancedAction(InstanceId, bComplete);
+}
+
 bool FFlow::IsActionRunning(const UObject* WorldContextObject, const FECFHandle& Handle)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))

@@ -43,6 +43,12 @@ public:
 	static void StopAction(const UObject* WorldContextObject, FECFHandle& Handle, bool bComplete = false);
 
 	/**
+	 * Stops running action with the given InstanceId.
+	 * bComplete param indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 */
+	static void StopInstancedAction(const UObject* WorldContextObject, FECFInstanceId InstanceId, bool bComplete = false);
+
+	/**
 	 * Checks if the action pointed by given handle is running.
 	 */
 	static bool IsActionRunning(const UObject* WorldContextObject, const FECFHandle& Handle);

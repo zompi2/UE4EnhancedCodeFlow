@@ -14,6 +14,7 @@ struct ENHANCEDCODEFLOW_API FECFHandleBP
 	FECFHandleBP()
 	{}
 
+
 	FECFHandleBP(const FECFHandle& InHandle) :
 		Handle(InHandle)
 	{}
@@ -21,4 +22,25 @@ struct ENHANCEDCODEFLOW_API FECFHandleBP
 	FECFHandleBP(FECFHandle&& InHandle) :
 		Handle(MoveTemp(InHandle))
 	{}
+
+
+	FECFHandleBP(const FECFHandleBP& Other) :
+		Handle(Other.Handle)
+	{}
+
+	FECFHandleBP(FECFHandleBP&& Other) :
+		Handle(MoveTemp(Other.Handle))
+	{}
+
+	FECFHandleBP& operator=(const FECFHandleBP& Other)
+	{
+		Handle = Other.Handle;
+		return *this;
+	}
+
+	FECFHandleBP& operator=(FECFHandleBP&& Other)
+	{
+		Handle = Forward<FECFHandle>(Other.Handle);
+		return *this;
+	}
 };

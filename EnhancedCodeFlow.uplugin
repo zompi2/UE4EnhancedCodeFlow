@@ -11,7 +11,7 @@
 	"MarketplaceURL": "",
 	"EngineVersion": "4.26.0",
 	"SupportURL": "mailto:zompi2@gmail.com",
-	"CanContainContent": false,
+	"CanContainContent": true,
 	"IsBetaVersion": false,
 	"IsExperimentalVersion": false,
 	"Installed": true,
