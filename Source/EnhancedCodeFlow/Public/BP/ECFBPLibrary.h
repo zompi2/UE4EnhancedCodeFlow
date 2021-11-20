@@ -40,7 +40,10 @@ public:
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete"), Category = "ECF")
 	static void ECFStopAction(const UObject* WorldContextObject, UPARAM(ref) FECFHandleBP& Handle, bool bComplete = false);
 
-
+	/**
+	 * Stops the running action with the given InstanceId.
+	 * bComplete param indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 */
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete"), Category = "ECF")
 	static void ECFStopInstancedActions(const UObject* WorldContextObject, FECFInstanceIdBP InstanceId, bool bComplete = false);
 
@@ -61,15 +64,27 @@ public:
 
 	/*^^^ Handle and Instance Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 	
+	/**
+	 * Returns a static instance id with a provided value.
+	 */
 	UFUNCTION(BlueprintPure, Category = "ECF")
 	static FECFInstanceIdBP ECFStaticInstanceId(int64 Id);
 
+	/**
+	 * Returns a generated dynamic instance id.
+	 */
 	UFUNCTION(BlueprintPure, Category = "ECF")
 	static FECFInstanceIdBP ECFDynamicInstanceId();
 
+	/**
+	 * Checks if the given Handle is valid.
+	 */
 	UFUNCTION(BlueprintPure, Category = "ECF")
 	static bool IsECFHandleValid(const FECFHandleBP& Handle);
 
+	/**
+	 * Checks if the given InstanceId is valid.
+	 */
 	UFUNCTION(BlueprintPure, Category = "ECF")
 	static bool IsECFInstanceIdValid(const FECFInstanceIdBP& InstanceId);
 
@@ -126,12 +141,23 @@ public:
 
 	/*^^^ Time Lock ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
+	/**
+	 * Allow to run the code only once in a given time. (Locks the ability to run the code for a specific amount of time in seconds).
+	 */
 	UFUNCTION(BlueprintCallable, meta = (HidePin = "Owner", DefaultToSelf = "Owner", AutoCreateRefTerm = "OnFinishedEvent", ExpandEnumAsExecs = "OutExecs", AdvancedDisplay = "OnFinishedEvent, Settings, TickingTime"), Category = "ECF")
 	static void ECFTimeLock(ETimeLockOutputType& OutExecs, UPARAM(DisplayName = "Handle") FECFHandleBP& OutHandle, UObject* Owner, float LockTime, FECFInstanceIdBP InstanceId, FECFActionSettings Settings);
 
+	/**
+	 * Removes all time locks.
+	 * @param InOwner [optional] - if defined it will remove time locks only from the given owner.
+	 *                             Otherwise it will remove all time locks from everywhere.
+	 */
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "InOwner"), Category = "ECF")
 	static void ECFRemoveAllTimeLocks(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
+	/**
+	 * Remove time lock of the given instance id.
+	 */
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"), Category = "ECF")
 	static void ECFRemoveInstanceOfTimeLock(const UObject* WorldContextObject, FECFInstanceIdBP InstanceId);
 
