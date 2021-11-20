@@ -105,6 +105,12 @@ void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass
 	}
 }
 
+void UECFSubsystem::RemoveInstancedAction(const FECFInstanceId& InstanceId, bool bComplete)
+{
+	FECFHandle ActionHandle = GetInstancedAction(InstanceId);
+	RemoveAction(ActionHandle, bComplete);
+}
+
 void UECFSubsystem::RemoveAllActions(bool bComplete, UObject* InOwner)
 {
 	// Stop all running and pending actions.
@@ -149,9 +155,9 @@ bool UECFSubsystem::HasAction(const FECFHandle& HandleId) const
 	return false;
 }
 
-FECFHandle UECFSubsystem::GetInstancedAction(int64 InstanceId)
+FECFHandle UECFSubsystem::GetInstancedAction(const FECFInstanceId& InstanceId)
 {
-	if (InstanceId > 0)
+	if (InstanceId.IsValid())
 	{
 		if (UECFActionBase* const* ActionFound = Actions.FindByPredicate([&](UECFActionBase* Action) { return IsActionValid(Action) && Action->GetInstanceId() == InstanceId; }))
 		{

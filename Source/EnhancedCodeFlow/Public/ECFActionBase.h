@@ -6,6 +6,7 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Tickable.h"
 #include "ECFHandle.h"
+#include "ECFInstanceId.h"
 #include "ECFActionSettings.h"
 #include "ECFActionBase.generated.h"
 
@@ -30,7 +31,8 @@ public:
 		return HandleId;
 	}
 
-	int64 GetInstanceId() const 
+	// Returns this action instance id
+	FECFInstanceId GetInstanceId() const 
 	{
 		return InstanceId;
 	}
@@ -75,7 +77,8 @@ protected:
 	// Current handle of this action
 	FECFHandle HandleId;
 
-	int64 InstanceId;
+	// InstanceId for actions that are instanced
+	FECFInstanceId InstanceId;
 
 	// Settings for this action
 	FECFActionSettings Settings;
@@ -83,7 +86,7 @@ protected:
 private:
 
 	// Sets the owner and handle id of this action.
-	void SetAction(const TWeakObjectPtr<UObject>& InOwner, const FECFHandle& InHandleId, int64 InInstanceId, const FECFActionSettings& InSettings)
+	void SetAction(const TWeakObjectPtr<UObject>& InOwner, const FECFHandle& InHandleId, const FECFInstanceId& InInstanceId, const FECFActionSettings& InSettings)
 	{
 		Owner = InOwner;
 		HandleId = InHandleId;

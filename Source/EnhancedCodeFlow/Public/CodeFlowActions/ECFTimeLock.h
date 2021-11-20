@@ -42,7 +42,7 @@ protected:
 	void Tick(float DeltaTime) override
 	{
 		CurrentTime += DeltaTime;
-		if (CurrentTime > LockTime)
+		if (CurrentTime >= LockTime)
 		{
 			MarkAsFinished();
 		}
