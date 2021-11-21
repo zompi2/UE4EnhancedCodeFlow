@@ -4,24 +4,23 @@
 
 #include "CoreMinimal.h"
 
-
 class FECFHandle
 {
 
 public:
 
-	FECFHandle()
-	: Handle(0)
+	FECFHandle() :
+		Handle(0)
 	{
 	}
 
-	FECFHandle(const FECFHandle& Other)
-	: Handle(Other.Handle)
+	FECFHandle(const FECFHandle& Other) :
+		Handle(Other.Handle)
 	{
 	}
 
-	FECFHandle(FECFHandle&& Other)
-		: Handle(Other.Handle)
+	FECFHandle(FECFHandle&& Other) :
+		Handle(Other.Handle)
 	{
 		Other.Invalidate();
 	}

@@ -5,11 +5,16 @@
 #include "BP/ECFBPLibrary.h"
 #include "EnhancedCodeFlow.h"
 
-/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+/*^^^ Global ECF Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 void UECFBPLibrary::ECFStopAction(const UObject* WorldContextObject, FECFHandleBP& Handle, bool bComplete/* = false*/)
 {
 	FFlow::StopAction(WorldContextObject, Handle.Handle, bComplete);
+}
+
+void UECFBPLibrary::ECFStopInstancedActions(const UObject* WorldContextObject, FECFInstanceIdBP InstanceId, bool bComplete /*= false*/)
+{
+	FFlow::StopInstancedAction(WorldContextObject, InstanceId.InstanceId, bComplete);
 }
 
 void UECFBPLibrary::ECFIsActionRunning(bool& bIsRunning, const UObject* WorldContextObject, const FECFHandleBP& Handle)
@@ -22,7 +27,33 @@ void UECFBPLibrary::ECFStopAllActions(const UObject* WorldContextObject, bool bC
 	FFlow::StopAllActions(WorldContextObject, bComplete, InOwner);
 }
 
-/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+/*^^^ Handle and Instance Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFInstanceIdBP UECFBPLibrary::ECFStaticInstanceId(int64 Id)
+{
+	if (Id >= 0)
+	{
+		return FECFInstanceIdBP(FECFInstanceId::GetStaticId(static_cast<uint64>(Id)));
+	}
+	return FECFInstanceIdBP();
+}
+
+FECFInstanceIdBP UECFBPLibrary::ECFDynamicInstanceId()
+{
+	return FECFInstanceIdBP(FECFInstanceId::GetDynamicId());
+}
+
+bool UECFBPLibrary::IsECFHandleValid(const FECFHandleBP& Handle)
+{
+	return Handle.Handle.IsValid();
+}
+
+bool UECFBPLibrary::IsECFInstanceIdValid(const FECFInstanceIdBP& InstanceId)
+{
+	return InstanceId.InstanceId.IsValid();
+}
+
+/*^^^ Ticker ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 void UECFBPLibrary::ECFTicker(FECFHandleBP& OutHandle, UObject* Owner, const FOnECFTick& OnTickEvent, const FOnECFFinished& OnFinishedEvent, FECFActionSettings Settings, float TickingTime /*= -1.f*/)
 {
@@ -41,7 +72,7 @@ void UECFBPLibrary::ECFTicker(FECFHandleBP& OutHandle, UObject* Owner, const FOn
 			OnFinishedEvent.Execute();
 		}
 	}, Settings);
-	OutHandle = FECFHandle(Handle);
+	OutHandle = FECFHandleBP(MoveTemp(Handle));
 }
 
 void UECFBPLibrary::ECFRemoveAllTickers(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
@@ -49,7 +80,7 @@ void UECFBPLibrary::ECFRemoveAllTickers(const UObject* WorldContextObject, bool 
 	FFlow::RemoveAllTickers(WorldContextObject, bComplete, InOwner);
 }
 
-/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+/*^^^ Timeline ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 void UECFBPLibrary::ECFTimeline(FECFHandleBP& OutHandle, UObject* Owner, float StartValue, float StopValue, float Time, const FOnECFTimelineTick& OnTickEvent, const FOnECFTimelineTick& OnFinishedEvent, FECFActionSettings Settings, EECFBlendFunc BlendFunc /*= EECFBlendFunc::ECFBlend_Linear*/, float BlendExp /*= 1.f*/)
 {
@@ -68,7 +99,7 @@ void UECFBPLibrary::ECFTimeline(FECFHandleBP& OutHandle, UObject* Owner, float S
 			OnFinishedEvent.Execute(Value, Time);
 		}
 	}, BlendFunc, BlendExp, Settings);
-	OutHandle = FECFHandle(Handle);
+	OutHandle = FECFHandleBP(MoveTemp(Handle));
 }
 
 void UECFBPLibrary::ECFRemoveAllTimelines(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
@@ -76,7 +107,7 @@ void UECFBPLibrary::ECFRemoveAllTimelines(const UObject* WorldContextObject, boo
 	FFlow::RemoveAllTimelines(WorldContextObject, bComplete, InOwner);
 }
 
-/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+/*^^^ Custom Timeline ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 void UECFBPLibrary::ECFCustomTimeline(FECFHandleBP& OutHandle, UObject* Owner, UCurveFloat* CurveFloat, const FOnECFTimelineTick& OnTickEvent, const FOnECFTimelineTick& OnFinishedEvent, FECFActionSettings Settings)
 {
@@ -95,13 +126,37 @@ void UECFBPLibrary::ECFCustomTimeline(FECFHandleBP& OutHandle, UObject* Owner, U
 			OnFinishedEvent.Execute(Value, Time);
 		}
 	}, Settings);
-	OutHandle = FECFHandle(Handle);
+	OutHandle = FECFHandleBP(MoveTemp(Handle));
 }
 
 void UECFBPLibrary::ECFRemoveAllCustomTimelines(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
 	FFlow::RemoveAllCustomTimelines(WorldContextObject, bComplete, InOwner);
 }
+
+/*^^^ Time Lock ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+void UECFBPLibrary::ECFTimeLock(ETimeLockOutputType& OutExecs, FECFHandleBP& OutHandle, UObject* Owner, float LockTime, FECFInstanceIdBP InstanceId, FECFActionSettings Settings)
+{
+	OutExecs = ETimeLockOutputType::Locked;
+	FECFHandle Handle = FFlow::TimeLock(Owner, LockTime, [&OutExecs]()
+	{
+		OutExecs = ETimeLockOutputType::Exec;
+	}, InstanceId.InstanceId, Settings);
+	OutHandle = FECFHandleBP(MoveTemp(Handle));
+}
+
+void UECFBPLibrary::ECFRemoveAllTimeLocks(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
+{
+	FFlow::RemoveAllTimeLocks(WorldContextObject, InOwner);
+}
+
+void UECFBPLibrary::ECFRemoveInstanceOfTimeLock(const UObject* WorldContextObject, FECFInstanceIdBP InstanceId)
+{
+	FFlow::RemoveInstanceOfTimeLock(WorldContextObject, InstanceId.InstanceId);
+}
+
+/*^^^ Removing Async Actions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 void UECFBPLibrary::ECFRemoveAllDelays(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {

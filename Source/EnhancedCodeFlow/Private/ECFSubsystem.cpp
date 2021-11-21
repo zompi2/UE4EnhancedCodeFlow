@@ -105,6 +105,12 @@ void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass
 	}
 }
 
+void UECFSubsystem::RemoveInstancedAction(const FECFInstanceId& InstanceId, bool bComplete)
+{
+	FECFHandle ActionHandle = GetInstancedAction(InstanceId);
+	RemoveAction(ActionHandle, bComplete);
+}
+
 void UECFSubsystem::RemoveAllActions(bool bComplete, UObject* InOwner)
 {
 	// Stop all running and pending actions.
@@ -137,16 +143,34 @@ bool UECFSubsystem::HasAction(const FECFHandle& HandleId) const
 		// Find running action and check if it is a valid one
 		if (UECFActionBase* const* ActionFound = Actions.FindByPredicate([&](UECFActionBase* Action) { return IsActionValid(Action) && Action->GetHandleId() == HandleId; }))
 		{
-			return (*ActionFound)->IsValid();
+			return true;
 		}
 		// If not found, ensure user don't want to check a pending action
 		else if (UECFActionBase* const* PendingActionFound = PendingAddActions.FindByPredicate([&](UECFActionBase* PendingAction) { return IsActionValid(PendingAction) && PendingAction->GetHandleId() == HandleId; }))
 		{
-			return (*PendingActionFound)->IsValid();
+			return true;
 		}
 	}
 
 	return false;
+}
+
+FECFHandle UECFSubsystem::GetInstancedAction(const FECFInstanceId& InstanceId)
+{
+	if (InstanceId.IsValid())
+	{
+		if (UECFActionBase* const* ActionFound = Actions.FindByPredicate([&](UECFActionBase* Action) { return IsActionValid(Action) && Action->GetInstanceId() == InstanceId; }))
+		{
+			return (*ActionFound)->GetHandleId();
+		}
+
+		else if (UECFActionBase* const* PendingActionFound = PendingAddActions.FindByPredicate([&](UECFActionBase* PendingAction) { return IsActionValid(PendingAction) && PendingAction->GetInstanceId() == InstanceId; }))
+		{
+			return (*PendingActionFound)->GetHandleId();
+		}
+	}
+
+	return FECFHandle();
 }
 
 void UECFSubsystem::FinishAction(UECFActionBase* Action, bool bComplete)

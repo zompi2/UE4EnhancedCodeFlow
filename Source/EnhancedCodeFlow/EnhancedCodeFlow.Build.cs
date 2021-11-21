@@ -8,8 +8,6 @@ public class EnhancedCodeFlow : ModuleRules
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		
-
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{

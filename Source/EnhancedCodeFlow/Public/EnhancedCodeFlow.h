@@ -27,6 +27,7 @@
 #include "ECFHandle.h"
 #include "ECFTypes.h"
 #include "ECFActionSettings.h"
+#include "ECFInstanceId.h"
 
 class ENHANCEDCODEFLOW_API FEnhancedCodeFlow
 {
@@ -40,6 +41,12 @@ public:
 	 * bComplete param indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
 	static void StopAction(const UObject* WorldContextObject, FECFHandle& Handle, bool bComplete = false);
+
+	/**
+	 * Stops the running action with the given InstanceId.
+	 * bComplete param indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 */
+	static void StopInstancedAction(const UObject* WorldContextObject, FECFInstanceId InstanceId, bool bComplete = false);
 
 	/**
 	 * Checks if the action pointed by given handle is running.
@@ -175,6 +182,27 @@ public:
 	static void RemoveAllCustomTimelines(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Allow to run the code only once in a given time. (Locks the ability to run the code for a specific amount of time in seconds).
+	 * @param InLockTime - time in seconds the lock will persist.
+	 * @param InExecFunc - the function to execute.
+	 * @param InstanceId - the id of the instance of this action (this action is instanced, use ECF_INSTANCEID macro in order to get proper instance id).
+	 */
+	static FECFHandle TimeLock(UObject* InOwner, float InLockTime, TUniqueFunction<void()>&& InExecFunc, const FECFInstanceId& InstanceId, const FECFActionSettings& Settings = {});
+
+	/**
+	 * Stops time locks.
+	 * @param InOwner [optional] - if defined it will remove time locks only from the given owner.
+	 *                             Otherwise it will remove all time locks from everywhere.
+	 */
+	static void RemoveAllTimeLocks(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+
+	/**
+	 * Stops time lock of the given instance id.
+	 * @param InstanceId - the instance id of the time lock action which will stop.
+	 */
+	static void RemoveInstanceOfTimeLock(const UObject* WorldContextObject, const FECFInstanceId& InstanceId);
 };
 
 using FFlow = FEnhancedCodeFlow;

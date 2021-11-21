@@ -6,6 +6,7 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Tickable.h"
 #include "ECFHandle.h"
+#include "ECFInstanceId.h"
 #include "ECFActionSettings.h"
 #include "ECFActionBase.generated.h"
 
@@ -28,6 +29,12 @@ public:
 	FECFHandle GetHandleId() const
 	{
 		return HandleId;
+	}
+
+	// Returns this action instance id
+	FECFInstanceId GetInstanceId() const 
+	{
+		return InstanceId;
 	}
 
 	// Marks this action as finished. It makes it invalid. 
@@ -70,16 +77,20 @@ protected:
 	// Current handle of this action
 	FECFHandle HandleId;
 
+	// InstanceId for actions that are instanced
+	FECFInstanceId InstanceId;
+
 	// Settings for this action
 	FECFActionSettings Settings;
 
 private:
 
 	// Sets the owner and handle id of this action.
-	void SetAction(const TWeakObjectPtr<UObject>& InOwner, const FECFHandle& InHandleId, const FECFActionSettings& InSettings)
+	void SetAction(const TWeakObjectPtr<UObject>& InOwner, const FECFHandle& InHandleId, const FECFInstanceId& InInstanceId, const FECFActionSettings& InSettings)
 	{
 		Owner = InOwner;
 		HandleId = InHandleId;
+		InstanceId = InInstanceId;
 		Settings = InSettings;
 
 		CurrentActionTime = 0.f;

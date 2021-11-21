@@ -41,8 +41,8 @@ struct ENHANCEDCODEFLOW_API FECFActionSettings
 	bool bIgnoreGlobalTimeDilation = false;
 };
 
-#define ECF_TICKINTERVAL(_Interval) FECFActionSettings(_Interval, 0.f, false, false)
-#define ECF_DELAYFIRST(_Delay) FECFActionSettings(0.f, _Delay, false, false)
-#define ECF_IGNOREPAUSE FECFActionSettings(0.f, 0.f, true, false)
-#define ECF_IGNORETIMEDILATION FECFActionSettings(0.f, 0.f, false, true)
-#define ECF_IGNOREPAUSEDILATION FECFActionSettings(0.f, 0.f, true, true)
+#define ECF_TICKINTERVAL(_Interval) FECFActionSettings(_Interval, 0.f, false, false, 0)
+#define ECF_DELAYFIRST(_Delay) FECFActionSettings(0.f, _Delay, false, false, 0)
+#define ECF_IGNOREPAUSE FECFActionSettings(0.f, 0.f, true, false, 0)
+#define ECF_IGNORETIMEDILATION FECFActionSettings(0.f, 0.f, false, true, 0)
+#define ECF_IGNOREPAUSEDILATION FECFActionSettings(0.f, 0.f, true, true, 0)

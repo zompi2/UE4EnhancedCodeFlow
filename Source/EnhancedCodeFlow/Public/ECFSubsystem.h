@@ -6,6 +6,7 @@
 #include "Subsystems/WorldSubsystem.h"
 #include "Tickable.h"
 #include "ECFHandle.h"
+#include "ECFInstanceId.h"
 #include "ECFActionSettings.h"
 #include "ECFSubsystem.generated.h"
 
@@ -32,16 +33,27 @@ protected:
 
 	// Add Action to list. Returns the Action id.
 	template<typename T, typename ... Ts>
-	FECFHandle AddAction(UObject* InOwner, const FECFActionSettings& Settings, Ts&& ... Args)
+	FECFHandle AddAction(UObject* InOwner, const FECFActionSettings& Settings, const FECFInstanceId& InstanceId, Ts&& ... Args)
 	{
+		// There can be only one instanced action running at the same time. When trying to add an
+		// action with existing instance id - return the currently running action's handle.
+		FECFHandle PossibleInstancedActionHandle = GetInstancedAction(InstanceId);
+		if (PossibleInstancedActionHandle.IsValid())
+		{
+			return PossibleInstancedActionHandle;
+		}
+
+		// Otherwise, create and set new action.
 		T* NewAction = NewObject<T>(this);
-		NewAction->SetAction(InOwner, ++LastHandleId, Settings);
+		NewAction->SetAction(InOwner, ++LastHandleId, InstanceId, Settings);
 		if (NewAction->Setup(Forward<Ts>(Args)...))
 		{
 			NewAction->Init();
 			PendingAddActions.Add(NewAction);
 			return NewAction->GetHandleId();
 		}
+
+		// If the action couldn't be created for any reason - return invalid id.
 		return FECFHandle();
 	}
 
@@ -58,11 +70,18 @@ protected:
 		RemoveActionsOfClass(T::StaticClass(), bComplete, InOwner);
 	}
 
+	// Remove action with the given InstanceId.
+	void RemoveInstancedAction(const FECFInstanceId& InstanceId, bool bComplete);
+
 	// Remove all Actions of async tasks.
 	void RemoveAllActions(bool bComplete, UObject* InOwner);
 
 	// Check if the action is running
 	bool HasAction(const FECFHandle& HandleId) const;
+
+	// Check if there is an instanced action running with the given instance id.
+	// Return the handle to this action if yes. Otherwise, return the invalid handle.
+	FECFHandle GetInstancedAction(const FECFInstanceId& InstanceId);
 	
 	// List of active actions.
 	UPROPERTY()
@@ -75,12 +94,12 @@ protected:
 	// Id of the last created node.
 	FECFHandle LastHandleId;
 	
-	/** Getter handling */
+	// Getter handling.
 	static UECFSubsystem* Get(const UObject* WorldContextObject);
 
-	/** Helper function to finish action */
+	// Helper function to finish action.
 	void FinishAction(UECFActionBase* Action, bool bComplete);
 
-	/** Utility function to check action validity. */
+	// Utility function to check action validity.
 	static bool IsActionValid(UECFActionBase* Action);
 };
