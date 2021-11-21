@@ -138,7 +138,7 @@ void UECFBPLibrary::ECFRemoveAllCustomTimelines(const UObject* WorldContextObjec
 
 void UECFBPLibrary::ECFTimeLock(ETimeLockOutputType& OutExecs, FECFHandleBP& OutHandle, UObject* Owner, float LockTime, FECFInstanceIdBP InstanceId, FECFActionSettings Settings)
 {
-	OutExecs = ETimeLockOutputType::Out;
+	OutExecs = ETimeLockOutputType::Locked;
 	FECFHandle Handle = FFlow::TimeLock(Owner, LockTime, [&OutExecs]()
 	{
 		OutExecs = ETimeLockOutputType::Exec;

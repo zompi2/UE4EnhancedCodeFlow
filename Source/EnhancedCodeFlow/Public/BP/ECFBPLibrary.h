@@ -20,8 +20,8 @@ DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnECFTimelineTick, float, Value, float, Time
 UENUM(BlueprintType)
 enum class ETimeLockOutputType : uint8
 {
-	Out UMETA(DisplayName = "Out"),
-	Exec UMETA(DisplayName = "Exec")
+	Exec UMETA(DisplayName = "Exec"),
+	Locked UMETA(DisplayName = "Locked")
 };
 
 UCLASS()
