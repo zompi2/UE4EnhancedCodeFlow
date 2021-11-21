@@ -268,13 +268,17 @@ FECFInstanceId::GetStaticId(10);
 
 Obtains the Instance Id of the given, static value.
 
-#### Validating Instance Id
 
-Instance Id can be Validated, which means, if it is invalid it makes it valid with a new Dynamic Instance Id.
+### Properly Using Instanced Ids
+
+If you want the action to be instanced per actor, keep `FECFInstanceId` in the header and use `Validate()` function when using it.
+
+If you want the action to be instanced globally, just use one of these:
 
 ``` cpp
-FECFInstanceId InstanceId;
-InstanceId.Validate();
+FECFInstanceId InstanceId = FECFInstanceId::GetStaticId(10); // or any other number
+or
+static FECFInstanceId InstanceId = FECFInstanceId::GetDynamicId();
 ```
 
 # Stopping actions
