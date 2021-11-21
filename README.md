@@ -271,7 +271,8 @@ Obtains the Instance Id of the given, static value.
 
 ### Properly Using Instanced Ids
 
-If you want the action to be instanced per actor, keep `FECFInstanceId` in the header and use `Validate()` function when using it.
+If you want the action to be instanced per actor, keep `FECFInstanceId` in the header.  
+Assign new InstanceId using `GetDynamicId()` or use `Validate()` right before using it.
 
 If you want the action to be instanced globally, just use one of these:
 
