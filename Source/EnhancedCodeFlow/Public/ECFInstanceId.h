@@ -49,6 +49,18 @@ public:
 		Id = 0;
 	}
 
+	// Makes this Id valid (if not valid)
+	FECFInstanceId& Validate()
+	{
+		if (Id == 0)
+		{
+			static uint64 DynamicIdCounter = 0;
+			Id = ++DynamicIdCounter;
+			Type = EECFInstanceType::Dynamic;
+		}
+		return *this;
+	}
+
 	// Compare Ids.
 	bool operator==(const FECFInstanceId& Other) const
 	{
@@ -79,7 +91,6 @@ public:
 	}
 
 	// Returns a static id. User need to give the desired Id value.
-	// Use ECF_INSTANCEID in order to generate unique instance id in compile-time.
 	static FECFInstanceId GetStaticId(const uint64 Id)
 	{
 		return FECFInstanceId(EECFInstanceType::Static, Id);
@@ -97,5 +108,3 @@ protected:
 	EECFInstanceType Type;
 	uint64 Id;
 };
-
-#define ECF_INSTANCEID FECFInstanceId::GetStaticId(__COUNTER__)
