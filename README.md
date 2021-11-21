@@ -19,7 +19,7 @@ The Changelog has been put into this file: **[Changelog.txt](Changelog.txt)**
 
 The example project wich uses this plugin can be found in **[this repository](https://github.com/zompi2/UE4EnhancedCodeFlowExample)**.
 
-![ecf](https://user-images.githubusercontent.com/7863125/111898879-0d845280-8a29-11eb-82cb-2953b4069b26.png)
+![ecf](https://user-images.githubusercontent.com/7863125/142775055-84ec1442-99b9-4c17-93e8-7a09122aedc7.png)
 
 # Usage
 
@@ -394,9 +394,19 @@ Even though this was originally code only plugin I decided to move it's function
 
 ![cust](https://user-images.githubusercontent.com/7863125/117880805-cd16b780-b2a8-11eb-9a9f-4f5400a21a05.png)
 
+#### Time Lock
+
+![ecftlock](https://user-images.githubusercontent.com/7863125/142775075-e4cfe100-1526-426b-83b9-b706755518c7.png)
+
 #### Other functions
 
-![newbp](https://user-images.githubusercontent.com/7863125/118320999-44dd2000-b4fd-11eb-8081-f280067c0f85.png)
+##### Stopping actions
+
+![stopping](https://user-images.githubusercontent.com/7863125/142775109-530ce7b7-9082-4051-849e-19ae0181be19.png)
+
+##### Handles and InstanceIds
+
+![ecfhandles](https://user-images.githubusercontent.com/7863125/142775087-84dbfc36-d83d-4ccd-aefa-5a4be0255896.png)
 
 # Special thanks
 
