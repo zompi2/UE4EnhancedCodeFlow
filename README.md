@@ -176,6 +176,21 @@ FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
 });
 ```
 
+#### Time Lock
+
+This action is **Instanced**.
+
+Blocks execution of the block of code until the given time has passed.
+
+``` cpp
+FFlow::TimeLock(this, 2.f, [this]()
+{
+  // This code will run now, and won't be able to execute for 2 seconds.
+}, ECF_INSTANCEID);
+```
+
+> Important! This action is instanced and it requires InstanceId. Use `ECF_INSTANCEID` macro to get valid instance id.
+
 # Extra settings
 
 You can define extra settings at the end of each action launch. Currently the following actions are available:
@@ -223,6 +238,37 @@ FFlow::Delay(this, 2.f, [this]()
 }, ECF_IGNOREPAUSE);
 ```
 
+# Instanced Actions
+
+Some actions can be Instanced. Instanced action is an action that has valid **FECFInstanceId**. 
+Such action can be executed onlye once. 
+
+As long as the action with given valid `FECFInstanceId` is running, no other action with the same `FECFInstanceId` can be executed.
+
+There are two InstanceId Types:
+
+#### Dynamic Instance Id
+
+Can be obtained using the following function:
+
+``` cpp
+FECFInstanceId::GetDynamicId();
+```
+
+The Id will alway be the next available id.
+
+#### Static Instance Id
+
+Can be obtained using the following function:
+
+``` cpp
+FECFInstanceId::GetStaticId(10);
+```
+
+Obtains the Instance Id of the given, static value.
+
+> **Important!** A convenient macro **`ECF_INSTANCEID`** will return a compile-time generated static instance id.
+
 # Stopping actions
 
 Every function described earlier returns a **FECFHandle** which can be used to check if the following action is running and to stop it.
@@ -233,6 +279,12 @@ FFlow::StopAction(GetWorld(), Handle); // <- stops this action!
 ```
 
 > Note that this function requires a pointer to the existing **World** in order to work properly.
+
+To stop a specific Instanced action the **FECFInstanceId** is needed.
+
+``` cpp
+FFlow::StopInstancedAction(GetWorld(), InstanceId);
+```
 
 You can also stop all of the actions from a specific owner or from everywhere. Stopped actions can launch their completion callbacks or not, depending on the given argument:
 
@@ -252,6 +304,7 @@ FFlow::RemoveAllWaitAndExecutes(GetWorld());
 FFlow::RemoveAllWhileTrueExecutes(GetWorld());
 FFlow::RemoveAllTimelines(GetWorld());
 FFlow::RemoveAllCustomTimelines(GetWorld());
+FFlow::RemoveAllTimeLocks(GetWorld());
 ```
 
 # Extending plugin
@@ -283,7 +336,7 @@ bool Setup(int32 Param1, int32 Param2, TUniqueFunction<void()>&& Callback)
 FECFHandle FEnhancedCodeFlow::NewAction(UObject* InOwner, int32 Param1, int32 Param2, TUniqueFunction<void()>&& Call, const FECFActionSettings& Settings = {})
 {
   if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-    return ECF->AddAction<UECFNewAction>(InOwner, Settings, Param1, Param2, MoveTemp(Call));
+    return ECF->AddAction<UECFNewAction>(InOwner, Settings, FECFInstanceId(), Param1, Param2, MoveTemp(Call));
   else
     return FECFHandle();
 }
@@ -301,6 +354,8 @@ void FFlow::RemoveNewActions(const UObject* WorldContextObject, bool bComplete, 
 8. You can optionally run `SetMaxActionTime` in actions `Init` phase to determine the maximum time in seconds this action should run. 
 >IMMPORTANT! SetMaxActionTime is only to help ticker run ticks with proper delta times.  
    >It will not stop the action itself!
+
+9. For Instanced actions pass proper `FECFInstanceId` to the `AddAction` function.
 
 It is done! Now you can run your own action:
 
