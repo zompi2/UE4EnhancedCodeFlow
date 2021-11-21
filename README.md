@@ -396,7 +396,7 @@ Even though this was originally code only plugin I decided to move it's function
 
 #### Time Lock
 
-![ecftlock](https://user-images.githubusercontent.com/7863125/142775075-e4cfe100-1526-426b-83b9-b706755518c7.png)
+![ecftlock](https://user-images.githubusercontent.com/7863125/142775620-c998bd9d-b944-4a1b-b2aa-5826483c581c.png)
 
 #### Other functions
 
