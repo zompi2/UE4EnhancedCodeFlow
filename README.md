@@ -403,11 +403,11 @@ Even though this was originally code only plugin I decided to move it's function
 
 ##### Stopping actions
 
-![stopping](https://user-images.githubusercontent.com/7863125/142775109-530ce7b7-9082-4051-849e-19ae0181be19.png)
+![stopac](https://user-images.githubusercontent.com/7863125/142932345-39ec3880-a47e-426c-8e9b-85e99ab5ba31.png)
 
 ##### Handles and InstanceIds
 
-![ecfhandles](https://user-images.githubusercontent.com/7863125/142775087-84dbfc36-d83d-4ccd-aefa-5a4be0255896.png)
+![handles](https://user-images.githubusercontent.com/7863125/142932359-3617c970-fc7b-4c50-aa54-c730309f3e0e.png)
 
 # Special thanks
 
