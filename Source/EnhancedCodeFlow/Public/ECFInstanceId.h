@@ -3,12 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
-enum class EECFInstanceType : uint8
-{
-	Dynamic,
-	Static
-};
+#include "ECFTypes.h"
 
 class FECFInstanceId
 {
@@ -16,22 +11,22 @@ class FECFInstanceId
 public:
 
 	FECFInstanceId() : 
-		Type(EECFInstanceType::Dynamic),
+		Scope(EECFInstanceIdScope::Object),
 		Id(0)
 	{}
 
-	FECFInstanceId(EECFInstanceType InType, const uint64 InId) :
-		Type(InType),
+	FECFInstanceId(EECFInstanceIdScope InScope, uint64 InId) :
+		Scope(InScope),
 		Id(InId)
 	{}
 
 	FECFInstanceId(const FECFInstanceId& Other) :
-		Type(Other.Type),
+		Scope(Other.Scope),
 		Id(Other.Id)
 	{}
 
 	FECFInstanceId(FECFInstanceId&& Other) :
-		Type(Other.Type),
+		Scope(Other.Scope),
 		Id(Other.Id)
 	{
 		Other.Invalidate();
@@ -49,35 +44,28 @@ public:
 		Id = 0;
 	}
 
-	// Makes this Id valid (if not valid)
-	FECFInstanceId& Validate()
+	EECFInstanceIdScope GetScope() const
 	{
-		if (Id == 0)
-		{
-			static uint64 DynamicIdCounter = 0;
-			Id = ++DynamicIdCounter;
-			Type = EECFInstanceType::Dynamic;
-		}
-		return *this;
+		return Scope;
 	}
 
 	// Compare Ids.
 	bool operator==(const FECFInstanceId& Other) const
 	{
-		return Type == Other.Type && Id == Other.Id;
+		return Id == Other.Id && Scope == Other.Scope;
 	}
 
 	// Compare (not) Ids.
 	bool operator!=(const FECFInstanceId& Other) const
 	{
-		return Type != Other.Type || Id != Other.Id;
+		return Id != Other.Id || Scope != Other.Scope;
 	}
 
 	// Copy.
 	FECFInstanceId& operator=(const FECFInstanceId& Other)
 	{
 		Id = Other.Id;
-		Type = Other.Type;
+		Scope = Other.Scope;
 		return *this;
 	}
 
@@ -85,26 +73,20 @@ public:
 	FECFInstanceId& operator=(FECFInstanceId&& Other)
 	{
 		Id = Other.Id;
-		Type = Other.Type;
+		Scope = Other.Scope;
 		Other.Invalidate();
 		return *this;
 	}
 
-	// Returns a static id. User need to give the desired Id value.
-	static FECFInstanceId GetStaticId(const uint64 Id)
-	{
-		return FECFInstanceId(EECFInstanceType::Static, Id);
-	}
-
-	// Returns a dynamic id, which is the
-	static FECFInstanceId GetDynamicId()
+	// Returns a new id.
+	static FECFInstanceId NewId(EECFInstanceIdScope InScope = EECFInstanceIdScope::Object)
 	{
 		static uint64 DynamicIdCounter = 0;
-		return FECFInstanceId(EECFInstanceType::Dynamic, ++DynamicIdCounter);
+		return FECFInstanceId(InScope, ++DynamicIdCounter);
 	}
 
 protected:
 
-	EECFInstanceType Type;
+	EECFInstanceIdScope Scope;
 	uint64 Id;
 };

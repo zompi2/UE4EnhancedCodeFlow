@@ -44,8 +44,8 @@ public:
 	 * Stops the running action with the given InstanceId.
 	 * bComplete param indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete"), Category = "ECF")
-	static void ECFStopInstancedActions(const UObject* WorldContextObject, FECFInstanceIdBP InstanceId, bool bComplete = false);
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner"), Category = "ECF")
+	static void ECFStopInstancedActions(const UObject* WorldContextObject, FECFInstanceIdBP InstanceId, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/**
 	 * Checks if the action pointed by given handle is running.
@@ -68,13 +68,7 @@ public:
 	 * Returns a static instance id with a provided value.
 	 */
 	UFUNCTION(BlueprintPure, Category = "ECF")
-	static FECFInstanceIdBP ECFStaticInstanceId(int64 Id);
-
-	/**
-	 * Returns a generated dynamic instance id.
-	 */
-	UFUNCTION(BlueprintPure, Category = "ECF")
-	static FECFInstanceIdBP ECFDynamicInstanceId();
+	static FECFInstanceIdBP ECFGetNewInstanceId(EECFInstanceIdScope Scope);
 
 	/**
 	 * Checks if the given Handle is valid.

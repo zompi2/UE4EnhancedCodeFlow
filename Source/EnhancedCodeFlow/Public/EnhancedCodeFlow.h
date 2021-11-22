@@ -46,7 +46,7 @@ public:
 	 * Stops the running action with the given InstanceId.
 	 * bComplete param indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	static void StopInstancedAction(const UObject* WorldContextObject, FECFInstanceId InstanceId, bool bComplete = false);
+	static void StopInstancedAction(const UObject* WorldContextObject, FECFInstanceId InstanceId, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/**
 	 * Checks if the action pointed by given handle is running.
@@ -202,7 +202,7 @@ public:
 	 * Stops time lock of the given instance id.
 	 * @param InstanceId - the instance id of the time lock action which will stop.
 	 */
-	static void RemoveInstanceOfTimeLock(const UObject* WorldContextObject, const FECFInstanceId& InstanceId);
+	static void RemoveInstanceOfTimeLock(const UObject* WorldContextObject, const FECFInstanceId& InstanceId, UObject* InOwner = nullptr);
 };
 
 using FFlow = FEnhancedCodeFlow;

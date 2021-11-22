@@ -20,10 +20,10 @@ void FFlow::StopAction(const UObject* WorldContextObject, FECFHandle& Handle, bo
 		ECF->RemoveAction(Handle, bComplete);
 }
 
-void FEnhancedCodeFlow::StopInstancedAction(const UObject* WorldContextObject, FECFInstanceId InstanceId, bool bComplete /*= false*/)
+void FEnhancedCodeFlow::StopInstancedAction(const UObject* WorldContextObject, FECFInstanceId InstanceId, bool bComplete /*= false*/, UObject* InOwner/* = nullptr*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
-		ECF->RemoveInstancedAction(InstanceId, bComplete);
+		ECF->RemoveInstancedAction(InstanceId, bComplete, InOwner);
 }
 
 bool FFlow::IsActionRunning(const UObject* WorldContextObject, const FECFHandle& Handle)
@@ -173,8 +173,8 @@ void FEnhancedCodeFlow::RemoveAllTimeLocks(const UObject* WorldContextObject, UO
 		ECF->RemoveActionsOfClass<UECFTimeLock>(false, InOwner);
 }
 
-void FEnhancedCodeFlow::RemoveInstanceOfTimeLock(const UObject* WorldContextObject, const FECFInstanceId& InstanceId)
+void FEnhancedCodeFlow::RemoveInstanceOfTimeLock(const UObject* WorldContextObject, const FECFInstanceId& InstanceId, UObject* InOwner/* = nullptr*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
-		ECF->RemoveInstancedAction(InstanceId, false);
+		ECF->RemoveInstancedAction(InstanceId, false, InOwner);
 }

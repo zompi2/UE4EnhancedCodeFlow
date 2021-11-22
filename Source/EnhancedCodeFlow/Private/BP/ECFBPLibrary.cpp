@@ -12,9 +12,9 @@ void UECFBPLibrary::ECFStopAction(const UObject* WorldContextObject, FECFHandleB
 	FFlow::StopAction(WorldContextObject, Handle.Handle, bComplete);
 }
 
-void UECFBPLibrary::ECFStopInstancedActions(const UObject* WorldContextObject, FECFInstanceIdBP InstanceId, bool bComplete /*= false*/)
+void UECFBPLibrary::ECFStopInstancedActions(const UObject* WorldContextObject, FECFInstanceIdBP InstanceId, bool bComplete /*= false*/, UObject* InOwner/* = nullptr*/)
 {
-	FFlow::StopInstancedAction(WorldContextObject, InstanceId.InstanceId, bComplete);
+	FFlow::StopInstancedAction(WorldContextObject, InstanceId.InstanceId, bComplete, InOwner);
 }
 
 void UECFBPLibrary::ECFIsActionRunning(bool& bIsRunning, const UObject* WorldContextObject, const FECFHandleBP& Handle)
@@ -29,18 +29,9 @@ void UECFBPLibrary::ECFStopAllActions(const UObject* WorldContextObject, bool bC
 
 /*^^^ Handle and Instance Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-FECFInstanceIdBP UECFBPLibrary::ECFStaticInstanceId(int64 Id)
+FECFInstanceIdBP UECFBPLibrary::ECFGetNewInstanceId(EECFInstanceIdScope Scope)
 {
-	if (Id >= 0)
-	{
-		return FECFInstanceIdBP(FECFInstanceId::GetStaticId(static_cast<uint64>(Id)));
-	}
-	return FECFInstanceIdBP();
-}
-
-FECFInstanceIdBP UECFBPLibrary::ECFDynamicInstanceId()
-{
-	return FECFInstanceIdBP(FECFInstanceId::GetDynamicId());
+	return FECFInstanceIdBP(FECFInstanceId::NewId(Scope));
 }
 
 bool UECFBPLibrary::IsECFHandleValid(const FECFHandleBP& Handle)
