@@ -7,6 +7,16 @@ It works very well with gameplay programming, UI programming with a lot of trans
 
 This plugin works with Unreal Engine 5 too! Checkout branch **ue5** to get a compatible version. 
 
+# Table of content
+
+- [Usage](#usage)
+- [Extra Settings](#extra-settings)
+- [Instanced Actions](#instanced-actions)
+- [Stopping Actions](#stopping-actions)
+- [Extending Plugin](#extending-plugin)
+- [Blueprint Support](#blueprint-support)
+- [Special Thanks](#special-thanks)
+
 # Contact
 
 If you have any question or suggestion regardles this plugin simply add an **Issue** to the github project or write an e-mail to me: **zompi2@gmail.com** I will try my best to answer it quickly :)
@@ -49,6 +59,8 @@ FFlow::Delay(this, 2.f, [this]()
   // Code to execute after 2 seconds.
 });
 ```
+[Back to actions list](#usage)
+[Back to top](#table-of-content)
 
 #### Add Ticker
 
@@ -103,6 +115,9 @@ FFlow::StopAction(this, TickerHandle);
 > Note 1: Tickers and every other plugin actions are impacted by global time dilation.  
 > Note 2: You can check if the ticker (or any other action) is running using **FFlow::IsActionRunning(TickerHandle)**
 
+[Back to actions list](#usage)
+[Back to top](#table-of-content)
+
 #### Wait and execute
 
 Waits until specific conditions are made and then executes code.  
@@ -121,6 +136,8 @@ FFlow::WaitAndExecute(this, [this]()
   // Implement code to execute when conditions are met.
 });
 ```
+[Back to actions list](#usage)
+[Back to top](#table-of-content)
 
 #### While true execute
 
@@ -139,6 +156,8 @@ FFlow::WhileTrueExecute(this, [this]()
   // Implement code to tick when conditions are true.
 });
 ```
+[Back to actions list](#usage)
+[Back to top](#table-of-content)
 
 #### Add timeline
 
@@ -170,6 +189,8 @@ FFlow::AddTimeline(this, 0.f, 1.f, 2.f, [this](float Value, float Time)
 }, 
 EECFBlendFunc::ECFBlend_Linear, 2.f);
 ```
+[Back to actions list](#usage)
+[Back to top](#table-of-content)
 
 #### Add custom timeline
 
@@ -185,6 +206,8 @@ FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
   // Code to run when timeline stops
 });
 ```
+[Back to actions list](#usage)
+[Back to top](#table-of-content)
 
 #### Time Lock
 
@@ -199,6 +222,8 @@ FFlow::TimeLock(this, 2.f, [this]()
   // This code will run now, and won't be able to execute for 2 seconds.
 }, InstanceId);
 ```
+[Back to actions list](#usage)
+[Back to top](#table-of-content)
 
 #### Do Once
 
@@ -213,6 +238,8 @@ FFlow::DoOnce(this, [this]()
   // This code can be run only once.
 }, InstanceId);
 ```
+[Back to actions list](#usage)
+[Back to top](#table-of-content)
 
 #### Do N Times
 
@@ -227,6 +254,8 @@ FFlow::DoNTimes(this, 5, [this](int32 Counter)
   // This code can be run only 5 times.
 }, InstanceId);
 ```
+[Back to actions list](#usage)
+[Back to top](#table-of-content)
 
 # Extra settings
 
@@ -274,6 +303,7 @@ FFlow::Delay(this, 2.f, [this]()
   // Run this code after 2 seconds, while ignoring game pause.
 }, ECF_IGNOREPAUSE);
 ```
+[Back to top](#table-of-content)
 
 # Instanced Actions
 
@@ -302,6 +332,7 @@ FECFInstanceId::NewId(); // for Object scoped InstanceId
 or
 FECFInstanceId::NewId(EECFInstanceIdScope::Global); // for Global scoped InstanceId
 ```
+[Back to top](#table-of-content)
 
 # Stopping actions
 
@@ -342,6 +373,7 @@ FFlow::RemoveAllTimelines(GetWorld());
 FFlow::RemoveAllCustomTimelines(GetWorld());
 FFlow::RemoveAllTimeLocks(GetWorld());
 ```
+[Back to top](#table-of-content)
 
 # Extending plugin
 
@@ -403,6 +435,7 @@ FFlow::NewAction(this, 1, 2, [this]()
   // Callback code.
 }, ECF_IGNOREPAUSE);
 ```
+[Back to top](#table-of-content)
 
 # Blueprints support
 
@@ -446,8 +479,12 @@ Even though this was originally code only plugin I decided to move it's function
 
 ![handles](https://user-images.githubusercontent.com/7863125/142932359-3617c970-fc7b-4c50-aa54-c730309f3e0e.png)
 
+[Back to top](#table-of-content)
+
 # Special thanks
 
 I want to send special thanks to Monika, because she always supports me and believes in me, to Pawel, for allowing me to test this plugin on his project and to everyone that contributed to this project.  
 Also, I want to thank You for using this plugin! It is very important for me that my work is useful for someone!  
 Happy coding!
+
+[Back to top](#table-of-content)
