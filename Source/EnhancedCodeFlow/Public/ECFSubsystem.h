@@ -40,6 +40,7 @@ protected:
 		UECFActionBase* PossibleInstancedAction = GetInstancedAction(InstanceId, InOwner);
 		if (IsActionValid(PossibleInstancedAction))
 		{
+			// Re-trigger active instanced action for any extra logic.
 			PossibleInstancedAction->RetriggeredInstancedAction();
 			return PossibleInstancedAction->GetHandleId();
 		}
