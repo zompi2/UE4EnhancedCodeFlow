@@ -11,6 +11,7 @@
 #include "CodeFlowActions/ECFTimeline.h"
 #include "CodeFlowActions/ECFCustomTimeline.h"
 #include "CodeFlowActions/ECFTimeLock.h"
+#include "CodeFlowActions/ECFDoOnce.h"
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
@@ -173,8 +174,18 @@ void FEnhancedCodeFlow::RemoveAllTimeLocks(const UObject* WorldContextObject, UO
 		ECF->RemoveActionsOfClass<UECFTimeLock>(false, InOwner);
 }
 
-void FEnhancedCodeFlow::RemoveInstanceOfTimeLock(const UObject* WorldContextObject, const FECFInstanceId& InstanceId, UObject* InOwner/* = nullptr*/)
+/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFHandle FEnhancedCodeFlow::DoOnce(UObject* InOwner, TUniqueFunction<void()>&& InExecFunc, const FECFInstanceId& InstanceId)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFDoOnce>(InOwner, {}, InstanceId, MoveTemp(InExecFunc));
+	else
+		return FECFHandle();
+}
+
+void FEnhancedCodeFlow::RemoveAllDoOnce(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
-		ECF->RemoveInstancedAction(InstanceId, false, InOwner);
+		ECF->RemoveActionsOfClass<UECFDoOnce>(false, InOwner);
 }

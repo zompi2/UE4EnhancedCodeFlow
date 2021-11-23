@@ -149,11 +149,6 @@ public:
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "InOwner"), Category = "ECF")
 	static void ECFRemoveAllTimeLocks(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
-	/**
-	 * Remove time lock of the given instance id.
-	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"), Category = "ECF")
-	static void ECFRemoveInstanceOfTimeLock(const UObject* WorldContextObject, FECFInstanceIdBP InstanceId);
 
 	/*^^^ Removing Async Actions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 

@@ -187,7 +187,7 @@ public:
 	 * Allow to run the code only once in a given time. (Locks the ability to run the code for a specific amount of time in seconds).
 	 * @param InLockTime - time in seconds the lock will persist.
 	 * @param InExecFunc - the function to execute.
-	 * @param InstanceId - the id of the instance of this action (this action is instanced, use ECF_INSTANCEID macro in order to get proper instance id).
+	 * @param InstanceId - the id of the instance of this action.
 	 */
 	static FECFHandle TimeLock(UObject* InOwner, float InLockTime, TUniqueFunction<void()>&& InExecFunc, const FECFInstanceId& InstanceId, const FECFActionSettings& Settings = {});
 
@@ -198,11 +198,21 @@ public:
 	 */
 	static void RemoveAllTimeLocks(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
+	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
 	/**
-	 * Stops time lock of the given instance id.
-	 * @param InstanceId - the instance id of the time lock action which will stop.
+	 * Run this code of block only once per instance.
+	 * @param InExecFunc - the function to execute.
+	 * @param InstanceId - the id of the instance of this action.
 	 */
-	static void RemoveInstanceOfTimeLock(const UObject* WorldContextObject, const FECFInstanceId& InstanceId, UObject* InOwner = nullptr);
+	static FECFHandle DoOnce(UObject* InOwner, TUniqueFunction<void()>&& InExecFunc, const FECFInstanceId& InstanceId);
+
+	/**
+	 * Stops DoOnces.
+	 * @param InOwner [optional] - if defined it will remove time locks only from the given owner.
+	 *                             Otherwise it will remove all time locks from everywhere.
+	 */
+	static void RemoveAllDoOnce(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 };
 
 using FFlow = FEnhancedCodeFlow;

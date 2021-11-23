@@ -142,11 +142,6 @@ void UECFBPLibrary::ECFRemoveAllTimeLocks(const UObject* WorldContextObject, UOb
 	FFlow::RemoveAllTimeLocks(WorldContextObject, InOwner);
 }
 
-void UECFBPLibrary::ECFRemoveInstanceOfTimeLock(const UObject* WorldContextObject, FECFInstanceIdBP InstanceId)
-{
-	FFlow::RemoveInstanceOfTimeLock(WorldContextObject, InstanceId.InstanceId);
-}
-
 /*^^^ Removing Async Actions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 void UECFBPLibrary::ECFRemoveAllDelays(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
