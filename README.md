@@ -59,7 +59,7 @@ FFlow::Delay(this, 2.f, [this]()
   // Code to execute after 2 seconds.
 });
 ```
-[Back to actions list](#usage)
+[Back to actions list](#usage)  
 [Back to top](#table-of-content)
 
 #### Add Ticker
@@ -115,7 +115,7 @@ FFlow::StopAction(this, TickerHandle);
 > Note 1: Tickers and every other plugin actions are impacted by global time dilation.  
 > Note 2: You can check if the ticker (or any other action) is running using **FFlow::IsActionRunning(TickerHandle)**
 
-[Back to actions list](#usage)
+[Back to actions list](#usage)  
 [Back to top](#table-of-content)
 
 #### Wait and execute
@@ -136,7 +136,7 @@ FFlow::WaitAndExecute(this, [this]()
   // Implement code to execute when conditions are met.
 });
 ```
-[Back to actions list](#usage)
+[Back to actions list](#usage)  
 [Back to top](#table-of-content)
 
 #### While true execute
@@ -156,7 +156,7 @@ FFlow::WhileTrueExecute(this, [this]()
   // Implement code to tick when conditions are true.
 });
 ```
-[Back to actions list](#usage)
+[Back to actions list](#usage)  
 [Back to top](#table-of-content)
 
 #### Add timeline
@@ -189,7 +189,7 @@ FFlow::AddTimeline(this, 0.f, 1.f, 2.f, [this](float Value, float Time)
 }, 
 EECFBlendFunc::ECFBlend_Linear, 2.f);
 ```
-[Back to actions list](#usage)
+[Back to actions list](#usage)  
 [Back to top](#table-of-content)
 
 #### Add custom timeline
@@ -206,7 +206,7 @@ FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
   // Code to run when timeline stops
 });
 ```
-[Back to actions list](#usage)
+[Back to actions list](#usage)  
 [Back to top](#table-of-content)
 
 #### Time Lock
@@ -222,7 +222,7 @@ FFlow::TimeLock(this, 2.f, [this]()
   // This code will run now, and won't be able to execute for 2 seconds.
 }, InstanceId);
 ```
-[Back to actions list](#usage)
+[Back to actions list](#usage)  
 [Back to top](#table-of-content)
 
 #### Do Once
@@ -238,7 +238,7 @@ FFlow::DoOnce(this, [this]()
   // This code can be run only once.
 }, InstanceId);
 ```
-[Back to actions list](#usage)
+[Back to actions list](#usage)  
 [Back to top](#table-of-content)
 
 #### Do N Times
@@ -254,7 +254,7 @@ FFlow::DoNTimes(this, 5, [this](int32 Counter)
   // This code can be run only 5 times.
 }, InstanceId);
 ```
-[Back to actions list](#usage)
+[Back to actions list](#usage)  
 [Back to top](#table-of-content)
 
 # Extra settings
