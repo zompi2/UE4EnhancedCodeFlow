@@ -23,6 +23,16 @@ The example project wich uses this plugin can be found in **[this repository](ht
 
 # Usage
 
+- [Delay](#delay)
+- [Add Ticker](#add-ticker)
+- [Wait And Execute](#wait-and-execute)
+- [While True Execute](#while-true-execute)
+- [Add Timeline](#add-timeline)
+- [Add Custom Timeline](#add-custom-timeline)
+- [Time Lock](#time-lock)
+- [Do Once](#do-once)
+- [Do N Times](#do-n-times)
+
 Run the following functions to use enhanced code flow!
 
 > Note that every function must receive a pointer to an owner that runs this function in it's first argument.  
