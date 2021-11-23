@@ -178,18 +178,43 @@ FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
 
 #### Time Lock
 
-This action is **Instanced**.
+**(Instanced)**
 
 Blocks execution of the block of code until the given time has passed.
-
-Because this action is Instanced it requires `FECFInstanceId`. 
-
 
 ``` cpp
 static FECFInstanceId InstanceId = FECFInstanceId::NewId();
 FFlow::TimeLock(this, 2.f, [this]()
 {
   // This code will run now, and won't be able to execute for 2 seconds.
+}, InstanceId);
+```
+
+#### Do Once
+
+**(Instanced)**
+
+Allow to execute the given block of code only once.
+
+``` cpp
+static FECFInstanceId InstanceId = FECFInstanceId::NewId();
+FFlow::DoOnce(this, [this]()
+{
+  // This code can be run only once.
+}, InstanceId);
+```
+
+#### Do N Times
+
+**(Instanced)**
+
+Allow to execute the given block of code only given amount of times.
+
+``` cpp
+static FECFInstanceId InstanceId = FECFInstanceId::NewId();
+FFlow::DoNTimes(this, 5, [this](int32 Counter)
+{
+  // This code can be run only 5 times.
 }, InstanceId);
 ```
 
@@ -331,7 +356,7 @@ bool Setup(int32 Param1, int32 Param2, TUniqueFunction<void()>&& Callback)
 4. If you want this action to be stopped while ticking - use `MarkAsFinished()` function.
 5. If you want to launch a callback when this action is stopped by `StopAction` method with `bComplete` set to true - override `Complete()` function.
 6. In the `FEnhancedCodeFlow` class implement static function that launches the action using `AddAction` function.
-   The function must receive a pointer to the launching `UObject`, `FECFActionSettings` structure and every other argument that is used in the action's `Setup` function in the same order.
+   The function must receive a pointer to the launching `UObject`, `FECFActionSettings`, `FECFInstanceId` and every other argument that is used in the action's `Setup` function in the same order.
    It must return `FECFHandle`.
 ```cpp
 FECFHandle FEnhancedCodeFlow::NewAction(UObject* InOwner, int32 Param1, int32 Param2, TUniqueFunction<void()>&& Call, const FECFActionSettings& Settings = {})
@@ -357,6 +382,8 @@ void FFlow::RemoveNewActions(const UObject* WorldContextObject, bool bComplete, 
    >It will not stop the action itself!
 
 9. For Instanced actions pass proper `FECFInstanceId` to the `AddAction` function.
+
+10. You can optionally override `RetriggeredInstancedAction()` function to add any logic that should be executed when the instanced action is called while already existing.
 
 It is done! Now you can run your own action:
 
