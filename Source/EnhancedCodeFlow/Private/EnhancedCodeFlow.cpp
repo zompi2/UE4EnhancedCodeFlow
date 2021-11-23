@@ -12,6 +12,7 @@
 #include "CodeFlowActions/ECFCustomTimeline.h"
 #include "CodeFlowActions/ECFTimeLock.h"
 #include "CodeFlowActions/ECFDoOnce.h"
+#include "CodeFlowActions/ECFDoNTimes.h"
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
@@ -188,4 +189,20 @@ void FEnhancedCodeFlow::RemoveAllDoOnce(const UObject* WorldContextObject, UObje
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
 		ECF->RemoveActionsOfClass<UECFDoOnce>(false, InOwner);
+}
+
+/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFHandle FEnhancedCodeFlow::DoNTimes(UObject* InOwner, const uint32 InTimes, TUniqueFunction<void(int32)>&& InExecFunc, const FECFInstanceId& InstanceId)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFDoNTimes>(InOwner, {}, InstanceId, InTimes, MoveTemp(InExecFunc));
+	else
+		return FECFHandle();
+}
+
+void FEnhancedCodeFlow::RemoveAllDoNTimes(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		ECF->RemoveActionsOfClass<UECFDoNTimes>(false, InOwner);
 }

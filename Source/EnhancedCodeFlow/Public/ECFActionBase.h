@@ -82,8 +82,11 @@ protected:
 	// Ticks this action.
 	virtual void Tick(float DeltaTime) {}
 
-	// Function called when the action is requested to be completed before it ends
+	// Function called when the action is requested to be completed before it ends.
 	virtual void Complete() {}
+
+	// Function called when this action is instanced and something tried to call it again.
+	virtual void RetriggeredInstancedAction() {}
 
 	// For any action that should last only the given time - set this function
 	// inside the action's Setup step. 

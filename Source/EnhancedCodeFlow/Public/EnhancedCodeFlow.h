@@ -213,6 +213,23 @@ public:
 	 *                             Otherwise it will remove all time locks from everywhere.
 	 */
 	static void RemoveAllDoOnce(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+
+	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Run this code of block only N times per instance.
+	 * @param InTimes - how many times it can be executed.
+	 * @param InExecFunc - the function to execute. The function has a counter of executions.
+	 * @param InstanceId - the id of the instance of this action.
+	 */
+	static FECFHandle DoNTimes(UObject* InOwner, const uint32 InTimes, TUniqueFunction<void(int32)>&& InExecFunc, const FECFInstanceId& InstanceId);
+
+	/**
+	 * Stops DoNTimes.
+	 * @param InOwner [optional] - if defined it will remove time locks only from the given owner.
+	 *                             Otherwise it will remove all time locks from everywhere.
+	 */
+	static void RemoveAllDoNTimes(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 };
 
 using FFlow = FEnhancedCodeFlow;

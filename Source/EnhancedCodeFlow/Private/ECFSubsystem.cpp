@@ -175,21 +175,21 @@ bool UECFSubsystem::HasAction(const FECFHandle& HandleId) const
 	return false;
 }
 
-FECFHandle UECFSubsystem::GetInstancedAction(const FECFInstanceId& InstanceId, UObject* InOwner/* = nullptr*/)
+UECFActionBase* UECFSubsystem::GetInstancedAction(const FECFInstanceId& InstanceId, UObject* InOwner/* = nullptr*/)
 {
 	if (InstanceId.IsValid())
 	{
 		if (UECFActionBase* const* ActionFound = Actions.FindByPredicate([&](UECFActionBase* Action) { return IsActionValid(Action) && Action->HasInstanceId(InstanceId, InOwner); }))
 		{
-			return (*ActionFound)->GetHandleId();
+			return *ActionFound;
 		}
 		else if (UECFActionBase* const* PendingActionFound = PendingAddActions.FindByPredicate([&](UECFActionBase* PendingAction) { return IsActionValid(PendingAction) && PendingAction->HasInstanceId(InstanceId, InOwner); }))
 		{
-			return (*PendingActionFound)->GetHandleId();
+			return *PendingActionFound;
 		}
 	}
 
-	return FECFHandle();
+	return nullptr;
 }
 
 void UECFSubsystem::FinishAction(UECFActionBase* Action, bool bComplete)

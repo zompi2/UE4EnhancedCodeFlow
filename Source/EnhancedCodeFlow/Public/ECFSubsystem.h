@@ -37,10 +37,11 @@ protected:
 	{
 		// There can be only one instanced action running at the same time. When trying to add an
 		// action with existing instance id - return the currently running action's handle.
-		FECFHandle PossibleInstancedActionHandle = GetInstancedAction(InstanceId, InOwner);
-		if (PossibleInstancedActionHandle.IsValid())
+		UECFActionBase* PossibleInstancedAction = GetInstancedAction(InstanceId, InOwner);
+		if (IsActionValid(PossibleInstancedAction))
 		{
-			return PossibleInstancedActionHandle;
+			PossibleInstancedAction->RetriggeredInstancedAction();
+			return PossibleInstancedAction->GetHandleId();
 		}
 
 		// Otherwise, create and set new action.
@@ -79,9 +80,8 @@ protected:
 	// Check if the action is running
 	bool HasAction(const FECFHandle& HandleId) const;
 
-	// Check if there is an instanced action running with the given instance id.
-	// Return the handle to this action if yes. Otherwise, return the invalid handle.
-	FECFHandle GetInstancedAction(const FECFInstanceId& InstanceId, UObject* InOwner = nullptr);
+	// Check if there is an instanced action running with the given instance id and returns it.
+	UECFActionBase* GetInstancedAction(const FECFInstanceId& InstanceId, UObject* InOwner = nullptr);
 	
 	// List of active actions.
 	UPROPERTY()
