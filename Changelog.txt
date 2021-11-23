@@ -1,3 +1,8 @@
+###### 1.6.0
+* DoOnce action added.
+* DoNTimes action added.
+* Added an option to implement extra logic when instanced action is retriggered.
+
 ###### 1.5.2
 * Redesigned Instanced Actions to be more useful and more readable.
 
