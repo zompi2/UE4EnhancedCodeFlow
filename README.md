@@ -14,7 +14,7 @@ This plugin works with Unreal Engine 5 too! Checkout branch **ue5** to get a com
 - [Instanced Actions](#instanced-actions)
 - [Stopping Actions](#stopping-actions)
 - [Extending Plugin](#extending-plugin)
-- [Blueprint Support](#blueprints-support)
+- [Blueprints Support](#blueprints-support)
 - [Special Thanks](#special-thanks)
 
 # Contact
