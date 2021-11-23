@@ -19,7 +19,7 @@ The Changelog has been put into this file: **[Changelog.txt](Changelog.txt)**
 
 The example project wich uses this plugin can be found in **[this repository](https://github.com/zompi2/UE4EnhancedCodeFlowExample)**.
 
-![ecf](https://user-images.githubusercontent.com/7863125/142775055-84ec1442-99b9-4c17-93e8-7a09122aedc7.png)
+![ecfscreen](https://user-images.githubusercontent.com/7863125/143097137-fe37ee9d-ccaf-440a-900f-86568ef77883.png)
 
 # Usage
 
