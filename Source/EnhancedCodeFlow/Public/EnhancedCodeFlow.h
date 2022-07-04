@@ -33,6 +33,23 @@ class ENHANCEDCODEFLOW_API FEnhancedCodeFlow
 {
 
 public:
+	
+	/*^^^ ECF Flow Control Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+	
+	/**
+	 * Checks if the action pointed by given handle is running.
+	 */
+	static bool IsActionRunning(const UObject* WorldContextObject, const FECFHandle& Handle);
+
+	/**
+	 * Pause ticking in the action pointed by given handle.
+	 */
+	static void PauseAction(const UObject* WorldContextObject, const FECFHandle& Handle);
+
+	/**
+	 * Resume ticking in the action pointed by given handle.
+	 */
+	static void ResumeAction(const UObject* WorldContextObject, const FECFHandle& Handle);
 
 	/*^^^ Stop ECF Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
@@ -47,11 +64,6 @@ public:
 	 * bComplete param indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
 	static void StopInstancedAction(const UObject* WorldContextObject, FECFInstanceId InstanceId, bool bComplete = false);
-
-	/**
-	 * Checks if the action pointed by given handle is running.
-	 */
-	static bool IsActionRunning(const UObject* WorldContextObject, const FECFHandle& Handle);
 	
 	/**
 	 * Stops all running actions.

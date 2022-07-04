@@ -3,22 +3,27 @@
 #include "ECFDelayBP.h"
 #include "EnhancedCodeFlow.h"
 
-UECFDelayBP* UECFDelayBP::ECFDelay(UObject* WorldContextObject, float DelayTime, FECFActionSettings Settings)
+UECFDelayBP* UECFDelayBP::ECFDelay(UObject* WorldContextObject, float DelayTime, FECFActionSettings Settings, FECFHandleBP& Handle)
 {
 	UECFDelayBP* Proxy = NewObject<UECFDelayBP>();
 
 	Proxy->Proxy_WorldContextObject = WorldContextObject;
-	Proxy->Proxy_DelayTime = DelayTime;
-	Proxy->Proxy_Settings = Settings;
+	Proxy->Proxy_IsPausedAtStart = Settings.bStartPaused;
+
+	Settings.bStartPaused = true;
+	Proxy->Proxy_Handle = FFlow::Delay(WorldContextObject, DelayTime, [Proxy]()
+	{
+		Proxy->OnComplete.Broadcast();
+	}, Settings);
+	Handle = FECFHandleBP(Proxy->Proxy_Handle);
 
 	return Proxy;
 }
 
 void UECFDelayBP::Activate()
 {
-	Proxy_Handle = FFlow::Delay(Proxy_WorldContextObject, Proxy_DelayTime, [this]()
+	if (Proxy_IsPausedAtStart == false)
 	{
-		OnComplete.Broadcast();
-	}, Proxy_Settings);
-	OnBegin.Broadcast(FECFHandleBP(Proxy_Handle));
+		FFlow::ResumeAction(Proxy_WorldContextObject, Proxy_Handle);
+	}
 }

@@ -14,6 +14,29 @@
 #include "CodeFlowActions/ECFDoOnce.h"
 #include "CodeFlowActions/ECFDoNTimes.h"
 
+/*^^^ ECF Flow Control Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+bool FFlow::IsActionRunning(const UObject* WorldContextObject, const FECFHandle& Handle)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		return ECF->HasAction(Handle);
+	else
+		return false;
+}
+
+void FEnhancedCodeFlow::PauseAction(const UObject* WorldContextObject, const FECFHandle& Handle)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		ECF->PauseAction(Handle);
+}
+
+void FEnhancedCodeFlow::ResumeAction(const UObject* WorldContextObject, const FECFHandle& Handle)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		ECF->ResumeAction(Handle);
+}
+
+
 /*^^^ Stop ECF Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 void FFlow::StopAction(const UObject* WorldContextObject, FECFHandle& Handle, bool bComplete/* = false*/)
@@ -26,14 +49,6 @@ void FEnhancedCodeFlow::StopInstancedAction(const UObject* WorldContextObject, F
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
 		ECF->RemoveInstancedAction(InstanceId, bComplete);
-}
-
-bool FFlow::IsActionRunning(const UObject* WorldContextObject, const FECFHandle& Handle)
-{
-	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
-		return ECF->HasAction(Handle);
-	else
-		return false;
 }
 
 void FFlow::StopAllActions(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner/* = nullptr*/)

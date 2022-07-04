@@ -159,4 +159,11 @@ void UECFBPLibrary::RemoveAllWhileTrueExecutes(const UObject* WorldContextObject
 	FFlow::RemoveAllWhileTrueExecutes(WorldContextObject, bComplete, InOwner);
 }
 
+/*^^^ Casting ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/	
+
+FString UECFBPLibrary::Conv_ECFHandleToString(const FECFHandleBP& Handle)
+{
+	return Handle.Handle.ToString();
+}
+
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/

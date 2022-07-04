@@ -59,6 +59,18 @@ protected:
 		return FECFHandle();
 	}
 
+	// Try to find running or pending action.
+	UECFActionBase* FindAction(const FECFHandle& HandleId) const;
+
+	// Check if the action is running or pending to run.
+	bool HasAction(const FECFHandle& HandleId) const;
+
+	// Pause ticking in this action
+	void PauseAction(const FECFHandle& HandleId);
+
+	// Resume ticking in this action
+	void ResumeAction(const FECFHandle& HandleId);
+
 	// Remove Action of given HandleId from list. 
 	void RemoveAction(FECFHandle& HandleId, bool bComplete);
 
@@ -77,9 +89,6 @@ protected:
 
 	// Remove all Actions of async tasks.
 	void RemoveAllActions(bool bComplete, UObject* InOwner);
-
-	// Check if the action is running
-	bool HasAction(const FECFHandle& HandleId) const;
 
 	// Check if there is an instanced action running with the given instance id and returns it.
 	UECFActionBase* GetInstancedAction(const FECFInstanceId& InstanceId);

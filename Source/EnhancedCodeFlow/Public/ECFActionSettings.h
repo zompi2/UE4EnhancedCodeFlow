@@ -14,16 +14,18 @@ struct ENHANCEDCODEFLOW_API FECFActionSettings
 		TickInterval(0.f),
 		FirstDelay(0.f),
 		bIgnorePause(false),
-		bIgnoreGlobalTimeDilation(false)
+		bIgnoreGlobalTimeDilation(false),
+		bStartPaused(false)
 	{
 
 	}
 
-	FECFActionSettings(float InTickInterval, float InFirstDelay = 0.f, bool InIgnorePause = false, bool InIgnoreTimeDilation = false) :
+	FECFActionSettings(float InTickInterval, float InFirstDelay = 0.f, bool InIgnorePause = false, bool InIgnoreTimeDilation = false, bool InStartPaused = false) :
 		TickInterval(InTickInterval),
 		FirstDelay(InFirstDelay),
 		bIgnorePause(InIgnorePause),
-		bIgnoreGlobalTimeDilation(InIgnoreTimeDilation)
+		bIgnoreGlobalTimeDilation(InIgnoreTimeDilation),
+		bStartPaused(InStartPaused)
 	{
 
 	}
@@ -39,10 +41,14 @@ struct ENHANCEDCODEFLOW_API FECFActionSettings
 
 	UPROPERTY(BlueprintReadWrite)
 	bool bIgnoreGlobalTimeDilation = false;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool bStartPaused = false;
 };
 
-#define ECF_TICKINTERVAL(_Interval) FECFActionSettings(_Interval, 0.f, false, false)
-#define ECF_DELAYFIRST(_Delay) FECFActionSettings(0.f, _Delay, false, false)
-#define ECF_IGNOREPAUSE FECFActionSettings(0.f, 0.f, true, false)
-#define ECF_IGNORETIMEDILATION FECFActionSettings(0.f, 0.f, false, true)
-#define ECF_IGNOREPAUSEDILATION FECFActionSettings(0.f, 0.f, true, true)
+#define ECF_TICKINTERVAL(_Interval) FECFActionSettings(_Interval, 0.f, false, false, false)
+#define ECF_DELAYFIRST(_Delay) FECFActionSettings(0.f, _Delay, false, false, false)
+#define ECF_IGNOREPAUSE FECFActionSettings(0.f, 0.f, true, false, false)
+#define ECF_IGNORETIMEDILATION FECFActionSettings(0.f, 0.f, false, true, false)
+#define ECF_IGNOREPAUSEDILATION FECFActionSettings(0.f, 0.f, true, true, false)
+#define ECF_STARTPAUSED FECFActionSettings(0.f, 0.f, false, false, true)
