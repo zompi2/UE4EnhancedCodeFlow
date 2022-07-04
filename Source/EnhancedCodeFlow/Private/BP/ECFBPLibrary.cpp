@@ -5,7 +5,24 @@
 #include "BP/ECFBPLibrary.h"
 #include "EnhancedCodeFlow.h"
 
-/*^^^ Global ECF Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+/*^^^ ECF Flow Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+void UECFBPLibrary::ECFIsActionRunning(bool& bIsRunning, const UObject* WorldContextObject, const FECFHandleBP& Handle)
+{
+	bIsRunning = FFlow::IsActionRunning(WorldContextObject, Handle.Handle);
+}
+
+void UECFBPLibrary::ECFPauseAction(const UObject* WorldContextObject, const FECFHandleBP& Handle)
+{
+	FFlow::PauseAction(WorldContextObject, Handle.Handle);
+}
+
+void UECFBPLibrary::ECFResumeAction(const UObject* WorldContextObject, const FECFHandleBP& Handle)
+{
+	FFlow::ResumeAction(WorldContextObject, Handle.Handle);
+}
+
+/*^^^ Stopping ECF Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 void UECFBPLibrary::ECFStopAction(const UObject* WorldContextObject, FECFHandleBP& Handle, bool bComplete/* = false*/)
 {
@@ -15,11 +32,6 @@ void UECFBPLibrary::ECFStopAction(const UObject* WorldContextObject, FECFHandleB
 void UECFBPLibrary::ECFStopInstancedActions(const UObject* WorldContextObject, FECFInstanceIdBP InstanceId, bool bComplete /*= false*/)
 {
 	FFlow::StopInstancedAction(WorldContextObject, InstanceId.InstanceId, bComplete);
-}
-
-void UECFBPLibrary::ECFIsActionRunning(bool& bIsRunning, const UObject* WorldContextObject, const FECFHandleBP& Handle)
-{
-	bIsRunning = FFlow::IsActionRunning(WorldContextObject, Handle.Handle);
 }
 
 void UECFBPLibrary::ECFStopAllActions(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
