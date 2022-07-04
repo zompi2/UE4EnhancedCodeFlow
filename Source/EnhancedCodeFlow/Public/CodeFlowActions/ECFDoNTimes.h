@@ -29,6 +29,7 @@ protected:
 		}
 		else
 		{
+			ensureMsgf(false, TEXT("ECF - DoNTimes failed to start. Are you sure Exec Fuinction and Times number are set properly?"));
 			return false;
 		}
 	}

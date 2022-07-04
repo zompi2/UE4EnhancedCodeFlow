@@ -30,6 +30,7 @@ protected:
 		}
 		else
 		{
+			ensureMsgf(false, TEXT("ECF - Timelock failed to start. Are you sure the Lock time is greater than 0 and the Exec Function is set properly?"));
 			return false;
 		}
 	}

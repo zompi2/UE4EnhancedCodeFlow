@@ -32,6 +32,7 @@ protected:
 		}
 		else
 		{
+			ensureMsgf(false, TEXT("ECF - While True Execute failed to start. Are you sure the Predicate and Function are set properly?"));
 			return false;
 		}
 	}

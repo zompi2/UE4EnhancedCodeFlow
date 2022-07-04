@@ -8,6 +8,7 @@
 #include "ECFHandle.h"
 #include "ECFInstanceId.h"
 #include "ECFActionSettings.h"
+#include "Misc/AssertionMacros.h"
 #include "ECFActionBase.generated.h"
 
 UCLASS()
