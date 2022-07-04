@@ -202,8 +202,17 @@ public:
 
 	/*^^^ Casting ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
+	/**
+	 * Convert Handle to String.
+	 */
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "ToString (FECFHandleBP)", CompactNodeTitle = "->", BlueprintAutocast), Category = "ECF")
 	static FString Conv_ECFHandleToString(const FECFHandleBP& Handle);
+
+	/**
+	 * InstanceId Handle to String.
+	 */
+	UFUNCTION(BlueprintPure, meta = (DisplayName = "ToString (FECFInstanceIdBP)", CompactNodeTitle = "->", BlueprintAutocast), Category = "ECF")
+	static FString Conv_ECFInstanceIdToString(const FECFInstanceIdBP& InstanceId);
 
 	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 };

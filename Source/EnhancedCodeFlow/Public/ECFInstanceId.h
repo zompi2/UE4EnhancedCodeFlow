@@ -67,6 +67,12 @@ public:
 		return *this;
 	}
 
+	// Convert the Id  to string.
+	FString ToString() const
+	{
+		return FString::Printf(TEXT("%llu"), Id);
+	}
+
 	// Returns a new id.
 	static FECFInstanceId NewId()
 	{

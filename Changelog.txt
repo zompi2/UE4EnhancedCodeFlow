@@ -1,3 +1,12 @@
+###### 1.7.0
+* Added options to pause and resume running actions. Actions can also be started with pause enabled at the beginning.
+* Major refactor of BP nodes - better readability and functionality.
+* Removed Static InstanceIds, as they had no valid purpose.
+* Added ToString node for ECFHandleBP.
+* Added ToString functionality to InstancedId (code and bp).
+* Added SetMaxActionTime() call to EVERY time dependent action.
+* Added ensure msgs for situations when actions couldn't be executed properly.
+
 ###### 1.6.1
 * Fixed ECFActionSettings macros
 

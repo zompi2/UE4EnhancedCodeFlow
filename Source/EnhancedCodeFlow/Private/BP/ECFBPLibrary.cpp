@@ -183,4 +183,9 @@ FString UECFBPLibrary::Conv_ECFHandleToString(const FECFHandleBP& Handle)
 	return Handle.Handle.ToString();
 }
 
+FString UECFBPLibrary::Conv_ECFInstanceIdToString(const FECFInstanceIdBP& InstanceId)
+{
+	return InstanceId.InstanceId.ToString();
+}
+
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
