@@ -50,6 +50,13 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject"), Category = "ECF")
 	static void ECFResumeAction(const UObject* WorldContextObject, const FECFHandleBP& Handle);
+
+	/**
+	 * Checks if the action pointed by given handle is paused.
+	 * Returns false if there is no action running.
+	 */
+	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject"), Category = "ECF")
+	static void ECFIsActionPaused(UPARAM(DisplayName = "IsRunning") bool& bIsRunning, UPARAM(DisplayName = "IsPaused") bool& bIsPaused, const UObject* WorldContextObject, const FECFHandleBP& Handle);
 	
 	/*^^^ Stopping ECF Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 

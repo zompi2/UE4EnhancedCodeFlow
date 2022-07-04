@@ -12,6 +12,11 @@ void UECFBPLibrary::ECFIsActionRunning(bool& bIsRunning, const UObject* WorldCon
 	bIsRunning = FFlow::IsActionRunning(WorldContextObject, Handle.Handle);
 }
 
+void UECFBPLibrary::ECFIsActionPaused(bool& bIsRunning, bool& bIsPaused, const UObject* WorldContextObject, const FECFHandleBP& Handle)
+{
+	bIsRunning = FFlow::IsActionPaused(WorldContextObject, Handle.Handle, bIsPaused);
+}
+
 void UECFBPLibrary::ECFPauseAction(const UObject* WorldContextObject, const FECFHandleBP& Handle)
 {
 	FFlow::PauseAction(WorldContextObject, Handle.Handle);

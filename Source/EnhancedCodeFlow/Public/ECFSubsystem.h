@@ -71,6 +71,9 @@ protected:
 	// Resume ticking in this action
 	void ResumeAction(const FECFHandle& HandleId);
 
+	// Checks if this action is not paused. Returns false if there is no action.
+	bool IsActionPaused(const FECFHandle& HandleId, bool &bIsPaused);
+
 	// Remove Action of given HandleId from list. 
 	void RemoveAction(FECFHandle& HandleId, bool bComplete);
 

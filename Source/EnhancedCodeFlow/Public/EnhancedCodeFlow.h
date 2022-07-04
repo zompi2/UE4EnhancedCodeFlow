@@ -51,6 +51,12 @@ public:
 	 */
 	static void ResumeAction(const UObject* WorldContextObject, const FECFHandle& Handle);
 
+	/**
+	 * Resume ticking in the action pointed by given handle.
+	 * Returns false if there is no action.
+	 */
+	static bool IsActionPaused(const UObject* WorldContextObject, const FECFHandle& Handle, bool &bIsPaused);
+
 	/*^^^ Stop ECF Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 	/**
