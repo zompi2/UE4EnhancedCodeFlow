@@ -23,8 +23,9 @@ protected:
 		LockTime = InLockTime;
 		ExecFunc = MoveTemp(InExecFunc);
 
-		if (ExecFunc && LockTime >= 0)
+		if (ExecFunc && LockTime > 0)
 		{
+			SetMaxActionTime(LockTime);
 			return true;
 		}
 		else

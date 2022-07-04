@@ -25,6 +25,7 @@ protected:
 
 		if (CallbackFunc && DelayTime >= 0)
 		{
+			SetMaxActionTime(DelayTime);
 			return true;
 		}
 		else

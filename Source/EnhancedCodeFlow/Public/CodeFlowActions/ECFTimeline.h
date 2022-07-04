@@ -32,11 +32,6 @@ protected:
 		StopValue = InStopValue;
 		Time = InTime;
 
-		if (Time > 0.f)
-		{
-			SetMaxActionTime(Time);
-		}
-
 		TickFunc = MoveTemp(InTickFunc);
 		CallbackFunc = MoveTemp(InCallbackFunc);
 
@@ -45,6 +40,7 @@ protected:
 
 		if (TickFunc && Time > 0 && BlendExp != 0 && StartValue != StopValue)
 		{
+			SetMaxActionTime(Time);
 			CurrentTime = 0.f;
 			return true;
 		}
