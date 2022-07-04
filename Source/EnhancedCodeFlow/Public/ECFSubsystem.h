@@ -37,7 +37,7 @@ protected:
 	{
 		// There can be only one instanced action running at the same time. When trying to add an
 		// action with existing instance id - return the currently running action's handle.
-		UECFActionBase* PossibleInstancedAction = GetInstancedAction(InstanceId, InOwner);
+		UECFActionBase* PossibleInstancedAction = GetInstancedAction(InstanceId);
 		if (IsActionValid(PossibleInstancedAction))
 		{
 			// Re-trigger active instanced action for any extra logic.
@@ -73,7 +73,7 @@ protected:
 	}
 
 	// Remove action with the given InstanceId.
-	void RemoveInstancedAction(const FECFInstanceId& InstanceId, bool bComplete, UObject* InOwner);
+	void RemoveInstancedAction(const FECFInstanceId& InstanceId, bool bComplete);
 
 	// Remove all Actions of async tasks.
 	void RemoveAllActions(bool bComplete, UObject* InOwner);
@@ -82,7 +82,7 @@ protected:
 	bool HasAction(const FECFHandle& HandleId) const;
 
 	// Check if there is an instanced action running with the given instance id and returns it.
-	UECFActionBase* GetInstancedAction(const FECFInstanceId& InstanceId, UObject* InOwner = nullptr);
+	UECFActionBase* GetInstancedAction(const FECFInstanceId& InstanceId);
 	
 	// List of active actions.
 	UPROPERTY()

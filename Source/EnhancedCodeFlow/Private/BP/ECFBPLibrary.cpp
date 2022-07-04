@@ -12,9 +12,9 @@ void UECFBPLibrary::ECFStopAction(const UObject* WorldContextObject, FECFHandleB
 	FFlow::StopAction(WorldContextObject, Handle.Handle, bComplete);
 }
 
-void UECFBPLibrary::ECFStopInstancedActions(const UObject* WorldContextObject, FECFInstanceIdBP InstanceId, bool bComplete /*= false*/, UObject* InOwner/* = nullptr*/)
+void UECFBPLibrary::ECFStopInstancedActions(const UObject* WorldContextObject, FECFInstanceIdBP InstanceId, bool bComplete /*= false*/)
 {
-	FFlow::StopInstancedAction(WorldContextObject, InstanceId.InstanceId, bComplete, InOwner);
+	FFlow::StopInstancedAction(WorldContextObject, InstanceId.InstanceId, bComplete);
 }
 
 void UECFBPLibrary::ECFIsActionRunning(bool& bIsRunning, const UObject* WorldContextObject, const FECFHandleBP& Handle)
@@ -29,9 +29,9 @@ void UECFBPLibrary::ECFStopAllActions(const UObject* WorldContextObject, bool bC
 
 /*^^^ Handle and Instance Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-FECFInstanceIdBP UECFBPLibrary::ECFGetNewInstanceId(EECFInstanceIdScope Scope)
+FECFInstanceIdBP UECFBPLibrary::ECFGetNewInstanceId()
 {
-	return FECFInstanceIdBP(FECFInstanceId::NewId(Scope));
+	return FECFInstanceIdBP(FECFInstanceId::NewId());
 }
 
 bool UECFBPLibrary::IsECFHandleValid(const FECFHandleBP& Handle)

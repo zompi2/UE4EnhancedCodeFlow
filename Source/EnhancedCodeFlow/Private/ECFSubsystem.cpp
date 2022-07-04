@@ -105,15 +105,14 @@ void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass
 	}
 }
 
-void UECFSubsystem::RemoveInstancedAction(const FECFInstanceId& InstanceId, bool bComplete, UObject* InOwner)
+void UECFSubsystem::RemoveInstancedAction(const FECFInstanceId& InstanceId, bool bComplete)
 {
-	// Stop all running and pending actions with the given InstanceId and the given Owner. If the Owner is null
-	// all actions with the InstanceId will be stopped.
+	// Stop all running and pending actions with the given InstanceId.
 	for (UECFActionBase* Action : Actions)
 	{
 		if (IsActionValid(Action))
 		{
-			if (Action->HasInstanceId(InstanceId, InOwner))
+			if (Action->HasInstanceId(InstanceId))
 			{
 				FinishAction(Action, bComplete);
 			}
@@ -123,7 +122,7 @@ void UECFSubsystem::RemoveInstancedAction(const FECFInstanceId& InstanceId, bool
 	{
 		if (IsActionValid(PendingAction))
 		{
-			if (PendingAction->HasInstanceId(InstanceId, InOwner))
+			if (PendingAction->HasInstanceId(InstanceId))
 			{
 				FinishAction(PendingAction, bComplete);
 			}
@@ -175,15 +174,15 @@ bool UECFSubsystem::HasAction(const FECFHandle& HandleId) const
 	return false;
 }
 
-UECFActionBase* UECFSubsystem::GetInstancedAction(const FECFInstanceId& InstanceId, UObject* InOwner/* = nullptr*/)
+UECFActionBase* UECFSubsystem::GetInstancedAction(const FECFInstanceId& InstanceId)
 {
 	if (InstanceId.IsValid())
 	{
-		if (UECFActionBase* const* ActionFound = Actions.FindByPredicate([&](UECFActionBase* Action) { return IsActionValid(Action) && Action->HasInstanceId(InstanceId, InOwner); }))
+		if (UECFActionBase* const* ActionFound = Actions.FindByPredicate([&](UECFActionBase* Action) { return IsActionValid(Action) && Action->HasInstanceId(InstanceId); }))
 		{
 			return *ActionFound;
 		}
-		else if (UECFActionBase* const* PendingActionFound = PendingAddActions.FindByPredicate([&](UECFActionBase* PendingAction) { return IsActionValid(PendingAction) && PendingAction->HasInstanceId(InstanceId, InOwner); }))
+		else if (UECFActionBase* const* PendingActionFound = PendingAddActions.FindByPredicate([&](UECFActionBase* PendingAction) { return IsActionValid(PendingAction) && PendingAction->HasInstanceId(InstanceId); }))
 		{
 			return *PendingActionFound;
 		}

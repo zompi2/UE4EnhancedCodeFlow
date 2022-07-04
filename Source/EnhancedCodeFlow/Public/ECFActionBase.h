@@ -44,26 +44,14 @@ public:
 		bHasFinished = true;
 	}
 
-	// Checks if this action has this instance id within the given scope.
-	bool HasInstanceId(const FECFInstanceId& InstanceIdToCheck, UObject* InstanceIdOwner)
+	// Checks if this action has this instance id.
+	bool HasInstanceId(const FECFInstanceId& InstanceIdToCheck)
 	{
 		if (InstanceId.IsValid() && InstanceIdToCheck.IsValid())
 		{
 			if (InstanceId == InstanceIdToCheck)
 			{
-				if (InstanceIdToCheck.GetScope() == EECFInstanceIdScope::Object)
-				{
-					// If the instance scope is object, check if the owners are the same.
-					// If checking owner is null we assume we want to get all instances of this id.
-					if (InstanceIdOwner == nullptr || InstanceIdOwner == Owner)
-					{
-						return true;
-					}
-				}
-				else
-				{
-					return true;
-				}
+				return true;
 			}
 		}
 		return false;
