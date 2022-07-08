@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "ECFActionBP.h"
+#include "../ECFActionBP.h"
 #include "ECFWaitAndExecuteBP.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnECFWaitAndExecuteBPEvent, class UECFWaitAndExecuteBP*, Action);

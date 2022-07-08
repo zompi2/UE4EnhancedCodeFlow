@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "ECFActionBP.h"
+#include "../ECFActionBP.h"
 #include "ECFDelayBP.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnECFDelayBPEvent);

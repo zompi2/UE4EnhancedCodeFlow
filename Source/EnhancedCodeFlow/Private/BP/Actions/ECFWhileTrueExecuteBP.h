@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "ECFActionBP.h"
+#include "../ECFActionBP.h"
 #include "ECFWhileTrueExecuteBP.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnECFWhileTrueExecuteBPEvent, class UECFWhileTrueExecuteBP*, Action, float, DeltaTime);
