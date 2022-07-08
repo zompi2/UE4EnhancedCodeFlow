@@ -15,6 +15,7 @@ class ENHANCEDCODEFLOW_API UECFActionBP : public UBlueprintAsyncActionBase
 public:
 
 	virtual void Init(UObject* WorldContextObject, FECFActionSettings& Settings);
+	class UWorld* GetWorld() const override;
 	void Activate() override;
 
 protected:

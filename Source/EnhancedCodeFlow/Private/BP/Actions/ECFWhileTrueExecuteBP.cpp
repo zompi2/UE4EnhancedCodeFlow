@@ -10,7 +10,7 @@ UECFWhileTrueExecuteBP* UECFWhileTrueExecuteBP::ECFWhileTrueExecute(UObject* Wor
 
 	Proxy->Proxy_IsTrue = true;
 
-	Proxy->Proxy_Handle = FFlow::WhileTrueExecute(WorldContextObject,
+	Proxy->Proxy_Handle = FFlow::WhileTrueExecute(Proxy,
 		[Proxy]()
 		{
 			Proxy->OnWhile.Broadcast(Proxy, 0.f);

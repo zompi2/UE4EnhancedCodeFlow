@@ -10,6 +10,11 @@ void UECFActionBP::Init(UObject* WorldContextObject, FECFActionSettings& Setting
 	Settings.bStartPaused = true;
 }
 
+UWorld* UECFActionBP::GetWorld() const
+{
+	return Proxy_WorldContextObject ? Proxy_WorldContextObject->GetWorld() : nullptr;
+}
+
 void UECFActionBP::Activate()
 {
 	if (Proxy_IsPausedAtStart == false)

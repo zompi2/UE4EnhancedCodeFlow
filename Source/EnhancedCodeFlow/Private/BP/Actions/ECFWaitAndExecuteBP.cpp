@@ -10,7 +10,7 @@ UECFWaitAndExecuteBP* UECFWaitAndExecuteBP::ECFWaitAndExecute(UObject* WorldCont
 
 	Proxy->Proxy_HasFinished = false;
 
-	Proxy->Proxy_Handle = FFlow::WaitAndExecute(WorldContextObject,
+	Proxy->Proxy_Handle = FFlow::WaitAndExecute(Proxy,
 		[Proxy]()
 		{
 			Proxy->OnWait.Broadcast(Proxy);
