@@ -2,43 +2,31 @@
 
 #pragma once
 
-#include "Kismet/BlueprintAsyncActionBase.h"
-#include "ECFActionSettings.h"
-#include "BP/ECFHandleBP.h"
+#include "ECFActionBP.h"
 #include "ECFWhileTrueExecuteBP.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnECFWhileTrueExecuteBPCheck, class UECFWhileTrueExecuteBP*, Action);
-DECLARE_DYNAMIC_DELEGATE_OneParam(FOnECFWhileTrueExecuteBPTick, float, DeltaTime);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnECFWhileTrueExecuteBPEvent, class UECFWhileTrueExecuteBP*, Action, float, DeltaTime);
 
 UCLASS()
-class ENHANCEDCODEFLOW_API UECFWhileTrueExecuteBP : public UBlueprintAsyncActionBase
+class ENHANCEDCODEFLOW_API UECFWhileTrueExecuteBP : public UECFActionBP
 {
 	GENERATED_BODY()
 
 public:
 
 	UPROPERTY(BlueprintAssignable)
-	FOnECFWhileTrueExecuteBPCheck OnCheck;
+	FOnECFWhileTrueExecuteBPEvent OnWhile;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnECFWhileTrueExecuteBPEvent OnExecute;
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings"), Category = "ECF")
-	static UECFWhileTrueExecuteBP* ECFWhileTrueExecute(UObject* WorldContextObject, const FOnECFWhileTrueExecuteBPTick& OnTick, FECFActionSettings Settings);
+	static UECFWhileTrueExecuteBP* ECFWhileTrueExecute(UObject* WorldContextObject, FECFActionSettings Settings, FECFHandleBP& Handle);
 
 	UFUNCTION(BlueprintCallable, Category = "ECF")
 	void Predicate(bool bIsTrue);
 
-	UFUNCTION(BlueprintCallable, Category = "ECF")
-	FECFHandleBP GetHandle();
-
-	void Activate() override;
-
 protected:
 
-	UPROPERTY(Transient)
-	class UObject* Proxy_WorldContextObject;
-
-	FOnECFWhileTrueExecuteBPTick Proxy_OnTick;
-	FECFActionSettings Proxy_Settings;
-
 	bool Proxy_IsTrue = true;
-	FECFHandle Proxy_Handle;
 };

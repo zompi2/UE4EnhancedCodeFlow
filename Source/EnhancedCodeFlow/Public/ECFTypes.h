@@ -15,11 +15,3 @@ enum class EECFBlendFunc : uint8
 	ECFBlend_EaseOut,
 	ECFBlend_EaseInOut
 };
-
-// Possible scopes of InstanceId
-UENUM(BlueprintType)
-enum class EECFInstanceIdScope : uint8
-{
-	Object,
-	Global
-};

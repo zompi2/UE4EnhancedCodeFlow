@@ -23,12 +23,14 @@ protected:
 		LockTime = InLockTime;
 		ExecFunc = MoveTemp(InExecFunc);
 
-		if (ExecFunc && LockTime >= 0)
+		if (ExecFunc && LockTime > 0)
 		{
+			SetMaxActionTime(LockTime);
 			return true;
 		}
 		else
 		{
+			ensureMsgf(false, TEXT("ECF - Timelock failed to start. Are you sure the Lock time is greater than 0 and the Exec Function is set properly?"));
 			return false;
 		}
 	}

@@ -25,10 +25,15 @@ protected:
 
 		if (CallbackFunc && DelayTime >= 0)
 		{
+			if (DelayTime > 0)
+			{
+				SetMaxActionTime(DelayTime);
+			}
 			return true;
 		}
 		else
 		{
+			ensureMsgf(false, TEXT("ECF - delay failed to start. Are you sure the DelayTime is not negative and Callback Function is set properly?"));
 			return false;
 		}
 	}

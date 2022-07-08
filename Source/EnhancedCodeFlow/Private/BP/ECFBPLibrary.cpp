@@ -5,21 +5,38 @@
 #include "BP/ECFBPLibrary.h"
 #include "EnhancedCodeFlow.h"
 
-/*^^^ Global ECF Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+/*^^^ ECF Flow Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+void UECFBPLibrary::ECFIsActionRunning(bool& bIsRunning, const UObject* WorldContextObject, const FECFHandleBP& Handle)
+{
+	bIsRunning = FFlow::IsActionRunning(WorldContextObject, Handle.Handle);
+}
+
+void UECFBPLibrary::ECFIsActionPaused(bool& bIsRunning, bool& bIsPaused, const UObject* WorldContextObject, const FECFHandleBP& Handle)
+{
+	bIsRunning = FFlow::IsActionPaused(WorldContextObject, Handle.Handle, bIsPaused);
+}
+
+void UECFBPLibrary::ECFPauseAction(const UObject* WorldContextObject, const FECFHandleBP& Handle)
+{
+	FFlow::PauseAction(WorldContextObject, Handle.Handle);
+}
+
+void UECFBPLibrary::ECFResumeAction(const UObject* WorldContextObject, const FECFHandleBP& Handle)
+{
+	FFlow::ResumeAction(WorldContextObject, Handle.Handle);
+}
+
+/*^^^ Stopping ECF Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 void UECFBPLibrary::ECFStopAction(const UObject* WorldContextObject, FECFHandleBP& Handle, bool bComplete/* = false*/)
 {
 	FFlow::StopAction(WorldContextObject, Handle.Handle, bComplete);
 }
 
-void UECFBPLibrary::ECFStopInstancedActions(const UObject* WorldContextObject, FECFInstanceIdBP InstanceId, bool bComplete /*= false*/, UObject* InOwner/* = nullptr*/)
+void UECFBPLibrary::ECFStopInstancedActions(const UObject* WorldContextObject, FECFInstanceIdBP InstanceId, bool bComplete /*= false*/)
 {
-	FFlow::StopInstancedAction(WorldContextObject, InstanceId.InstanceId, bComplete, InOwner);
-}
-
-void UECFBPLibrary::ECFIsActionRunning(bool& bIsRunning, const UObject* WorldContextObject, const FECFHandleBP& Handle)
-{
-	bIsRunning = FFlow::IsActionRunning(WorldContextObject, Handle.Handle);
+	FFlow::StopInstancedAction(WorldContextObject, InstanceId.InstanceId, bComplete);
 }
 
 void UECFBPLibrary::ECFStopAllActions(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
@@ -29,9 +46,9 @@ void UECFBPLibrary::ECFStopAllActions(const UObject* WorldContextObject, bool bC
 
 /*^^^ Handle and Instance Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-FECFInstanceIdBP UECFBPLibrary::ECFGetNewInstanceId(EECFInstanceIdScope Scope)
+FECFInstanceIdBP UECFBPLibrary::ECFGetNewInstanceId()
 {
-	return FECFInstanceIdBP(FECFInstanceId::NewId(Scope));
+	return FECFInstanceIdBP(FECFInstanceId::NewId());
 }
 
 bool UECFBPLibrary::IsECFHandleValid(const FECFHandleBP& Handle)
@@ -42,33 +59,6 @@ bool UECFBPLibrary::IsECFHandleValid(const FECFHandleBP& Handle)
 bool UECFBPLibrary::IsECFInstanceIdValid(const FECFInstanceIdBP& InstanceId)
 {
 	return InstanceId.InstanceId.IsValid();
-}
-
-/*^^^ Ticker ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
-
-void UECFBPLibrary::ECFTicker(FECFHandleBP& OutHandle, UObject* Owner, const FOnECFTick& OnTickEvent, const FOnECFFinished& OnFinishedEvent, FECFActionSettings Settings, float TickingTime /*= -1.f*/)
-{
-	FECFHandle Handle = FFlow::AddTicker(Owner, TickingTime,
-	[OnTickEvent](float DeltaTime)
-	{
-		if (OnTickEvent.IsBound())
-		{
-			OnTickEvent.Execute(DeltaTime);
-		}
-	},
-	[OnFinishedEvent]()
-	{
-		if (OnFinishedEvent.IsBound())
-		{
-			OnFinishedEvent.Execute();
-		}
-	}, Settings);
-	OutHandle = FECFHandleBP(MoveTemp(Handle));
-}
-
-void UECFBPLibrary::ECFRemoveAllTickers(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
-{
-	FFlow::RemoveAllTickers(WorldContextObject, bComplete, InOwner);
 }
 
 /*^^^ Timeline ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -157,6 +147,23 @@ void UECFBPLibrary::ECFRemoveAllWaitAndExecutes(const UObject* WorldContextObjec
 void UECFBPLibrary::RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
 	FFlow::RemoveAllWhileTrueExecutes(WorldContextObject, bComplete, InOwner);
+}
+
+void UECFBPLibrary::ECFRemoveAllTickers(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
+{
+	FFlow::RemoveAllTickers(WorldContextObject, bComplete, InOwner);
+}
+
+/*^^^ Casting ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/	
+
+FString UECFBPLibrary::Conv_ECFHandleToString(const FECFHandleBP& Handle)
+{
+	return Handle.Handle.ToString();
+}
+
+FString UECFBPLibrary::Conv_ECFInstanceIdToString(const FECFInstanceIdBP& InstanceId)
+{
+	return InstanceId.InstanceId.ToString();
 }
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
