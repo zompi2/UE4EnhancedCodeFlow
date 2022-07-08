@@ -53,56 +53,22 @@ void UECFSubsystem::Tick(float DeltaTime)
 	}
 }
 
-UECFActionBase* UECFSubsystem::FindAction(const FECFHandle& HandleId) const
+void UECFSubsystem::RemoveAction(FECFHandle& HandleId, bool bComplete)
 {
 	if (HandleId.IsValid())
 	{
 		// Find running action and set it as finished
-		if (UECFActionBase* const* ActionFound = Actions.FindByPredicate([&](UECFActionBase* Action) { return (IsActionValid(Action) && (Action->GetHandleId() == HandleId)); }))
+		if (UECFActionBase** ActionFound = Actions.FindByPredicate([&](UECFActionBase* Action) { return (IsActionValid(Action) && (Action->GetHandleId() == HandleId)); }))
 		{
-			return *ActionFound;
+			FinishAction(*ActionFound, bComplete);
+			HandleId.Invalidate();
 		}
 		// If not found, ensure user don't want to stop pending action
-		else if (UECFActionBase* const* PendingActionFound = PendingAddActions.FindByPredicate([&](UECFActionBase* PendingAddAction) { return (IsActionValid(PendingAddAction) && (PendingAddAction->GetHandleId() == HandleId)); }))
+		else if (UECFActionBase** PendingActionFound = PendingAddActions.FindByPredicate([&](UECFActionBase* PendingAddAction) { return (IsActionValid(PendingAddAction) && (PendingAddAction->GetHandleId() == HandleId)); }))
 		{
-			return *PendingActionFound;
+			FinishAction(*PendingActionFound, bComplete);
+			HandleId.Invalidate();
 		}
-	}
-	return nullptr;
-}
-
-void UECFSubsystem::PauseAction(const FECFHandle& HandleId)
-{
-	if (UECFActionBase* ActionFound = FindAction(HandleId))
-	{
-		ActionFound->bIsPaused = true;
-	}
-}
-
-void UECFSubsystem::ResumeAction(const FECFHandle& HandleId)
-{
-	if (UECFActionBase* ActionFound = FindAction(HandleId))
-	{
-		ActionFound->bIsPaused = false;
-	}
-}
-
-bool UECFSubsystem::IsActionPaused(const FECFHandle& HandleId, bool& bIsPaused)
-{
-	if (UECFActionBase* ActionFound = FindAction(HandleId))
-	{
-		bIsPaused = ActionFound->bIsPaused;
-		return true;
-	}
-	return false;
-}
-
-void UECFSubsystem::RemoveAction(FECFHandle& HandleId, bool bComplete)
-{
-	if (UECFActionBase* ActionFound = FindAction(HandleId))
-	{
-		FinishAction(ActionFound, bComplete);
-		HandleId.Invalidate();
 	}
 }
 
@@ -139,14 +105,15 @@ void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass
 	}
 }
 
-void UECFSubsystem::RemoveInstancedAction(const FECFInstanceId& InstanceId, bool bComplete)
+void UECFSubsystem::RemoveInstancedAction(const FECFInstanceId& InstanceId, bool bComplete, UObject* InOwner)
 {
-	// Stop all running and pending actions with the given InstanceId.
+	// Stop all running and pending actions with the given InstanceId and the given Owner. If the Owner is null
+	// all actions with the InstanceId will be stopped.
 	for (UECFActionBase* Action : Actions)
 	{
 		if (IsActionValid(Action))
 		{
-			if (Action->HasInstanceId(InstanceId))
+			if (Action->HasInstanceId(InstanceId, InOwner))
 			{
 				FinishAction(Action, bComplete);
 			}
@@ -156,7 +123,7 @@ void UECFSubsystem::RemoveInstancedAction(const FECFInstanceId& InstanceId, bool
 	{
 		if (IsActionValid(PendingAction))
 		{
-			if (PendingAction->HasInstanceId(InstanceId))
+			if (PendingAction->HasInstanceId(InstanceId, InOwner))
 			{
 				FinishAction(PendingAction, bComplete);
 			}
@@ -191,22 +158,32 @@ void UECFSubsystem::RemoveAllActions(bool bComplete, UObject* InOwner)
 
 bool UECFSubsystem::HasAction(const FECFHandle& HandleId) const
 {
-	if (UECFActionBase* ActionFound = FindAction(HandleId))
+	if (HandleId.IsValid())
 	{
-		return true;
+		// Find running action and check if it is a valid one
+		if (UECFActionBase* const* ActionFound = Actions.FindByPredicate([&](UECFActionBase* Action) { return IsActionValid(Action) && Action->GetHandleId() == HandleId; }))
+		{
+			return true;
+		}
+		// If not found, ensure user don't want to check a pending action
+		else if (UECFActionBase* const* PendingActionFound = PendingAddActions.FindByPredicate([&](UECFActionBase* PendingAction) { return IsActionValid(PendingAction) && PendingAction->GetHandleId() == HandleId; }))
+		{
+			return true;
+		}
 	}
+
 	return false;
 }
 
-UECFActionBase* UECFSubsystem::GetInstancedAction(const FECFInstanceId& InstanceId)
+UECFActionBase* UECFSubsystem::GetInstancedAction(const FECFInstanceId& InstanceId, UObject* InOwner/* = nullptr*/)
 {
 	if (InstanceId.IsValid())
 	{
-		if (UECFActionBase* const* ActionFound = Actions.FindByPredicate([&](UECFActionBase* Action) { return IsActionValid(Action) && Action->HasInstanceId(InstanceId); }))
+		if (UECFActionBase* const* ActionFound = Actions.FindByPredicate([&](UECFActionBase* Action) { return IsActionValid(Action) && Action->HasInstanceId(InstanceId, InOwner); }))
 		{
 			return *ActionFound;
 		}
-		else if (UECFActionBase* const* PendingActionFound = PendingAddActions.FindByPredicate([&](UECFActionBase* PendingAction) { return IsActionValid(PendingAction) && PendingAction->HasInstanceId(InstanceId); }))
+		else if (UECFActionBase* const* PendingActionFound = PendingAddActions.FindByPredicate([&](UECFActionBase* PendingAction) { return IsActionValid(PendingAction) && PendingAction->HasInstanceId(InstanceId, InOwner); }))
 		{
 			return *PendingActionFound;
 		}

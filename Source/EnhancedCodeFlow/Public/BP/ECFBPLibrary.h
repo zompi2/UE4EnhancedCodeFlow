@@ -31,34 +31,7 @@ class ENHANCEDCODEFLOW_API UECFBPLibrary : public UBlueprintFunctionLibrary
 
 public:
 
-	/*^^^ ECF Flow Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
-
-	/**
-	 * Checks if the action pointed by given handle is running.
-	 */
-	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject"), Category = "ECF")
-	static void ECFIsActionRunning(UPARAM(DisplayName = "IsRunning") bool& bIsRunning, const UObject* WorldContextObject, const FECFHandleBP& Handle);
-
-	/**
-	 * Pause running action.
-	 */
-	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject"), Category = "ECF")
-	static void ECFPauseAction(const UObject* WorldContextObject, const FECFHandleBP& Handle);
-
-	/**
-	 * Resume running action.
-	 */
-	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject"), Category = "ECF")
-	static void ECFResumeAction(const UObject* WorldContextObject, const FECFHandleBP& Handle);
-
-	/**
-	 * Checks if the action pointed by given handle is paused.
-	 * Returns false if there is no action running.
-	 */
-	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject"), Category = "ECF")
-	static void ECFIsActionPaused(UPARAM(DisplayName = "IsRunning") bool& bIsRunning, UPARAM(DisplayName = "IsPaused") bool& bIsPaused, const UObject* WorldContextObject, const FECFHandleBP& Handle);
-	
-	/*^^^ Stopping ECF Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+	/*^^^ Global ECF Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 	/**
 	 * Stops the running action pointed by given handle. Invalidates given handle.
@@ -71,8 +44,14 @@ public:
 	 * Stops the running action with the given InstanceId.
 	 * bComplete param indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete"), Category = "ECF")
-	static void ECFStopInstancedActions(const UObject* WorldContextObject, FECFInstanceIdBP InstanceId, bool bComplete = false);
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner"), Category = "ECF")
+	static void ECFStopInstancedActions(const UObject* WorldContextObject, FECFInstanceIdBP InstanceId, bool bComplete = false, UObject* InOwner = nullptr);
+
+	/**
+	 * Checks if the action pointed by given handle is running.
+	 */
+	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject"), Category = "ECF")
+	static void ECFIsActionRunning(UPARAM(DisplayName = "IsRunning") bool& bIsRunning, const UObject* WorldContextObject, const FECFHandleBP& Handle);
 
 	/**
 	 * Stops all running actions.
@@ -89,7 +68,7 @@ public:
 	 * Returns a static instance id with a provided value.
 	 */
 	UFUNCTION(BlueprintPure, Category = "ECF")
-	static FECFInstanceIdBP ECFGetNewInstanceId();
+	static FECFInstanceIdBP ECFGetNewInstanceId(EECFInstanceIdScope Scope);
 
 	/**
 	 * Checks if the given Handle is valid.
@@ -102,6 +81,23 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, Category = "ECF")
 	static bool IsECFInstanceIdValid(const FECFInstanceIdBP& InstanceId);
+
+	/*^^^ Ticker ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Creates a ticker. It can tick specified amount of time or until it won't be stopped or when owning object won't be destroyed.
+	 */
+	UFUNCTION(BlueprintCallable, meta = (HidePin = "Owner", DefaultToSelf = "Owner", AutoCreateRefTerm = "OnFinishedEvent", AdvancedDisplay = "OnFinishedEvent, Settings, TickingTime"), Category = "ECF")
+	static void ECFTicker(UPARAM(DisplayName = "Handle") FECFHandleBP& OutHandle, UObject* Owner, const FOnECFTick& OnTickEvent, const FOnECFFinished& OnFinishedEvent, FECFActionSettings Settings, float TickingTime = -1.f);
+
+	/**
+	 * Removes all running tickers.
+	 * If owner is defined it will remove all tickers from the given owner.
+	 * Otherwise it will stop all the tickers from everywhere.
+	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 */
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner"), Category = "ECF")
+	static void ECFRemoveAllTickers(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^ Timeline ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
@@ -183,28 +179,6 @@ public:
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner"), Category = "ECF")
 	static void RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
-	/**
-	 * Removes all running tickers.
-	 * If owner is defined it will remove all tickers from the given owner.
-	 * Otherwise it will stop all the tickers from everywhere.
-	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
-	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner"), Category = "ECF")
-	static void ECFRemoveAllTickers(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
-
-	/*^^^ Casting ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
-
-	/**
-	 * Convert Handle to String.
-	 */
-	UFUNCTION(BlueprintPure, meta = (DisplayName = "ToString (FECFHandleBP)", CompactNodeTitle = "->", BlueprintAutocast), Category = "ECF")
-	static FString Conv_ECFHandleToString(const FECFHandleBP& Handle);
-
-	/**
-	 * InstanceId Handle to String.
-	 */
-	UFUNCTION(BlueprintPure, meta = (DisplayName = "ToString (FECFInstanceIdBP)", CompactNodeTitle = "->", BlueprintAutocast), Category = "ECF")
-	static FString Conv_ECFInstanceIdToString(const FECFInstanceIdBP& InstanceId);
-
 	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
 };

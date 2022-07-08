@@ -33,7 +33,6 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Wait and Execute failed to start. Are you sure the Predicate and Function are set properly?"));
 			return false;
 		}
 	}

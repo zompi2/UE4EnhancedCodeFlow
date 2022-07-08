@@ -38,7 +38,6 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Ticker(2) failed to start. Are you sure the Ticking time and Ticking Function are set properly?"));
 			return false;
 		}
 	}

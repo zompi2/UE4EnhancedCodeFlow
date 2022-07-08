@@ -37,7 +37,7 @@ protected:
 	{
 		// There can be only one instanced action running at the same time. When trying to add an
 		// action with existing instance id - return the currently running action's handle.
-		UECFActionBase* PossibleInstancedAction = GetInstancedAction(InstanceId);
+		UECFActionBase* PossibleInstancedAction = GetInstancedAction(InstanceId, InOwner);
 		if (IsActionValid(PossibleInstancedAction))
 		{
 			// Re-trigger active instanced action for any extra logic.
@@ -59,21 +59,6 @@ protected:
 		return FECFHandle();
 	}
 
-	// Try to find running or pending action.
-	UECFActionBase* FindAction(const FECFHandle& HandleId) const;
-
-	// Check if the action is running or pending to run.
-	bool HasAction(const FECFHandle& HandleId) const;
-
-	// Pause ticking in this action
-	void PauseAction(const FECFHandle& HandleId);
-
-	// Resume ticking in this action
-	void ResumeAction(const FECFHandle& HandleId);
-
-	// Checks if this action is not paused. Returns false if there is no action.
-	bool IsActionPaused(const FECFHandle& HandleId, bool &bIsPaused);
-
 	// Remove Action of given HandleId from list. 
 	void RemoveAction(FECFHandle& HandleId, bool bComplete);
 
@@ -88,13 +73,16 @@ protected:
 	}
 
 	// Remove action with the given InstanceId.
-	void RemoveInstancedAction(const FECFInstanceId& InstanceId, bool bComplete);
+	void RemoveInstancedAction(const FECFInstanceId& InstanceId, bool bComplete, UObject* InOwner);
 
 	// Remove all Actions of async tasks.
 	void RemoveAllActions(bool bComplete, UObject* InOwner);
 
+	// Check if the action is running
+	bool HasAction(const FECFHandle& HandleId) const;
+
 	// Check if there is an instanced action running with the given instance id and returns it.
-	UECFActionBase* GetInstancedAction(const FECFInstanceId& InstanceId);
+	UECFActionBase* GetInstancedAction(const FECFInstanceId& InstanceId, UObject* InOwner = nullptr);
 	
 	// List of active actions.
 	UPROPERTY()

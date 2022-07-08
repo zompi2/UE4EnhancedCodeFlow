@@ -26,7 +26,6 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - do once failed to start. Are you sure the Exec Function is is set properly?"));
 			return false;
 		}
 	}

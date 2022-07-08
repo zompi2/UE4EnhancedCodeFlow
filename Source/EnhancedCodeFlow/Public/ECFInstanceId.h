@@ -10,19 +10,23 @@ class FECFInstanceId
 
 public:
 
-	FECFInstanceId() :
+	FECFInstanceId() : 
+		Scope(EECFInstanceIdScope::Object),
 		Id(0)
 	{}
 
-	FECFInstanceId(uint64 InId) :
+	FECFInstanceId(EECFInstanceIdScope InScope, uint64 InId) :
+		Scope(InScope),
 		Id(InId)
 	{}
 
 	FECFInstanceId(const FECFInstanceId& Other) :
+		Scope(Other.Scope),
 		Id(Other.Id)
 	{}
 
 	FECFInstanceId(FECFInstanceId&& Other) :
+		Scope(Other.Scope),
 		Id(Other.Id)
 	{
 		Other.Invalidate();
@@ -40,22 +44,28 @@ public:
 		Id = 0;
 	}
 
+	EECFInstanceIdScope GetScope() const
+	{
+		return Scope;
+	}
+
 	// Compare Ids.
 	bool operator==(const FECFInstanceId& Other) const
 	{
-		return Id == Other.Id;
+		return Id == Other.Id && Scope == Other.Scope;
 	}
 
 	// Compare (not) Ids.
 	bool operator!=(const FECFInstanceId& Other) const
 	{
-		return Id != Other.Id;
+		return Id != Other.Id || Scope != Other.Scope;
 	}
 
 	// Copy.
 	FECFInstanceId& operator=(const FECFInstanceId& Other)
 	{
 		Id = Other.Id;
+		Scope = Other.Scope;
 		return *this;
 	}
 
@@ -63,24 +73,20 @@ public:
 	FECFInstanceId& operator=(FECFInstanceId&& Other)
 	{
 		Id = Other.Id;
+		Scope = Other.Scope;
 		Other.Invalidate();
 		return *this;
 	}
 
-	// Convert the Id  to string.
-	FString ToString() const
-	{
-		return FString::Printf(TEXT("%llu"), Id);
-	}
-
 	// Returns a new id.
-	static FECFInstanceId NewId()
+	static FECFInstanceId NewId(EECFInstanceIdScope InScope = EECFInstanceIdScope::Object)
 	{
 		static uint64 DynamicIdCounter = 0;
-		return FECFInstanceId(++DynamicIdCounter);
+		return FECFInstanceId(InScope, ++DynamicIdCounter);
 	}
 
 protected:
 
+	EECFInstanceIdScope Scope;
 	uint64 Id;
 };

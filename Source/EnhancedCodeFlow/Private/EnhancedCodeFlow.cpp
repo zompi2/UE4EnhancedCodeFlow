@@ -14,36 +14,6 @@
 #include "CodeFlowActions/ECFDoOnce.h"
 #include "CodeFlowActions/ECFDoNTimes.h"
 
-/*^^^ ECF Flow Control Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
-
-bool FFlow::IsActionRunning(const UObject* WorldContextObject, const FECFHandle& Handle)
-{
-	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
-		return ECF->HasAction(Handle);
-	else
-		return false;
-}
-
-void FEnhancedCodeFlow::PauseAction(const UObject* WorldContextObject, const FECFHandle& Handle)
-{
-	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
-		ECF->PauseAction(Handle);
-}
-
-void FEnhancedCodeFlow::ResumeAction(const UObject* WorldContextObject, const FECFHandle& Handle)
-{
-	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
-		ECF->ResumeAction(Handle);
-}
-
-bool FEnhancedCodeFlow::IsActionPaused(const UObject* WorldContextObject, const FECFHandle& Handle, bool& bIsPaused)
-{
-	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
-		return ECF->IsActionPaused(Handle, bIsPaused);
-	else
-		return false;
-}
-
 /*^^^ Stop ECF Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 void FFlow::StopAction(const UObject* WorldContextObject, FECFHandle& Handle, bool bComplete/* = false*/)
@@ -52,10 +22,18 @@ void FFlow::StopAction(const UObject* WorldContextObject, FECFHandle& Handle, bo
 		ECF->RemoveAction(Handle, bComplete);
 }
 
-void FEnhancedCodeFlow::StopInstancedAction(const UObject* WorldContextObject, FECFInstanceId InstanceId, bool bComplete /*= false*/)
+void FEnhancedCodeFlow::StopInstancedAction(const UObject* WorldContextObject, FECFInstanceId InstanceId, bool bComplete /*= false*/, UObject* InOwner/* = nullptr*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
-		ECF->RemoveInstancedAction(InstanceId, bComplete);
+		ECF->RemoveInstancedAction(InstanceId, bComplete, InOwner);
+}
+
+bool FFlow::IsActionRunning(const UObject* WorldContextObject, const FECFHandle& Handle)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		return ECF->HasAction(Handle);
+	else
+		return false;
 }
 
 void FFlow::StopAllActions(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner/* = nullptr*/)

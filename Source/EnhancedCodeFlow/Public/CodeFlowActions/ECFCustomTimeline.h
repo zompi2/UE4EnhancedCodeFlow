@@ -48,7 +48,6 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - custom timeline failed to start. Are you sure Tick Function and Curve are set properly?"));
 			return false;
 		}
 	}

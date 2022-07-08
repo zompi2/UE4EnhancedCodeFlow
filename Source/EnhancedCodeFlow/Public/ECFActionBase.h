@@ -8,7 +8,6 @@
 #include "ECFHandle.h"
 #include "ECFInstanceId.h"
 #include "ECFActionSettings.h"
-#include "Misc/AssertionMacros.h"
 #include "ECFActionBase.generated.h"
 
 UCLASS()
@@ -45,14 +44,26 @@ public:
 		bHasFinished = true;
 	}
 
-	// Checks if this action has this instance id.
-	bool HasInstanceId(const FECFInstanceId& InstanceIdToCheck)
+	// Checks if this action has this instance id within the given scope.
+	bool HasInstanceId(const FECFInstanceId& InstanceIdToCheck, UObject* InstanceIdOwner)
 	{
 		if (InstanceId.IsValid() && InstanceIdToCheck.IsValid())
 		{
 			if (InstanceId == InstanceIdToCheck)
 			{
-				return true;
+				if (InstanceIdToCheck.GetScope() == EECFInstanceIdScope::Object)
+				{
+					// If the instance scope is object, check if the owners are the same.
+					// If checking owner is null we assume we want to get all instances of this id.
+					if (InstanceIdOwner == nullptr || InstanceIdOwner == Owner)
+					{
+						return true;
+					}
+				}
+				else
+				{
+					return true;
+				}
 			}
 		}
 		return false;
@@ -116,22 +127,11 @@ private:
 		ActionDelayLeft = Settings.FirstDelay;
 
 		bFirstTick = true;
-
-		if (Settings.bStartPaused)
-		{
-			bIsPaused = true;
-		}
 	}
 
 	// Performs a tick. Apply any settings to the time step.
 	void DoTick(float DeltaTime)
 	{
-		// If this action is paused - ignore tick.
-		if (bIsPaused)
-		{
-			return;
-		}
-
 		// If game is paused and the action does not ignore this pause - ignore tick.
 		if (Settings.bIgnorePause == false)
 		{
@@ -224,9 +224,6 @@ private:
 	// Indicates if this is a first tick. First tick should be launched as
 	// soon as possible, without consideration of tick interval.
 	bool bFirstTick = false;
-
-	// Indicates if this action is paused (by the ECF system).
-	bool bIsPaused = false;
 
 	// Timers for this action
 	float CurrentActionTime = 0.f;
