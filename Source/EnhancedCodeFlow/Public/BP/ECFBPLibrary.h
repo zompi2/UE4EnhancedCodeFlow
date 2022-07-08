@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
 
 /**
  * Library of static functions used to launch Code Flow Actions via Blueprints.
