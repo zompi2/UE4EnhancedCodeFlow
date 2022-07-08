@@ -6,11 +6,8 @@
 UECFDelayBP* UECFDelayBP::ECFDelay(UObject* WorldContextObject, float DelayTime, FECFActionSettings Settings, FECFHandleBP& Handle)
 {
 	UECFDelayBP* Proxy = NewObject<UECFDelayBP>();
+	Proxy->Init(WorldContextObject, Settings);
 
-	Proxy->Proxy_WorldContextObject = WorldContextObject;
-	Proxy->Proxy_IsPausedAtStart = Settings.bStartPaused;
-
-	Settings.bStartPaused = true;
 	Proxy->Proxy_Handle = FFlow::Delay(WorldContextObject, DelayTime, [Proxy]()
 	{
 		Proxy->OnComplete.Broadcast();
@@ -18,12 +15,4 @@ UECFDelayBP* UECFDelayBP::ECFDelay(UObject* WorldContextObject, float DelayTime,
 	Handle = FECFHandleBP(Proxy->Proxy_Handle);
 
 	return Proxy;
-}
-
-void UECFDelayBP::Activate()
-{
-	if (Proxy_IsPausedAtStart == false)
-	{
-		FFlow::ResumeAction(Proxy_WorldContextObject, Proxy_Handle);
-	}
 }

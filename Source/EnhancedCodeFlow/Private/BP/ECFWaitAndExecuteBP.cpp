@@ -3,37 +3,30 @@
 #include "ECFWaitAndExecuteBP.h"
 #include "EnhancedCodeFlow.h"
 
-UECFWaitAndExecuteBP* UECFWaitAndExecuteBP::ECFWaitAndExecute(UObject* WorldContextObject, FECFActionSettings Settings)
+UECFWaitAndExecuteBP* UECFWaitAndExecuteBP::ECFWaitAndExecute(UObject* WorldContextObject, FECFActionSettings Settings, FECFHandleBP& Handle)
 {
 	UECFWaitAndExecuteBP* Proxy = NewObject<UECFWaitAndExecuteBP>();
+	Proxy->Init(WorldContextObject, Settings);
 
-	Proxy->Proxy_WorldContextObject = WorldContextObject;
-	Proxy->Proxy_Settings = Settings;
 	Proxy->Proxy_HasFinished = false;
 
-	return Proxy;
-}
+	Proxy->Proxy_Handle = FFlow::WaitAndExecute(WorldContextObject,
+		[Proxy]()
+		{
+			Proxy->OnWait.Broadcast(Proxy);
+			return Proxy->Proxy_HasFinished;
+		},
+		[Proxy]()
+		{
+			Proxy->OnExecute.Broadcast(Proxy);
+		},
+	Settings);
+	Handle = FECFHandleBP(Proxy->Proxy_Handle);
 
-void UECFWaitAndExecuteBP::Activate()
-{
-	Proxy_Handle = FFlow::WaitAndExecute(Proxy_WorldContextObject, 
-	[this]()
-	{
-		OnCheck.Broadcast(this);
-		return Proxy_HasFinished;
-	},
-	[this]()
-	{
-		OnFinished.Broadcast();
-	}, Proxy_Settings);
+	return Proxy;
 }
 
 void UECFWaitAndExecuteBP::Predicate(bool bHasFinished)
 {
 	Proxy_HasFinished = bHasFinished;
-}
-
-FECFHandleBP UECFWaitAndExecuteBP::GetHandle()
-{
-	return FECFHandleBP(Proxy_Handle);
 }

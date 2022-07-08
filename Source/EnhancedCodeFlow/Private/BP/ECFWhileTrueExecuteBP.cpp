@@ -3,38 +3,30 @@
 #include "ECFWhileTrueExecuteBP.h"
 #include "EnhancedCodeFlow.h"
 
-UECFWhileTrueExecuteBP* UECFWhileTrueExecuteBP::ECFWhileTrueExecute(UObject* WorldContextObject, const FOnECFWhileTrueExecuteBPTick& OnTick, FECFActionSettings Settings)
+UECFWhileTrueExecuteBP* UECFWhileTrueExecuteBP::ECFWhileTrueExecute(UObject* WorldContextObject, FECFActionSettings Settings, FECFHandleBP& Handle)
 {
 	UECFWhileTrueExecuteBP* Proxy = NewObject<UECFWhileTrueExecuteBP>();
+	Proxy->Init(WorldContextObject, Settings);
 
-	Proxy->Proxy_WorldContextObject = WorldContextObject;
-	Proxy->Proxy_OnTick = OnTick;
-	Proxy->Proxy_Settings = Settings;
 	Proxy->Proxy_IsTrue = true;
 
-	return Proxy;
-}
+	Proxy->Proxy_Handle = FFlow::WhileTrueExecute(WorldContextObject,
+		[Proxy]()
+		{
+			Proxy->OnWhile.Broadcast(Proxy, 0.f);
+			return Proxy->Proxy_IsTrue;
+		},
+		[Proxy](float DeltaTime)
+		{
+			Proxy->OnExecute.Broadcast(Proxy, DeltaTime);
+		}, 
+	Settings);
+	Handle = FECFHandleBP(Proxy->Proxy_Handle);
 
-void UECFWhileTrueExecuteBP::Activate()
-{
-	Proxy_Handle = FFlow::WhileTrueExecute(Proxy_WorldContextObject, 
-	[this]()
-	{
-		OnCheck.Broadcast(this);
-		return Proxy_IsTrue;
-	},
-	[this](float DeltaTime)
-	{
-		Proxy_OnTick.Execute(DeltaTime);
-	}, Proxy_Settings);
+	return Proxy;
 }
 
 void UECFWhileTrueExecuteBP::Predicate(bool bIsTrue)
 {
 	Proxy_IsTrue = bIsTrue;
-}
-
-FECFHandleBP UECFWhileTrueExecuteBP::GetHandle()
-{
-	return FECFHandleBP(Proxy_Handle);
 }

@@ -61,33 +61,6 @@ bool UECFBPLibrary::IsECFInstanceIdValid(const FECFInstanceIdBP& InstanceId)
 	return InstanceId.InstanceId.IsValid();
 }
 
-/*^^^ Ticker ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
-
-void UECFBPLibrary::ECFTicker(FECFHandleBP& OutHandle, UObject* Owner, const FOnECFTick& OnTickEvent, const FOnECFFinished& OnFinishedEvent, FECFActionSettings Settings, float TickingTime /*= -1.f*/)
-{
-	FECFHandle Handle = FFlow::AddTicker(Owner, TickingTime,
-	[OnTickEvent](float DeltaTime)
-	{
-		if (OnTickEvent.IsBound())
-		{
-			OnTickEvent.Execute(DeltaTime);
-		}
-	},
-	[OnFinishedEvent]()
-	{
-		if (OnFinishedEvent.IsBound())
-		{
-			OnFinishedEvent.Execute();
-		}
-	}, Settings);
-	OutHandle = FECFHandleBP(MoveTemp(Handle));
-}
-
-void UECFBPLibrary::ECFRemoveAllTickers(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
-{
-	FFlow::RemoveAllTickers(WorldContextObject, bComplete, InOwner);
-}
-
 /*^^^ Timeline ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 void UECFBPLibrary::ECFTimeline(FECFHandleBP& OutHandle, UObject* Owner, float StartValue, float StopValue, float Time, const FOnECFTimelineTick& OnTickEvent, const FOnECFTimelineTick& OnFinishedEvent, FECFActionSettings Settings, EECFBlendFunc BlendFunc /*= EECFBlendFunc::ECFBlend_Linear*/, float BlendExp /*= 1.f*/)
@@ -174,6 +147,11 @@ void UECFBPLibrary::ECFRemoveAllWaitAndExecutes(const UObject* WorldContextObjec
 void UECFBPLibrary::RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
 	FFlow::RemoveAllWhileTrueExecutes(WorldContextObject, bComplete, InOwner);
+}
+
+void UECFBPLibrary::ECFRemoveAllTickers(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
+{
+	FFlow::RemoveAllTickers(WorldContextObject, bComplete, InOwner);
 }
 
 /*^^^ Casting ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/	

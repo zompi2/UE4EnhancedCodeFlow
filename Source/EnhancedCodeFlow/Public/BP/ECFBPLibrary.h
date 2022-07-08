@@ -103,23 +103,6 @@ public:
 	UFUNCTION(BlueprintPure, Category = "ECF")
 	static bool IsECFInstanceIdValid(const FECFInstanceIdBP& InstanceId);
 
-	/*^^^ Ticker ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
-
-	/**
-	 * Creates a ticker. It can tick specified amount of time or until it won't be stopped or when owning object won't be destroyed.
-	 */
-	UFUNCTION(BlueprintCallable, meta = (HidePin = "Owner", DefaultToSelf = "Owner", AutoCreateRefTerm = "OnFinishedEvent", AdvancedDisplay = "OnFinishedEvent, Settings, TickingTime"), Category = "ECF")
-	static void ECFTicker(UPARAM(DisplayName = "Handle") FECFHandleBP& OutHandle, UObject* Owner, const FOnECFTick& OnTickEvent, const FOnECFFinished& OnFinishedEvent, FECFActionSettings Settings, float TickingTime = -1.f);
-
-	/**
-	 * Removes all running tickers.
-	 * If owner is defined it will remove all tickers from the given owner.
-	 * Otherwise it will stop all the tickers from everywhere.
-	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
-	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner"), Category = "ECF")
-	static void ECFRemoveAllTickers(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
-
 	/*^^^ Timeline ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 	/**
@@ -199,6 +182,15 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner"), Category = "ECF")
 	static void RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
+
+	/**
+	 * Removes all running tickers.
+	 * If owner is defined it will remove all tickers from the given owner.
+	 * Otherwise it will stop all the tickers from everywhere.
+	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 */
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner"), Category = "ECF")
+	static void ECFRemoveAllTickers(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^ Casting ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 

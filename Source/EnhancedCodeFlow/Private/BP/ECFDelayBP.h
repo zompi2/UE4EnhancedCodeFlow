@@ -2,33 +2,24 @@
 
 #pragma once
 
-#include "Kismet/BlueprintAsyncActionBase.h"
-#include "ECFActionSettings.h"
-#include "BP/ECFHandleBP.h"
+#include "ECFActionBP.h"
 #include "ECFDelayBP.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnECFDelayBPComplete);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnECFDelayBPEvent);
 
 UCLASS()
-class ENHANCEDCODEFLOW_API UECFDelayBP : public UBlueprintAsyncActionBase
+class ENHANCEDCODEFLOW_API UECFDelayBP : public UECFActionBP
 {
 	GENERATED_BODY()
 
 public:
 
 	UPROPERTY(BlueprintAssignable)
-	FOnECFDelayBPComplete OnComplete;
+	FOnECFDelayBPEvent OnComplete;
 
-	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay="Settings"), Category = "ECF")
+	/**
+	 * Execute specified action after some time.
+	 */
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings"), Category = "ECF")
 	static UECFDelayBP* ECFDelay(UObject* WorldContextObject, float DelayTime, FECFActionSettings Settings, FECFHandleBP& Handle);
-
-	void Activate() override;
-
-protected:
-
-	UPROPERTY(Transient)
-	class UObject* Proxy_WorldContextObject;
-
-	FECFHandle Proxy_Handle;
-	bool Proxy_IsPausedAtStart;
 };
