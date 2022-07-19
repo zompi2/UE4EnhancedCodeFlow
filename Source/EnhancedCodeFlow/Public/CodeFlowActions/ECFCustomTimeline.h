@@ -73,13 +73,19 @@ private:
 	{
 		CurrentValue = Value;
 		CurrentTime = MyTimeline.GetPlaybackPosition();
-		TickFunc(CurrentValue, CurrentTime);
+		if (HasValidOwner())
+		{
+			TickFunc(CurrentValue, CurrentTime);
+		}
 	}
 
 	UFUNCTION()
 	void HandleFinish()
 	{
-		Complete();
+		if (HasValidOwner())
+		{
+			Complete();
+		}
 		MarkAsFinished();
 	}
 };

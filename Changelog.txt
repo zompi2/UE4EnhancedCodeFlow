@@ -8,6 +8,7 @@
 * Added SetMaxActionTime() call to EVERY time dependent action.
 * Added ensure msgs for situations when actions couldn't be executed properly.
 * Removed Macro node for TimeLock and gave a convenient node to validate InstanceIds.
+* Ensure the Custom Timeline always has a valid owner when performing it's actions.
 
 ###### 1.6.1
 * Fixed ECFActionSettings macros
