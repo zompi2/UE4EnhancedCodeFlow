@@ -20,7 +20,7 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnECFWaitAndExecuteBPEvent OnExecute;
 
-	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings", DisplayName = "ECF - Wait And Execute"), Category = "ECF")
 	static UECFWaitAndExecuteBP* ECFWaitAndExecute(UObject* WorldContextObject, FECFActionSettings Settings, FECFHandleBP& Handle);
 
 	UFUNCTION(BlueprintCallable, Category = "ECF")

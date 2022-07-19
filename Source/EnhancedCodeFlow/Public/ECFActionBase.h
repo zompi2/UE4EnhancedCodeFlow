@@ -20,10 +20,16 @@ class ENHANCEDCODEFLOW_API UECFActionBase : public UObject
 
 public:
 
+	// Checks if the action has valid owner
+	virtual bool HasValidOwner() const
+	{
+		return Owner.IsValid() && (Owner->HasAnyFlags(RF_BeginDestroyed | RF_FinishDestroyed) == false);
+	}
+
 	// Checks if the action is valid
 	virtual bool IsValid() const
 	{
-		return bHasFinished == false && Owner.IsValid() && (Owner->HasAnyFlags(RF_BeginDestroyed | RF_FinishDestroyed) == false);
+		return bHasFinished == false && HasValidOwner();
 	}
 
 	// Returns this action handle id

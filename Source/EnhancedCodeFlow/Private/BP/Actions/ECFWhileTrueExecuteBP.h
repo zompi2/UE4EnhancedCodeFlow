@@ -20,7 +20,7 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnECFWhileTrueExecuteBPEvent OnExecute;
 
-	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings", DisplayName = "ECF - While True Execute"), Category = "ECF")
 	static UECFWhileTrueExecuteBP* ECFWhileTrueExecute(UObject* WorldContextObject, FECFActionSettings Settings, FECFHandleBP& Handle);
 
 	UFUNCTION(BlueprintCallable, Category = "ECF")
