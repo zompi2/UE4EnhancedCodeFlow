@@ -103,23 +103,6 @@ public:
 	UFUNCTION(BlueprintPure, Category = "ECF")
 	static bool IsECFInstanceIdValid(const FECFInstanceIdBP& InstanceId);
 
-	/*^^^ Timeline ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
-
-	/**
-	 * Adds a simple timeline that runs in a given range during a given time.
-	 */
-	UFUNCTION(BlueprintCallable, meta = (HidePin = "Owner", DefaultToSelf = "Owner", AutoCreateRefTerm = "OnFinishedEvent", AdvancedDisplay = "OnFinishedEvent, Settings, BlendFunc, BlendExp"), Category = "ECF")
-	static void ECFTimeline(UPARAM(DisplayName = "Handle") FECFHandleBP& OutHandle, UObject* Owner, float StartValue, float StopValue, float Time, const FOnECFTimelineTick& OnTickEvent, const FOnECFTimelineTick& OnFinishedEvent, FECFActionSettings Settings, EECFBlendFunc BlendFunc = EECFBlendFunc::ECFBlend_Linear, float BlendExp = 1.f);
-
-	/**
-	 * Removes all running timelines.
-	 * If owner is defined it will remove all timelines from the given owner.
-	 * Otherwise it will stop all the timelines from everywhere.
-	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
-	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner"), Category = "ECF")
-	static void ECFRemoveAllTimelines(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
-
 	/*^^^ Custom Timeline ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 	/**
@@ -191,6 +174,15 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner"), Category = "ECF")
 	static void ECFRemoveAllTickers(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
+
+	/**
+	 * Removes all running timelines.
+	 * If owner is defined it will remove all timelines from the given owner.
+	 * Otherwise it will stop all the timelines from everywhere.
+	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 */
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner"), Category = "ECF")
+	static void ECFRemoveAllTimelines(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^ Casting ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 

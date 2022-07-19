@@ -61,33 +61,6 @@ bool UECFBPLibrary::IsECFInstanceIdValid(const FECFInstanceIdBP& InstanceId)
 	return InstanceId.InstanceId.IsValid();
 }
 
-/*^^^ Timeline ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
-
-void UECFBPLibrary::ECFTimeline(FECFHandleBP& OutHandle, UObject* Owner, float StartValue, float StopValue, float Time, const FOnECFTimelineTick& OnTickEvent, const FOnECFTimelineTick& OnFinishedEvent, FECFActionSettings Settings, EECFBlendFunc BlendFunc /*= EECFBlendFunc::ECFBlend_Linear*/, float BlendExp /*= 1.f*/)
-{
-	FECFHandle Handle = FFlow::AddTimeline(Owner, StartValue, StopValue, Time, 
-	[OnTickEvent](float Value, float Time)
-	{
-		if (OnTickEvent.IsBound())
-		{
-			OnTickEvent.Execute(Value, Time);
-		}
-	},
-	[OnFinishedEvent](float Value, float Time)
-	{
-		if (OnFinishedEvent.IsBound())
-		{
-			OnFinishedEvent.Execute(Value, Time);
-		}
-	}, BlendFunc, BlendExp, Settings);
-	OutHandle = FECFHandleBP(MoveTemp(Handle));
-}
-
-void UECFBPLibrary::ECFRemoveAllTimelines(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
-{
-	FFlow::RemoveAllTimelines(WorldContextObject, bComplete, InOwner);
-}
-
 /*^^^ Custom Timeline ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 void UECFBPLibrary::ECFCustomTimeline(FECFHandleBP& OutHandle, UObject* Owner, UCurveFloat* CurveFloat, const FOnECFTimelineTick& OnTickEvent, const FOnECFTimelineTick& OnFinishedEvent, FECFActionSettings Settings)
@@ -152,6 +125,11 @@ void UECFBPLibrary::RemoveAllWhileTrueExecutes(const UObject* WorldContextObject
 void UECFBPLibrary::ECFRemoveAllTickers(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
 	FFlow::RemoveAllTickers(WorldContextObject, bComplete, InOwner);
+}
+
+void UECFBPLibrary::ECFRemoveAllTimelines(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
+{
+	FFlow::RemoveAllTimelines(WorldContextObject, bComplete, InOwner);
 }
 
 /*^^^ Casting ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/	
