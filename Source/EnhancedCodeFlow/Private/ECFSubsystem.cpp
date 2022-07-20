@@ -33,10 +33,16 @@ UECFSubsystem* UECFSubsystem::Get(const UObject* WorldContextObject)
 
 void UECFSubsystem::Tick(float DeltaTime)
 {
+	// Do nothing when the whole subsystem is paused
+	if (bIsECFPaused)
+	{
+		return;
+	}
+
 	// Remove all expired actions first
 	Actions.RemoveAll([](UECFActionBase* Action) { return IsActionValid(Action) == false; });
 
-	// There might be a situation the pending action is invalid too.
+	// There might be a situation the pending action is invalid too
 	PendingAddActions.RemoveAll([&](UECFActionBase* PendingAddAction) { return IsActionValid(PendingAddAction) == false; });
 
 	// Add all pending actions

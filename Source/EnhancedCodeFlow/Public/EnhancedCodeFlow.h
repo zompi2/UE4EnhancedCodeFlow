@@ -57,6 +57,16 @@ public:
 	 */
 	static bool IsActionPaused(const UObject* WorldContextObject, const FECFHandle& Handle, bool &bIsPaused);
 
+	/**
+	 * Sets if the ECF system is paused or not.
+	 */
+	static void SetPause(const UObject* WorldContextObject, bool bPaused);
+
+	/**
+	 * Checks if the ECF system is paused or not.
+	 */
+	static bool GetPause(const UObject* WorldContextObject);
+
 	/*^^^ Stop ECF Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 	/**

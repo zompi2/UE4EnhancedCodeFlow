@@ -44,6 +44,20 @@ bool FEnhancedCodeFlow::IsActionPaused(const UObject* WorldContextObject, const 
 		return false;
 }
 
+void FEnhancedCodeFlow::SetPause(const UObject* WorldContextObject, bool bPaused)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		ECF->bIsECFPaused = bPaused;
+}
+
+bool FEnhancedCodeFlow::GetPause(const UObject* WorldContextObject)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		return ECF->bIsECFPaused;
+	else
+		return false;
+}
+
 /*^^^ Stop ECF Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 void FFlow::StopAction(const UObject* WorldContextObject, FECFHandle& Handle, bool bComplete/* = false*/)

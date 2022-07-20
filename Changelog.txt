@@ -1,6 +1,7 @@
 ###### 1.7.0
-* Added options to pause and resume running actions. Actions can also be started with pause enabled at the beginning.
 * BIG refactor of BP nodes - better readability and functionality.
+* Added options to pause and resume running actions. Actions can also be started with pause enabled at the beginning.
+* Added option to pause the whole subsystem.
 * Async BP nodes sets action's owners to be themselves, not the WorldContextObjects.
 * Removed Static InstanceIds, as they had no valid purpose.
 * Added ToString node for ECFHandleBP.

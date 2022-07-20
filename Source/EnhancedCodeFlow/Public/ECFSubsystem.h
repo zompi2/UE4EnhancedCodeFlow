@@ -106,6 +106,9 @@ protected:
 
 	// Id of the last created node.
 	FECFHandle LastHandleId;
+
+	// Indicates if subsystem is paused
+	bool bIsECFPaused = false;
 	
 	// Getter handling.
 	static UECFSubsystem* Get(const UObject* WorldContextObject);
@@ -115,4 +118,5 @@ protected:
 
 	// Utility function to check action validity.
 	static bool IsActionValid(UECFActionBase* Action);
+
 };
