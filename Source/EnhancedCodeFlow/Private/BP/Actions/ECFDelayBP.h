@@ -17,9 +17,6 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnECFDelayBPEvent OnComplete;
 
-	/**
-	 * Execute specified action after some time.
-	 */
-	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings", DisplayName = "ECF - Delay"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings", ToolTip = "Execute specified action after some time.", DisplayName = "ECF - Delay"), Category = "ECF")
 	static UECFDelayBP* ECFDelay(UObject* WorldContextObject, float DelayTime, FECFActionSettings Settings, FECFHandleBP& Handle);
 };

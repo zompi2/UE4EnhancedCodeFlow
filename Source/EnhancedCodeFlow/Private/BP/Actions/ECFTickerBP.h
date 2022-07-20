@@ -20,9 +20,6 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnECFTickerBPEvent OnComplete;
 
-	/**
-	 * Creates a ticker. It can tick specified amount of time or until it won't be stopped or when owning object won't be destroyed.
-	 */
-	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings", DisplayName = "ECF - Ticker"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings", ToolTip = "Creates a ticker. It can tick specified amount of time or until it won't be stopped or when owning object won't be destroyed.", DisplayName = "ECF - Ticker"), Category = "ECF")
 	static UECFTickerBP* ECFTicker(UObject* WorldContextObject, float TickingTime, FECFActionSettings Settings, FECFHandleBP& Handle);
 };

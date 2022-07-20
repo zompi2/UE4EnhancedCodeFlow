@@ -20,9 +20,6 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnECFCustomTimelineBPEvent OnFinished;
 	
-	/**
-	 * Adds a custom timeline defined by a float curve.
-	 */
-	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings", DisplayName = "ECF - Custom Timeline"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings", ToolTip = "Adds a custom timeline defined by a float curve.", DisplayName = "ECF - Custom Timeline"), Category = "ECF")
 	static UECFCustomTimelineBP* ECFCustomTimeline(UObject* WorldContextObject, UCurveFloat* CurveFloat, FECFActionSettings Settings, FECFHandleBP& Handle);
 };
