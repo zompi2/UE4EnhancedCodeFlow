@@ -20,10 +20,10 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnECFWaitAndExecuteBPEvent OnExecute;
 
-	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings", ToolTip = "Adds a custom timeline defined by a float curve.", DisplayName = "ECF - Wait And Execute"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings", ToolTip = "Waits until specific conditions are made and then execute code.\nUse Action's 'Predicate' function to control it.", DisplayName = "ECF - Wait And Execute"), Category = "ECF")
 	static UECFWaitAndExecuteBP* ECFWaitAndExecute(UObject* WorldContextObject, FECFActionSettings Settings, FECFHandleBP& Handle);
 
-	UFUNCTION(BlueprintCallable, meta = (ToolTip = "Pass 'true' to this function in order to execute."), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (ToolTip = "Pass 'true' to this function in order to execute the 'Wait And Execute' Action."), Category = "ECF")
 	void Predicate(bool bHasFinished);
 
 protected:

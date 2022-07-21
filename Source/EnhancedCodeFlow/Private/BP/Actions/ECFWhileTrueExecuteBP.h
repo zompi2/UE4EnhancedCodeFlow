@@ -20,10 +20,10 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnECFWhileTrueExecuteBPEvent OnExecute;
 
-	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings", ToolTip = "Adds a custom timeline defined by a float curve.", DisplayName = "ECF - While True Execute"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings", ToolTip = "While the specific condition is true the function will tick.\nUse Action's 'Predicate' function to control it.", DisplayName = "ECF - While True Execute"), Category = "ECF")
 	static UECFWhileTrueExecuteBP* ECFWhileTrueExecute(UObject* WorldContextObject, FECFActionSettings Settings, FECFHandleBP& Handle);
 
-	UFUNCTION(BlueprintCallable, meta = (ToolTip = "Pass 'true' to this function in order to continue, 'false' to stop."), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (ToolTip = "Pass 'true' to this function in order to continue 'While True Execute' Action. Pass 'false' to stop it."), Category = "ECF")
 	void Predicate(bool bIsTrue);
 
 protected:
