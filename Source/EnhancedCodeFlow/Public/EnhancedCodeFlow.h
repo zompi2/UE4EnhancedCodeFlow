@@ -93,6 +93,7 @@ public:
 
 	/**
 	 * Creates a ticker. It can tick specified amount of time or until it won't be stopped or when owning object won't be destroyed.
+	 * To run ticker infinitely set InTickingTime to -1.
 	 * @param InTickingTime [optional] - how long the ticker should tick. -1 means it will tick until it is explicitly stopped.
 	 * @param InTickFunc - a ticking function can be: [](float DeltaTime) -> void, or [](float DeltaTime, FECFHandle TickerHandle) -> void.
 	 * @param InCallbackFunc [optional] - a function which will be run after the last tick occurs. Must be: []() -> void.
