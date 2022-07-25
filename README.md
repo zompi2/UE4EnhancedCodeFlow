@@ -25,7 +25,7 @@ The Changelog has been put into this file: **[Changelog.txt](Changelog.txt)**
 
 # Example Project
 
-The example project wich uses this plugin can be found in **[this repository](https://github.com/zompi2/UE4EnhancedCodeFlowExample)**.
+The example project wich uses this plugin can be found in **[this repository](https://github.com/zompi2/UE4EnhancedCodeFlowExample/tree/Legacy-1.6)**.
 
 ![ecfscreen](https://user-images.githubusercontent.com/7863125/143097137-fe37ee9d-ccaf-440a-900f-86568ef77883.png)
 
