@@ -8,7 +8,7 @@ It works very well with gameplay programming, UI programming with a lot of trans
 - [Usage](#usage)
 - [Extra Settings](#extra-settings)
 - [Instanced Actions](#instanced-actions)
-- [Pausing and Resuming Actions](#pausing-and-resuming)
+- [Pausing and Resuming](#pausing-and-resuming)
 - [Stopping Actions](#stopping-actions)
 - [Extending Plugin](#extending-plugin)
 - [Special Thanks](#special-thanks)
