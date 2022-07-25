@@ -1,4 +1,5 @@
-###### 1.7.0
+###### 2.0.0
+* This version will probably break compatiblity with the previous one. Update with caution!
 * BIG refactor of BP nodes - better readability and functionality.
 * Added options to pause and resume running actions. Actions can also be started with pause enabled at the beginning.
 * Added option to pause the whole subsystem.

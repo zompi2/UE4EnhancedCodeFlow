@@ -21,9 +21,13 @@ If you have any question or suggestion regardles this plugin simply add an **Iss
 
 The Changelog has been put into this file: **[Changelog.txt](Changelog.txt)**
 
+**IMPORTANT**
+Version `2.0.0` will probably break Blueprint nodes from previous versions. Update with caution!  
+Version `1.6.1` can be found on a separate branch here: [TODO]
+
 # Example Project
 
-The example project wich uses this plugin can be found in **[this repository](https://github.com/zompi2/UE4EnhancedCodeFlowExample)**.
+The example project wich uses this plugin can be found in **[this repository](https://github.com/zompi2/UE4EnhancedCodeFlowExample)**. Example project is compatible with the newest version of the plugin only.
 
 ![ecfscreen](https://user-images.githubusercontent.com/7863125/143097137-fe37ee9d-ccaf-440a-900f-86568ef77883.png)
 
