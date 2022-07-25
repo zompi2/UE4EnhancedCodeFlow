@@ -7,6 +7,16 @@
 
 /*^^^ ECF Flow Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
+void UECFBPLibrary::ECFSetPause(const UObject* WorldContextObject, bool bPaused)
+{
+	FFlow::SetPause(WorldContextObject, bPaused);
+}
+
+void UECFBPLibrary::ECFGetPause(const UObject* WorldContextObject, bool& bIsPaused)
+{
+	bIsPaused = FFlow::GetPause(WorldContextObject);
+}
+
 void UECFBPLibrary::ECFIsActionRunning(bool& bIsRunning, const UObject* WorldContextObject, const FECFHandleBP& Handle)
 {
 	bIsRunning = FFlow::IsActionRunning(WorldContextObject, Handle.Handle);

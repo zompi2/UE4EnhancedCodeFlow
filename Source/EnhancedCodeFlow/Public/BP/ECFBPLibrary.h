@@ -30,6 +30,18 @@ public:
 	/*^^^ ECF Flow Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 	/**
+	 * Sets if the ECF system is paused or not.
+	 */
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", DisplayName = "ECF - Set Pause Subsystem"), Category = "ECF")
+	static void ECFSetPause(const UObject* WorldContextObject, bool bPaused);
+
+	/**
+	 * Checks if the ECF system is paused or not.
+	 */
+	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject", DisplayName = "ECF - Set Pause Subsystem"), Category = "ECF")
+	static void ECFGetPause(const UObject* WorldContextObject, UPARAM(DisplayName = "IsPaused") bool& bIsPaused);
+
+	/**
 	 * Checks if the action pointed by given handle is running.
 	 */
 	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject", DisplayName = "ECF - Is Action Running"), Category = "ECF")
