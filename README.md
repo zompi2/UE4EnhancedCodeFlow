@@ -8,7 +8,7 @@ It works very well with gameplay programming, UI programming with a lot of trans
 - [Usage](#usage)
 - [Extra Settings](#extra-settings)
 - [Instanced Actions](#instanced-actions)
-- [Pausing and Resuming Actions](#pausing-and-resuming-actions)
+- [Pausing and Resuming Actions](#pausing-and-resuming)
 - [Stopping Actions](#stopping-actions)
 - [Extending Plugin](#extending-plugin)
 - [Special Thanks](#special-thanks)
@@ -21,9 +21,9 @@ If you have any question or suggestion regardles this plugin simply add an **Iss
 
 The Changelog has been put into this file: **[Changelog.txt](Changelog.txt)**
 
-**IMPORTANT**
+## **IMPORTANT**  
 Version `2.0.0` will probably break Blueprint nodes from previous versions. Update with caution!  
-Version `1.6.1` can be found on a separate branch here: [TODO]
+Version `1.6.1` can be found on a separate branch here: **[Legacy-1.6](https://github.com/zompi2/UE4EnhancedCodeFlow/tree/Legacy-1.6)**
 
 # Example Project
 
