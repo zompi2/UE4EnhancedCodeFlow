@@ -6,11 +6,11 @@
 #include "Subsystems/WorldSubsystem.h"
 #include "Tickable.h"
 #include "ECFHandle.h"
+#include "ECFActionBase.h"
 #include "ECFInstanceId.h"
 #include "ECFActionSettings.h"
 #include "ECFSubsystem.generated.h"
 
-class UECFActionBase;
 
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFSubsystem : public UWorldSubsystem, public FTickableGameObject
