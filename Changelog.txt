@@ -1,3 +1,6 @@
+###### 2.0.1
+* Fix for the UECFActionBase forward declaration (@Matiis)
+
 ###### 2.0.0
 * This version will probably break compatiblity with the previous one. Update with caution!
 * BIG refactor of BP nodes - better readability and functionality.
