@@ -11,6 +11,7 @@ It works very well with gameplay programming, UI programming with a lot of trans
 - [Pausing and Resuming](#pausing-and-resuming)
 - [Stopping Actions](#stopping-actions)
 - [Extending Plugin](#extending-plugin)
+- [Extra Links](#extra-links)
 - [Special Thanks](#special-thanks)
 
 # Contact
@@ -487,6 +488,13 @@ FFlow::NewAction(this, 1, 2, [this]()
   // Callback code.
 }, ECF_IGNOREPAUSE);
 ```
+[Back to top](#table-of-content)
+
+# Extra links
+
+- [Unreal Engine Forum](https://forums.unrealengine.com/t/plugin-enhanced-code-flow/684237)
+- [Blog Entry](https://zompidev.blogspot.com/2021/03/enhanced-code-flow-plugin-for-ue4.html)
+
 [Back to top](#table-of-content)
 
 # Special thanks
