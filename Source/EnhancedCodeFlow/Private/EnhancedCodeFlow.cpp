@@ -13,6 +13,7 @@
 #include "CodeFlowActions/ECFTimeLock.h"
 #include "CodeFlowActions/ECFDoOnce.h"
 #include "CodeFlowActions/ECFDoNTimes.h"
+#include "CodeFlowActions/ECFDoNoMoreThanXTime.h"
 
 /*^^^ ECF Flow Control Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
@@ -241,4 +242,20 @@ void FEnhancedCodeFlow::RemoveAllDoNTimes(const UObject* WorldContextObject, UOb
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
 		ECF->RemoveActionsOfClass<UECFDoNTimes>(false, InOwner);
+}
+
+/*^^^ Do No More Than X Time ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFHandle FEnhancedCodeFlow::DoNoMoreThanXTime(UObject* InOwner, TUniqueFunction<void()>&& InExecFunc, float InTime, int32 InMaxExecsEnqueue, FECFInstanceId& InstanceId, const FECFActionSettings& Settings /*= {}*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFDoNoMoreThanXTime>(InOwner, Settings, InstanceId, MoveTemp(InExecFunc), InTime, InMaxExecsEnqueue);
+	else
+		return FECFHandle();
+}
+
+void FEnhancedCodeFlow::RemoveAllDoNoMoreThanTimes(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		ECF->RemoveActionsOfClass<UECFDoNoMoreThanXTime>(false, InOwner);
 }

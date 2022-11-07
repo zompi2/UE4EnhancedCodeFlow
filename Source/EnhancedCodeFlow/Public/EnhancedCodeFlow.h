@@ -259,6 +259,25 @@ public:
 	 *                             Otherwise it will remove all time locks from everywhere.
 	 */
 	static void RemoveAllDoNTimes(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+
+	/*^^^ Do No More Than X Time ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Run this code of block now and if run again - wait until the time after the previous run is no shorter than the given time.
+	 * It can enqueue the given number of executions (must be at least 1).
+	 * @param InExecFunc - the function to execute.
+	 * @param InTime - the time of for how long the two code executions should be hold.
+	 * @param InMaxExecsEnqueue - how many extra executions can be enqueued (must be at least 1).
+	 * @param InstanceId - the id of the instance of this action.
+	 */
+	static FECFHandle DoNoMoreThanXTime(UObject* InOwner, TUniqueFunction<void()>&& InExecFunc, float InTime, int32 InMaxExecsEnqueue, FECFInstanceId& InstanceId, const FECFActionSettings& Settings = {});
+
+	/**
+	 * Stops DoNoMoreThanXTimes.
+	 * @param InOwner [optional] - if defined it will remove time locks only from the given owner.
+	 *                             Otherwise it will remove all time locks from everywhere.
+	 */
+	static void RemoveAllDoNoMoreThanTimes(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 };
 
 using FFlow = FEnhancedCodeFlow;
