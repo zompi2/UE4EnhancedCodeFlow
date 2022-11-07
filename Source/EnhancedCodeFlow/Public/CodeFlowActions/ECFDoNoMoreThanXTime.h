@@ -21,10 +21,10 @@ protected:
 	int32 MaxExecsEnqueued;
 
 
-	bool Setup(TUniqueFunction<void()>&& InExecFunc, float InLockTime, int32 InMaxExecsEnqueued)
+	bool Setup(TUniqueFunction<void()>&& InExecFunc, float InTime, int32 InMaxExecsEnqueued)
 	{
 		ExecFunc = MoveTemp(InExecFunc);
-		LockTime = InLockTime;
+		InTime = InTime;
 		MaxExecsEnqueued = InMaxExecsEnqueued;
 
 		if (ExecFunc && LockTime > 0 && InMaxExecsEnqueued > 0)
