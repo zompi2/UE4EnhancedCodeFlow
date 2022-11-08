@@ -27,7 +27,7 @@ protected:
 		LockTime = InTime;
 		MaxExecsEnqueued = InMaxExecsEnqueued;
 
-		if (ExecFunc && LockTime > 0 && InMaxExecsEnqueued > 0)
+		if (ExecFunc && LockTime > 0 && MaxExecsEnqueued > 0)
 		{
 			return true;
 		}
