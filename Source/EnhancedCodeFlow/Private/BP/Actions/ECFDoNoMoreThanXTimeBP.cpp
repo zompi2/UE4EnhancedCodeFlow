@@ -1,0 +1,46 @@
+// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
+
+#include "ECFDoNoMoreThanXTimeBP.h"
+#include "EnhancedCodeFlow.h"
+#include "BP/ECFBPLibrary.h"
+
+UECFDoNoMoreThanXTimeBP* UECFDoNoMoreThanXTimeBP::ECFDoNoMoreThanXTime(UObject* WorldContextObject, float Time, FECFHandleBP& Handle, FECFInstanceIdBP& InstanceId, FECFActionSettings Settings, int32 MaxExecsEnqueued /*= 1*/)
+{
+	UECFDoNoMoreThanXTimeBP* Proxy = NewObject<UECFDoNoMoreThanXTimeBP>();
+	Proxy->Init(WorldContextObject, Settings);
+
+	if (InstanceId.InstanceId.IsValid() == false)
+	{
+		UECFBPLibrary::ECFGetNewInstanceId(InstanceId);
+	}
+
+	Proxy->Proxy_Handle = FFlow::DoNoMoreThanXTime(Proxy, [Proxy]()
+	{
+		// Because the action will be executed on first call, check if the async action has been activated.
+		// Not activated actions don't have bindings to delegates! 
+		// Enqueue the OnExecute broadcast for the activation.
+		if (Proxy->bActivated)
+		{
+			Proxy->OnExecute.Broadcast();
+		}
+		else
+		{
+			Proxy->bExecuteOnActivation = true;
+		}
+	}, Time, MaxExecsEnqueued, InstanceId.InstanceId, Settings);
+	Handle = FECFHandleBP(Proxy->Proxy_Handle);
+
+	return Proxy;
+}
+
+void UECFDoNoMoreThanXTimeBP::Activate()
+{
+	Super::Activate();
+
+	// Broadcast OnExecute event if it was enqueued.
+	if (bExecuteOnActivation)
+	{
+		bExecuteOnActivation = false;
+		OnExecute.Broadcast();
+	}
+}

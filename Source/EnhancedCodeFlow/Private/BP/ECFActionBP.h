@@ -41,4 +41,7 @@ protected:
 
 	// If the action was supposed to be paused - to not resume it on Activate!
 	bool Proxy_IsPausedAtStart;
+
+	// Just a handy flag to check if the action has been activated already.
+	bool bActivated = false;
 };

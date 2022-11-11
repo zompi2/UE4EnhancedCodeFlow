@@ -133,6 +133,11 @@ void UECFBPLibrary::ECFRemoveAllCustomTimelines(const UObject* WorldContextObjec
 	FFlow::RemoveAllCustomTimelines(WorldContextObject, bComplete, InOwner);
 }
 
+void UECFBPLibrary::ECFRemoveAllDoNoMoreThanXTimes(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
+{
+	FFlow::RemoveAllDoNoMoreThanXTimes(WorldContextObject, InOwner);
+}
+
 /*^^^ Casting ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/	
 
 FString UECFBPLibrary::Conv_ECFHandleToString(const FECFHandleBP& Handle)

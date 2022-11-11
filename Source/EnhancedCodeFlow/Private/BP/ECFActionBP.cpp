@@ -17,6 +17,7 @@ UWorld* UECFActionBP::GetWorld() const
 
 void UECFActionBP::Activate()
 {
+	bActivated = true;
 	if (Proxy_IsPausedAtStart == false)
 	{
 		FFlow::ResumeAction(Proxy_WorldContextObject, Proxy_Handle);
