@@ -30,7 +30,7 @@ Version `1.6.1` can be found on a separate branch here: **[Legacy-1.6](https://g
 
 The example project wich uses this plugin can be found in **[this repository](https://github.com/zompi2/UE4EnhancedCodeFlowExample)**. Example project is compatible with the newest version of the plugin only.
 
-![ecfscreen](https://user-images.githubusercontent.com/7863125/143097137-fe37ee9d-ccaf-440a-900f-86568ef77883.png)
+![updscre](https://user-images.githubusercontent.com/7863125/201350280-42cbc499-8d50-4ee2-8024-2834e6515c4b.png)
 
 # Usage
 
@@ -293,6 +293,26 @@ FFlow::DoNTimes(this, 5, [this](int32 Counter)
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
 
+#### Do No More Than X Time
+
+**(Instanced)**
+
+It will execute the given block of code immediately, but the next execution will be enqueued and will be called after specified time. There is a parameter which allow to define how many next executions can be enqueued (must be at least 1). If this code will be used when the queue is full - the code will be discarded (not enqueued).
+
+``` cpp
+static FECFInstanceId InstanceId = FECFInstanceId::NewId();
+FFlow::DoNoMoreThanXTime(this, [this]()
+{
+  // This code will run now and if called again it will run no earlier than after 5 seconds after the last execution.
+  // If this will be called again before the second execution - it will be discarded.
+}, 5.f, 1, InstanceId);
+```
+
+![timelock_bp](https://user-images.githubusercontent.com/7863125/180842599-84917c05-4036-4924-b15f-c5f7d5e95480.png)
+
+[Back to actions list](#usage)  
+[Back to top](#table-of-content)
+
 # Extra settings
 
 You can define extra settings at the end of each action launch. Currently the following actions are available:
@@ -435,6 +455,7 @@ FFlow::RemoveAllWhileTrueExecutes(GetWorld());
 FFlow::RemoveAllTimelines(GetWorld());
 FFlow::RemoveAllCustomTimelines(GetWorld());
 FFlow::RemoveAllTimeLocks(GetWorld());
+FFlow::RemoveAllDoNoMoreThanTimes(GetWorld());
 ```
 
 ![removeall](https://user-images.githubusercontent.com/7863125/180850420-b5082914-87ca-443c-9be6-afb8055af9d0.png)
