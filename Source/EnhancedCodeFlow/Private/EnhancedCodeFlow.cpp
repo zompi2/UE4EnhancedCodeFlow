@@ -254,7 +254,7 @@ FECFHandle FEnhancedCodeFlow::DoNoMoreThanXTime(UObject* InOwner, TUniqueFunctio
 		return FECFHandle();
 }
 
-void FEnhancedCodeFlow::RemoveAllDoNoMoreThanTimes(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
+void FEnhancedCodeFlow::RemoveAllDoNoMoreThanXTimes(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
 		ECF->RemoveActionsOfClass<UECFDoNoMoreThanXTime>(false, InOwner);

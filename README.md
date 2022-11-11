@@ -43,6 +43,7 @@ The example project wich uses this plugin can be found in **[this repository](ht
 - [Time Lock](#time-lock)
 - [Do Once](#do-once)
 - [Do N Times](#do-n-times)
+- [Do No More Than X Time](#do-no-more-than-x-time)
 
 Run the following functions to use enhanced code flow!
 
@@ -249,9 +250,9 @@ FFlow::TimeLock(this, 2.f, [this]()
 }, InstanceId);
 ```
 
-BP version of this function requires `InstanceId` too. The best way to obtain it is to validate `InstanceId` handler. It will return a new `InstanceId` only if the one in the handler is not valid.
+BP version of this function requires `InstanceId` too. The BP node will validate the `InstandeId` from the handler so it just need to be passed into it.
 
-![timelock_bp](https://user-images.githubusercontent.com/7863125/180842599-84917c05-4036-4924-b15f-c5f7d5e95480.png)
+![tlock1](https://user-images.githubusercontent.com/7863125/201354732-26bd20b3-f6b1-433e-8eef-19d0e6e4189d.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -308,7 +309,9 @@ FFlow::DoNoMoreThanXTime(this, [this]()
 }, 5.f, 1, InstanceId);
 ```
 
-![timelock_bp](https://user-images.githubusercontent.com/7863125/180842599-84917c05-4036-4924-b15f-c5f7d5e95480.png)
+BP version of this function requires `InstanceId` too. The BP node will validate the `InstandeId` from the handler so it just need to be passed into it.
+
+![donomor](https://user-images.githubusercontent.com/7863125/201354730-e444acc0-c327-48c1-b0f6-3d6cc5855362.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -455,10 +458,10 @@ FFlow::RemoveAllWhileTrueExecutes(GetWorld());
 FFlow::RemoveAllTimelines(GetWorld());
 FFlow::RemoveAllCustomTimelines(GetWorld());
 FFlow::RemoveAllTimeLocks(GetWorld());
-FFlow::RemoveAllDoNoMoreThanTimes(GetWorld());
+FFlow::RemoveAllDoNoMoreThanXTimes(GetWorld());
 ```
 
-![removeall](https://user-images.githubusercontent.com/7863125/180850420-b5082914-87ca-443c-9be6-afb8055af9d0.png)
+![removeall](https://user-images.githubusercontent.com/7863125/201354733-31eed266-097a-45b6-8733-e4e17a306ed9.png)
 
 [Back to top](#table-of-content)
 

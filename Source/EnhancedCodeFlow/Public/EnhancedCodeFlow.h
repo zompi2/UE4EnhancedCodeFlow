@@ -277,7 +277,7 @@ public:
 	 * @param InOwner [optional] - if defined it will remove time locks only from the given owner.
 	 *                             Otherwise it will remove all time locks from everywhere.
 	 */
-	static void RemoveAllDoNoMoreThanTimes(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+	static void RemoveAllDoNoMoreThanXTimes(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 };
 
 using FFlow = FEnhancedCodeFlow;
