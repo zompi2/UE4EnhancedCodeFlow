@@ -1,3 +1,6 @@
+###### 2.1.1
+* Fixed all AsyncBP nodes. Using WorldContextObject instead of Proxy to determine Action Owner, so Actions started from BP can be stopped using StopAction with specified Owner set.
+
 ###### 2.1.0
 * "Do No More Than X Time" action added which allows to enqueue to run the given block of code but no more often than a given amount of time.
 

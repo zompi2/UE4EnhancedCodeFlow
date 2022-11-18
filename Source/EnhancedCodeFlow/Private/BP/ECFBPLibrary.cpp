@@ -82,14 +82,14 @@ void UECFBPLibrary::IsECFInstanceIdValid(bool& bIsValid, const FECFInstanceIdBP&
 
 /*^^^ Time Lock ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-void UECFBPLibrary::ECFTimeLock(ETimeLockOutputType& OutExecs, FECFHandleBP& OutHandle, UObject* Owner, float LockTime, FECFInstanceIdBP& InstanceId, FECFActionSettings Settings)
+void UECFBPLibrary::ECFTimeLock(UObject* WorldContextObject, ETimeLockOutputType& OutExecs, FECFHandleBP& OutHandle, float LockTime, FECFInstanceIdBP& InstanceId, FECFActionSettings Settings)
 {
 	if (InstanceId.InstanceId.IsValid() == false)
 	{
 		ECFGetNewInstanceId(InstanceId);
 	}
 	OutExecs = ETimeLockOutputType::Locked;
-	FECFHandle Handle = FFlow::TimeLock(Owner, LockTime, [&OutExecs]()
+	FECFHandle Handle = FFlow::TimeLock(WorldContextObject, LockTime, [&OutExecs]()
 	{
 		OutExecs = ETimeLockOutputType::Exec;
 	}, InstanceId.InstanceId, Settings);

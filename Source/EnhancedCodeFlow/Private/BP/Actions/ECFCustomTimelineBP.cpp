@@ -8,7 +8,7 @@ UECFCustomTimelineBP* UECFCustomTimelineBP::ECFCustomTimeline(UObject* WorldCont
 	UECFCustomTimelineBP* Proxy = NewObject<UECFCustomTimelineBP>();
 	Proxy->Init(WorldContextObject, Settings);
 
-	Proxy->Proxy_Handle = FFlow::AddCustomTimeline(Proxy, CurveFloat,
+	Proxy->Proxy_Handle = FFlow::AddCustomTimeline(WorldContextObject, CurveFloat,
 		[Proxy](float Value, float Time)
 		{
 			Proxy->OnTick.Broadcast(Value, Time);

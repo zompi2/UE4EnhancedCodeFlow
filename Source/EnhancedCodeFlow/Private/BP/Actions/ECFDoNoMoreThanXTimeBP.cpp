@@ -14,7 +14,7 @@ UECFDoNoMoreThanXTimeBP* UECFDoNoMoreThanXTimeBP::ECFDoNoMoreThanXTime(UObject* 
 		UECFBPLibrary::ECFGetNewInstanceId(InstanceId);
 	}
 
-	Proxy->Proxy_Handle = FFlow::DoNoMoreThanXTime(Proxy, [Proxy]()
+	Proxy->Proxy_Handle = FFlow::DoNoMoreThanXTime(WorldContextObject, [Proxy]()
 	{
 		// Because the action will be executed on first call, check if the async action has been activated.
 		// Not activated actions don't have bindings to delegates! 

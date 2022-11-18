@@ -8,7 +8,7 @@ UECFTimelineBP* UECFTimelineBP::ECFTimeline(UObject* WorldContextObject, float S
 	UECFTimelineBP* Proxy = NewObject<UECFTimelineBP>();
 	Proxy->Init(WorldContextObject, Settings);
 
-	Proxy->Proxy_Handle = FFlow::AddTimeline(Proxy, 
+	Proxy->Proxy_Handle = FFlow::AddTimeline(WorldContextObject,
 		StartValue, StopValue, Time, 
 		[Proxy](float Value, float Time)
 		{

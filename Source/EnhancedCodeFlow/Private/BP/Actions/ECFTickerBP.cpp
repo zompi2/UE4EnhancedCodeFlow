@@ -8,7 +8,7 @@ UECFTickerBP* UECFTickerBP::ECFTicker(UObject* WorldContextObject, float Ticking
 	UECFTickerBP* Proxy = NewObject<UECFTickerBP>();
 	Proxy->Init(WorldContextObject, Settings);
 
-	Proxy->Proxy_Handle = FFlow::AddTicker(Proxy, TickingTime, 
+	Proxy->Proxy_Handle = FFlow::AddTicker(WorldContextObject, TickingTime,
 		[Proxy](float DeltaTime)
 		{
 			Proxy->OnTick.Broadcast(DeltaTime);
