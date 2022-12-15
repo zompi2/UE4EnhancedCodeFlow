@@ -1,3 +1,6 @@
+###### 2.1.2
+* Fixed an issue which could lead to duplicating InstanceIds.
+
 ###### 2.1.1
 * Fixed all AsyncBP nodes. Using WorldContextObject instead of Proxy to determine Action Owner, so Actions started from BP can be stopped using StopAction with specified Owner set.
 

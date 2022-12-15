@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-class FECFHandle
+class ENHANCEDCODEFLOW_API FECFHandle
 {
 
 public:

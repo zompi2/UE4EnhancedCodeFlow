@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "ECFTypes.h"
 
-class FECFInstanceId
+class ENHANCEDCODEFLOW_API FECFInstanceId
 {
 
 public:
@@ -74,13 +74,13 @@ public:
 	}
 
 	// Returns a new id.
-	static FECFInstanceId NewId()
-	{
-		static uint64 DynamicIdCounter = 0;
-		return FECFInstanceId(++DynamicIdCounter);
-	}
+	static FECFInstanceId NewId();
 
 protected:
 
 	uint64 Id;
+
+private:
+	
+	static uint64 DynamicIdCounter;
 };
