@@ -3,7 +3,7 @@
 #include "ECFDelayBP.h"
 #include "EnhancedCodeFlow.h"
 
-UECFDelayBP* UECFDelayBP::ECFDelay(UObject* WorldContextObject, float DelayTime, FECFActionSettings Settings, FECFHandleBP& Handle)
+UECFDelayBP* UECFDelayBP::ECFDelay(const UObject* WorldContextObject, float DelayTime, FECFActionSettings Settings, FECFHandleBP& Handle)
 {
 	UECFDelayBP* Proxy = NewObject<UECFDelayBP>();
 	Proxy->Init(WorldContextObject, Settings);

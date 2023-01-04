@@ -123,7 +123,7 @@ public:
 	 * Allow to run the code only once in a given time. (Locks the ability to run the code for a specific amount of time in seconds).
 	 */
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", ExpandEnumAsExecs = "OutExecs", AdvancedDisplay = "Settings", DisplayName = "ECF - Time Lock"), Category = "ECF")
-	static void ECFTimeLock(UObject* WorldContextObject, ETimeLockOutputType& OutExecs, UPARAM(DisplayName = "Handle") FECFHandleBP& OutHandle, float LockTime, UPARAM(Ref) FECFInstanceIdBP& InstanceId, FECFActionSettings Settings);
+	static void ECFTimeLock(const UObject* WorldContextObject, ETimeLockOutputType& OutExecs, UPARAM(DisplayName = "Handle") FECFHandleBP& OutHandle, float LockTime, UPARAM(Ref) FECFInstanceIdBP& InstanceId, FECFActionSettings Settings);
 
 	/**
 	 * Removes all time locks.

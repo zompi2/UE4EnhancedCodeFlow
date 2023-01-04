@@ -93,7 +93,7 @@ void UECFSubsystem::ResumeAction(const FECFHandle& HandleId)
 	}
 }
 
-bool UECFSubsystem::IsActionPaused(const FECFHandle& HandleId, bool& bIsPaused)
+bool UECFSubsystem::IsActionPaused(const FECFHandle& HandleId, bool& bIsPaused) const
 {
 	if (UECFActionBase* ActionFound = FindAction(HandleId))
 	{
@@ -204,7 +204,7 @@ bool UECFSubsystem::HasAction(const FECFHandle& HandleId) const
 	return false;
 }
 
-UECFActionBase* UECFSubsystem::GetInstancedAction(const FECFInstanceId& InstanceId)
+UECFActionBase* UECFSubsystem::GetInstancedAction(const FECFInstanceId& InstanceId) const
 {
 	if (InstanceId.IsValid())
 	{

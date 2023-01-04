@@ -3,7 +3,7 @@
 #include "ECFCustomTimelineBP.h"
 #include "EnhancedCodeFlow.h"
 
-UECFCustomTimelineBP* UECFCustomTimelineBP::ECFCustomTimeline(UObject* WorldContextObject, UCurveFloat* CurveFloat, FECFActionSettings Settings, FECFHandleBP& Handle)
+UECFCustomTimelineBP* UECFCustomTimelineBP::ECFCustomTimeline(const UObject* WorldContextObject, UCurveFloat* CurveFloat, FECFActionSettings Settings, FECFHandleBP& Handle)
 {
 	UECFCustomTimelineBP* Proxy = NewObject<UECFCustomTimelineBP>();
 	Proxy->Init(WorldContextObject, Settings);

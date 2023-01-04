@@ -18,5 +18,5 @@ public:
 	FOnECFDelayBPEvent OnComplete;
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings", ToolTip = "Execute specified action after some time.", DisplayName = "ECF - Delay"), Category = "ECF")
-	static UECFDelayBP* ECFDelay(UObject* WorldContextObject, float DelayTime, FECFActionSettings Settings, FECFHandleBP& Handle);
+	static UECFDelayBP* ECFDelay(const UObject* WorldContextObject, float DelayTime, FECFActionSettings Settings, FECFHandleBP& Handle);
 };

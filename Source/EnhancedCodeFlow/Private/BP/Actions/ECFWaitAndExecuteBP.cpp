@@ -3,7 +3,7 @@
 #include "ECFWaitAndExecuteBP.h"
 #include "EnhancedCodeFlow.h"
 
-UECFWaitAndExecuteBP* UECFWaitAndExecuteBP::ECFWaitAndExecute(UObject* WorldContextObject, FECFActionSettings Settings, FECFHandleBP& Handle)
+UECFWaitAndExecuteBP* UECFWaitAndExecuteBP::ECFWaitAndExecute(const UObject* WorldContextObject, FECFActionSettings Settings, FECFHandleBP& Handle)
 {
 	UECFWaitAndExecuteBP* Proxy = NewObject<UECFWaitAndExecuteBP>();
 	Proxy->Init(WorldContextObject, Settings);

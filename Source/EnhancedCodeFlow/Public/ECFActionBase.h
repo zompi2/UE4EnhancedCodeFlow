@@ -52,7 +52,7 @@ public:
 	}
 
 	// Checks if this action has this instance id.
-	bool HasInstanceId(const FECFInstanceId& InstanceIdToCheck)
+	bool HasInstanceId(const FECFInstanceId& InstanceIdToCheck) const
 	{
 		if (InstanceId.IsValid() && InstanceIdToCheck.IsValid())
 		{
@@ -94,8 +94,8 @@ protected:
 
 	// Pointer to the owner of this action. Owner must be valid all the time, otherwise
 	// the action will become invalid and will be deleted.
-	UPROPERTY()
-	TWeakObjectPtr<UObject> Owner;
+	UPROPERTY(Transient)
+	TWeakObjectPtr<const UObject> Owner;
 
 	// Current handle of this action
 	FECFHandle HandleId;
@@ -109,7 +109,7 @@ protected:
 private:
 
 	// Sets the owner and handle id of this action.
-	void SetAction(const TWeakObjectPtr<UObject>& InOwner, const FECFHandle& InHandleId, const FECFInstanceId& InInstanceId, const FECFActionSettings& InSettings)
+	void SetAction(const UObject* InOwner, const FECFHandle& InHandleId, const FECFInstanceId& InInstanceId, const FECFActionSettings& InSettings)
 	{
 		Owner = InOwner;
 		HandleId = InHandleId;

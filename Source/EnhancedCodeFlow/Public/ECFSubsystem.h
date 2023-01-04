@@ -33,7 +33,7 @@ protected:
 
 	// Add Action to list. Returns the Action id.
 	template<typename T, typename ... Ts>
-	FECFHandle AddAction(UObject* InOwner, const FECFActionSettings& Settings, const FECFInstanceId& InstanceId, Ts&& ... Args)
+	FECFHandle AddAction(const UObject* InOwner, const FECFActionSettings& Settings, const FECFInstanceId& InstanceId, Ts&& ... Args)
 	{
 		// There can be only one instanced action running at the same time. When trying to add an
 		// action with existing instance id - return the currently running action's handle.
@@ -72,7 +72,7 @@ protected:
 	void ResumeAction(const FECFHandle& HandleId);
 
 	// Checks if this action is not paused. Returns false if there is no action.
-	bool IsActionPaused(const FECFHandle& HandleId, bool &bIsPaused);
+	bool IsActionPaused(const FECFHandle& HandleId, bool &bIsPaused) const;
 
 	// Remove Action of given HandleId from list. 
 	void RemoveAction(FECFHandle& HandleId, bool bComplete);
@@ -94,7 +94,7 @@ protected:
 	void RemoveAllActions(bool bComplete, UObject* InOwner);
 
 	// Check if there is an instanced action running with the given instance id and returns it.
-	UECFActionBase* GetInstancedAction(const FECFInstanceId& InstanceId);
+	UECFActionBase* GetInstancedAction(const FECFInstanceId& InstanceId) const;
 	
 	// List of active actions.
 	UPROPERTY()
@@ -118,5 +118,4 @@ protected:
 
 	// Utility function to check action validity.
 	static bool IsActionValid(UECFActionBase* Action);
-
 };

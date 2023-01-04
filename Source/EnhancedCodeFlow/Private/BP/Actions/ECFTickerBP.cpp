@@ -3,7 +3,7 @@
 #include "ECFTickerBP.h"
 #include "EnhancedCodeFlow.h"
 
-UECFTickerBP* UECFTickerBP::ECFTicker(UObject* WorldContextObject, float TickingTime, FECFActionSettings Settings, FECFHandleBP& Handle)
+UECFTickerBP* UECFTickerBP::ECFTicker(const UObject* WorldContextObject, float TickingTime, FECFActionSettings Settings, FECFHandleBP& Handle)
 {
 	UECFTickerBP* Proxy = NewObject<UECFTickerBP>();
 	Proxy->Init(WorldContextObject, Settings);

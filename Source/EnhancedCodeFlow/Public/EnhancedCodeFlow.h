@@ -99,10 +99,10 @@ public:
 	 * @param InCallbackFunc [optional] - a function which will be run after the last tick occurs. Must be: []() -> void.
 	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
-	static FECFHandle AddTicker(UObject* InOwner, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
-	static FECFHandle AddTicker(UObject* InOwner, float InTickingTime, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
-	static FECFHandle AddTicker(UObject* InOwner, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
-	static FECFHandle AddTicker(UObject* InOwner, float InTickingTime, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
+	static FECFHandle AddTicker(const UObject* InOwner, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
+	static FECFHandle AddTicker(const UObject* InOwner, float InTickingTime, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
+	static FECFHandle AddTicker(const UObject* InOwner, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
+	static FECFHandle AddTicker(const UObject* InOwner, float InTickingTime, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Removes all running tickers.
@@ -120,7 +120,7 @@ public:
 	 * @param InCallbackFunc - a callback with action to execute. Must be: []() -> void. 
 	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
-	static FECFHandle Delay(UObject* InOwner, float InDelayTime, TUniqueFunction<void()>&& InCallbackFunc, const FECFActionSettings& Settings = {});
+	static FECFHandle Delay(const UObject* InOwner, float InDelayTime, TUniqueFunction<void()>&& InCallbackFunc, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops all delays. Callbacks will not be executed.
@@ -139,7 +139,7 @@ public:
 	 * @param InCallbackFunc - a callback with action to execute. Must be: []() -> void.
 	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
-	static FECFHandle WaitAndExecute(UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void()>&& InCallbackFunc, const FECFActionSettings& Settings = {});
+	static FECFHandle WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void()>&& InCallbackFunc, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops "wait and execute" actions. Callbacks will not be executed.
@@ -158,7 +158,7 @@ public:
 	 * @param InTickFunc -  a ticking function must be: [](float DeltaTime) -> void.
 	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
-	static FECFHandle WhileTrueExecute(UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, const FECFActionSettings& Settings = {});
+	static FECFHandle WhileTrueExecute(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops "while true execute" actions.
@@ -181,7 +181,7 @@ public:
 	 * @param InBlendExp -      [optional] an exponent, used by certain blend functions (EaseIn, EaseOut, EaseInOut) to control the shape of the timeline curve.
 	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
-	static FECFHandle AddTimeline(UObject* InOwner, float InStartValue, float InStopValue, float InTime, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc = nullptr, EECFBlendFunc InBlendFunc = EECFBlendFunc::ECFBlend_Linear, float InBlendExp = 1.f, const FECFActionSettings& Settings = {});
+	static FECFHandle AddTimeline(const UObject* InOwner, float InStartValue, float InStopValue, float InTime, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc = nullptr, EECFBlendFunc InBlendFunc = EECFBlendFunc::ECFBlend_Linear, float InBlendExp = 1.f, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops timelines. Will not launch callback functions.
@@ -200,7 +200,7 @@ public:
 	 * @param InCallbackFunc - [optional] function which will be launched when timeline reaches end. Must be: [](float CurrentValue, float CurrentTime) -> void.
 	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
-	static FECFHandle AddCustomTimeline(UObject* InOwner, UCurveFloat* CurveFloat, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
+	static FECFHandle AddCustomTimeline(const UObject* InOwner, UCurveFloat* CurveFloat, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops custom timelines. Will not launch callback functions.
@@ -218,7 +218,7 @@ public:
 	 * @param InExecFunc - the function to execute.
 	 * @param InstanceId - the id of the instance of this action.
 	 */
-	static FECFHandle TimeLock(UObject* InOwner, float InLockTime, TUniqueFunction<void()>&& InExecFunc, const FECFInstanceId& InstanceId, const FECFActionSettings& Settings = {});
+	static FECFHandle TimeLock(const UObject* InOwner, float InLockTime, TUniqueFunction<void()>&& InExecFunc, const FECFInstanceId& InstanceId, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops time locks.
@@ -234,7 +234,7 @@ public:
 	 * @param InExecFunc - the function to execute.
 	 * @param InstanceId - the id of the instance of this action.
 	 */
-	static FECFHandle DoOnce(UObject* InOwner, TUniqueFunction<void()>&& InExecFunc, const FECFInstanceId& InstanceId);
+	static FECFHandle DoOnce(const UObject* InOwner, TUniqueFunction<void()>&& InExecFunc, const FECFInstanceId& InstanceId);
 
 	/**
 	 * Stops DoOnces.
@@ -251,7 +251,7 @@ public:
 	 * @param InExecFunc - the function to execute. The function has a counter of executions.
 	 * @param InstanceId - the id of the instance of this action.
 	 */
-	static FECFHandle DoNTimes(UObject* InOwner, const uint32 InTimes, TUniqueFunction<void(int32)>&& InExecFunc, const FECFInstanceId& InstanceId);
+	static FECFHandle DoNTimes(const UObject* InOwner, const uint32 InTimes, TUniqueFunction<void(int32)>&& InExecFunc, const FECFInstanceId& InstanceId);
 
 	/**
 	 * Stops DoNTimes.
@@ -270,7 +270,7 @@ public:
 	 * @param InMaxExecsEnqueue - how many extra executions can be enqueued (must be at least 1).
 	 * @param InstanceId - the id of the instance of this action.
 	 */
-	static FECFHandle DoNoMoreThanXTime(UObject* InOwner, TUniqueFunction<void()>&& InExecFunc, float InTime, int32 InMaxExecsEnqueue, FECFInstanceId& InstanceId, const FECFActionSettings& Settings = {});
+	static FECFHandle DoNoMoreThanXTime(const UObject* InOwner, TUniqueFunction<void()>&& InExecFunc, float InTime, int32 InMaxExecsEnqueue, FECFInstanceId& InstanceId, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops DoNoMoreThanXTimes.

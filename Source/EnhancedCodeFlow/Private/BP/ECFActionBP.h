@@ -18,7 +18,7 @@ public:
 	 * Initializes the Async Action with project WorldContext Object and Settings.
 	 * Set the action to start paused, as unreal will run it in next tick.
 	 */
-	virtual void Init(UObject* WorldContextObject, FECFActionSettings& Settings);
+	virtual void Init(const UObject* WorldContextObject, FECFActionSettings& Settings);
 
 	/**
 	 * Getting world from World Context Object.
@@ -34,7 +34,7 @@ protected:
 
 	// The World Context Object that started this action.
 	UPROPERTY(Transient)
-	class UObject* Proxy_WorldContextObject;
+	const UObject* Proxy_WorldContextObject;
 
 	// Handle of the Action to control.
 	FECFHandle Proxy_Handle;

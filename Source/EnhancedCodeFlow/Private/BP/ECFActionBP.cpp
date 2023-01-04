@@ -3,7 +3,7 @@
 #include "ECFActionBP.h"
 #include "EnhancedCodeFlow.h"
 
-void UECFActionBP::Init(UObject* WorldContextObject, FECFActionSettings& Settings)
+void UECFActionBP::Init(const UObject* WorldContextObject, FECFActionSettings& Settings)
 {
 	Proxy_WorldContextObject = WorldContextObject;
 	Proxy_IsPausedAtStart = Settings.bStartPaused;

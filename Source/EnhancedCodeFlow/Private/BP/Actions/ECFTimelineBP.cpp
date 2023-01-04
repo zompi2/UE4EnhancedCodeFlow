@@ -3,7 +3,7 @@
 #include "ECFTimelineBP.h"
 #include "EnhancedCodeFlow.h"
 
-UECFTimelineBP* UECFTimelineBP::ECFTimeline(UObject* WorldContextObject, float StartValue, float StopValue, float Time, FECFActionSettings Settings, FECFHandleBP& Handle, EECFBlendFunc BlendFunc /*= EECFBlendFunc::ECFBlend_Linear*/, float BlendExp /*= 1.f*/)
+UECFTimelineBP* UECFTimelineBP::ECFTimeline(const UObject* WorldContextObject, float StartValue, float StopValue, float Time, FECFActionSettings Settings, FECFHandleBP& Handle, EECFBlendFunc BlendFunc /*= EECFBlendFunc::ECFBlend_Linear*/, float BlendExp /*= 1.f*/)
 {
 	UECFTimelineBP* Proxy = NewObject<UECFTimelineBP>();
 	Proxy->Init(WorldContextObject, Settings);

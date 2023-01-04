@@ -3,7 +3,7 @@
 #include "ECFWhileTrueExecuteBP.h"
 #include "EnhancedCodeFlow.h"
 
-UECFWhileTrueExecuteBP* UECFWhileTrueExecuteBP::ECFWhileTrueExecute(UObject* WorldContextObject, FECFActionSettings Settings, FECFHandleBP& Handle)
+UECFWhileTrueExecuteBP* UECFWhileTrueExecuteBP::ECFWhileTrueExecute(const UObject* WorldContextObject, FECFActionSettings Settings, FECFHandleBP& Handle)
 {
 	UECFWhileTrueExecuteBP* Proxy = NewObject<UECFWhileTrueExecuteBP>();
 	Proxy->Init(WorldContextObject, Settings);
