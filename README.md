@@ -495,7 +495,7 @@ bool Setup(int32 Param1, int32 Param2, TUniqueFunction<void()>&& Callback)
    The function must receive a pointer to the launching `UObject`, `FECFActionSettings`, `FECFInstanceId` (use invalid one if the action shouldn't be instanced) and every other argument that is used in the action's `Setup` function in the same order.
    It must return `FECFHandle`.
 ```cpp
-FECFHandle FEnhancedCodeFlow::NewAction(UObject* InOwner, int32 Param1, int32 Param2, TUniqueFunction<void()>&& Call, const FECFActionSettings& Settings = {})
+FECFHandle FEnhancedCodeFlow::NewAction(const UObject* InOwner, int32 Param1, int32 Param2, TUniqueFunction<void()>&& Call, const FECFActionSettings& Settings = {})
 {
   if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
     return ECF->AddAction<UECFNewAction>(InOwner, Settings, FECFInstanceId(), Param1, Param2, MoveTemp(Call));
