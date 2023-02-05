@@ -157,9 +157,11 @@ public:
 	 * @param InPredicate - a function that decides if the action should tick. 
 	 *                      If it returns true - it means the action will tick. Must be: []() -> bool.
 	 * @param InTickFunc -  a ticking function must be: [](float DeltaTime) -> void.
+	 * @param IncOmpleteFunc - called when the action stops. Will return bool indicating if the callback was called because of the timeout. Must be: [](bool) -> void.
+	 * @param InTimeOut - if greater than 0.f it will apply timeout to this action.
 	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
-	static FECFHandle WhileTrueExecute(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, const FECFActionSettings& Settings = {});
+	static FECFHandle WhileTrueExecute(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(bool)>&& InCompleteFunc, float InTimeOut = 0.f, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops "while true execute" actions.

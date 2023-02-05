@@ -21,7 +21,7 @@ protected:
 	bool bWithTimeOut = false;
 	bool bTimedOut = false;
 
-	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(bool)>&& InFunc, float InTimeOut = 0.f)
+	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(bool)>&& InFunc, float InTimeOut)
 	{
 		Predicate = MoveTemp(InPredicate);
 		Func = MoveTemp(InFunc);
@@ -56,11 +56,6 @@ protected:
 
 	void Tick(float DeltaTime) override 
 	{
-		if (Predicate())
-		{
-			Complete();
-			MarkAsFinished();
-		}
 		if (bWithTimeOut)
 		{
 			TimeOut -= DeltaTime;
@@ -69,7 +64,14 @@ protected:
 				bTimedOut = true;
 				Complete();
 				MarkAsFinished();
+				return;
 			}
+		}
+
+		if (Predicate())
+		{
+			Complete();
+			MarkAsFinished();
 		}
 	}
 

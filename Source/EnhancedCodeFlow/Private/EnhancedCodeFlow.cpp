@@ -150,10 +150,10 @@ void FFlow::RemoveAllWaitAndExecutes(const UObject* WorldContextObject, bool bCo
 
 /*^^^ While True Execute ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-FECFHandle FFlow::WhileTrueExecute(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, const FECFActionSettings& Settings/* = {}*/)
+FECFHandle FFlow::WhileTrueExecute(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(bool)>&& InCompleteFunc, float InTimeOut/* = 0.f*/, const FECFActionSettings& Settings/* = {}*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-		return ECF->AddAction<UECFWhileTrueExecute>(InOwner, Settings, FECFInstanceId(), MoveTemp(InPredicate), MoveTemp(InTickFunc));
+		return ECF->AddAction<UECFWhileTrueExecute>(InOwner, Settings, FECFInstanceId(), MoveTemp(InPredicate), MoveTemp(InTickFunc), MoveTemp(InCompleteFunc), InTimeOut);
 	else
 		return FECFHandle();
 }
