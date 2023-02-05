@@ -3,6 +3,8 @@
 #include "ECFWaitAndExecuteBP.h"
 #include "EnhancedCodeFlow.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 UECFWaitAndExecuteBP* UECFWaitAndExecuteBP::ECFWaitAndExecute(const UObject* WorldContextObject, float InTimeOut, FECFActionSettings Settings, FECFHandleBP& Handle)
 {
 	UECFWaitAndExecuteBP* Proxy = NewObject<UECFWaitAndExecuteBP>();
@@ -30,3 +32,5 @@ void UECFWaitAndExecuteBP::Predicate(bool bHasFinished)
 {
 	Proxy_HasFinished = bHasFinished;
 }
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

@@ -3,6 +3,8 @@
 #include "ECFWhileTrueExecuteBP.h"
 #include "EnhancedCodeFlow.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 UECFWhileTrueExecuteBP* UECFWhileTrueExecuteBP::ECFWhileTrueExecute(const UObject* WorldContextObject, float TimeOut, FECFActionSettings Settings, FECFHandleBP& Handle)
 {
 	UECFWhileTrueExecuteBP* Proxy = NewObject<UECFWhileTrueExecuteBP>();
@@ -34,3 +36,5 @@ void UECFWhileTrueExecuteBP::Predicate(bool bIsTrue)
 {
 	Proxy_IsTrue = bIsTrue;
 }
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

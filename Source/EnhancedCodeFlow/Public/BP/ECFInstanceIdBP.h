@@ -6,6 +6,8 @@
 #include "ECFInstanceId.h"
 #include "ECFInstanceIdBP.generated.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 USTRUCT(BlueprintType)
 struct ENHANCEDCODEFLOW_API FECFInstanceIdBP
 {
@@ -46,3 +48,5 @@ struct ENHANCEDCODEFLOW_API FECFInstanceIdBP
 		return *this;
 	}
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

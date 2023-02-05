@@ -3,6 +3,8 @@
 #include "ECFTimelineBP.h"
 #include "EnhancedCodeFlow.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 UECFTimelineBP* UECFTimelineBP::ECFTimeline(const UObject* WorldContextObject, float StartValue, float StopValue, float Time, FECFActionSettings Settings, FECFHandleBP& Handle, EECFBlendFunc BlendFunc /*= EECFBlendFunc::ECFBlend_Linear*/, float BlendExp /*= 1.f*/)
 {
 	UECFTimelineBP* Proxy = NewObject<UECFTimelineBP>();
@@ -23,3 +25,5 @@ UECFTimelineBP* UECFTimelineBP::ECFTimeline(const UObject* WorldContextObject, f
 
 	return Proxy;
 }
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

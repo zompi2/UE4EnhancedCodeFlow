@@ -6,6 +6,8 @@
 #include "ECFTypes.h"
 #include "ECFTimeline.generated.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFTimeline : public UECFActionBase
 {
@@ -91,3 +93,5 @@ protected:
 		}
 	}
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

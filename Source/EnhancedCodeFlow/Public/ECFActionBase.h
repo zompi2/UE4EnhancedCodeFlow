@@ -11,6 +11,8 @@
 #include "Misc/AssertionMacros.h"
 #include "ECFActionBase.generated.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFActionBase : public UObject
 {
@@ -240,3 +242,5 @@ private:
 	float AccumulatedTime = 0.f;
 	float MaxActionTime = 0.f;
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

@@ -5,6 +5,8 @@
 #include "ECFActionBase.h"
 #include "ECFDoOnce.generated.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFDoOnce : public UECFActionBase
 {
@@ -36,3 +38,5 @@ protected:
 		ExecFunc();
 	}
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

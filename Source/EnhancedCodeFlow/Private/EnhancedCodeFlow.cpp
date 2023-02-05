@@ -15,6 +15,8 @@
 #include "CodeFlowActions/ECFDoNTimes.h"
 #include "CodeFlowActions/ECFDoNoMoreThanXTime.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 /*^^^ ECF Flow Control Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 bool FFlow::IsActionRunning(const UObject* WorldContextObject, const FECFHandle& Handle)
@@ -259,3 +261,5 @@ void FEnhancedCodeFlow::RemoveAllDoNoMoreThanXTimes(const UObject* WorldContextO
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
 		ECF->RemoveActionsOfClass<UECFDoNoMoreThanXTime>(false, InOwner);
 }
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

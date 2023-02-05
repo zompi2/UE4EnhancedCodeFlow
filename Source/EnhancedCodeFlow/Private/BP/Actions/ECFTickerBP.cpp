@@ -3,6 +3,8 @@
 #include "ECFTickerBP.h"
 #include "EnhancedCodeFlow.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 UECFTickerBP* UECFTickerBP::ECFTicker(const UObject* WorldContextObject, float TickingTime, FECFActionSettings Settings, FECFHandleBP& Handle)
 {
 	UECFTickerBP* Proxy = NewObject<UECFTickerBP>();
@@ -22,3 +24,5 @@ UECFTickerBP* UECFTickerBP::ECFTicker(const UObject* WorldContextObject, float T
 
 	return Proxy;
 }
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

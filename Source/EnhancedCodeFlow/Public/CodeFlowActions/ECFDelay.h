@@ -5,6 +5,8 @@
 #include "ECFActionBase.h"
 #include "ECFDelay.generated.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFDelay : public UECFActionBase
 {
@@ -58,3 +60,5 @@ protected:
 		CallbackFunc();
 	}
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

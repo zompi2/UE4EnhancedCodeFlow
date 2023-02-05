@@ -3,6 +3,8 @@
 #include "ECFSubsystem.h"
 #include "ECFActionBase.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 DEFINE_STAT(STAT_ECF_ActionsCount);
 DEFINE_STAT(STAT_ECF_InstancesCount);
 
@@ -254,3 +256,5 @@ bool UECFSubsystem::IsActionValid(UECFActionBase* Action)
 {
 	return IsValid(Action) && (Action->HasAnyFlags(RF_BeginDestroyed | RF_FinishDestroyed) == false) && Action->IsValid();
 }
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

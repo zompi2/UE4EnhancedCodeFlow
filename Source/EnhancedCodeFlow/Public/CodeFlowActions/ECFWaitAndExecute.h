@@ -5,6 +5,8 @@
 #include "ECFActionBase.h"
 #include "ECFWaitAndExecute.generated.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFWaitAndExecute : public UECFActionBase
 {
@@ -80,3 +82,5 @@ protected:
 		Func(bTimedOut);
 	}
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

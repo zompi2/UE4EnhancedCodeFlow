@@ -6,6 +6,8 @@
 #include "ECFHandle.h"
 #include "ECFHandleBP.generated.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 USTRUCT(BlueprintType)
 struct ENHANCEDCODEFLOW_API FECFHandleBP
 {
@@ -46,3 +48,5 @@ struct ENHANCEDCODEFLOW_API FECFHandleBP
 		return *this;
 	}
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

@@ -5,6 +5,8 @@
 #include "ECFActionBase.h"
 #include "ECFWhileTrueExecute.generated.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFWhileTrueExecute : public UECFActionBase
 {
@@ -92,3 +94,5 @@ protected:
 		}
 	}
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

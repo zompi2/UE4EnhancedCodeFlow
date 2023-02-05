@@ -5,6 +5,8 @@
 #include "ECFActionBase.h"
 #include "ECFDoNoMoreThanXTime.generated.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFDoNoMoreThanXTime : public UECFActionBase
 {
@@ -76,3 +78,5 @@ protected:
 		}
 	}
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

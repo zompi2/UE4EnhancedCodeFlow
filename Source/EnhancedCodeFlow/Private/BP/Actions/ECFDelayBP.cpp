@@ -3,6 +3,8 @@
 #include "ECFDelayBP.h"
 #include "EnhancedCodeFlow.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 UECFDelayBP* UECFDelayBP::ECFDelay(const UObject* WorldContextObject, float DelayTime, FECFActionSettings Settings, FECFHandleBP& Handle)
 {
 	UECFDelayBP* Proxy = NewObject<UECFDelayBP>();
@@ -16,3 +18,5 @@ UECFDelayBP* UECFDelayBP::ECFDelay(const UObject* WorldContextObject, float Dela
 
 	return Proxy;
 }
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

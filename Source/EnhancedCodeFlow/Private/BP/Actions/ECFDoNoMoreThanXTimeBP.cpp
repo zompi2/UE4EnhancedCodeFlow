@@ -4,6 +4,8 @@
 #include "EnhancedCodeFlow.h"
 #include "BP/ECFBPLibrary.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 UECFDoNoMoreThanXTimeBP* UECFDoNoMoreThanXTimeBP::ECFDoNoMoreThanXTime(const UObject* WorldContextObject, float Time, FECFHandleBP& Handle, FECFInstanceIdBP& InstanceId, FECFActionSettings Settings, int32 MaxExecsEnqueued /*= 1*/)
 {
 	UECFDoNoMoreThanXTimeBP* Proxy = NewObject<UECFDoNoMoreThanXTimeBP>();
@@ -44,3 +46,5 @@ void UECFDoNoMoreThanXTimeBP::Activate()
 		OnExecute.Broadcast();
 	}
 }
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

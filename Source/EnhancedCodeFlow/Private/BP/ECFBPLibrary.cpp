@@ -5,6 +5,8 @@
 #include "BP/ECFBPLibrary.h"
 #include "EnhancedCodeFlow.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 /*^^^ ECF Flow Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 void UECFBPLibrary::ECFSetPause(const UObject* WorldContextObject, bool bPaused)
@@ -151,3 +153,5 @@ FString UECFBPLibrary::Conv_ECFInstanceIdToString(const FECFInstanceIdBP& Instan
 }
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

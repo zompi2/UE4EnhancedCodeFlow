@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 class ENHANCEDCODEFLOW_API FECFHandle
 {
 
@@ -81,3 +83,5 @@ protected:
 
 	uint64 Handle;
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

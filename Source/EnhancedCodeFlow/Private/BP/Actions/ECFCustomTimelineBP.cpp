@@ -3,6 +3,8 @@
 #include "ECFCustomTimelineBP.h"
 #include "EnhancedCodeFlow.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 UECFCustomTimelineBP* UECFCustomTimelineBP::ECFCustomTimeline(const UObject* WorldContextObject, UCurveFloat* CurveFloat, FECFActionSettings Settings, FECFHandleBP& Handle)
 {
 	UECFCustomTimelineBP* Proxy = NewObject<UECFCustomTimelineBP>();
@@ -22,3 +24,5 @@ UECFCustomTimelineBP* UECFCustomTimelineBP::ECFCustomTimeline(const UObject* Wor
 
 	return Proxy;
 }
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

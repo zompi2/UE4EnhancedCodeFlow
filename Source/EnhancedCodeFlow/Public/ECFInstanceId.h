@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "ECFTypes.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 class ENHANCEDCODEFLOW_API FECFInstanceId
 {
 
@@ -84,3 +86,5 @@ private:
 	
 	static uint64 DynamicIdCounter;
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

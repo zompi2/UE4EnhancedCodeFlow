@@ -5,6 +5,8 @@
 #include "ECFActionBase.h"
 #include "ECFDoNTimes.generated.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFDoNTimes : public UECFActionBase
 {
@@ -49,3 +51,5 @@ protected:
 		}
 	}
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

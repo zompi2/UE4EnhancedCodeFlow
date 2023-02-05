@@ -5,6 +5,8 @@
 #include "ECFActionBase.h"
 #include "ECFTicker.generated.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFTicker : public UECFActionBase
 {
@@ -62,3 +64,5 @@ protected:
 		}
 	}
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

@@ -7,6 +7,8 @@
 #include "Curves/CurveFloat.h"
 #include "ECFCustomTimeline.generated.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFCustomTimeline : public UECFActionBase
 {
@@ -89,3 +91,5 @@ private:
 		MarkAsFinished();
 	}
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

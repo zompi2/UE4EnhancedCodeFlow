@@ -3,6 +3,8 @@
 #include "ECFActionBP.h"
 #include "EnhancedCodeFlow.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
 void UECFActionBP::Init(const UObject* WorldContextObject, FECFActionSettings& Settings)
 {
 	Proxy_WorldContextObject = WorldContextObject;
@@ -23,3 +25,5 @@ void UECFActionBP::Activate()
 		FFlow::ResumeAction(Proxy_WorldContextObject, Proxy_Handle);
 	}
 }
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION
