@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
 
 #include "ECFTimelineBP.h"
 #include "EnhancedCodeFlow.h"
