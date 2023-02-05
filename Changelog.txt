@@ -1,3 +1,11 @@
+###### 3.0.0
+* This version will probably break compatiblity with the previous one. Update with caution!
+* WorldContextObjects and Action Owners are passed as const UObject* now.
+* Added option to setup TimeOuts for WaitAndExecute and WhileTrueExecute actions.
+* Added OnComplete delegate to WhileTrueExecute action.
+
+=======================================================================================
+
 ###### 2.1.2
 * Fixed an issue which could lead to duplicating InstanceIds.
 
@@ -23,6 +31,8 @@
 * Added ensure msgs for situations when actions couldn't be executed properly.
 * Removed Macro node for TimeLock and gave a convenient node to validate InstanceIds.
 * Ensure the Custom Timeline always has a valid owner when performing it's actions.
+
+=======================================================================================
 
 ###### 1.6.1
 * Fixed ECFActionSettings macros
