@@ -3,7 +3,7 @@
 #include "ECFWaitAndExecuteBP.h"
 #include "EnhancedCodeFlow.h"
 
-UECFWaitAndExecuteBP* UECFWaitAndExecuteBP::ECFWaitAndExecute(const UObject* WorldContextObject, FECFActionSettings Settings, FECFHandleBP& Handle)
+UECFWaitAndExecuteBP* UECFWaitAndExecuteBP::ECFWaitAndExecute(const UObject* WorldContextObject, float InTimeOut, FECFActionSettings Settings, FECFHandleBP& Handle)
 {
 	UECFWaitAndExecuteBP* Proxy = NewObject<UECFWaitAndExecuteBP>();
 	Proxy->Init(WorldContextObject, Settings);
@@ -13,14 +13,14 @@ UECFWaitAndExecuteBP* UECFWaitAndExecuteBP::ECFWaitAndExecute(const UObject* Wor
 	Proxy->Proxy_Handle = FFlow::WaitAndExecute(WorldContextObject,
 		[Proxy]()
 		{
-			Proxy->OnWait.Broadcast(Proxy);
+			Proxy->OnWait.Broadcast(Proxy, false);
 			return Proxy->Proxy_HasFinished;
 		},
-		[Proxy]()
+		[Proxy](bool bTimedOut)
 		{
-			Proxy->OnExecute.Broadcast(Proxy);
+			Proxy->OnExecute.Broadcast(Proxy, bTimedOut);
 		},
-	Settings);
+	InTimeOut, Settings);
 	Handle = FECFHandleBP(Proxy->Proxy_Handle);
 
 	return Proxy;

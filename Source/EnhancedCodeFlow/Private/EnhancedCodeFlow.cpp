@@ -134,10 +134,10 @@ void FFlow::RemoveAllDelays(const UObject* WorldContextObject, bool bComplete/* 
 
 /*^^^ Wait And Execute ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-FECFHandle FFlow::WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void()>&& InCallbackFunc, const FECFActionSettings& Settings/* = {}*/)
+FECFHandle FFlow::WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(bool)>&& InCallbackFunc, float InTimeOut/* = 0.f*/, const FECFActionSettings& Settings/* = {}*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-		return ECF->AddAction<UECFWaitAndExecute>(InOwner, Settings, FECFInstanceId(), MoveTemp(InPredicate), MoveTemp(InCallbackFunc));
+		return ECF->AddAction<UECFWaitAndExecute>(InOwner, Settings, FECFInstanceId(), MoveTemp(InPredicate), MoveTemp(InCallbackFunc), InTimeOut);
 	else
 		return FECFHandle();
 }
