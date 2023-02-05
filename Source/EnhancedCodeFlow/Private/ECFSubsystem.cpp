@@ -246,7 +246,7 @@ void UECFSubsystem::FinishAction(UECFActionBase* Action, bool bComplete)
 	{
 		if (bComplete)
 		{
-			Action->Complete();
+			Action->Complete(true);
 		}
 		Action->MarkAsFinished();
 	}

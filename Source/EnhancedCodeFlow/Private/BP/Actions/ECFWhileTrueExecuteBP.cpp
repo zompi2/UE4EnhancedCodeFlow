@@ -15,16 +15,16 @@ UECFWhileTrueExecuteBP* UECFWhileTrueExecuteBP::ECFWhileTrueExecute(const UObjec
 	Proxy->Proxy_Handle = FFlow::WhileTrueExecute(WorldContextObject,
 		[Proxy]()
 		{
-			Proxy->OnWhile.Broadcast(Proxy, 0.f, false);
+			Proxy->OnWhile.Broadcast(Proxy, 0.f, false, false);
 			return Proxy->Proxy_IsTrue;
 		},
 		[Proxy](float DeltaTime)
 		{
-			Proxy->OnExecute.Broadcast(Proxy, DeltaTime, false);
+			Proxy->OnExecute.Broadcast(Proxy, DeltaTime, false, false);
 		},
-		[Proxy](bool bTimedOut)
+		[Proxy](bool bTimedOut, bool bStopped)
 		{
-			Proxy->OnComplete.Broadcast(Proxy, 0.f, bTimedOut);
+			Proxy->OnComplete.Broadcast(Proxy, 0.f, bTimedOut, bStopped);
 		},
 	TimeOut, Settings);
 	Handle = FECFHandleBP(Proxy->Proxy_Handle);

@@ -13,11 +13,11 @@ UECFTickerBP* UECFTickerBP::ECFTicker(const UObject* WorldContextObject, float T
 	Proxy->Proxy_Handle = FFlow::AddTicker(WorldContextObject, TickingTime,
 		[Proxy](float DeltaTime)
 		{
-			Proxy->OnTick.Broadcast(DeltaTime);
+			Proxy->OnTick.Broadcast(DeltaTime, false);
 		}, 
-		[Proxy]()
+		[Proxy](bool bStopped)
 		{
-			Proxy->OnComplete.Broadcast(0.f);
+			Proxy->OnComplete.Broadcast(0.f, bStopped);
 		}, 
 	Settings);
 	Handle = FECFHandleBP(Proxy->Proxy_Handle);

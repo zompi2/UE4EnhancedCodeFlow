@@ -5,7 +5,7 @@
 #include "../ECFActionBP.h"
 #include "ECFTimelineBP.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnECFTimelineBPEvent, float, Value, float, Time);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnECFTimelineBPEvent, float, Value, float, Time, bool, bStopped);
 
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFTimelineBP : public UECFActionBP

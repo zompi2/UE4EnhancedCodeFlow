@@ -5,7 +5,7 @@
 #include "../ECFActionBP.h"
 #include "ECFWaitAndExecuteBP.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnECFWaitAndExecuteBPEvent, class UECFWaitAndExecuteBP*, Action, bool, bTimedOut);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnECFWaitAndExecuteBPEvent, class UECFWaitAndExecuteBP*, Action, bool, bTimedOut, bool, bStopped);
 
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFWaitAndExecuteBP : public UECFActionBP

@@ -19,7 +19,7 @@ class ENHANCEDCODEFLOW_API UECFCustomTimeline : public UECFActionBase
 protected:
 
 	TUniqueFunction<void(float, float)> TickFunc;
-	TUniqueFunction<void(float, float)> CallbackFunc;
+	TUniqueFunction<void(float, float, bool)> CallbackFunc;
 	FTimeline MyTimeline;
 
 	float CurrentValue;
@@ -28,7 +28,7 @@ protected:
 	UPROPERTY(Transient)
 	UCurveFloat* CurveFloat;
 
-	bool Setup(UCurveFloat* InCurveFloat, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc = nullptr)
+	bool Setup(UCurveFloat* InCurveFloat, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float, bool)>&& InCallbackFunc = nullptr)
 	{
 		TickFunc = MoveTemp(InTickFunc);
 		CallbackFunc = MoveTemp(InCallbackFunc);
@@ -60,11 +60,11 @@ protected:
 		MyTimeline.TickTimeline(DeltaTime);
 	}
 
-	void Complete() override
+	void Complete(bool bStopped) override
 	{
 		if (CallbackFunc)
 		{
-			CallbackFunc(CurrentValue, CurrentTime);
+			CallbackFunc(CurrentValue, CurrentTime, bStopped);
 		}
 	}
 
@@ -86,7 +86,7 @@ private:
 	{
 		if (HasValidOwner())
 		{
-			Complete();
+			Complete(false);
 		}
 		MarkAsFinished();
 	}

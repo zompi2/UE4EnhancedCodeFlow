@@ -16,11 +16,11 @@ class ENHANCEDCODEFLOW_API UECFDelay : public UECFActionBase
 
 protected:
 
-	TUniqueFunction<void()> CallbackFunc;
+	TUniqueFunction<void(bool)> CallbackFunc;
 	float DelayTime;
 	float CurrentTime;
 
-	bool Setup(float InDelayTime, TUniqueFunction<void()>&& InCallbackFunc)
+	bool Setup(float InDelayTime, TUniqueFunction<void(bool)>&& InCallbackFunc)
 	{
 		DelayTime = InDelayTime;
 		CallbackFunc = MoveTemp(InCallbackFunc);
@@ -50,14 +50,14 @@ protected:
 		CurrentTime += DeltaTime;
 		if (CurrentTime > DelayTime)
 		{
-			Complete();
+			Complete(false);
 			MarkAsFinished();
 		}
 	}
 
-	void Complete() override
+	void Complete(bool bStopped) override
 	{
-		CallbackFunc();
+		CallbackFunc(bStopped);
 	}
 };
 

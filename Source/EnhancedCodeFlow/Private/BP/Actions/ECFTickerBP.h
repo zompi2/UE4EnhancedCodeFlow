@@ -5,7 +5,7 @@
 #include "../ECFActionBP.h"
 #include "ECFTickerBP.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnECFTickerBPEvent, float, DeltaTime);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnECFTickerBPEvent, float, DeltaTime, bool, bStopped);
 
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFTickerBP : public UECFActionBP

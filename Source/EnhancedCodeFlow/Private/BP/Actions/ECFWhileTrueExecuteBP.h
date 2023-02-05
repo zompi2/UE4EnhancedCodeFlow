@@ -5,7 +5,7 @@
 #include "../ECFActionBP.h"
 #include "ECFWhileTrueExecuteBP.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnECFWhileTrueExecuteBPEvent, class UECFWhileTrueExecuteBP*, Action, float, DeltaTime, bool, bTimedOut);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnECFWhileTrueExecuteBPEvent, class UECFWhileTrueExecuteBP*, Action, float, DeltaTime, bool, bTimedOut, bool, bStopped);
 
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFWhileTrueExecuteBP : public UECFActionBP

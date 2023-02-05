@@ -13,11 +13,11 @@ UECFCustomTimelineBP* UECFCustomTimelineBP::ECFCustomTimeline(const UObject* Wor
 	Proxy->Proxy_Handle = FFlow::AddCustomTimeline(WorldContextObject, CurveFloat,
 		[Proxy](float Value, float Time)
 		{
-			Proxy->OnTick.Broadcast(Value, Time);
+			Proxy->OnTick.Broadcast(Value, Time, false);
 		},
-		[Proxy](float Value, float Time)
+		[Proxy](float Value, float Time, bool bStopped)
 		{
-			Proxy->OnFinished.Broadcast(Value, Time);
+			Proxy->OnFinished.Broadcast(Value, Time, bStopped);
 		},
 	Settings);
 	Handle = FECFHandleBP(Proxy->Proxy_Handle);

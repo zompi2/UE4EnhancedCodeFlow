@@ -18,13 +18,13 @@ protected:
 
 	TUniqueFunction<bool()> Predicate;
 	TUniqueFunction<void(float)> TickFunc;
-	TUniqueFunction<void(bool)> CompleteFunc;
+	TUniqueFunction<void(bool, bool)> CompleteFunc;
 
 	float TimeOut = 0.f;
 	bool bWithTimeOut = false;
 	bool bTimedOut = false;
 
-	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(bool)>&& InCompleteFunc, float InTimeOut)
+	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(bool, bool)>&& InCompleteFunc, float InTimeOut)
 	{
 		Predicate = MoveTemp(InPredicate);
 		TickFunc = MoveTemp(InTickFunc);
@@ -36,7 +36,7 @@ protected:
 			{
 				if (CompleteFunc)
 				{
-					CompleteFunc(false);
+					CompleteFunc(false, false);
 				}
 				return false;
 			}
@@ -69,7 +69,7 @@ protected:
 			if (TimeOut <= 0.f)
 			{
 				bTimedOut = true;
-				Complete();
+				Complete(false);
 				MarkAsFinished();
 				return;
 			}
@@ -81,16 +81,16 @@ protected:
 		}
 		else
 		{
-			Complete();
+			Complete(false);
 			MarkAsFinished();
 		}
 	}
 
-	void Complete() override
+	void Complete(bool bStopped) override
 	{
 		if (CompleteFunc)
 		{
-			CompleteFunc(bTimedOut);
+			CompleteFunc(bTimedOut, bStopped);
 		}
 	}
 };

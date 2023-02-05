@@ -80,7 +80,7 @@ protected:
 	virtual void Tick(float DeltaTime) {}
 
 	// Function called when the action is requested to be completed before it ends.
-	virtual void Complete() {}
+	virtual void Complete(bool bStopped) {}
 
 	// Function called when this action is instanced and something tried to call it again.
 	virtual void RetriggeredInstancedAction() {}

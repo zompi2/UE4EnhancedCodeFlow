@@ -5,7 +5,7 @@
 #include "../ECFActionBP.h"
 #include "ECFDelayBP.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnECFDelayBPEvent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnECFDelayBPEvent, bool, bStopped);
 
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFDelayBP : public UECFActionBP

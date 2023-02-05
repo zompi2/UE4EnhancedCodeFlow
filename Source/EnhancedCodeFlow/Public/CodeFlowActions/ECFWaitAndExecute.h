@@ -17,13 +17,13 @@ class ENHANCEDCODEFLOW_API UECFWaitAndExecute : public UECFActionBase
 protected:
 
 	TUniqueFunction<bool()> Predicate;
-	TUniqueFunction<void(bool)> Func;
+	TUniqueFunction<void(bool, bool)> Func;
 
 	float TimeOut = 0.f;
 	bool bWithTimeOut = false;
 	bool bTimedOut = false;
 
-	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(bool)>&& InFunc, float InTimeOut)
+	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(bool, bool)>&& InFunc, float InTimeOut)
 	{
 		Predicate = MoveTemp(InPredicate);
 		Func = MoveTemp(InFunc);
@@ -32,7 +32,7 @@ protected:
 		{
 			if (Predicate())
 			{
-				Func(false);
+				Func(false, false);
 				return false;
 			}
 			if (InTimeOut > 0.f)
@@ -64,7 +64,7 @@ protected:
 			if (TimeOut <= 0.f)
 			{
 				bTimedOut = true;
-				Complete();
+				Complete(false);
 				MarkAsFinished();
 				return;
 			}
@@ -72,14 +72,14 @@ protected:
 
 		if (Predicate())
 		{
-			Complete();
+			Complete(false);
 			MarkAsFinished();
 		}
 	}
 
-	void Complete() override
+	void Complete(bool bStopped) override
 	{
-		Func(bTimedOut);
+		Func(bTimedOut, bStopped);
 	}
 };
 

@@ -15,12 +15,12 @@ UECFWaitAndExecuteBP* UECFWaitAndExecuteBP::ECFWaitAndExecute(const UObject* Wor
 	Proxy->Proxy_Handle = FFlow::WaitAndExecute(WorldContextObject,
 		[Proxy]()
 		{
-			Proxy->OnWait.Broadcast(Proxy, false);
+			Proxy->OnWait.Broadcast(Proxy, false, false);
 			return Proxy->Proxy_HasFinished;
 		},
-		[Proxy](bool bTimedOut)
+		[Proxy](bool bTimedOut, bool bStopped)
 		{
-			Proxy->OnExecute.Broadcast(Proxy, bTimedOut);
+			Proxy->OnExecute.Broadcast(Proxy, bTimedOut, bStopped);
 		},
 	InTimeOut, Settings);
 	Handle = FECFHandleBP(Proxy->Proxy_Handle);
