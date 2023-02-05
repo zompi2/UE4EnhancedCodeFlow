@@ -3,6 +3,9 @@
 #include "ECFSubsystem.h"
 #include "ECFActionBase.h"
 
+DEFINE_STAT(STAT_ECF_ActionsCount);
+DEFINE_STAT(STAT_ECF_InstancesCount);
+
 void UECFSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	LastHandleId.Invalidate();
@@ -33,6 +36,10 @@ UECFSubsystem* UECFSubsystem::Get(const UObject* WorldContextObject)
 
 void UECFSubsystem::Tick(float DeltaTime)
 {
+#if STATS
+	DECLARE_SCOPE_CYCLE_COUNTER(TEXT("Tick"), STAT_ECF_TickAll, STATGROUP_ECF);
+#endif
+
 	// Do nothing when the whole subsystem is paused
 	if (bIsECFPaused)
 	{
@@ -50,10 +57,20 @@ void UECFSubsystem::Tick(float DeltaTime)
 	PendingAddActions.Empty();
 
 	// Tick all active actions
+#if STATS
+	SET_DWORD_STAT(STAT_ECF_ActionsCount, Actions.Num());
+	SET_DWORD_STAT(STAT_ECF_InstancesCount, 0);
+#endif
 	for (UECFActionBase* Action : Actions)
 	{
 		if (IsActionValid(Action))
 		{
+#if STATS
+			if (Action->InstanceId.IsValid())
+			{
+				INC_DWORD_STAT(STAT_ECF_InstancesCount);
+			}
+#endif
 			Action->DoTick(DeltaTime);
 		}
 	}

@@ -11,6 +11,9 @@
 #include "ECFActionSettings.h"
 #include "ECFSubsystem.generated.h"
 
+DECLARE_STATS_GROUP(TEXT("ECF"), STATGROUP_ECF, STATCAT_Advanced);
+DECLARE_DWORD_COUNTER_STAT_EXTERN(TEXT("Actions"), STAT_ECF_ActionsCount, STATGROUP_ECF, ENHANCEDCODEFLOW_API);
+DECLARE_DWORD_COUNTER_STAT_EXTERN(TEXT("Instances"), STAT_ECF_InstancesCount, STATGROUP_ECF, ENHANCEDCODEFLOW_API);
 
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFSubsystem : public UWorldSubsystem, public FTickableGameObject
