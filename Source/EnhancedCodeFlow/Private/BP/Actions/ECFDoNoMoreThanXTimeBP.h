@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -18,7 +18,7 @@ public:
 	FOnECFDoNoMoreThanXTimeBPEvent OnExecute;
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings,MaxExecsEnqueued", ToolTip = "Execute specified action no more often thant the given time. Allow to enqueue actions no more than given times.", DisplayName = "ECF - Do No More Than X Time"), Category = "ECF")
-	static UECFDoNoMoreThanXTimeBP* ECFDoNoMoreThanXTime(UObject* WorldContextObject, float Time, FECFHandleBP& Handle, UPARAM(Ref) FECFInstanceIdBP& InstanceId, FECFActionSettings Settings, int32 MaxExecsEnqueued = 1);
+	static UECFDoNoMoreThanXTimeBP* ECFDoNoMoreThanXTime(const UObject* WorldContextObject, float Time, FECFHandleBP& Handle, UPARAM(Ref) FECFInstanceIdBP& InstanceId, FECFActionSettings Settings, int32 MaxExecsEnqueued = 1);
 
 	bool bExecuteOnActivation = false;
 	

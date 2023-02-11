@@ -1,9 +1,11 @@
-// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
 #include "BP/ECFBPLibrary.h"
 #include "EnhancedCodeFlow.h"
+
+ECF_PRAGMA_DISABLE_OPTIMIZATION
 
 /*^^^ ECF Flow Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
@@ -82,7 +84,7 @@ void UECFBPLibrary::IsECFInstanceIdValid(bool& bIsValid, const FECFInstanceIdBP&
 
 /*^^^ Time Lock ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-void UECFBPLibrary::ECFTimeLock(UObject* WorldContextObject, ETimeLockOutputType& OutExecs, FECFHandleBP& OutHandle, float LockTime, FECFInstanceIdBP& InstanceId, FECFActionSettings Settings)
+void UECFBPLibrary::ECFTimeLock(const UObject* WorldContextObject, ETimeLockOutputType& OutExecs, FECFHandleBP& OutHandle, float LockTime, FECFInstanceIdBP& InstanceId, FECFActionSettings Settings)
 {
 	if (InstanceId.InstanceId.IsValid() == false)
 	{
@@ -151,3 +153,5 @@ FString UECFBPLibrary::Conv_ECFInstanceIdToString(const FECFInstanceIdBP& Instan
 }
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

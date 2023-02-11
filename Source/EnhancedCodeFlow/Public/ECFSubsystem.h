@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -11,6 +11,11 @@
 #include "ECFActionSettings.h"
 #include "ECFSubsystem.generated.h"
 
+DECLARE_STATS_GROUP(TEXT("ECF"), STATGROUP_ECF, STATCAT_Advanced);
+DECLARE_DWORD_COUNTER_STAT_EXTERN(TEXT("Actions"), STAT_ECF_ActionsCount, STATGROUP_ECF, ENHANCEDCODEFLOW_API);
+DECLARE_DWORD_COUNTER_STAT_EXTERN(TEXT("Instances"), STAT_ECF_InstancesCount, STATGROUP_ECF, ENHANCEDCODEFLOW_API);
+
+ECF_PRAGMA_DISABLE_OPTIMIZATION
 
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFSubsystem : public UWorldSubsystem, public FTickableGameObject
@@ -28,12 +33,12 @@ protected:
 	/** FTickableGameObject interface implementation */
 	void Tick(float DeltaTime) override;
 	TStatId GetStatId() const override { RETURN_QUICK_DECLARE_CYCLE_STAT(ECFSubsystem, STATGROUP_Tickables); }
-	bool IsTickable() const override { return true; }
+	bool IsTickable() const override { return bCanTick; }
 	bool IsTickableWhenPaused() const override { return true; }
 
 	// Add Action to list. Returns the Action id.
 	template<typename T, typename ... Ts>
-	FECFHandle AddAction(UObject* InOwner, const FECFActionSettings& Settings, const FECFInstanceId& InstanceId, Ts&& ... Args)
+	FECFHandle AddAction(const UObject* InOwner, const FECFActionSettings& Settings, const FECFInstanceId& InstanceId, Ts&& ... Args)
 	{
 		// There can be only one instanced action running at the same time. When trying to add an
 		// action with existing instance id - return the currently running action's handle.
@@ -72,7 +77,7 @@ protected:
 	void ResumeAction(const FECFHandle& HandleId);
 
 	// Checks if this action is not paused. Returns false if there is no action.
-	bool IsActionPaused(const FECFHandle& HandleId, bool &bIsPaused);
+	bool IsActionPaused(const FECFHandle& HandleId, bool &bIsPaused) const;
 
 	// Remove Action of given HandleId from list. 
 	void RemoveAction(FECFHandle& HandleId, bool bComplete);
@@ -94,7 +99,7 @@ protected:
 	void RemoveAllActions(bool bComplete, UObject* InOwner);
 
 	// Check if there is an instanced action running with the given instance id and returns it.
-	UECFActionBase* GetInstancedAction(const FECFInstanceId& InstanceId);
+	UECFActionBase* GetInstancedAction(const FECFInstanceId& InstanceId) const;
 	
 	// List of active actions.
 	UPROPERTY()
@@ -119,4 +124,10 @@ protected:
 	// Utility function to check action validity.
 	static bool IsActionValid(UECFActionBase* Action);
 
+private:
+
+	// Indicates if this subsystem should tick
+	bool bCanTick = false;
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

@@ -1,9 +1,11 @@
-// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
 #include "ECFActionBase.h"
 #include "ECFDelay.generated.h"
+
+ECF_PRAGMA_DISABLE_OPTIMIZATION
 
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFDelay : public UECFActionBase
@@ -14,11 +16,11 @@ class ENHANCEDCODEFLOW_API UECFDelay : public UECFActionBase
 
 protected:
 
-	TUniqueFunction<void()> CallbackFunc;
+	TUniqueFunction<void(bool)> CallbackFunc;
 	float DelayTime;
 	float CurrentTime;
 
-	bool Setup(float InDelayTime, TUniqueFunction<void()>&& InCallbackFunc)
+	bool Setup(float InDelayTime, TUniqueFunction<void(bool)>&& InCallbackFunc)
 	{
 		DelayTime = InDelayTime;
 		CallbackFunc = MoveTemp(InCallbackFunc);
@@ -48,13 +50,15 @@ protected:
 		CurrentTime += DeltaTime;
 		if (CurrentTime > DelayTime)
 		{
-			Complete();
+			Complete(false);
 			MarkAsFinished();
 		}
 	}
 
-	void Complete() override
+	void Complete(bool bStopped) override
 	{
-		CallbackFunc();
+		CallbackFunc(bStopped);
 	}
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

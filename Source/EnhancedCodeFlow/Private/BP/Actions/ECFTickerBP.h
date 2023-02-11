@@ -1,11 +1,11 @@
-// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
 #include "../ECFActionBP.h"
 #include "ECFTickerBP.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnECFTickerBPEvent, float, DeltaTime);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnECFTickerBPEvent, float, DeltaTime, bool, bStopped);
 
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFTickerBP : public UECFActionBP
@@ -21,5 +21,5 @@ public:
 	FOnECFTickerBPEvent OnComplete;
 
 	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings", ToolTip = "Creates a ticker. It can tick specified amount of time or until it won't be stopped or when owning object won't be destroyed.\nTo run ticker infinitely set TickingTime to -1.", DisplayName = "ECF - Ticker"), Category = "ECF")
-	static UECFTickerBP* ECFTicker(UObject* WorldContextObject, float TickingTime, FECFActionSettings Settings, FECFHandleBP& Handle);
+	static UECFTickerBP* ECFTicker(const UObject* WorldContextObject, float TickingTime, FECFActionSettings Settings, FECFHandleBP& Handle);
 };

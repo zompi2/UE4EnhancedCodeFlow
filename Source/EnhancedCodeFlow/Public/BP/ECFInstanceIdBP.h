@@ -1,10 +1,12 @@
-﻿// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
+﻿// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "ECFInstanceId.h"
 #include "ECFInstanceIdBP.generated.h"
+
+ECF_PRAGMA_DISABLE_OPTIMIZATION
 
 USTRUCT(BlueprintType)
 struct ENHANCEDCODEFLOW_API FECFInstanceIdBP
@@ -46,3 +48,5 @@ struct ENHANCEDCODEFLOW_API FECFInstanceIdBP
 		return *this;
 	}
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

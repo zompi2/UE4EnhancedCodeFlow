@@ -1,9 +1,11 @@
-// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
 #include "ECFActionBase.h"
 #include "ECFDoNoMoreThanXTime.generated.h"
+
+ECF_PRAGMA_DISABLE_OPTIMIZATION
 
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFDoNoMoreThanXTime : public UECFActionBase
@@ -76,3 +78,5 @@ protected:
 		}
 	}
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

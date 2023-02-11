@@ -1,9 +1,11 @@
-// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
 
 #include "ECFActionBP.h"
 #include "EnhancedCodeFlow.h"
 
-void UECFActionBP::Init(UObject* WorldContextObject, FECFActionSettings& Settings)
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
+void UECFActionBP::Init(const UObject* WorldContextObject, FECFActionSettings& Settings)
 {
 	Proxy_WorldContextObject = WorldContextObject;
 	Proxy_IsPausedAtStart = Settings.bStartPaused;
@@ -23,3 +25,5 @@ void UECFActionBP::Activate()
 		FFlow::ResumeAction(Proxy_WorldContextObject, Proxy_Handle);
 	}
 }
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

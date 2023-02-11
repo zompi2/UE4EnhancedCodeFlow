@@ -1,8 +1,10 @@
-// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
 #include "CoreMinimal.h"
+
+ECF_PRAGMA_DISABLE_OPTIMIZATION
 
 class ENHANCEDCODEFLOW_API FECFHandle
 {
@@ -81,3 +83,5 @@ protected:
 
 	uint64 Handle;
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

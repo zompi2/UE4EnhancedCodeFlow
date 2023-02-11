@@ -1,9 +1,11 @@
-// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
 
 #include "ECFTickerBP.h"
 #include "EnhancedCodeFlow.h"
 
-UECFTickerBP* UECFTickerBP::ECFTicker(UObject* WorldContextObject, float TickingTime, FECFActionSettings Settings, FECFHandleBP& Handle)
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
+UECFTickerBP* UECFTickerBP::ECFTicker(const UObject* WorldContextObject, float TickingTime, FECFActionSettings Settings, FECFHandleBP& Handle)
 {
 	UECFTickerBP* Proxy = NewObject<UECFTickerBP>();
 	Proxy->Init(WorldContextObject, Settings);
@@ -11,14 +13,16 @@ UECFTickerBP* UECFTickerBP::ECFTicker(UObject* WorldContextObject, float Ticking
 	Proxy->Proxy_Handle = FFlow::AddTicker(WorldContextObject, TickingTime,
 		[Proxy](float DeltaTime)
 		{
-			Proxy->OnTick.Broadcast(DeltaTime);
+			Proxy->OnTick.Broadcast(DeltaTime, false);
 		}, 
-		[Proxy]()
+		[Proxy](bool bStopped)
 		{
-			Proxy->OnComplete.Broadcast(0.f);
+			Proxy->OnComplete.Broadcast(0.f, bStopped);
 		}, 
 	Settings);
 	Handle = FECFHandleBP(Proxy->Proxy_Handle);
 
 	return Proxy;
 }
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

@@ -1,3 +1,15 @@
+###### 3.0.0
+* This version will probably break compatiblity with the previous one. Update with caution!
+* WorldContextObjects and Action Owners are passed as const UObject* now.
+* Added option to setup TimeOuts for WaitAndExecute and WhileTrueExecute actions.
+* Added bStopped property to every completion callback that informs if the action was stopped manually.
+* Added OnComplete delegate to WhileTrueExecute action.
+* Added Stat command to monitor the plugin performance.
+* Added option to disable/enable compiler optimizations for easier debugging (to be set in the plugin's Build.cs file).
+* Ensure only those instances of the subsystem are ticking that were created withing the game world.
+
+=======================================================================================
+
 ###### 2.1.2
 * Fixed an issue which could lead to duplicating InstanceIds.
 
@@ -23,6 +35,8 @@
 * Added ensure msgs for situations when actions couldn't be executed properly.
 * Removed Macro node for TimeLock and gave a convenient node to validate InstanceIds.
 * Ensure the Custom Timeline always has a valid owner when performing it's actions.
+
+=======================================================================================
 
 ###### 1.6.1
 * Fixed ECFActionSettings macros

@@ -1,9 +1,11 @@
-// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
 
 #include "ECFTimelineBP.h"
 #include "EnhancedCodeFlow.h"
 
-UECFTimelineBP* UECFTimelineBP::ECFTimeline(UObject* WorldContextObject, float StartValue, float StopValue, float Time, FECFActionSettings Settings, FECFHandleBP& Handle, EECFBlendFunc BlendFunc /*= EECFBlendFunc::ECFBlend_Linear*/, float BlendExp /*= 1.f*/)
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
+UECFTimelineBP* UECFTimelineBP::ECFTimeline(const UObject* WorldContextObject, float StartValue, float StopValue, float Time, FECFActionSettings Settings, FECFHandleBP& Handle, EECFBlendFunc BlendFunc /*= EECFBlendFunc::ECFBlend_Linear*/, float BlendExp /*= 1.f*/)
 {
 	UECFTimelineBP* Proxy = NewObject<UECFTimelineBP>();
 	Proxy->Init(WorldContextObject, Settings);
@@ -12,14 +14,16 @@ UECFTimelineBP* UECFTimelineBP::ECFTimeline(UObject* WorldContextObject, float S
 		StartValue, StopValue, Time, 
 		[Proxy](float Value, float Time)
 		{
-			Proxy->OnTick.Broadcast(Value, Time);
+			Proxy->OnTick.Broadcast(Value, Time, false);
 		},
-		[Proxy](float Value, float Time)
+		[Proxy](float Value, float Time, bool bStopped)
 		{
-			Proxy->OnFinished.Broadcast(Value, Time);
+			Proxy->OnFinished.Broadcast(Value, Time, false);
 		}, 
 		BlendFunc, BlendExp, Settings);
 	Handle = FECFHandleBP(Proxy->Proxy_Handle);
 
 	return Proxy;
 }
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

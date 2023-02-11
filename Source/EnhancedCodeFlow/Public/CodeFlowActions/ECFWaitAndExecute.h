@@ -1,9 +1,11 @@
-// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
 #include "ECFActionBase.h"
 #include "ECFWaitAndExecute.generated.h"
+
+ECF_PRAGMA_DISABLE_OPTIMIZATION
 
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFWaitAndExecute : public UECFActionBase
@@ -15,9 +17,13 @@ class ENHANCEDCODEFLOW_API UECFWaitAndExecute : public UECFActionBase
 protected:
 
 	TUniqueFunction<bool()> Predicate;
-	TUniqueFunction<void()> Func;
+	TUniqueFunction<void(bool, bool)> Func;
 
-	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void()>&& InFunc)
+	float TimeOut = 0.f;
+	bool bWithTimeOut = false;
+	bool bTimedOut = false;
+
+	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(bool, bool)>&& InFunc, float InTimeOut)
 	{
 		Predicate = MoveTemp(InPredicate);
 		Func = MoveTemp(InFunc);
@@ -26,8 +32,20 @@ protected:
 		{
 			if (Predicate())
 			{
-				Func();
+				Func(false, false);
 				return false;
+			}
+			if (InTimeOut > 0.f)
+			{
+				bWithTimeOut = true;
+				bTimedOut = false;
+				TimeOut = InTimeOut;
+				SetMaxActionTime(TimeOut);
+			}
+			else
+			{
+				bWithTimeOut = false;
+				bTimedOut = false;
 			}
 			return true;
 		}
@@ -40,15 +58,29 @@ protected:
 
 	void Tick(float DeltaTime) override 
 	{
+		if (bWithTimeOut)
+		{
+			TimeOut -= DeltaTime;
+			if (TimeOut <= 0.f)
+			{
+				bTimedOut = true;
+				Complete(false);
+				MarkAsFinished();
+				return;
+			}
+		}
+
 		if (Predicate())
 		{
-			Complete();
+			Complete(false);
 			MarkAsFinished();
 		}
 	}
 
-	void Complete() override
+	void Complete(bool bStopped) override
 	{
-		Func();
+		Func(bTimedOut, bStopped);
 	}
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

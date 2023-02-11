@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -10,6 +10,8 @@
 #include "ECFActionSettings.h"
 #include "Misc/AssertionMacros.h"
 #include "ECFActionBase.generated.h"
+
+ECF_PRAGMA_DISABLE_OPTIMIZATION
 
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFActionBase : public UObject
@@ -52,7 +54,7 @@ public:
 	}
 
 	// Checks if this action has this instance id.
-	bool HasInstanceId(const FECFInstanceId& InstanceIdToCheck)
+	bool HasInstanceId(const FECFInstanceId& InstanceIdToCheck) const
 	{
 		if (InstanceId.IsValid() && InstanceIdToCheck.IsValid())
 		{
@@ -78,7 +80,7 @@ protected:
 	virtual void Tick(float DeltaTime) {}
 
 	// Function called when the action is requested to be completed before it ends.
-	virtual void Complete() {}
+	virtual void Complete(bool bStopped) {}
 
 	// Function called when this action is instanced and something tried to call it again.
 	virtual void RetriggeredInstancedAction() {}
@@ -94,8 +96,8 @@ protected:
 
 	// Pointer to the owner of this action. Owner must be valid all the time, otherwise
 	// the action will become invalid and will be deleted.
-	UPROPERTY()
-	TWeakObjectPtr<UObject> Owner;
+	UPROPERTY(Transient)
+	TWeakObjectPtr<const UObject> Owner;
 
 	// Current handle of this action
 	FECFHandle HandleId;
@@ -109,7 +111,7 @@ protected:
 private:
 
 	// Sets the owner and handle id of this action.
-	void SetAction(const TWeakObjectPtr<UObject>& InOwner, const FECFHandle& InHandleId, const FECFInstanceId& InInstanceId, const FECFActionSettings& InSettings)
+	void SetAction(const UObject* InOwner, const FECFHandle& InHandleId, const FECFInstanceId& InInstanceId, const FECFActionSettings& InSettings)
 	{
 		Owner = InOwner;
 		HandleId = InHandleId;
@@ -240,3 +242,5 @@ private:
 	float AccumulatedTime = 0.f;
 	float MaxActionTime = 0.f;
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

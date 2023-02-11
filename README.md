@@ -10,6 +10,7 @@ It works very well with gameplay programming, UI programming with a lot of trans
 - [Instanced Actions](#instanced-actions)
 - [Pausing and Resuming](#pausing-and-resuming)
 - [Stopping Actions](#stopping-actions)
+- [Measuring Performance](#measuring-performance)
 - [Extending Plugin](#extending-plugin)
 - [Extra Links](#extra-links)
 - [Special Thanks](#special-thanks)
@@ -23,6 +24,9 @@ If you have any question or suggestion regardles this plugin simply add an **Iss
 The Changelog has been put into this file: **[Changelog.txt](Changelog.txt)**
 
 ## **IMPORTANT**  
+Version `3.0.0` will probably break code and Blueprint nodes from previous version. Update with caution!  
+Version `2.1.2` can be found on a separate branch here: **Legacy-2.1**  
+
 Version `2.0.0` will probably break Blueprint nodes from previous versions. Update with caution!  
 Version `1.6.1` can be found on a separate branch here: **[Legacy-1.6](https://github.com/zompi2/UE4EnhancedCodeFlow/tree/Legacy-1.6)**
 
@@ -30,7 +34,7 @@ Version `1.6.1` can be found on a separate branch here: **[Legacy-1.6](https://g
 
 The example project wich uses this plugin can be found in **[this repository](https://github.com/zompi2/UE4EnhancedCodeFlowExample)**. Example project is compatible with the newest version of the plugin only.
 
-![updscre](https://user-images.githubusercontent.com/7863125/201350280-42cbc499-8d50-4ee2-8024-2834e6515c4b.png)
+![Main](https://user-images.githubusercontent.com/7863125/218276144-932eba74-913f-4376-afac-26aa1ef13e30.png)
 
 # Usage
 
@@ -53,10 +57,10 @@ Run the following functions to use enhanced code flow!
 #### Delay
 
 Execute specified action after some time. This can be useful in many various situations. Everytime when I was using a Delay node
-in blueprints I wish there was an equivalent of it in c++.
+in blueprints I wish there was an equivalent of it in c++. The `bStopped` tells if this action has been stopped by a Stop function.
 
 ``` cpp
-FFlow::Delay(this, 2.f, [this]()
+FFlow::Delay(this, 2.f, [this](bool bStopped)
 {
   // Code to execute after 2 seconds.
 });
@@ -65,7 +69,7 @@ FFlow::Delay(this, 2.f, [this]()
 An ECF-Delay BP node has few advantages over the built in Unreal's Delay node.  
 You can plan to execute delayed code without delaying the whole Blueprint, you can cancel the delayed code's execution or make the dilation game pause and time dilation independent. 
 
-![delay_bp](https://user-images.githubusercontent.com/7863125/180840927-38ebd2b4-9fe6-45fa-867d-03f76dd76361.png)
+![Delay](https://user-images.githubusercontent.com/7863125/218276143-db9554f2-abb3-40a1-ad83-ad1132812bb7.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -90,9 +94,10 @@ FFlow::AddTicker(this, 10.f, [this](float DeltaTime)
 FFlow::AddTicker(this, 10.f, [this](float DeltaTime)
 {
   // Code to execute every tick
-}, [this]()
+}, [this](bool bStopped)
 {
-  // Code to execute when ticker finishes ticking
+  // Code to execute when ticker finishes ticking.
+  // The bStopped tells if this action has been stopped by a Stop function.
 });
 ```
 
@@ -124,7 +129,7 @@ FFlow::StopAction(this, TickerHandle);
 > Note 2: You can check if the ticker (or any other action) is running using **FFlow::IsActionRunning(TickerHandle)**  
 > Note 3: You can also run ticker infinitely by setting Ticking Time to -1
 
-![ticker_bp](https://user-images.githubusercontent.com/7863125/180840930-f93cfb16-c5d9-4270-802b-e428fe92c17d.png)
+![Ticker](https://user-images.githubusercontent.com/7863125/218276146-fe27c97e-911d-4af1-980e-54556efc4f08.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -132,8 +137,11 @@ FFlow::StopAction(this, TickerHandle);
 #### Wait and execute
 
 Waits until specific conditions are met and then executes code.  
-The conditions are defined in a form of predicate.  
+The conditions are defined in a form of a predicate.  
+You can specify a timeout, which will stop this action after the given time. Setting the timeout value to less or equal 0 will cause this function to run infinitely untill the predicate returns true or when it is explicitly stopped.  
+The `bStopped` tells if this action has been stopped by a Stop function.  
 Perfect solution if code needs a reference to an object, which spawn moment is not clearly defined, or if you can execute a specific code only when the game reaches a specific state. 
+
 
 ``` cpp
 FFlow::WaitAndExecute(this, [this]()
@@ -142,15 +150,15 @@ FFlow::WaitAndExecute(this, [this]()
   // Return true when you want to execute the code below.
   return bIsReadyToUse;
 },
-[this]()
+[this](bool bTimedOut, bool bStopped)
 {
-  // Implement code to execute when conditions are met.
-});
+  // Implement code to execute when conditions are met or when this action has ran for 5 seconds (time specified in a timeout parameter)
+}, 5.f);
 ```
 
 BP version of this function uses a `Predicate` function which controls when the `On Execution` pin will execute.
 
-![waitandex_bp](https://user-images.githubusercontent.com/7863125/180840932-b0e99740-4541-4e86-aeb1-938d1c732c00.png)
+![WaitAndExecute](https://user-images.githubusercontent.com/7863125/218276148-2cb4feec-7343-4a63-92a4-2f0334e495c0.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -159,6 +167,8 @@ BP version of this function uses a `Predicate` function which controls when the 
 
 While the specified conditions are true tick the given code.  
 This one is useful when you want to write a loop that executes one run every tick until it finishes it's job.  
+You can specify a timeout, which will stop this action after the given time. Setting the timeout value to less or equal 0 will cause this function to run infinitely untill the predicate returns false or when it is explicitly stopped.  
+You can optionally defined what happens when the loop ends.  
 
 ``` cpp
 FFlow::WhileTrueExecute(this, [this]()
@@ -170,12 +180,17 @@ FFlow::WhileTrueExecute(this, [this]()
 [this](float DeltaTime)
 {
   // Implement code to tick when predicate returns true.
-});
+},
+[this](bool bTimedOut, bool bStopped)
+{
+  // Optionally implement a code that runs when this action ends, even when the condition
+  // in the predicate returns false or it is timed out or it is explicitly stopped.
+}, 0.f);
 ```
 
 BP version of this function uses a `Predicate` function which controls when the `On Execution` pin with `Delta Time` will execute.
 
-![whiletrue_bp](https://user-images.githubusercontent.com/7863125/180841417-7674bca9-54ae-4c90-b986-4510b547d3c6.png)
+![WhileTrueExecute](https://user-images.githubusercontent.com/7863125/218276149-964b91e0-76da-4758-b2c2-7800a0eea2ae.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -199,19 +214,21 @@ The function requires the following parameters:
   * EaseInOut
 * BlendExp - an exponent defining a shape of EaseIn, EaseOut and EaseInOut function shapes. *(default value: 1.f)*;
 
+The `bStopped` tells if this action has been stopped by a Stop function.  
+
 ``` cpp
 FFlow::AddTimeline(this, 0.f, 1.f, 2.f, [this](float Value, float Time)
 {
   // Code to run every time the timeline tick
 }, 
-[this](float Value, float Time)
+[this](float Value, float Time, bool bStopped)
 {
   // Code to run when timeline stops
 }, 
 EECFBlendFunc::ECFBlend_Linear, 2.f);
 ```
 
-![timeline_bp](https://user-images.githubusercontent.com/7863125/180841988-1c1ec2eb-0a44-41fe-ad31-b438ebf268c7.png)
+![Timeline](https://user-images.githubusercontent.com/7863125/218276147-80928cc9-5455-4edd-bd7c-2f50ae819ca3.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -225,13 +242,13 @@ FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
 {
   // Code to run every time the timeline tick
 }, 
-[this](float Value, float Time)
+[this](float Value, float Time, bool bStopped)
 {
   // Code to run when timeline stops
 });
 ```
 
-![custim_bp](https://user-images.githubusercontent.com/7863125/180842199-5d9bba5a-8255-4dbf-8e27-4a4530cc2c53.png)
+![CustomTimeline](https://user-images.githubusercontent.com/7863125/218276141-1168dd7d-24ab-43bd-901a-bedb3fb9664b.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -359,7 +376,7 @@ To make defining these settings easier there are few macros that creates a setti
 * `ECF_STARTPAUSED` - settings which makes this action started in paused state
 
 ``` cpp
-FFlow::Delay(this, 2.f, [this]()
+FFlow::Delay(this, 2.f, [this](bool bStopped)
 {
   // Run this code after 2 seconds, while ignoring game pause.
 }, ECF_IGNOREPAUSE);
@@ -436,6 +453,8 @@ FFlow::StopAllActions(GetWorld(), true); // <- stops all of the actions and laun
 FFlow::StopAllActions(GetWorld(), false, Owner); // <- stops all of the actions started from this specific owner
 ```
 
+When the **completion** callback will run after the Stop Function, the `bStopped` argument in the completion function of the action will be set to `true`.
+
 ![stopping](https://user-images.githubusercontent.com/7863125/180849533-03cb9d37-977f-4c9e-8961-aebd60f8ee25.png)
 
 You can also stop a specific Instanced action with the **`FECFInstanceId`**:
@@ -465,6 +484,18 @@ FFlow::RemoveAllDoNoMoreThanXTimes(GetWorld());
 
 [Back to top](#table-of-content)
 
+# Measuring Performance
+
+To measure plugin's performance you can use the stat command designed for it:  
+`stat ecf`  
+![stat](https://user-images.githubusercontent.com/7863125/218276145-f0e80f4e-70fa-4c62-80e7-2b132e2b0bf7.png)  
+There are the following stats:  
+* Tick - the time in `ms` the plugin needs to perform one full update.
+* Actions - the amount of actions that are currently running.
+* Instances - describes how many of the running actions are the instanced ones.
+
+[Back to top](#table-of-content)
+
 # Extending plugin
 
 You have a source code of this plugin you can easily extend it's functionalities!
@@ -475,7 +506,7 @@ You have a source code of this plugin you can easily extend it's functionalities
 2. Implement `Setup` function, which accepts all parameters you want to pass to this action. 
    `Setup` function must return true if the given parameters are valid.  
 ```cpp
-bool Setup(int32 Param1, int32 Param2, TUniqueFunction<void()>&& Callback)
+bool Setup(int32 Param1, int32 Param2, TUniqueFunction<void(bool)>&& Callback)
 {
   CallbackFunc = MoveTemp(Callback);
   if (CallbackFunc) return true;
@@ -486,7 +517,7 @@ bool Setup(int32 Param1, int32 Param2, TUniqueFunction<void()>&& Callback)
 
 3. Override `Init` and `Tick` functions if needed.
 4. If you want this action to be stopped while ticking - use `MarkAsFinished()` function.
-5. If you want to launch a callback when this action is stopped by `StopAction` method with `bComplete` set to true - override `Complete()` function.
+5. If you want to launch a callback when this action is stopped by `StopAction` method with `bComplete` set to true - override `Complete(bool bStopped)` function.
 6. If this is an instanced action you can optionally override `RetriggeredInstancedAction()` function to add any logic that should be executed when the instanced action is called while already existing.
 7. You can optionally run `SetMaxActionTime` in action's `Init` function to determine the maximum time in seconds this action should run. 
 >IMMPORTANT! SetMaxActionTime is only to help ticker run ticks with proper delta times.  
@@ -495,10 +526,10 @@ bool Setup(int32 Param1, int32 Param2, TUniqueFunction<void()>&& Callback)
    The function must receive a pointer to the launching `UObject`, `FECFActionSettings`, `FECFInstanceId` (use invalid one if the action shouldn't be instanced) and every other argument that is used in the action's `Setup` function in the same order.
    It must return `FECFHandle`.
 ```cpp
-FECFHandle FEnhancedCodeFlow::NewAction(UObject* InOwner, int32 Param1, int32 Param2, TUniqueFunction<void()>&& Call, const FECFActionSettings& Settings = {})
+FECFHandle FEnhancedCodeFlow::NewAction(const UObject* InOwner, int32 Param1, int32 Param2, TUniqueFunction<void(bool)>&& Callback, const FECFActionSettings& Settings = {})
 {
   if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-    return ECF->AddAction<UECFNewAction>(InOwner, Settings, FECFInstanceId(), Param1, Param2, MoveTemp(Call));
+    return ECF->AddAction<UECFNewAction>(InOwner, Settings, FECFInstanceId(), Param1, Param2, MoveTemp(Callback));
   else
     return FECFHandle();
 }
@@ -507,11 +538,15 @@ FECFHandle FEnhancedCodeFlow::NewAction(UObject* InOwner, int32 Param1, int32 Pa
 It is done! Now you can run your own action:
 
 ```cpp
-FFlow::NewAction(this, 1, 2, [this]()
+FFlow::NewAction(this, 1, 2, [this](bool bStopped)
 {
   // Callback code.
 }, ECF_IGNOREPAUSE);
 ```
+
+## Disabling build optimization
+You can temporarily disable plugin's build optimizations by setting the `bDisableOptimization` parameter in `EnhancedCodeFlow.Build.cs` file to `true`. It can help with debugging.
+
 [Back to top](#table-of-content)
 
 # Extra links

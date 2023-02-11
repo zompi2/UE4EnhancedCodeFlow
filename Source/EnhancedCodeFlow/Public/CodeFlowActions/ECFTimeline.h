@@ -1,10 +1,12 @@
-// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
 #include "ECFActionBase.h"
 #include "ECFTypes.h"
 #include "ECFTimeline.generated.h"
+
+ECF_PRAGMA_DISABLE_OPTIMIZATION
 
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFTimeline : public UECFActionBase
@@ -16,7 +18,7 @@ class ENHANCEDCODEFLOW_API UECFTimeline : public UECFActionBase
 protected:
 
 	TUniqueFunction<void(float, float)> TickFunc;
-	TUniqueFunction<void(float, float)> CallbackFunc;
+	TUniqueFunction<void(float, float, bool)> CallbackFunc;
 	float StartValue;
 	float StopValue;
 	float Time;
@@ -26,7 +28,7 @@ protected:
 	float CurrentTime;
 	float CurrentValue;
 
-	bool Setup(float InStartValue, float InStopValue, float InTime, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc, EECFBlendFunc InBlendFunc, float InBlendExp)
+	bool Setup(float InStartValue, float InStopValue, float InTime, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float, bool)>&& InCallbackFunc, EECFBlendFunc InBlendFunc, float InBlendExp)
 	{
 		StartValue = InStartValue;
 		StopValue = InStopValue;
@@ -78,16 +80,18 @@ protected:
 
 		if ((StopValue > StartValue && CurrentValue >= StopValue) || (StopValue < StartValue && CurrentValue <= StopValue))
 		{
-			Complete();
+			Complete(false);
 			MarkAsFinished();
 		}
 	}
 
-	void Complete() override
+	void Complete(bool bStopped) override
 	{
 		if (CallbackFunc)
 		{
-			CallbackFunc(CurrentValue, CurrentTime);
+			CallbackFunc(CurrentValue, CurrentTime, bStopped);
 		}
 	}
 };
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

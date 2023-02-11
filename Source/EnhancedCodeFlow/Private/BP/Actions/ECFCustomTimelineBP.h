@@ -1,11 +1,11 @@
-// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
 #include "../ECFActionBP.h"
 #include "ECFCustomTimelineBP.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnECFCustomTimelineBPEvent, float, Value, float, Time);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnECFCustomTimelineBPEvent, float, Value, float, Time, bool, bStopped);
 
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFCustomTimelineBP : public UECFActionBP
@@ -21,5 +21,5 @@ public:
 	FOnECFCustomTimelineBPEvent OnFinished;
 	
 	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings", ToolTip = "Adds a custom timeline defined by a float curve.", DisplayName = "ECF - Custom Timeline"), Category = "ECF")
-	static UECFCustomTimelineBP* ECFCustomTimeline(UObject* WorldContextObject, UCurveFloat* CurveFloat, FECFActionSettings Settings, FECFHandleBP& Handle);
+	static UECFCustomTimelineBP* ECFCustomTimeline(const UObject* WorldContextObject, UCurveFloat* CurveFloat, FECFActionSettings Settings, FECFHandleBP& Handle);
 };

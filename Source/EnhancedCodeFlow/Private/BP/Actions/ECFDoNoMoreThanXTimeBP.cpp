@@ -1,10 +1,12 @@
-// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
 
 #include "ECFDoNoMoreThanXTimeBP.h"
 #include "EnhancedCodeFlow.h"
 #include "BP/ECFBPLibrary.h"
 
-UECFDoNoMoreThanXTimeBP* UECFDoNoMoreThanXTimeBP::ECFDoNoMoreThanXTime(UObject* WorldContextObject, float Time, FECFHandleBP& Handle, FECFInstanceIdBP& InstanceId, FECFActionSettings Settings, int32 MaxExecsEnqueued /*= 1*/)
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
+UECFDoNoMoreThanXTimeBP* UECFDoNoMoreThanXTimeBP::ECFDoNoMoreThanXTime(const UObject* WorldContextObject, float Time, FECFHandleBP& Handle, FECFInstanceIdBP& InstanceId, FECFActionSettings Settings, int32 MaxExecsEnqueued /*= 1*/)
 {
 	UECFDoNoMoreThanXTimeBP* Proxy = NewObject<UECFDoNoMoreThanXTimeBP>();
 	Proxy->Init(WorldContextObject, Settings);
@@ -44,3 +46,5 @@ void UECFDoNoMoreThanXTimeBP::Activate()
 		OnExecute.Broadcast();
 	}
 }
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

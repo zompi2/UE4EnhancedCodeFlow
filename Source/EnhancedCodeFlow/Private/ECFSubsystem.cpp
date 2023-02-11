@@ -1,10 +1,30 @@
-// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
 
 #include "ECFSubsystem.h"
 #include "ECFActionBase.h"
 
+ECF_PRAGMA_DISABLE_OPTIMIZATION
+
+DEFINE_STAT(STAT_ECF_ActionsCount);
+DEFINE_STAT(STAT_ECF_InstancesCount);
+
 void UECFSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
+	// Only the subsystem from the Game World can tick.
+	bCanTick = false;
+	if (UWorld* ThisWorld = GetWorld())
+	{
+		switch (ThisWorld->WorldType)
+		{
+			case EWorldType::Game:
+			case EWorldType::GamePreview:
+			case EWorldType::GameRPC:
+			case EWorldType::PIE:
+				bCanTick = true;
+		}
+	}
+
+	// Reset the HandleId counter
 	LastHandleId.Invalidate();
 }
 
@@ -33,6 +53,10 @@ UECFSubsystem* UECFSubsystem::Get(const UObject* WorldContextObject)
 
 void UECFSubsystem::Tick(float DeltaTime)
 {
+#if STATS
+	DECLARE_SCOPE_CYCLE_COUNTER(TEXT("Tick"), STAT_ECF_TickAll, STATGROUP_ECF);
+#endif
+
 	// Do nothing when the whole subsystem is paused
 	if (bIsECFPaused)
 	{
@@ -50,10 +74,20 @@ void UECFSubsystem::Tick(float DeltaTime)
 	PendingAddActions.Empty();
 
 	// Tick all active actions
+#if STATS
+	SET_DWORD_STAT(STAT_ECF_ActionsCount, Actions.Num());
+	SET_DWORD_STAT(STAT_ECF_InstancesCount, 0);
+#endif
 	for (UECFActionBase* Action : Actions)
 	{
 		if (IsActionValid(Action))
 		{
+#if STATS
+			if (Action->InstanceId.IsValid())
+			{
+				INC_DWORD_STAT(STAT_ECF_InstancesCount);
+			}
+#endif
 			Action->DoTick(DeltaTime);
 		}
 	}
@@ -93,7 +127,7 @@ void UECFSubsystem::ResumeAction(const FECFHandle& HandleId)
 	}
 }
 
-bool UECFSubsystem::IsActionPaused(const FECFHandle& HandleId, bool& bIsPaused)
+bool UECFSubsystem::IsActionPaused(const FECFHandle& HandleId, bool& bIsPaused) const
 {
 	if (UECFActionBase* ActionFound = FindAction(HandleId))
 	{
@@ -204,7 +238,7 @@ bool UECFSubsystem::HasAction(const FECFHandle& HandleId) const
 	return false;
 }
 
-UECFActionBase* UECFSubsystem::GetInstancedAction(const FECFInstanceId& InstanceId)
+UECFActionBase* UECFSubsystem::GetInstancedAction(const FECFInstanceId& InstanceId) const
 {
 	if (InstanceId.IsValid())
 	{
@@ -227,7 +261,7 @@ void UECFSubsystem::FinishAction(UECFActionBase* Action, bool bComplete)
 	{
 		if (bComplete)
 		{
-			Action->Complete();
+			Action->Complete(true);
 		}
 		Action->MarkAsFinished();
 	}
@@ -237,3 +271,5 @@ bool UECFSubsystem::IsActionValid(UECFActionBase* Action)
 {
 	return IsValid(Action) && (Action->HasAnyFlags(RF_BeginDestroyed | RF_FinishDestroyed) == false) && Action->IsValid();
 }
+
+ECF_PRAGMA_ENABLE_OPTIMIZATION

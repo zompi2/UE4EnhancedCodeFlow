@@ -1,11 +1,11 @@
-// Copyright (c) 2022 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
 #include "../ECFActionBP.h"
 #include "ECFWaitAndExecuteBP.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnECFWaitAndExecuteBPEvent, class UECFWaitAndExecuteBP*, Action);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnECFWaitAndExecuteBPEvent, class UECFWaitAndExecuteBP*, Action, bool, bTimedOut, bool, bStopped);
 
 UCLASS()
 class ENHANCEDCODEFLOW_API UECFWaitAndExecuteBP : public UECFActionBP
@@ -20,8 +20,8 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnECFWaitAndExecuteBPEvent OnExecute;
 
-	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings", ToolTip = "Waits until specific conditions are made and then execute code.\nUse Action's 'Predicate' function to control it.", DisplayName = "ECF - Wait And Execute"), Category = "ECF")
-	static UECFWaitAndExecuteBP* ECFWaitAndExecute(UObject* WorldContextObject, FECFActionSettings Settings, FECFHandleBP& Handle);
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", AdvancedDisplay = "Settings", ToolTip = "Waits until specific conditions are made and then execute code.\nUse Action's 'Predicate' function to control it.\nSet TimeOut greater than 0 to stop action after this time.", DisplayName = "ECF - Wait And Execute"), Category = "ECF")
+	static UECFWaitAndExecuteBP* ECFWaitAndExecute(const UObject* WorldContextObject, float InTimeOut, FECFActionSettings Settings, FECFHandleBP& Handle);
 
 	UFUNCTION(BlueprintCallable, meta = (ToolTip = "Pass 'true' to this function in order to execute the 'Wait And Execute' Action."), Category = "ECF")
 	void Predicate(bool bHasFinished);
