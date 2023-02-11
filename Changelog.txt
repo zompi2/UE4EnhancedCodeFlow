@@ -6,6 +6,7 @@
 * Added OnComplete delegate to WhileTrueExecute action.
 * Added Stat command to monitor the plugin performance.
 * Added option to disable/enable compiler optimizations for easier debugging (to be set in the plugin's Build.cs file).
+* Ensure only those instances of the subsystem are ticking that were created withing the game world.
 
 =======================================================================================
 
