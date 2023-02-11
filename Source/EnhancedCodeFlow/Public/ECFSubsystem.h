@@ -33,7 +33,7 @@ protected:
 	/** FTickableGameObject interface implementation */
 	void Tick(float DeltaTime) override;
 	TStatId GetStatId() const override { RETURN_QUICK_DECLARE_CYCLE_STAT(ECFSubsystem, STATGROUP_Tickables); }
-	bool IsTickable() const override { return true; }
+	bool IsTickable() const override { return bCanTick; }
 	bool IsTickableWhenPaused() const override { return true; }
 
 	// Add Action to list. Returns the Action id.
@@ -123,6 +123,11 @@ protected:
 
 	// Utility function to check action validity.
 	static bool IsActionValid(UECFActionBase* Action);
+
+private:
+
+	// Indicates if this subsystem should tick
+	bool bCanTick = false;
 };
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION

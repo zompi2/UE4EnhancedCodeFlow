@@ -10,6 +10,21 @@ DEFINE_STAT(STAT_ECF_InstancesCount);
 
 void UECFSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
+	// Only the subsystem from the Game World can tick.
+	bCanTick = false;
+	if (UWorld* ThisWorld = GetWorld())
+	{
+		switch (ThisWorld->WorldType)
+		{
+			case EWorldType::Game:
+			case EWorldType::GamePreview:
+			case EWorldType::GameRPC:
+			case EWorldType::PIE:
+				bCanTick = true;
+		}
+	}
+
+	// Reset the HandleId counter
 	LastHandleId.Invalidate();
 }
 
