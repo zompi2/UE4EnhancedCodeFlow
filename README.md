@@ -23,6 +23,9 @@ If you have any question or suggestion regardles this plugin simply add an **Iss
 The Changelog has been put into this file: **[Changelog.txt](Changelog.txt)**
 
 ## **IMPORTANT**  
+Version `3.0.0` will probably break code and Blueprint nodes from previous version. Update with caution!  
+Version `2.1.2` can be found on a separate branch here: **Legacy-2.1**  
+
 Version `2.0.0` will probably break Blueprint nodes from previous versions. Update with caution!  
 Version `1.6.1` can be found on a separate branch here: **[Legacy-1.6](https://github.com/zompi2/UE4EnhancedCodeFlow/tree/Legacy-1.6)**
 
@@ -53,10 +56,10 @@ Run the following functions to use enhanced code flow!
 #### Delay
 
 Execute specified action after some time. This can be useful in many various situations. Everytime when I was using a Delay node
-in blueprints I wish there was an equivalent of it in c++.
+in blueprints I wish there was an equivalent of it in c++. The `bStopped` tells if this action has been stopped by a Stop function.
 
 ``` cpp
-FFlow::Delay(this, 2.f, [this]()
+FFlow::Delay(this, 2.f, [this](bool bStopped)
 {
   // Code to execute after 2 seconds.
 });
@@ -90,9 +93,10 @@ FFlow::AddTicker(this, 10.f, [this](float DeltaTime)
 FFlow::AddTicker(this, 10.f, [this](float DeltaTime)
 {
   // Code to execute every tick
-}, [this]()
+}, [this](bool bStopped)
 {
-  // Code to execute when ticker finishes ticking
+  // Code to execute when ticker finishes ticking.
+  // The bStopped tells if this action has been stopped by a Stop function.
 });
 ```
 
@@ -132,8 +136,11 @@ FFlow::StopAction(this, TickerHandle);
 #### Wait and execute
 
 Waits until specific conditions are met and then executes code.  
-The conditions are defined in a form of predicate.  
+The conditions are defined in a form of a predicate.  
+You can specify a timeout, which will stop this action after the given time. Setting the timeout value to less or equal 0 will cause this function to run infinitely untill the predicate returns true or when it is explicitly stopped.  
+The `bStopped` tells if this action has been stopped by a Stop function.  
 Perfect solution if code needs a reference to an object, which spawn moment is not clearly defined, or if you can execute a specific code only when the game reaches a specific state. 
+
 
 ``` cpp
 FFlow::WaitAndExecute(this, [this]()
@@ -142,10 +149,10 @@ FFlow::WaitAndExecute(this, [this]()
   // Return true when you want to execute the code below.
   return bIsReadyToUse;
 },
-[this]()
+[this](bool bTimedOut, bool bStopped)
 {
-  // Implement code to execute when conditions are met.
-});
+  // Implement code to execute when conditions are met or when this action has ran for 5 seconds (time specified in a timeout parameter)
+}, 5.f);
 ```
 
 BP version of this function uses a `Predicate` function which controls when the `On Execution` pin will execute.
@@ -159,6 +166,8 @@ BP version of this function uses a `Predicate` function which controls when the 
 
 While the specified conditions are true tick the given code.  
 This one is useful when you want to write a loop that executes one run every tick until it finishes it's job.  
+You can specify a timeout, which will stop this action after the given time. Setting the timeout value to less or equal 0 will cause this function to run infinitely untill the predicate returns false or when it is explicitly stopped.  
+You can optionally defined what happens when the loop ends.  
 
 ``` cpp
 FFlow::WhileTrueExecute(this, [this]()
@@ -170,7 +179,12 @@ FFlow::WhileTrueExecute(this, [this]()
 [this](float DeltaTime)
 {
   // Implement code to tick when predicate returns true.
-});
+},
+[this](bool bTimedOut, bool bStopped)
+{
+  // Optionally implement a code that runs when this action ends, even when the condition
+  // in the predicate returns false or it is timed out or it is explicitly stopped.
+}, 0.f);
 ```
 
 BP version of this function uses a `Predicate` function which controls when the `On Execution` pin with `Delta Time` will execute.
@@ -199,12 +213,14 @@ The function requires the following parameters:
   * EaseInOut
 * BlendExp - an exponent defining a shape of EaseIn, EaseOut and EaseInOut function shapes. *(default value: 1.f)*;
 
+The `bStopped` tells if this action has been stopped by a Stop function.  
+
 ``` cpp
 FFlow::AddTimeline(this, 0.f, 1.f, 2.f, [this](float Value, float Time)
 {
   // Code to run every time the timeline tick
 }, 
-[this](float Value, float Time)
+[this](float Value, float Time, bool bStopped)
 {
   // Code to run when timeline stops
 }, 
@@ -225,7 +241,7 @@ FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
 {
   // Code to run every time the timeline tick
 }, 
-[this](float Value, float Time)
+[this](float Value, float Time, bool bStopped)
 {
   // Code to run when timeline stops
 });
@@ -359,7 +375,7 @@ To make defining these settings easier there are few macros that creates a setti
 * `ECF_STARTPAUSED` - settings which makes this action started in paused state
 
 ``` cpp
-FFlow::Delay(this, 2.f, [this]()
+FFlow::Delay(this, 2.f, [this](bool bStopped)
 {
   // Run this code after 2 seconds, while ignoring game pause.
 }, ECF_IGNOREPAUSE);
@@ -436,6 +452,8 @@ FFlow::StopAllActions(GetWorld(), true); // <- stops all of the actions and laun
 FFlow::StopAllActions(GetWorld(), false, Owner); // <- stops all of the actions started from this specific owner
 ```
 
+When the **completion** callback will run after the Stop Function, the `bStopped` argument in the completion function of the action will be set to `true`.
+
 ![stopping](https://user-images.githubusercontent.com/7863125/180849533-03cb9d37-977f-4c9e-8961-aebd60f8ee25.png)
 
 You can also stop a specific Instanced action with the **`FECFInstanceId`**:
@@ -486,7 +504,7 @@ bool Setup(int32 Param1, int32 Param2, TUniqueFunction<void()>&& Callback)
 
 3. Override `Init` and `Tick` functions if needed.
 4. If you want this action to be stopped while ticking - use `MarkAsFinished()` function.
-5. If you want to launch a callback when this action is stopped by `StopAction` method with `bComplete` set to true - override `Complete()` function.
+5. If you want to launch a callback when this action is stopped by `StopAction` method with `bComplete` set to true - override `Complete(bool bStopped)` function.
 6. If this is an instanced action you can optionally override `RetriggeredInstancedAction()` function to add any logic that should be executed when the instanced action is called while already existing.
 7. You can optionally run `SetMaxActionTime` in action's `Init` function to determine the maximum time in seconds this action should run. 
 >IMMPORTANT! SetMaxActionTime is only to help ticker run ticks with proper delta times.  
