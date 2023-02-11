@@ -1,15 +1,3 @@
-
-
-![CustomTimeline](https://user-images.githubusercontent.com/7863125/218276141-1168dd7d-24ab-43bd-901a-bedb3fb9664b.png)
-![Delay](https://user-images.githubusercontent.com/7863125/218276143-db9554f2-abb3-40a1-ad83-ad1132812bb7.png)
-![Main](https://user-images.githubusercontent.com/7863125/218276144-932eba74-913f-4376-afac-26aa1ef13e30.png)
-![stat](https://user-images.githubusercontent.com/7863125/218276145-f0e80f4e-70fa-4c62-80e7-2b132e2b0bf7.png)
-![Ticker](https://user-images.githubusercontent.com/7863125/218276146-fe27c97e-911d-4af1-980e-54556efc4f08.png)
-![Timeline](https://user-images.githubusercontent.com/7863125/218276147-80928cc9-5455-4edd-bd7c-2f50ae819ca3.png)
-![WaitAndExecute](https://user-images.githubusercontent.com/7863125/218276148-2cb4feec-7343-4a63-92a4-2f0334e495c0.png)
-![WhileTrueExecute](https://user-images.githubusercontent.com/7863125/218276149-964b91e0-76da-4758-b2c2-7800a0eea2ae.png)
-
-
 # Enhanced Code Flow for Unreal Engine 4
 
 This code plugin provides functions that drastically improve the quality of life during the implementation of game flow in C++.  
@@ -22,6 +10,7 @@ It works very well with gameplay programming, UI programming with a lot of trans
 - [Instanced Actions](#instanced-actions)
 - [Pausing and Resuming](#pausing-and-resuming)
 - [Stopping Actions](#stopping-actions)
+- [Measuring Performance](#measuring-performance)
 - [Extending Plugin](#extending-plugin)
 - [Extra Links](#extra-links)
 - [Special Thanks](#special-thanks)
@@ -45,7 +34,7 @@ Version `1.6.1` can be found on a separate branch here: **[Legacy-1.6](https://g
 
 The example project wich uses this plugin can be found in **[this repository](https://github.com/zompi2/UE4EnhancedCodeFlowExample)**. Example project is compatible with the newest version of the plugin only.
 
-![updscre](https://user-images.githubusercontent.com/7863125/201350280-42cbc499-8d50-4ee2-8024-2834e6515c4b.png)
+![Main](https://user-images.githubusercontent.com/7863125/218276144-932eba74-913f-4376-afac-26aa1ef13e30.png)
 
 # Usage
 
@@ -80,7 +69,7 @@ FFlow::Delay(this, 2.f, [this](bool bStopped)
 An ECF-Delay BP node has few advantages over the built in Unreal's Delay node.  
 You can plan to execute delayed code without delaying the whole Blueprint, you can cancel the delayed code's execution or make the dilation game pause and time dilation independent. 
 
-![delay_bp](https://user-images.githubusercontent.com/7863125/180840927-38ebd2b4-9fe6-45fa-867d-03f76dd76361.png)
+![Delay](https://user-images.githubusercontent.com/7863125/218276143-db9554f2-abb3-40a1-ad83-ad1132812bb7.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -140,7 +129,7 @@ FFlow::StopAction(this, TickerHandle);
 > Note 2: You can check if the ticker (or any other action) is running using **FFlow::IsActionRunning(TickerHandle)**  
 > Note 3: You can also run ticker infinitely by setting Ticking Time to -1
 
-![ticker_bp](https://user-images.githubusercontent.com/7863125/180840930-f93cfb16-c5d9-4270-802b-e428fe92c17d.png)
+![Ticker](https://user-images.githubusercontent.com/7863125/218276146-fe27c97e-911d-4af1-980e-54556efc4f08.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -169,7 +158,7 @@ FFlow::WaitAndExecute(this, [this]()
 
 BP version of this function uses a `Predicate` function which controls when the `On Execution` pin will execute.
 
-![waitandex_bp](https://user-images.githubusercontent.com/7863125/180840932-b0e99740-4541-4e86-aeb1-938d1c732c00.png)
+![WaitAndExecute](https://user-images.githubusercontent.com/7863125/218276148-2cb4feec-7343-4a63-92a4-2f0334e495c0.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -201,7 +190,7 @@ FFlow::WhileTrueExecute(this, [this]()
 
 BP version of this function uses a `Predicate` function which controls when the `On Execution` pin with `Delta Time` will execute.
 
-![whiletrue_bp](https://user-images.githubusercontent.com/7863125/180841417-7674bca9-54ae-4c90-b986-4510b547d3c6.png)
+![WhileTrueExecute](https://user-images.githubusercontent.com/7863125/218276149-964b91e0-76da-4758-b2c2-7800a0eea2ae.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -239,7 +228,7 @@ FFlow::AddTimeline(this, 0.f, 1.f, 2.f, [this](float Value, float Time)
 EECFBlendFunc::ECFBlend_Linear, 2.f);
 ```
 
-![timeline_bp](https://user-images.githubusercontent.com/7863125/180841988-1c1ec2eb-0a44-41fe-ad31-b438ebf268c7.png)
+![Timeline](https://user-images.githubusercontent.com/7863125/218276147-80928cc9-5455-4edd-bd7c-2f50ae819ca3.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -259,7 +248,7 @@ FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
 });
 ```
 
-![custim_bp](https://user-images.githubusercontent.com/7863125/180842199-5d9bba5a-8255-4dbf-8e27-4a4530cc2c53.png)
+![CustomTimeline](https://user-images.githubusercontent.com/7863125/218276141-1168dd7d-24ab-43bd-901a-bedb3fb9664b.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -495,6 +484,18 @@ FFlow::RemoveAllDoNoMoreThanXTimes(GetWorld());
 
 [Back to top](#table-of-content)
 
+# Measuring Performance
+
+To measure plugin's performance you can use the stat command designed for it:  
+`stat ecf`  
+![stat](https://user-images.githubusercontent.com/7863125/218276145-f0e80f4e-70fa-4c62-80e7-2b132e2b0bf7.png)  
+There are the following stats:  
+* Tick - the time in `ms` the plugin needs to perform one full update.
+* Actions - the amount of actions that are currently running.
+* Instances - describes how many of the running actions are the instanced ones.
+
+[Back to top](#table-of-content)
+
 # Extending plugin
 
 You have a source code of this plugin you can easily extend it's functionalities!
@@ -505,7 +506,7 @@ You have a source code of this plugin you can easily extend it's functionalities
 2. Implement `Setup` function, which accepts all parameters you want to pass to this action. 
    `Setup` function must return true if the given parameters are valid.  
 ```cpp
-bool Setup(int32 Param1, int32 Param2, TUniqueFunction<void()>&& Callback)
+bool Setup(int32 Param1, int32 Param2, TUniqueFunction<void(bool)>&& Callback)
 {
   CallbackFunc = MoveTemp(Callback);
   if (CallbackFunc) return true;
@@ -525,10 +526,10 @@ bool Setup(int32 Param1, int32 Param2, TUniqueFunction<void()>&& Callback)
    The function must receive a pointer to the launching `UObject`, `FECFActionSettings`, `FECFInstanceId` (use invalid one if the action shouldn't be instanced) and every other argument that is used in the action's `Setup` function in the same order.
    It must return `FECFHandle`.
 ```cpp
-FECFHandle FEnhancedCodeFlow::NewAction(const UObject* InOwner, int32 Param1, int32 Param2, TUniqueFunction<void()>&& Call, const FECFActionSettings& Settings = {})
+FECFHandle FEnhancedCodeFlow::NewAction(const UObject* InOwner, int32 Param1, int32 Param2, TUniqueFunction<void(bool)>&& Callback, const FECFActionSettings& Settings = {})
 {
   if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-    return ECF->AddAction<UECFNewAction>(InOwner, Settings, FECFInstanceId(), Param1, Param2, MoveTemp(Call));
+    return ECF->AddAction<UECFNewAction>(InOwner, Settings, FECFInstanceId(), Param1, Param2, MoveTemp(Callback));
   else
     return FECFHandle();
 }
@@ -537,11 +538,15 @@ FECFHandle FEnhancedCodeFlow::NewAction(const UObject* InOwner, int32 Param1, in
 It is done! Now you can run your own action:
 
 ```cpp
-FFlow::NewAction(this, 1, 2, [this]()
+FFlow::NewAction(this, 1, 2, [this](bool bStopped)
 {
   // Callback code.
 }, ECF_IGNOREPAUSE);
 ```
+
+## Disabling build optimization
+You can temporarily disable plugin's build optimizations by setting the `bDisableOptimization` parameter in `EnhancedCodeFlow.Build.cs` file to `true`. It can help with debugging.
+
 [Back to top](#table-of-content)
 
 # Extra links
