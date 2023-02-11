@@ -25,7 +25,7 @@ The Changelog has been put into this file: **[Changelog.txt](Changelog.txt)**
 
 ## **IMPORTANT**  
 Version `3.0.0` will probably break code and Blueprint nodes from previous version. Update with caution!  
-Version `2.1.2` can be found on a separate branch here: **Legacy-2.1**  
+Version `2.1.2` can be found on a separate branch here: **[Legacy-2.1](https://github.com/zompi2/UE4EnhancedCodeFlow/tree/Legacy-2.1)**  
 
 Version `2.0.0` will probably break Blueprint nodes from previous versions. Update with caution!  
 Version `1.6.1` can be found on a separate branch here: **[Legacy-1.6](https://github.com/zompi2/UE4EnhancedCodeFlow/tree/Legacy-1.6)**
