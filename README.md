@@ -551,8 +551,9 @@ You can temporarily disable plugin's build optimizations by setting the `bDisabl
 
 # Extra links
 
-- [Unreal Engine Forum](https://forums.unrealengine.com/t/plugin-enhanced-code-flow/684237)
-- [Blog Entry](https://zompidev.blogspot.com/2021/03/enhanced-code-flow-plugin-for-ue4.html)
+* [Unreal Engine Forum](https://forums.unrealengine.com/t/plugin-enhanced-code-flow/684237)
+* [Blog Entry](https://zompidev.blogspot.com/2021/03/enhanced-code-flow-plugin-for-ue4.html)
+* [Reddit Post](https://www.reddit.com/r/unrealengine/comments/mbkzqj/enhanced_code_flow_plugin)
 
 [Back to top](#table-of-content)
 
