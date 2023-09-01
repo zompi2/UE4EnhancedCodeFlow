@@ -2,8 +2,25 @@
 
 #include "ECFActionBP.h"
 #include "EnhancedCodeFlow.h"
+#include "ECFStats.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
+
+DEFINE_STAT(STAT_ECF_AsyncBPObjectsCount);
+
+UECFActionBP::UECFActionBP()
+{
+#if STATS
+	INC_DWORD_STAT(STAT_ECF_AsyncBPObjectsCount);
+#endif
+}
+
+UECFActionBP::~UECFActionBP()
+{
+#if STATS
+	DEC_DWORD_STAT(STAT_ECF_AsyncBPObjectsCount);
+#endif
+}
 
 void UECFActionBP::Init(const UObject* WorldContextObject, FECFActionSettings& Settings)
 {
@@ -24,6 +41,12 @@ void UECFActionBP::Activate()
 	{
 		FFlow::ResumeAction(Proxy_WorldContextObject, Proxy_Handle);
 	}
+}
+
+void UECFActionBP::ClearAsyncBPAction()
+{
+	SetReadyToDestroy();
+	MarkPendingKill();
 }
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION

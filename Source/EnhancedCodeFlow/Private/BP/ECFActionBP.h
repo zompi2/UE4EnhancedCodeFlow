@@ -15,6 +15,12 @@ class ENHANCEDCODEFLOW_API UECFActionBP : public UBlueprintAsyncActionBase
 public:
 
 	/**
+	 * Default constructor and destructor. Used only for stat counting.
+	 */
+	UECFActionBP();
+	virtual ~UECFActionBP();
+
+	/**
 	 * Initializes the Async Action with project WorldContext Object and Settings.
 	 * Set the action to start paused, as unreal will run it in next tick.
 	 */
@@ -44,4 +50,7 @@ protected:
 
 	// Just a handy flag to check if the action has been activated already.
 	bool bActivated = false;
+
+	// Mark this async node as ready to destroy
+	void ClearAsyncBPAction();
 };

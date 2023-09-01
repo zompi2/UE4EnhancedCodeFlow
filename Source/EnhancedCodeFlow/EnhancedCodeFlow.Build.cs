@@ -32,5 +32,16 @@ public class EnhancedCodeFlow : ModuleRules
             PublicDefinitions.Add("ECF_PRAGMA_DISABLE_OPTIMIZATION=");
             PublicDefinitions.Add("ECF_PRAGMA_ENABLE_OPTIMIZATION=");
         }
+
+        // Enable or disable extra traces for Unreal Insight profiler
+        bool bEnableInsightProfiling = true;
+        if (bEnableInsightProfiling)
+        {
+            PublicDefinitions.Add("ECF_INSIGHT_PROFILING=1");
+        }
+        else
+        {
+            PublicDefinitions.Add("ECF_INSIGHT_PROFILING=0");
+        }
     }
 }

@@ -24,6 +24,7 @@ UECFDoNoMoreThanXTimeBP* UECFDoNoMoreThanXTimeBP::ECFDoNoMoreThanXTime(const UOb
 		if (Proxy->bActivated)
 		{
 			Proxy->OnExecute.Broadcast();
+			Proxy->ClearAsyncBPAction();
 		}
 		else
 		{
@@ -44,6 +45,7 @@ void UECFDoNoMoreThanXTimeBP::Activate()
 	{
 		bExecuteOnActivation = false;
 		OnExecute.Broadcast();
+		ClearAsyncBPAction();
 	}
 }
 

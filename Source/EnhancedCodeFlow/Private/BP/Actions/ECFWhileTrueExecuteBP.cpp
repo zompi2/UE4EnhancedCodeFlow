@@ -25,6 +25,7 @@ UECFWhileTrueExecuteBP* UECFWhileTrueExecuteBP::ECFWhileTrueExecute(const UObjec
 		[Proxy](bool bTimedOut, bool bStopped)
 		{
 			Proxy->OnComplete.Broadcast(Proxy, 0.f, bTimedOut, bStopped);
+			Proxy->ClearAsyncBPAction();
 		},
 	TimeOut, Settings);
 	Handle = FECFHandleBP(Proxy->Proxy_Handle);

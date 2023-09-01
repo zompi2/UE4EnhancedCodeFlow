@@ -21,6 +21,7 @@ UECFWaitAndExecuteBP* UECFWaitAndExecuteBP::ECFWaitAndExecute(const UObject* Wor
 		[Proxy](bool bTimedOut, bool bStopped)
 		{
 			Proxy->OnExecute.Broadcast(Proxy, bTimedOut, bStopped);
+			Proxy->ClearAsyncBPAction();
 		},
 	InTimeOut, Settings);
 	Handle = FECFHandleBP(Proxy->Proxy_Handle);
