@@ -53,15 +53,19 @@ UECFSubsystem* UECFSubsystem::Get(const UObject* WorldContextObject)
 
 void UECFSubsystem::Tick(float DeltaTime)
 {
-#if STATS
-	DECLARE_SCOPE_CYCLE_COUNTER(TEXT("Tick"), STAT_ECF_TickAll, STATGROUP_ECF);
-#endif
-
 	// Do nothing when the whole subsystem is paused
 	if (bIsECFPaused)
 	{
 		return;
 	}
+
+#if STATS
+	DECLARE_SCOPE_CYCLE_COUNTER(TEXT("Tick"), STAT_ECF_TickAll, STATGROUP_ECF);
+#endif
+
+#if ECF_INSIGHT_PROFILING
+	TRACE_CPUPROFILER_EVENT_SCOPE_STR("ECF-Actions-Tick");
+#endif
 
 	// Remove all expired actions first
 	Actions.RemoveAll([](UECFActionBase* Action) { return IsActionValid(Action) == false; });
@@ -76,10 +80,6 @@ void UECFSubsystem::Tick(float DeltaTime)
 #if STATS
 	SET_DWORD_STAT(STAT_ECF_ActionsCount, Actions.Num());
 	SET_DWORD_STAT(STAT_ECF_InstancesCount, 0);
-#endif
-
-#if ECF_INSIGHT_PROFILING
-	TRACE_CPUPROFILER_EVENT_SCOPE(TEXT("ECF-Action-Tick"));
 #endif
 
 	// Tick all active actions
