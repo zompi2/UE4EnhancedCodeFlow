@@ -488,8 +488,7 @@ FFlow::RemoveAllDoNoMoreThanXTimes(GetWorld());
 
 ## Stats
 
-To measure plugin's performance you can use the stat command designed for it:  
-`stat ecf`  
+To measure plugin's performance you can use the stat command designed for it: `stat ecf`  
 ![stat](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/ccd5ab03-d1b1-423a-837d-cdd828605508)
 There are the following stats:  
 * Tick - the time in `ms` the plugin needs to perform one full update.  
@@ -507,7 +506,7 @@ There are the following stats:
 You can measure performence using [Unreal Insights](https://docs.unrealengine.com/4.26/en-US/TestingAndOptimization/PerformanceAndProfiling/UnrealInsights/) tool. Currently there is only one cpu timing trace available:
 * ECF-Actions-Tick - measures the time the plugin needs to perform one full update.
 
-You can disable Unreal Insights traces for this plugin by setting `bEnableInsightProfiling` in `EnhancedCodeFlow.Build.cs` to false.
+You can disable Unreal Insights traces for this plugin by setting `bEnableInsightProfiling` in `EnhancedCodeFlow.Build.cs` to `false`.
 
 [Back to top](#table-of-content)
 
