@@ -19,6 +19,7 @@ UECFTimelineBP* UECFTimelineBP::ECFTimeline(const UObject* WorldContextObject, f
 		[Proxy](float Value, float Time, bool bStopped)
 		{
 			Proxy->OnFinished.Broadcast(Value, Time, false);
+			Proxy->ClearAsyncBPAction();
 		}, 
 		BlendFunc, BlendExp, Settings);
 	Handle = FECFHandleBP(Proxy->Proxy_Handle);

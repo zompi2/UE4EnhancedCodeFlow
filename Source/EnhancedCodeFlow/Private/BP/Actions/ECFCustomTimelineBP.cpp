@@ -18,6 +18,7 @@ UECFCustomTimelineBP* UECFCustomTimelineBP::ECFCustomTimeline(const UObject* Wor
 		[Proxy](float Value, float Time, bool bStopped)
 		{
 			Proxy->OnFinished.Broadcast(Value, Time, bStopped);
+			Proxy->ClearAsyncBPAction();
 		},
 	Settings);
 	Handle = FECFHandleBP(Proxy->Proxy_Handle);

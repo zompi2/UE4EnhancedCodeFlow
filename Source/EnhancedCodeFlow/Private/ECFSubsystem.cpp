@@ -53,15 +53,19 @@ UECFSubsystem* UECFSubsystem::Get(const UObject* WorldContextObject)
 
 void UECFSubsystem::Tick(float DeltaTime)
 {
-#if STATS
-	DECLARE_SCOPE_CYCLE_COUNTER(TEXT("Tick"), STAT_ECF_TickAll, STATGROUP_ECF);
-#endif
-
 	// Do nothing when the whole subsystem is paused
 	if (bIsECFPaused)
 	{
 		return;
 	}
+
+#if STATS
+	DECLARE_SCOPE_CYCLE_COUNTER(TEXT("Tick"), STAT_ECF_TickAll, STATGROUP_ECF);
+#endif
+
+#if ECF_INSIGHT_PROFILING
+	TRACE_CPUPROFILER_EVENT_SCOPE_STR("ECF-Actions-Tick");
+#endif
 
 	// Remove all expired actions first
 	Actions.RemoveAll([](UECFActionBase* Action) { return IsActionValid(Action) == false; });
@@ -73,11 +77,12 @@ void UECFSubsystem::Tick(float DeltaTime)
 	Actions.Append(PendingAddActions);
 	PendingAddActions.Empty();
 
-	// Tick all active actions
 #if STATS
 	SET_DWORD_STAT(STAT_ECF_ActionsCount, Actions.Num());
 	SET_DWORD_STAT(STAT_ECF_InstancesCount, 0);
 #endif
+
+	// Tick all active actions
 	for (UECFActionBase* Action : Actions)
 	{
 		if (IsActionValid(Action))
@@ -97,12 +102,10 @@ UECFActionBase* UECFSubsystem::FindAction(const FECFHandle& HandleId) const
 {
 	if (HandleId.IsValid())
 	{
-		// Find running action and set it as finished
 		if (UECFActionBase* const* ActionFound = Actions.FindByPredicate([&](UECFActionBase* Action) { return (IsActionValid(Action) && (Action->GetHandleId() == HandleId)); }))
 		{
 			return *ActionFound;
 		}
-		// If not found, ensure user don't want to stop pending action
 		else if (UECFActionBase* const* PendingActionFound = PendingAddActions.FindByPredicate([&](UECFActionBase* PendingAddAction) { return (IsActionValid(PendingAddAction) && (PendingAddAction->GetHandleId() == HandleId)); }))
 		{
 			return *PendingActionFound;

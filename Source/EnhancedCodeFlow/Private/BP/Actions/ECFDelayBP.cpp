@@ -13,6 +13,7 @@ UECFDelayBP* UECFDelayBP::ECFDelay(const UObject* WorldContextObject, float Dela
 	Proxy->Proxy_Handle = FFlow::Delay(WorldContextObject, DelayTime, [Proxy](bool bStopped)
 	{
 		Proxy->OnComplete.Broadcast(bStopped);
+		Proxy->ClearAsyncBPAction();
 	}, Settings);
 	Handle = FECFHandleBP(Proxy->Proxy_Handle);
 

@@ -486,13 +486,28 @@ FFlow::RemoveAllDoNoMoreThanXTimes(GetWorld());
 
 # Measuring Performance
 
+## Stats
+
 To measure plugin's performance you can use the stat command designed for it:  
 `stat ecf`  
-![stat](https://user-images.githubusercontent.com/7863125/218276145-f0e80f4e-70fa-4c62-80e7-2b132e2b0bf7.png)  
+![stat](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/ccd5ab03-d1b1-423a-837d-cdd828605508)
 There are the following stats:  
-* Tick - the time in `ms` the plugin needs to perform one full update.
+* Tick - the time in `ms` the plugin needs to perform one full update.  
 * Actions - the amount of actions that are currently running.
 * Instances - describes how many of the running actions are the instanced ones.
+* Action Objects - the amount of the real action UObjects residing in the memory.
+* Async BP Objects - the amount of the real UObjects handling async BP calls residenting in the memory.
+
+> Have in mind that `Action Objects` and `Async BP Objects` counts Class Default Objects (CDO) too, so their values will never be 0.
+
+> `Tick` measures not only the time the plugin needs to do it's job, but also the time needed to run the code inside action's callbacks.
+
+## Unreal Insights
+
+You can measure performence using [Unreal Insights](https://docs.unrealengine.com/4.26/en-US/TestingAndOptimization/PerformanceAndProfiling/UnrealInsights/) tool. Currently there is only one cpu timing trace available:
+* ECF-Actions-Tick - measures the time the plugin needs to perform one full update.
+
+You can disable Unreal Insights traces for this plugin by setting `bEnableInsightProfiling` in `EnhancedCodeFlow.Build.cs` to false.
 
 [Back to top](#table-of-content)
 

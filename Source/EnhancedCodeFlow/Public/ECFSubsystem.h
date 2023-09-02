@@ -9,11 +9,8 @@
 #include "ECFActionBase.h"
 #include "ECFInstanceId.h"
 #include "ECFActionSettings.h"
+#include "ECFStats.h"
 #include "ECFSubsystem.generated.h"
-
-DECLARE_STATS_GROUP(TEXT("ECF"), STATGROUP_ECF, STATCAT_Advanced);
-DECLARE_DWORD_COUNTER_STAT_EXTERN(TEXT("Actions"), STAT_ECF_ActionsCount, STATGROUP_ECF, ENHANCEDCODEFLOW_API);
-DECLARE_DWORD_COUNTER_STAT_EXTERN(TEXT("Instances"), STAT_ECF_InstancesCount, STATGROUP_ECF, ENHANCEDCODEFLOW_API);
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 
@@ -102,11 +99,11 @@ protected:
 	UECFActionBase* GetInstancedAction(const FECFInstanceId& InstanceId) const;
 	
 	// List of active actions.
-	UPROPERTY()
+	UPROPERTY(Transient)
 	TArray<UECFActionBase*> Actions;
 
 	// List of nodes to be add in the future.
-	UPROPERTY()
+	UPROPERTY(Transient)
 	TArray<UECFActionBase*> PendingAddActions;
 
 	// Id of the last created node.

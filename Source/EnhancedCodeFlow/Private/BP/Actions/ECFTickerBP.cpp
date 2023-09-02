@@ -18,6 +18,7 @@ UECFTickerBP* UECFTickerBP::ECFTicker(const UObject* WorldContextObject, float T
 		[Proxy](bool bStopped)
 		{
 			Proxy->OnComplete.Broadcast(0.f, bStopped);
+			Proxy->ClearAsyncBPAction();
 		}, 
 	Settings);
 	Handle = FECFHandleBP(Proxy->Proxy_Handle);

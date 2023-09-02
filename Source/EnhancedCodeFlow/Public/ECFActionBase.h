@@ -22,6 +22,12 @@ class ENHANCEDCODEFLOW_API UECFActionBase : public UObject
 
 public:
 
+	/**
+	 * Default constructor and destructor. Used only for stats counting.
+	 */
+	UECFActionBase();
+	virtual ~UECFActionBase();
+
 	// Checks if the action has valid owner
 	virtual bool HasValidOwner() const
 	{
