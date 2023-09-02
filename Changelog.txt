@@ -1,3 +1,8 @@
+###### 3.0.1
+* Fixed possible memory leaks when using BP functions.
+* Added more stats to control memory usage.
+* Added Unreal Insight cpu tracing for tick function.
+
 ###### 3.0.0
 * This version will probably break compatiblity with the previous one. Update with caution!
 * WorldContextObjects and Action Owners are passed as const UObject* now.
