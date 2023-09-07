@@ -1,7 +1,9 @@
-# Enhanced Code Flow for Unreal Engine 4
+# Enhanced Code Flow for Unreal Engine
 
 This code plugin provides functions that drastically improve the quality of life during the implementation of game flow in C++.  
 It works very well with gameplay programming, UI programming with a lot of transitions or in any other situation.
+
+The plugin has been tested on the Engine's versions: 4.27.2 and 5.2.0.
 
 # Table of content
 
