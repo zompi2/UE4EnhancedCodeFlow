@@ -9,6 +9,7 @@
 #include "ECFInstanceId.h"
 #include "ECFActionSettings.h"
 #include "Misc/AssertionMacros.h"
+#include "ECFStats.h"
 #include "ECFActionBase.generated.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION

@@ -501,6 +501,12 @@ There are the following stats:
 
 > `Tick` measures not only the time the plugin needs to do it's job, but also the time needed to run the code inside action's callbacks.
 
+You can also display more detailed plugin's performance info with `stat ecfdetails`. It will display the time needed by every type of action.
+
+![image](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/98e13279-52ba-424f-9100-1e1405ed04f3)
+
+> Have in mind that custom tick intervals might alter the values of stats, especially the `CallCounts`.
+
 ## Unreal Insights
 
 You can measure performence using [Unreal Insights](https://docs.unrealengine.com/4.26/en-US/TestingAndOptimization/PerformanceAndProfiling/UnrealInsights/) tool. Currently there is only one cpu timing trace available:
@@ -548,7 +554,10 @@ FECFHandle FEnhancedCodeFlow::NewAction(const UObject* InOwner, int32 Param1, in
     return FECFHandle();
 }
 ```
-
+9. You can optionally add the stats counter to your action's `Tick` function, in order to measure it's performence  with `stat ecfdetails`.
+```cpp
+DECLARE_SCOPE_CYCLE_COUNTER(TEXT("NewAction - Tick"), STAT_ECFDETAILS_NEWACTION, STATGROUP_ECFDETAILS);
+```
 It is done! Now you can run your own action:
 
 ```cpp

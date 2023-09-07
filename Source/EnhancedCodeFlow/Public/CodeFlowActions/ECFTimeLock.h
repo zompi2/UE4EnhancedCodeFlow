@@ -45,6 +45,9 @@ protected:
 
 	void Tick(float DeltaTime) override
 	{
+#if STATS
+		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("TimeLock - Tick"), STAT_ECFDETAILS_TIMELOCK, STATGROUP_ECFDETAILS);
+#endif
 		CurrentTime += DeltaTime;
 		if (CurrentTime >= LockTime)
 		{

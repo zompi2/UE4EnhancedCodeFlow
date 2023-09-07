@@ -65,6 +65,9 @@ protected:
 
 	void Tick(float DeltaTime) override
 	{
+#if STATS
+		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("DoNoMoreThanXTime - Tick"), STAT_ECFDETAILS_DONOMORETHANXTIMES, STATGROUP_ECFDETAILS);
+#endif
 		if (CurrentTime < LockTime)
 		{
 			CurrentTime += DeltaTime;

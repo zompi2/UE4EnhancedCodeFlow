@@ -58,6 +58,9 @@ protected:
 
 	void Tick(float DeltaTime) override 
 	{
+#if STATS
+		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("WaitAndExecute - Tick"), STAT_ECFDETAILS_WAITANDEXECUTE, STATGROUP_ECFDETAILS);
+#endif
 		if (bWithTimeOut)
 		{
 			TimeOut -= DeltaTime;

@@ -47,6 +47,9 @@ protected:
 
 	void Tick(float DeltaTime) override
 	{
+#if STATS
+		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("Ticker - Tick"), STAT_ECFDETAILS_TICKER, STATGROUP_ECFDETAILS);
+#endif
 		TickFunc(DeltaTime, HandleId);
 		CurrentTime += DeltaTime;
 		if (TickingTime > 0.f && CurrentTime >= TickingTime)

@@ -57,6 +57,9 @@ protected:
 
 	void Tick(float DeltaTime) override
 	{
+#if STATS
+		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("CustomTimeline - Tick"), STAT_ECFDETAILS_CUSTOMTIMELINE, STATGROUP_ECFDETAILS);
+#endif
 		MyTimeline.TickTimeline(DeltaTime);
 	}
 

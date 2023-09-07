@@ -9,15 +9,18 @@
  * Every Action function require it's owner, so it can be properly cleaned up in case the owner
  * would be destroyed.
  * Launching action will return a handle to it. If the Handle is not valid (check IsValid() function)
- * it means the action couldn't be launched. Handles will be invalidated after action has finished.
+ * it means the action couldn't be launched.
+ * Even when the action has finished, the Handle will still be valid. To check if the action is still running
+ * use IsActionRunning(this, Handle) function.
  * Callbacks should be defined using lambdas.
  * Example of the plugin usage when using Delay Action:
- * FECFHandle DelayHandle = FFlow::Delay(this, 2.f, [this](float DeltaTime)
+ * FECFHandle DelayHandle = FFlow::Delay(this, 2.f, [this](bool bStopped)
  * {
  *     // Stuff to do after 2 seconds delay.
  * });
  * Every function accepts an optional parameter of FECFActionSettings which can control
- * tick interval and flag to ignore global time dilation.
+ * tick interval and flag to ignore global time dilation and more.
+ * For more detailed instructions please check README.md.
  */
 
 #pragma once

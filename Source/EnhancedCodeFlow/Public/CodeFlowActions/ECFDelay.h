@@ -47,6 +47,9 @@ protected:
 
 	void Tick(float DeltaTime) override
 	{
+#if STATS
+		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("Delay - Tick"), STAT_ECFDETAILS_DELAY, STATGROUP_ECFDETAILS);
+#endif
 		CurrentTime += DeltaTime;
 		if (CurrentTime > DelayTime)
 		{
