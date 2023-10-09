@@ -46,7 +46,11 @@ void UECFActionBP::Activate()
 void UECFActionBP::ClearAsyncBPAction()
 {
 	SetReadyToDestroy();
+#if ((ENGINE_MAJOR_VERSION == 5) && (ENGINE_MINOR_VERSION >= 3))
+	MarkAsGarbage();
+#else
 	MarkPendingKill();
+#endif
 }
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION

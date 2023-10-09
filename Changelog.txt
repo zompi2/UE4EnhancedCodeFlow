@@ -1,3 +1,6 @@
+###### 3.0.3
+* Deprecation fix for UE5.3
+
 ###### 3.0.2
 * More detailed stats added.
 * Readme and comments  fixes

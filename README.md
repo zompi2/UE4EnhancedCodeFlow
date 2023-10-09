@@ -3,7 +3,7 @@
 This code plugin provides functions that drastically improve the quality of life during the implementation of game flow in C++.  
 It works very well with gameplay programming, UI programming with a lot of transitions or in any other situation.
 
-The plugin has been tested on the Engine's versions: 4.27.2 and 5.2.0.
+The plugin has been tested on the Engine's versions: 4.27.2 and 5.3.1.
 
 # Table of content
 
