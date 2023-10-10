@@ -32,8 +32,6 @@ class ENHANCEDCODEFLOW_API FECFCoroutineTask_WaitSeconds : public FECFCoroutineT
 public:
 
 	FECFCoroutineTask_WaitSeconds(class UObject* InOwner, const FECFActionSettings& InSettings, float InTime);
-
-
 	void await_suspend(FECFCoroutineHandle CoroHandle);
 	
 private:
