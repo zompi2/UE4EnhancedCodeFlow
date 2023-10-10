@@ -31,6 +31,7 @@
 #include "ECFTypes.h"
 #include "ECFActionSettings.h"
 #include "ECFInstanceId.h"
+#include <ECFCoro.h>
 
 class ENHANCEDCODEFLOW_API FEnhancedCodeFlow
 {
@@ -284,6 +285,8 @@ public:
 	 *                             Otherwise it will remove all time locks from everywhere.
 	 */
 	static void RemoveAllDoNoMoreThanXTimes(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+
+	static FECFCoroutineWaitTask DelayCoro(UObject* InOwner, float Time);
 };
 
 using FFlow = FEnhancedCodeFlow;

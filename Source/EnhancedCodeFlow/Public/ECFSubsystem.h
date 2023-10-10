@@ -10,6 +10,7 @@
 #include "ECFInstanceId.h"
 #include "ECFActionSettings.h"
 #include "ECFStats.h"
+#include "ECFCoro.h"
 #include "ECFSubsystem.generated.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
@@ -20,6 +21,12 @@ class ENHANCEDCODEFLOW_API UECFSubsystem : public UWorldSubsystem, public FTicka
 	GENERATED_BODY()
 
 	friend class FEnhancedCodeFlow;
+	friend class FECFCoroutineTask;
+
+public: 
+
+	FECFCoroutine Wait();
+	void RegisterWaitCoroutine(const UObject* InOwner, FECFCoroutineHandle Handle, float InTime);
 
 protected:
 
