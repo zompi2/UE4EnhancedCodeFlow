@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "ECFCoro.h"
+#include "ECFCoroutines.h"
 #include "ECFSubsystem.h"
 
 class ENHANCEDCODEFLOW_API FECFCoroutineTask
@@ -19,10 +19,10 @@ protected:
 	}
 };
 
-class ENHANCEDCODEFLOW_API FECFCoroutineWaitTask : public FECFCoroutineTask
+class ENHANCEDCODEFLOW_API FECFCoroutineTask_WaitSeconds : public FECFCoroutineTask
 {
 public:
-	FECFCoroutineWaitTask(class UObject* InOwner, const FECFActionSettings& InSettings, float InTime);
+	FECFCoroutineTask_WaitSeconds(class UObject* InOwner, const FECFActionSettings& InSettings, float InTime);
 
 	void await_suspend(FECFCoroutineHandle CoroHandle);
 	bool await_ready() { return false; }

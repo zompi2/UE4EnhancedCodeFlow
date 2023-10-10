@@ -10,7 +10,7 @@
 #include "ECFInstanceId.h"
 #include "ECFActionSettings.h"
 #include "ECFStats.h"
-#include "ECFCoro.h"
+#include "ECFCoroutines.h"
 #include "ECFSubsystem.generated.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
@@ -63,6 +63,7 @@ protected:
 		return FECFHandle();
 	}
 
+	// Add Coroutine Action to List.
 	template<typename T, typename ... Ts>
 	void AddCoroutineAction(const UObject* InOwner, FECFCoroutineHandle InCoroutineHandle, const FECFActionSettings& Settings, Ts&& ... Args)
 	{

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "ECFActionBase.h"
-#include "ECFCoro.h"
+#include "ECFCoroutines.h"
 #include "ECFCoroutineActionBase.generated.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION

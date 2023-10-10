@@ -3,12 +3,12 @@
 #pragma once
 
 #include "ECFCoroutineActionBase.h"
-#include "ECFDelayCoro.generated.h"
+#include "ECFWaitSeconds.generated.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 
 UCLASS()
-class ENHANCEDCODEFLOW_API UECFDelayCoro : public UECFCoroutineActionBase
+class ENHANCEDCODEFLOW_API UECFWaitSeconds : public UECFCoroutineActionBase
 {
 	GENERATED_BODY()
 
@@ -33,7 +33,7 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - delay coro failed to start. Are you sure the DelayTime is not negative?"));
+			ensureMsgf(false, TEXT("ECF Coroutine - wait seconds failed to start. Are you sure the DelayTime is not negative?"));
 			return false;
 		}
 	}
@@ -46,7 +46,7 @@ protected:
 	void Tick(float DeltaTime) override
 	{
 #if STATS
-		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("Delay - Tick"), STAT_ECFDETAILS_DELAY, STATGROUP_ECFDETAILS);
+		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("WaitSeconds - Tick"), STAT_ECFDETAILS_WAITSECONDS, STATGROUP_ECFDETAILS);
 #endif
 		CurrentTime += DeltaTime;
 		if (CurrentTime > DelayTime)
