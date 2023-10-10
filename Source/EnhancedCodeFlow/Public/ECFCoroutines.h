@@ -2,6 +2,8 @@
 
 #pragma once
 
+#ifdef __cpp_impl_coroutine
+
 #include <coroutine>
 
 struct FECFCoroutinePromise;
@@ -20,3 +22,13 @@ struct FECFCoroutinePromise
 	void return_void() {}
 	void unhandled_exception() {}
 };
+
+#else
+
+struct FECFCoroutine
+{};
+
+struct FECFCoroutineHandle
+{};
+
+#endif

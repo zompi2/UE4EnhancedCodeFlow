@@ -58,7 +58,9 @@ protected:
 
 	void Complete(bool bStopped) override
 	{
+#ifdef __cpp_impl_coroutine
 		CoroutineHandle.resume();
+#endif
 	}
 };
 
