@@ -1,3 +1,6 @@
+###### 3.0.4
+* Deprecation fix for UE5.2 when disabling optimizations
+
 ###### 3.0.3
 * Deprecation fix for UE5.3
 
