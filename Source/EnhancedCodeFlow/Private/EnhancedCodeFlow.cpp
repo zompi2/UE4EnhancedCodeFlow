@@ -15,6 +15,8 @@
 #include "CodeFlowActions/ECFDoNTimes.h"
 #include "CodeFlowActions/ECFDoNoMoreThanXTime.h"
 
+
+
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 
 /*^^^ ECF Flow Control Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -262,9 +264,9 @@ void FEnhancedCodeFlow::RemoveAllDoNoMoreThanXTimes(const UObject* WorldContextO
 		ECF->RemoveActionsOfClass<UECFDoNoMoreThanXTime>(false, InOwner);
 }
 
-FECFCoroutineWaitTask FEnhancedCodeFlow::DelayCoro(UObject* InOwner, float Time)
+FECFCoroutineWaitTask FEnhancedCodeFlow::DelayCoro(UObject* InOwner, float Time, const FECFActionSettings& Settings /*= {}*/)
 {
-	return FECFCoroutineWaitTask(InOwner, Time);
+	return FECFCoroutineWaitTask(InOwner, Settings, Time);
 }
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION

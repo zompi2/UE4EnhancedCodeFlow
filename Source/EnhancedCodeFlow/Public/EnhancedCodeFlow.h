@@ -31,7 +31,7 @@
 #include "ECFTypes.h"
 #include "ECFActionSettings.h"
 #include "ECFInstanceId.h"
-#include <ECFCoro.h>
+#include "ECFCoro2.h"
 
 class ENHANCEDCODEFLOW_API FEnhancedCodeFlow
 {
@@ -286,7 +286,7 @@ public:
 	 */
 	static void RemoveAllDoNoMoreThanXTimes(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
-	static FECFCoroutineWaitTask DelayCoro(UObject* InOwner, float Time);
+	static FECFCoroutineWaitTask DelayCoro(UObject* InOwner, float Time, const FECFActionSettings& Settings = {});
 };
 
 using FFlow = FEnhancedCodeFlow;

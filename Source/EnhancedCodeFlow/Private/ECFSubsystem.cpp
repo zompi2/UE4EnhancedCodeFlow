@@ -276,20 +276,4 @@ bool UECFSubsystem::IsActionValid(UECFActionBase* Action)
 	return IsValid(Action) && (Action->HasAnyFlags(RF_BeginDestroyed | RF_FinishDestroyed) == false) && Action->IsValid();
 }
 
-FECFCoroutine UECFSubsystem::Wait()
-{
-	return FECFCoroutine();
-}
-
-void UECFSubsystem::RegisterWaitCoroutine(const UObject* InOwner, FECFCoroutineHandle Handle, float InTime)
-{
-	UECFDelayCoro* NewAction = NewObject<UECFDelayCoro>(this);
-	NewAction->SetAction(InOwner, ++LastHandleId, {}, {});
-	if (NewAction->Setup(InTime, Handle))
-	{
-		NewAction->Init();
-		PendingAddActions.Add(NewAction);
-	}
-}
-
 ECF_PRAGMA_ENABLE_OPTIMIZATION

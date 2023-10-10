@@ -115,8 +115,6 @@ protected:
 	// Settings for this action
 	FECFActionSettings Settings;
 
-private:
-
 	// Sets the owner and handle id of this action.
 	void SetAction(const UObject* InOwner, const FECFHandle& InHandleId, const FECFInstanceId& InInstanceId, const FECFActionSettings& InSettings)
 	{
@@ -137,6 +135,8 @@ private:
 			bIsPaused = true;
 		}
 	}
+
+private:
 
 	// Performs a tick. Apply any settings to the time step.
 	void DoTick(float DeltaTime)

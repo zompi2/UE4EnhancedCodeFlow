@@ -23,11 +23,6 @@ class ENHANCEDCODEFLOW_API UECFSubsystem : public UWorldSubsystem, public FTicka
 	friend class FEnhancedCodeFlow;
 	friend class FECFCoroutineTask;
 
-public: 
-
-	FECFCoroutine Wait();
-	void RegisterWaitCoroutine(const UObject* InOwner, FECFCoroutineHandle Handle, float InTime);
-
 protected:
 
 	/** UGameInstanceSubsystem interface implementation */
@@ -66,6 +61,18 @@ protected:
 
 		// If the action couldn't be created for any reason - return invalid id.
 		return FECFHandle();
+	}
+
+	template<typename T, typename ... Ts>
+	void AddCoroutineAction(const UObject* InOwner, FECFCoroutineHandle InCoroutineHandle, const FECFActionSettings& Settings, Ts&& ... Args)
+	{
+		T* NewAction = NewObject<T>(this);
+		NewAction->SetCoroutineAction(InOwner, InCoroutineHandle, ++LastHandleId, Settings);
+		if (NewAction->Setup(Forward<Ts>(Args)...))
+		{
+			NewAction->Init();
+			PendingAddActions.Add(NewAction);
+		}
 	}
 
 	// Try to find running or pending action.
