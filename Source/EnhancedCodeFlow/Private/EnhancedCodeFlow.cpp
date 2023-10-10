@@ -264,6 +264,8 @@ void FEnhancedCodeFlow::RemoveAllDoNoMoreThanXTimes(const UObject* WorldContextO
 		ECF->RemoveActionsOfClass<UECFDoNoMoreThanXTime>(false, InOwner);
 }
 
+/*^^^ Wait Seconds (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
 FECFCoroutineTask_WaitSeconds FEnhancedCodeFlow::WaitSeconds(UObject* InOwner, float Time, const FECFActionSettings& Settings /*= {}*/)
 {
 	return FECFCoroutineTask_WaitSeconds(InOwner, Settings, Time);

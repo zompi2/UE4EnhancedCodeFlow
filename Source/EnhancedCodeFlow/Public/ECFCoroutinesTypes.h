@@ -7,6 +7,11 @@
 
 class ENHANCEDCODEFLOW_API FECFCoroutineTask
 {
+public:
+
+	void await_resume() {}
+	bool await_ready() { return false; }
+
 protected:
 
 	template<typename T, typename ... Ts>
@@ -17,19 +22,19 @@ protected:
 			ECF->AddCoroutineAction<T>(InOwner, InCoroutineHandle, Settings, Forward<Ts>(Args)...);
 		}
 	}
+
+	class UObject* Owner;
+	FECFActionSettings Settings;
 };
 
 class ENHANCEDCODEFLOW_API FECFCoroutineTask_WaitSeconds : public FECFCoroutineTask
 {
 public:
+
 	FECFCoroutineTask_WaitSeconds(class UObject* InOwner, const FECFActionSettings& InSettings, float InTime);
-
 	void await_suspend(FECFCoroutineHandle CoroHandle);
-	bool await_ready() { return false; }
-	void await_resume() {}
-
+	
 private:
-	class UObject* Owner;
-	FECFActionSettings Settings;
+
 	float Time;
 };
