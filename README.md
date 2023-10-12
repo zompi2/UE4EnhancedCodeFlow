@@ -146,10 +146,11 @@ Perfect solution if code needs a reference to an object, which spawn moment is n
 
 
 ``` cpp
-FFlow::WaitAndExecute(this, [this]()
+FFlow::WaitAndExecute(this, [this](float DeltaTime)
 {
   // Write your own predicate. 
   // Return true when you want to execute the code below.
+  // The DeltaTime parameter is optional.
   return bIsReadyToUse;
 },
 [this](bool bTimedOut, bool bStopped)
@@ -160,7 +161,7 @@ FFlow::WaitAndExecute(this, [this]()
 
 BP version of this function uses a `Predicate` function which controls when the `On Execution` pin will execute.
 
-![WaitAndExecute](https://user-images.githubusercontent.com/7863125/218276148-2cb4feec-7343-4a63-92a4-2f0334e495c0.png)
+![WaitAndExecute](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/882f7637-5f2a-4e7d-b0ef-093da3693a33)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -192,7 +193,7 @@ FFlow::WhileTrueExecute(this, [this]()
 
 BP version of this function uses a `Predicate` function which controls when the `On Execution` pin with `Delta Time` will execute.
 
-![WhileTrueExecute](https://user-images.githubusercontent.com/7863125/218276149-964b91e0-76da-4758-b2c2-7800a0eea2ae.png)
+![WhileTrueExecute](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/999b064d-9ea9-4a15-9998-8c15bbd10ff0)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)

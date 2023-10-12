@@ -13,14 +13,14 @@ UECFWaitAndExecuteBP* UECFWaitAndExecuteBP::ECFWaitAndExecute(const UObject* Wor
 	Proxy->Proxy_HasFinished = false;
 
 	Proxy->Proxy_Handle = FFlow::WaitAndExecute(WorldContextObject,
-		[Proxy]()
+		[Proxy](float DeltaTime)
 		{
-			Proxy->OnWait.Broadcast(Proxy, false, false);
+			Proxy->OnWait.Broadcast(Proxy, DeltaTime, false, false);
 			return Proxy->Proxy_HasFinished;
 		},
 		[Proxy](bool bTimedOut, bool bStopped)
 		{
-			Proxy->OnExecute.Broadcast(Proxy, bTimedOut, bStopped);
+			Proxy->OnExecute.Broadcast(Proxy, 0.f, bTimedOut, bStopped);
 			Proxy->ClearAsyncBPAction();
 		},
 	InTimeOut, Settings);

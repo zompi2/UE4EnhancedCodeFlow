@@ -1,12 +1,18 @@
+###### 3.1.0
+* Additional WaitAndExecute function wich DeltaTime value in a predicate.
+* Better class naming: ECFTicker2 -> ECFTicker_WithHandle.
+* Better Predicate BP nodes naming.
+* Deprecation warning fix for UE5.0.
+
 ###### 3.0.4
-* Deprecation fix for UE5.2 when disabling optimizations
+* Deprecation fix for UE5.2 when disabling optimizations.
 
 ###### 3.0.3
-* Deprecation fix for UE5.3
+* Deprecation fix for UE5.3.
 
 ###### 3.0.2
 * More detailed stats added.
-* Readme and comments  fixes
+* Readme and comments fixes.
 
 ###### 3.0.1
 * Fixed possible memory leaks when using BP functions.

@@ -4,9 +4,10 @@
 #include "ECFSubsystem.h"
 
 #include "CodeFlowActions/ECFTicker.h"
-#include "CodeFlowActions/ECFTicker2.h"
+#include "CodeFlowActions/ECFTicker_WithHandle.h"
 #include "CodeFlowActions/ECFDelay.h"
 #include "CodeFlowActions/ECFWaitAndExecute.h"
+#include "CodeFlowActions/ECFWaitAndExecute_WithDeltaTime.h"
 #include "CodeFlowActions/ECFWhileTrueExecute.h"
 #include "CodeFlowActions/ECFTimeline.h"
 #include "CodeFlowActions/ECFCustomTimeline.h"
@@ -104,7 +105,7 @@ FECFHandle FFlow::AddTicker(const UObject* InOwner, TUniqueFunction<void(float, 
 FECFHandle FFlow::AddTicker(const UObject* InOwner, float InTickingTime, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, TUniqueFunction<void(bool)>&& InCallbackFunc/* = nullptr*/, const FECFActionSettings& Settings/* = {}*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-		return ECF->AddAction<UECFTicker2>(InOwner, Settings, FECFInstanceId(), InTickingTime, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc));
+		return ECF->AddAction<UECFTicker_WithHandle>(InOwner, Settings, FECFInstanceId(), InTickingTime, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc));
 	else
 		return FECFHandle();
 }
@@ -114,7 +115,7 @@ void FFlow::RemoveAllTickers(const UObject* WorldContextObject, bool bComplete/*
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
 	{
 		ECF->RemoveActionsOfClass<UECFTicker>(bComplete, InOwner);
-		ECF->RemoveActionsOfClass<UECFTicker2>(bComplete, InOwner);
+		ECF->RemoveActionsOfClass<UECFTicker_WithHandle>(bComplete, InOwner);
 	}
 }
 
@@ -144,10 +145,21 @@ FECFHandle FFlow::WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool()>
 		return FECFHandle();
 }
 
+FECFHandle FFlow::WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool(float)>&& InPredicate, TUniqueFunction<void(bool, bool)>&& InCallbackFunc, float InTimeOut, const FECFActionSettings& Settings)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFWaitAndExecute_WithDeltaTime>(InOwner, Settings, FECFInstanceId(), MoveTemp(InPredicate), MoveTemp(InCallbackFunc), InTimeOut);
+	else
+		return FECFHandle();
+}
+
 void FFlow::RemoveAllWaitAndExecutes(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner/* = nullptr*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+	{
 		ECF->RemoveActionsOfClass<UECFWaitAndExecute>(bComplete, InOwner);
+		ECF->RemoveActionsOfClass<UECFWaitAndExecute_WithDeltaTime>(bComplete, InOwner);
+	}
 }
 
 /*^^^ While True Execute ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/

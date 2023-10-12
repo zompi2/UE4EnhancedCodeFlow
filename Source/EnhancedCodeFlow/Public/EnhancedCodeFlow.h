@@ -138,12 +138,13 @@ public:
 	/**
 	 * Waits until specific conditions are made and then execute code.
 	 * @param InPredicate			- a function that decides if the action should launch. 
-	 *								  If it returns true it means the action must be launched. Must be: []() -> bool.
+	 *								  If it returns true it means the action must be launched. Can be: []() -> bool, or [](float DeltaTime) -> bool
 	 * @param InCallbackFunc		- a callback with action to execute. Will return bool indicating if the callback was called because of the timeout. Must be: [](bool bTimedOut, bool bStopped) -> void.
 	 * @param InTimeOut				- if greater than 0.f it will apply timeout to this action.
 	 * @param Settings [optional]	- an extra settings to apply to this action.
 	 */
 	static FECFHandle WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(bool, bool)>&& InCallbackFunc, float InTimeOut = 0.f, const FECFActionSettings& Settings = {});
+	static FECFHandle WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool(float)>&& InPredicate, TUniqueFunction<void(bool, bool)>&& InCallbackFunc, float InTimeOut = 0.f, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops "wait and execute" actions. Callbacks will not be executed.
