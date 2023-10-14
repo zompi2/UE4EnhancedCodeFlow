@@ -133,6 +133,11 @@ public:
 	 */
 	static void RemoveAllDelays(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
+	/*^^^ Delay Ticks ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	static FECFHandle DelayTicks(const UObject* InOwner, int32 InDelayTicks, TUniqueFunction<void(bool)>&& InCallbackFunc, const FECFActionSettings& Settings = {});
+	static void RemoveAllDelayTicks(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
+
 	/*^^^ Wait And Execute ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 	/**

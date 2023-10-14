@@ -6,6 +6,7 @@
 #include "CodeFlowActions/ECFTicker.h"
 #include "CodeFlowActions/ECFTicker_WithHandle.h"
 #include "CodeFlowActions/ECFDelay.h"
+#include "CodeFlowActions/ECFDelayTicks.h"
 #include "CodeFlowActions/ECFWaitAndExecute.h"
 #include "CodeFlowActions/ECFWaitAndExecute_WithDeltaTime.h"
 #include "CodeFlowActions/ECFWhileTrueExecute.h"
@@ -133,6 +134,22 @@ void FFlow::RemoveAllDelays(const UObject* WorldContextObject, bool bComplete/* 
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
 		ECF->RemoveActionsOfClass<UECFDelay>(bComplete, InOwner);
+}
+
+/*^^^ Delay Ticks ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFHandle FEnhancedCodeFlow::DelayTicks(const UObject* InOwner, int32 InDelayTicks, TUniqueFunction<void(bool)>&& InCallbackFunc, const FECFActionSettings& Settings)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFDelayTicks>(InOwner, Settings, FECFInstanceId(), InDelayTicks, MoveTemp(InCallbackFunc));
+	else
+		return FECFHandle();
+}
+
+void FEnhancedCodeFlow::RemoveAllDelayTicks(const UObject* WorldContextObject, bool bComplete, UObject* InOwner)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		ECF->RemoveActionsOfClass<UECFDelayTicks>(bComplete, InOwner);
 }
 
 /*^^^ Wait And Execute ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
