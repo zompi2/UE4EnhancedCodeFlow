@@ -41,6 +41,7 @@ The example project wich uses this plugin can be found in **[this repository](ht
 # Usage
 
 - [Delay](#delay)
+- [Delay Ticks](#delay-ticks)
 - [Add Ticker](#add-ticker)
 - [Wait And Execute](#wait-and-execute)
 - [While True Execute](#while-true-execute)
@@ -72,6 +73,22 @@ An ECF-Delay BP node has few advantages over the built in Unreal's Delay node.
 You can plan to execute delayed code without delaying the whole Blueprint, you can cancel the delayed code's execution or make the dilation game pause and time dilation independent. 
 
 ![Delay](https://user-images.githubusercontent.com/7863125/218276143-db9554f2-abb3-40a1-ad83-ad1132812bb7.png)
+
+[Back to actions list](#usage)  
+[Back to top](#table-of-content)
+
+#### Delay Ticks
+
+Execute specified action after some ticks. Can be useful if we want to execute some code in next game tick.
+
+``` cpp
+FFlow::DelayTicks(this, 1, [this](bool bStopped)
+{
+  // Code to execute after 1 tick.
+});
+```
+
+![ecfticks](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/39d1b743-f373-435c-befc-290c90dd720c)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -146,10 +163,11 @@ Perfect solution if code needs a reference to an object, which spawn moment is n
 
 
 ``` cpp
-FFlow::WaitAndExecute(this, [this]()
+FFlow::WaitAndExecute(this, [this](float DeltaTime)
 {
   // Write your own predicate. 
   // Return true when you want to execute the code below.
+  // The DeltaTime parameter is optional.
   return bIsReadyToUse;
 },
 [this](bool bTimedOut, bool bStopped)
@@ -160,7 +178,7 @@ FFlow::WaitAndExecute(this, [this]()
 
 BP version of this function uses a `Predicate` function which controls when the `On Execution` pin will execute.
 
-![WaitAndExecute](https://user-images.githubusercontent.com/7863125/218276148-2cb4feec-7343-4a63-92a4-2f0334e495c0.png)
+![WaitAndExecute](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/882f7637-5f2a-4e7d-b0ef-093da3693a33)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -192,7 +210,7 @@ FFlow::WhileTrueExecute(this, [this]()
 
 BP version of this function uses a `Predicate` function which controls when the `On Execution` pin with `Delta Time` will execute.
 
-![WhileTrueExecute](https://user-images.githubusercontent.com/7863125/218276149-964b91e0-76da-4758-b2c2-7800a0eea2ae.png)
+![WhileTrueExecute](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/999b064d-9ea9-4a15-9998-8c15bbd10ff0)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
