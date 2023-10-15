@@ -119,34 +119,53 @@ public:
 
 	/**
 	 * Execute specified action after some time.
-	 * @param InDelayTiem - time in seconds to wait before executing action.
+	 * @param InDelayTime - time in seconds to wait before executing action.
 	 * @param InCallbackFunc - a callback with action to execute. Must be: [](bool bStopped) -> void. 
 	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
 	static FECFHandle Delay(const UObject* InOwner, float InDelayTime, TUniqueFunction<void(bool)>&& InCallbackFunc, const FECFActionSettings& Settings = {});
 
 	/**
-	 * Stops all delays. Callbacks will not be executed.
+	 * Stops all delays.
 	 * @param bComplete			 - indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 * @param InOwner [optional] - if defined it will remove delayed actions only from the given owner. Otherwise
 	 *                             it will remove delayed actions from everywhere.
 	 */
 	static void RemoveAllDelays(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
+	/*^^^ Delay Ticks ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Execute specified action after some ticks.
+	 * @param InDelayTicks - number of ticks after which the action will be executed.
+	 * @param InCallbackFunc - a callback with action to execute. Must be: [](bool bStopped) -> void.
+	 * @param Settings [optional] - an extra settings to apply to this action.
+	 */
+	static FECFHandle DelayTicks(const UObject* InOwner, int32 InDelayTicks, TUniqueFunction<void(bool)>&& InCallbackFunc, const FECFActionSettings& Settings = {});
+
+	/**
+	 * Stops all delay ticks.
+	 * @param bComplete			 - indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 * @param InOwner [optional] - if defined it will remove delayed actions only from the given owner. Otherwise
+	 *                             it will remove delayed actions from everywhere.
+	 */
+	static void RemoveAllDelayTicks(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
+
 	/*^^^ Wait And Execute ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 	/**
 	 * Waits until specific conditions are made and then execute code.
 	 * @param InPredicate			- a function that decides if the action should launch. 
-	 *								  If it returns true it means the action must be launched. Must be: []() -> bool.
+	 *								  If it returns true it means the action must be launched. Can be: []() -> bool, or [](float DeltaTime) -> bool
 	 * @param InCallbackFunc		- a callback with action to execute. Will return bool indicating if the callback was called because of the timeout. Must be: [](bool bTimedOut, bool bStopped) -> void.
 	 * @param InTimeOut				- if greater than 0.f it will apply timeout to this action.
 	 * @param Settings [optional]	- an extra settings to apply to this action.
 	 */
 	static FECFHandle WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(bool, bool)>&& InCallbackFunc, float InTimeOut = 0.f, const FECFActionSettings& Settings = {});
+	static FECFHandle WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool(float)>&& InPredicate, TUniqueFunction<void(bool, bool)>&& InCallbackFunc, float InTimeOut = 0.f, const FECFActionSettings& Settings = {});
 
 	/**
-	 * Stops "wait and execute" actions. Callbacks will not be executed.
+	 * Stops "wait and execute" actions.
 	 * @param bComplete			 - indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 * @param InOwner [optional] - if defined it will remove "wait and execute" actions only from the given owner. 
 	 *                             Otherwise it will remove all "wait and execute" actions from everywhere.

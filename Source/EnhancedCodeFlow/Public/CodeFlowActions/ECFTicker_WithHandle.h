@@ -3,12 +3,12 @@
 #pragma once
 
 #include "ECFActionBase.h"
-#include "ECFTicker2.generated.h"
+#include "ECFTicker_WithHandle.generated.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 
 UCLASS()
-class ENHANCEDCODEFLOW_API UECFTicker2 : public UECFActionBase
+class ENHANCEDCODEFLOW_API UECFTicker_WithHandle : public UECFActionBase
 {
 	GENERATED_BODY()
 
