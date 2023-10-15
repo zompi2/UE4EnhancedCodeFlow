@@ -1,8 +1,10 @@
 ###### 3.1.0
+* DelayTicks action has been added, which executes the given action after the specified amount of ticks.
 * Additional WaitAndExecute function wich DeltaTime value in a predicate.
 * Better class naming: ECFTicker2 -> ECFTicker_WithHandle.
 * Better Predicate BP nodes naming.
 * Deprecation warning fix for UE5.0.
+* Some fixes in code comments.
 
 ###### 3.0.4
 * Deprecation fix for UE5.2 when disabling optimizations.

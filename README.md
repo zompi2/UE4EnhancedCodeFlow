@@ -41,6 +41,7 @@ The example project wich uses this plugin can be found in **[this repository](ht
 # Usage
 
 - [Delay](#delay)
+- [Delay Ticks](#delay-ticks)
 - [Add Ticker](#add-ticker)
 - [Wait And Execute](#wait-and-execute)
 - [While True Execute](#while-true-execute)
@@ -72,6 +73,22 @@ An ECF-Delay BP node has few advantages over the built in Unreal's Delay node.
 You can plan to execute delayed code without delaying the whole Blueprint, you can cancel the delayed code's execution or make the dilation game pause and time dilation independent. 
 
 ![Delay](https://user-images.githubusercontent.com/7863125/218276143-db9554f2-abb3-40a1-ad83-ad1132812bb7.png)
+
+[Back to actions list](#usage)  
+[Back to top](#table-of-content)
+
+#### Delay Ticks
+
+Execute specified action after some ticks. Can be useful if we want to execute some code in next game tick.
+
+``` cpp
+FFlow::DelayTicks(this, 1, [this](bool bStopped)
+{
+  // Code to execute after 1 tick.
+});
+```
+
+![ecfticks](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/39d1b743-f373-435c-befc-290c90dd720c)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)

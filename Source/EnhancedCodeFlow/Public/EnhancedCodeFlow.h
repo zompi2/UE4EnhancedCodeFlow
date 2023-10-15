@@ -119,14 +119,14 @@ public:
 
 	/**
 	 * Execute specified action after some time.
-	 * @param InDelayTiem - time in seconds to wait before executing action.
+	 * @param InDelayTime - time in seconds to wait before executing action.
 	 * @param InCallbackFunc - a callback with action to execute. Must be: [](bool bStopped) -> void. 
 	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
 	static FECFHandle Delay(const UObject* InOwner, float InDelayTime, TUniqueFunction<void(bool)>&& InCallbackFunc, const FECFActionSettings& Settings = {});
 
 	/**
-	 * Stops all delays. Callbacks will not be executed.
+	 * Stops all delays.
 	 * @param bComplete			 - indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 * @param InOwner [optional] - if defined it will remove delayed actions only from the given owner. Otherwise
 	 *                             it will remove delayed actions from everywhere.
@@ -135,7 +135,20 @@ public:
 
 	/*^^^ Delay Ticks ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
+	/**
+	 * Execute specified action after some ticks.
+	 * @param InDelayTicks - number of ticks after which the action will be executed.
+	 * @param InCallbackFunc - a callback with action to execute. Must be: [](bool bStopped) -> void.
+	 * @param Settings [optional] - an extra settings to apply to this action.
+	 */
 	static FECFHandle DelayTicks(const UObject* InOwner, int32 InDelayTicks, TUniqueFunction<void(bool)>&& InCallbackFunc, const FECFActionSettings& Settings = {});
+
+	/**
+	 * Stops all delay ticks.
+	 * @param bComplete			 - indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 * @param InOwner [optional] - if defined it will remove delayed actions only from the given owner. Otherwise
+	 *                             it will remove delayed actions from everywhere.
+	 */
 	static void RemoveAllDelayTicks(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^ Wait And Execute ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -152,7 +165,7 @@ public:
 	static FECFHandle WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool(float)>&& InPredicate, TUniqueFunction<void(bool, bool)>&& InCallbackFunc, float InTimeOut = 0.f, const FECFActionSettings& Settings = {});
 
 	/**
-	 * Stops "wait and execute" actions. Callbacks will not be executed.
+	 * Stops "wait and execute" actions.
 	 * @param bComplete			 - indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 * @param InOwner [optional] - if defined it will remove "wait and execute" actions only from the given owner. 
 	 *                             Otherwise it will remove all "wait and execute" actions from everywhere.
