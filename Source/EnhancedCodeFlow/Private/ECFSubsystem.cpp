@@ -45,7 +45,13 @@ UECFSubsystem* UECFSubsystem::Get(const UObject* WorldContextObject)
 	ensureAlwaysMsgf(ThisWorld, TEXT("Can't obtain ThisWorld from WorldContextObject in ECF!"));
 	if (ThisWorld)
 	{
-		return ThisWorld->GetSubsystem<UECFSubsystem>(ThisWorld);
+		UGameInstance* GameInstance = ThisWorld->GetGameInstance();
+
+		ensureAlwaysMsgf(GameInstance, TEXT("Can't obtain GameInstance from WorldContextObject in ECF!"));
+		if (GameInstance)
+		{
+			return GameInstance->GetSubsystem<UECFSubsystem>();
+		}
 	}
 
 	return nullptr;
