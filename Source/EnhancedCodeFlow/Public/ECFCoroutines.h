@@ -25,9 +25,13 @@ struct FECFCoroutinePromise
 
 #else
 
+using FECFCoroutine = void;
+
 struct FECFCoroutineHandle 
 {
 	void resume() {};
 };
+
+#define co_await static_assert(false, "Trying to use co_await without coroutine support!")
 
 #endif
