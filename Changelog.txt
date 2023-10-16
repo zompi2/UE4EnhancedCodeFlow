@@ -1,3 +1,7 @@
+###### 3.1.1
+* ECF subsystem is now a GameInstance Subsystem instead of the World Subsystem. 
+  This will allow the ECF to be used in other GameInstance Subsystems which might work between game worlds.
+
 ###### 3.1.0
 * DelayTicks action has been added, which executes the given action after the specified amount of ticks.
 * Additional WaitAndExecute function wich DeltaTime value in a predicate.
