@@ -6,7 +6,7 @@
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 
-FECFCoroutineTask_WaitSeconds::FECFCoroutineTask_WaitSeconds(UObject* InOwner, const FECFActionSettings& InSettings, float InTime)
+FECFCoroutineTask_WaitSeconds::FECFCoroutineTask_WaitSeconds(const UObject* InOwner, const FECFActionSettings& InSettings, float InTime)
 {
 	Owner = InOwner;
 	Settings = InSettings;

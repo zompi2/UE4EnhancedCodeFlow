@@ -23,7 +23,7 @@ protected:
 		}
 	}
 
-	class UObject* Owner;
+	const UObject* Owner;
 	FECFActionSettings Settings;
 };
 
@@ -31,7 +31,7 @@ class ENHANCEDCODEFLOW_API FECFCoroutineTask_WaitSeconds : public FECFCoroutineT
 {
 public:
 
-	FECFCoroutineTask_WaitSeconds(class UObject* InOwner, const FECFActionSettings& InSettings, float InTime);
+	FECFCoroutineTask_WaitSeconds(const UObject* InOwner, const FECFActionSettings& InSettings, float InTime);
 	void await_suspend(FECFCoroutineHandle CoroHandle);
 	
 private:

@@ -25,10 +25,9 @@ struct FECFCoroutinePromise
 
 #else
 
-struct FECFCoroutine
-{};
-
-struct FECFCoroutineHandle
-{};
+struct FECFCoroutineHandle 
+{
+	void resume() {};
+};
 
 #endif

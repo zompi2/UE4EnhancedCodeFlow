@@ -307,7 +307,7 @@ public:
 
 	/*^^^ Wait Seconds (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-	static FECFCoroutineTask_WaitSeconds WaitSeconds(UObject* InOwner, float Time, const FECFActionSettings& Settings = {});
+	static FECFCoroutineTask_WaitSeconds WaitSeconds(const UObject* InOwner, float Time, const FECFActionSettings& Settings = {});
 };
 
 using FFlow = FEnhancedCodeFlow;
