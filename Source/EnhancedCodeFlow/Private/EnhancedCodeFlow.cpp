@@ -305,4 +305,9 @@ FECFCoroutineTask_WaitTicks FEnhancedCodeFlow::WaitTicks(const UObject* InOwner,
 	return FECFCoroutineTask_WaitTicks(InOwner, Settings, InTicks);
 }
 
+FECFCoroutineTask_WaitUntil FEnhancedCodeFlow::WaitUntil(const UObject* InOwner, TUniqueFunction<bool(float)>&& InPredicate, float InTimeOut, const FECFActionSettings& Settings)
+{
+	return FECFCoroutineTask_WaitUntil(InOwner, Settings, MoveTemp(InPredicate), InTimeOut);
+}
+
 ECF_PRAGMA_ENABLE_OPTIMIZATION

@@ -2,6 +2,7 @@
 * COROUTINES! Now you can implement coroutine actions if your compiler supports c++20 (for UE5.3 and later).
 * WaitSeconds coroutine added.
 * WaitTicks coroutine added.
+* WaitUntil coroutine added.
 * Fixed lack of initial values of variables in multiple actions.
 
 ###### 3.1.1

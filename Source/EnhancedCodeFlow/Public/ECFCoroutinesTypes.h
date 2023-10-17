@@ -50,3 +50,16 @@ private:
 
 	int32 Ticks = 0;
 };
+
+class ENHANCEDCODEFLOW_API FECFCoroutineTask_WaitUntil : public FECFCoroutineTask
+{
+public:
+
+	FECFCoroutineTask_WaitUntil(const UObject* InOwner, const FECFActionSettings& InSettings, TUniqueFunction<bool(float)>&& InPredicate, float InTimeOut);
+	void await_suspend(FECFCoroutineHandle CoroHandle);
+
+private:
+
+	TUniqueFunction<bool(float)> Predicate;
+	float TimeOut = 0.f;
+};
