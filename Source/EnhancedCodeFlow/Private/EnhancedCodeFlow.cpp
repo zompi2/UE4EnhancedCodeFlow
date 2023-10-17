@@ -17,7 +17,9 @@
 #include "CodeFlowActions/ECFDoNTimes.h"
 #include "CodeFlowActions/ECFDoNoMoreThanXTime.h"
 
-
+#include "CodeFlowActions/Coroutines/ECFWaitSeconds.h"
+#include "CodeFlowActions/Coroutines/ECFWaitTicks.h"
+#include "CodeFlowActions/Coroutines/ECFWaitUntil.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 
@@ -300,14 +302,36 @@ FECFCoroutineTask_WaitSeconds FEnhancedCodeFlow::WaitSeconds(const UObject* InOw
 	return FECFCoroutineTask_WaitSeconds(InOwner, Settings, InTime);
 }
 
+void FEnhancedCodeFlow::RemoveAllWaitSeconds(const UObject* WorldContextObject, UObject* InOwner)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		ECF->RemoveActionsOfClass<UECFWaitSeconds>(false, InOwner);
+}
+
+/*^^^ Wait Ticks (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
 FECFCoroutineTask_WaitTicks FEnhancedCodeFlow::WaitTicks(const UObject* InOwner, int32 InTicks, const FECFActionSettings& Settings)
 {
 	return FECFCoroutineTask_WaitTicks(InOwner, Settings, InTicks);
 }
 
+void FEnhancedCodeFlow::RemoveAllWaitTicks(const UObject* WorldContextObject, UObject* InOwner)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		ECF->RemoveActionsOfClass<UECFWaitTicks>(false, InOwner);
+}
+
+/*^^^ Wait Until (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
 FECFCoroutineTask_WaitUntil FEnhancedCodeFlow::WaitUntil(const UObject* InOwner, TUniqueFunction<bool(float)>&& InPredicate, float InTimeOut, const FECFActionSettings& Settings)
 {
 	return FECFCoroutineTask_WaitUntil(InOwner, Settings, MoveTemp(InPredicate), InTimeOut);
+}
+
+void FEnhancedCodeFlow::RemoveAllWaitUntil(const UObject* WorldContextObject, UObject* InOwner)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		ECF->RemoveActionsOfClass<UECFWaitUntil>(false, InOwner);
 }
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION

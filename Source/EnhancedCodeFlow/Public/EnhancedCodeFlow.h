@@ -307,12 +307,15 @@ public:
 
 	/*^^^ Wait Seconds (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 	static FECFCoroutineTask_WaitSeconds WaitSeconds(const UObject* InOwner, float InTime, const FECFActionSettings& Settings = {});
+	static void RemoveAllWaitSeconds(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
 	/*^^^ Wait Ticks (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 	static FECFCoroutineTask_WaitTicks WaitTicks(const UObject* InOwner, int32 InTicks, const FECFActionSettings& Settings = {});
+	static void RemoveAllWaitTicks(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
 	/*^^^ Wait Until (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 	static FECFCoroutineTask_WaitUntil WaitUntil(const UObject* InOwner, TUniqueFunction<bool(float)>&& InPredicate, float InTimeOut, const FECFActionSettings& Settings = {});
+	static void RemoveAllWaitUntil(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 };
 
 using FFlow = FEnhancedCodeFlow;
