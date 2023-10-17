@@ -7,6 +7,12 @@ The plugin has been tested on the Engine's versions: 4.27.2 and 5.3.1.
 
 # Table of content
 
+- [Contact](#contact)
+- [Changelog](#changelog)
+- [LEGACY VERSIONS](#legacy-versions)
+- [Example Project](#example-project)
+- [Used in...](#used-in)
+---
 - [Usage](#usage)
 - [Extra Settings](#extra-settings)
 - [Instanced Actions](#instanced-actions)
@@ -21,22 +27,41 @@ The plugin has been tested on the Engine's versions: 4.27.2 and 5.3.1.
 
 If you have any question or suggestion regardles this plugin simply add an **Issue** to the github project or write an e-mail to me: **zompi2@gmail.com** I will try my best to answer it quickly :)
 
+[Back to top](#table-of-content)
+
 # Changelog
 
 The Changelog has been put into this file: **[Changelog.txt](Changelog.txt)**
 
-## **IMPORTANT**  
+[Back to top](#table-of-content)
+
+## **LEGACY VERSIONS**  
 Version `3.0.0` will probably break code and Blueprint nodes from previous version. Update with caution!  
 Version `2.1.2` can be found on a separate branch here: **[Legacy-2.1](https://github.com/zompi2/UE4EnhancedCodeFlow/tree/Legacy-2.1)**  
 
 Version `2.0.0` will probably break Blueprint nodes from previous versions. Update with caution!  
 Version `1.6.1` can be found on a separate branch here: **[Legacy-1.6](https://github.com/zompi2/UE4EnhancedCodeFlow/tree/Legacy-1.6)**
 
+[Back to top](#table-of-content)
+
 # Example Project
 
 The example project wich uses this plugin can be found in **[this repository](https://github.com/zompi2/UE4EnhancedCodeFlowExample)**. Example project is compatible with the newest version of the plugin only.
 
 ![Main](https://user-images.githubusercontent.com/7863125/218276144-932eba74-913f-4376-afac-26aa1ef13e30.png)
+
+[Back to top](#table-of-content)
+
+# Used In
+
+Enhanced Code Flow has been used in the following projects:  
+- [Achilles: Legends Untold](https://store.steampowered.com/app/1314000/Achilles_Legends_Untold)
+- [Wanderer's Sigil](https://store.steampowered.com/app/2436870/Wanderers_Sigil)
+- [Blaze in Space: Beat a-Maze](https://store.steampowered.com/app/2016110/Blaze_in_Space_Beat_aMaze)
+
+If you are using ECF in your project, let me know :)
+
+[Back to top](#table-of-content)
 
 # Usage
 
