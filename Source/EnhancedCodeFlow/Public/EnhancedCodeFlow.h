@@ -159,7 +159,7 @@ public:
 	 * @param InPredicate			- a function that decides if the action should launch. 
 	 *								  If it returns true it means the action must be launched. Can be: []() -> bool, or [](float DeltaTime) -> bool
 	 * @param InCallbackFunc		- a callback with action to execute. Will return bool indicating if the callback was called because of the timeout. Must be: [](bool bTimedOut, bool bStopped) -> void.
-	 * @param InTimeOut				- if greater than 0.f it will apply timeout to this action.
+	 * @param InTimeOut				- if greater than 0.f it will apply timeout to this action. After this time the CallbackFunc will be called with a bTimedOut parameter set to true.
 	 * @param Settings [optional]	- an extra settings to apply to this action.
 	 */
 	static FECFHandle WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(bool, bool)>&& InCallbackFunc, float InTimeOut = 0.f, const FECFActionSettings& Settings = {});
@@ -181,7 +181,7 @@ public:
 	 *                      If it returns true - it means the action will tick. Must be: []() -> bool.
 	 * @param InTickFunc -  a ticking function must be: [](float DeltaTime) -> void.
 	 * @param IncOmpleteFunc - called when the action stops. Will return bool indicating if the callback was called because of the timeout. Must be: [](bool bTimedOut, bool bStopped) -> void.
-	 * @param InTimeOut - if greater than 0.f it will apply timeout to this action.
+	 * @param InTimeOut - if greater than 0.f it will apply timeout to this action. After this time the CompleteFunc will be called with a bTimedOut parameter set to true.
 	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
 	static FECFHandle WhileTrueExecute(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(bool, bool)>&& InCompleteFunc, float InTimeOut = 0.f, const FECFActionSettings& Settings = {});
@@ -306,16 +306,60 @@ public:
 	static void RemoveAllDoNoMoreThanXTimes(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
 	/*^^^ Wait Seconds (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Suspends running coroutine function for a specified time.
+	 * @param InTime - time in seconds the suspension will last.
+	 * @param Settings [optional] - an extra settings to apply to this action.
+	 */
 	static FECFCoroutineTask_WaitSeconds WaitSeconds(const UObject* InOwner, float InTime, const FECFActionSettings& Settings = {});
-	static void RemoveAllWaitSeconds(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+
+	/**
+	 * Stops all Wait Seconds coroutine actions.
+	 * @param bComplete			 - indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 *							   !!!Have in mind that not completed coroutine will suspend function forever!!!
+	 * @param InOwner [optional] - if defined it will remove Wait Seconds actions only from the given owner. Otherwise
+	 *                             it will remove Wait Seconds actions from everywhere.
+	 */
+	static void RemoveAllWaitSeconds(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^ Wait Ticks (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Suspends running coroutine function for a specified amount of ticks.
+	 * @param InTicks - the amount of ticks the suspension will last.
+	 * @param Settings [optional] - an extra settings to apply to this action.
+	 */
 	static FECFCoroutineTask_WaitTicks WaitTicks(const UObject* InOwner, int32 InTicks, const FECFActionSettings& Settings = {});
-	static void RemoveAllWaitTicks(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+
+	/**
+	 * Stops all Wait Ticks coroutine actions.
+	 * @param bComplete			 - indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 *							   !!!Have in mind that not completed coroutine will suspend function forever!!!
+	 * @param InOwner [optional] - if defined it will remove Wait Ticks actions only from the given owner. Otherwise
+	 *                             it will remove Wait Ticks actions from everywhere.
+	 */
+	static void RemoveAllWaitTicks(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^ Wait Until (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+	
+	/**
+	 * Suspends running coroutine function until the given predicate won't return true.
+	 * @param InPredicate			- a function that decides if the suspended function should be resumed.
+	 *								  If it returns true it means the suspended function must be resumed. Must be: [](float DeltaTime) -> bool
+	 * @param InTimeOut				- if greater than 0.f it will apply timeout to this action. After this timeout the suspended function will be resumed.
+	 * @param Settings [optional]	- an extra settings to apply to this action.
+	 */
 	static FECFCoroutineTask_WaitUntil WaitUntil(const UObject* InOwner, TUniqueFunction<bool(float)>&& InPredicate, float InTimeOut, const FECFActionSettings& Settings = {});
-	static void RemoveAllWaitUntil(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+
+	/**
+	 * Stops all Wait Until coroutine actions.
+	 * @param bComplete			 - indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 *							   !!!Have in mind that not completed coroutine will suspend function forever!!!
+	 * @param InOwner [optional] - if defined it will remove Wait Until actions only from the given owner. Otherwise
+	 *                             it will remove Wait Until actions from everywhere.
+	 */
+	static void RemoveAllWaitUntil(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 };
 
 using FFlow = FEnhancedCodeFlow;

@@ -4,6 +4,7 @@
 * WaitTicks coroutine added.
 * WaitUntil coroutine added.
 * Fixed lack of initial values of variables in multiple actions.
+* Minor improvements to comments for functions in main header.
 
 ###### 3.1.1
 * ECF subsystem is now a GameInstance Subsystem instead of the World Subsystem. 
