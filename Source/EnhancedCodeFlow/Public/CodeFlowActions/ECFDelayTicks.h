@@ -17,8 +17,8 @@ class ENHANCEDCODEFLOW_API UECFDelayTicks : public UECFActionBase
 protected:
 
 	TUniqueFunction<void(bool)> CallbackFunc;
-	int32 DelayTicks;
-	int32 CurrentTicks;
+	int32 DelayTicks = 0;
+	int32 CurrentTicks = 0;
 
 	bool Setup(int32 InDelayTicks, TUniqueFunction<void(bool)>&& InCallbackFunc)
 	{

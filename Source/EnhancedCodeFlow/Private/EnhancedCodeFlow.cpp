@@ -295,9 +295,14 @@ void FEnhancedCodeFlow::RemoveAllDoNoMoreThanXTimes(const UObject* WorldContextO
 
 /*^^^ Wait Seconds (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-FECFCoroutineTask_WaitSeconds FEnhancedCodeFlow::WaitSeconds(const UObject* InOwner, float Time, const FECFActionSettings& Settings /*= {}*/)
+FECFCoroutineTask_WaitSeconds FEnhancedCodeFlow::WaitSeconds(const UObject* InOwner, float InTime, const FECFActionSettings& Settings /*= {}*/)
 {
-	return FECFCoroutineTask_WaitSeconds(InOwner, Settings, Time);
+	return FECFCoroutineTask_WaitSeconds(InOwner, Settings, InTime);
+}
+
+FECFCoroutineTask_WaitTicks FEnhancedCodeFlow::WaitTicks(const UObject* InOwner, int32 InTicks, const FECFActionSettings& Settings)
+{
+	return FECFCoroutineTask_WaitTicks(InOwner, Settings, InTicks);
 }
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION

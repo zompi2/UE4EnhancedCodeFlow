@@ -16,24 +16,24 @@ class ENHANCEDCODEFLOW_API UECFWaitSeconds : public UECFCoroutineActionBase
 
 protected:
 
-	float DelayTime;
-	float CurrentTime;
+	float WaitTime = 0.f;
+	float CurrentTime = 0.f;
 
-	bool Setup(float InDelayTime)
+	bool Setup(float InWaitTime)
 	{
-		DelayTime = InDelayTime;
+		WaitTime = InWaitTime;
 
-		if (DelayTime >= 0)
+		if (WaitTime >= 0)
 		{
-			if (DelayTime > 0)
+			if (WaitTime > 0)
 			{
-				SetMaxActionTime(DelayTime);
+				SetMaxActionTime(WaitTime);
 			}
 			return true;
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF Coroutine - wait seconds failed to start. Are you sure the DelayTime is not negative?"));
+			ensureMsgf(false, TEXT("ECF Coroutine - wait seconds failed to start. Are you sure the WaitTime is not negative?"));
 			return false;
 		}
 	}
@@ -49,7 +49,7 @@ protected:
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("WaitSeconds - Tick"), STAT_ECFDETAILS_WAITSECONDS, STATGROUP_ECFDETAILS);
 #endif
 		CurrentTime += DeltaTime;
-		if (CurrentTime > DelayTime)
+		if (CurrentTime > WaitTime)
 		{
 			Complete(false);
 			MarkAsFinished();

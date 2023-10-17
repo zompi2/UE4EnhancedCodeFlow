@@ -36,5 +36,17 @@ public:
 	
 private:
 
-	float Time;
+	float Time = 0.f;
+};
+
+class ENHANCEDCODEFLOW_API FECFCoroutineTask_WaitTicks : public FECFCoroutineTask
+{
+public:
+
+	FECFCoroutineTask_WaitTicks(const UObject* InOwner, const FECFActionSettings& InSettings, int32 InTicks);
+	void await_suspend(FECFCoroutineHandle CoroHandle);
+
+private:
+
+	int32 Ticks = 0;
 };

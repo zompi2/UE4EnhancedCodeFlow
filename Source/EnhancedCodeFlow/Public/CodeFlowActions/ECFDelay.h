@@ -17,8 +17,8 @@ class ENHANCEDCODEFLOW_API UECFDelay : public UECFActionBase
 protected:
 
 	TUniqueFunction<void(bool)> CallbackFunc;
-	float DelayTime;
-	float CurrentTime;
+	float DelayTime = 0.f;
+	float CurrentTime = 0.f;
 
 	bool Setup(float InDelayTime, TUniqueFunction<void(bool)>&& InCallbackFunc)
 	{
