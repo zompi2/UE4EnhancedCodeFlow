@@ -1,3 +1,9 @@
+###### 3.2.0
+* COROUTINES! Now you can implement coroutine actions if your compiler supports c++20 (for UE5.3 and later).
+* WaitSeconds coroutine added.
+* WaitTicks coroutine added.
+* Fixed lack of initial values of variables in multiple actions.
+
 ###### 3.1.1
 * ECF subsystem is now a GameInstance Subsystem instead of the World Subsystem. 
   This will allow the ECF to be used in other GameInstance Subsystems which might work between game worlds.
