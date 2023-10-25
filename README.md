@@ -1,5 +1,7 @@
 # Enhanced Code Flow for Unreal Engine
 
+## (This is a legacy version of ECF. For the newest version check main branch).
+
 This code plugin provides functions that drastically improve the quality of life during the implementation of game flow in C++.  
 It works very well with gameplay programming, UI programming with a lot of transitions or in any other situation.
 
