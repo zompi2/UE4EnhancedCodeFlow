@@ -492,7 +492,7 @@ FECFCoroutine UMyClass::SuspandableFunction()
 }
 ```
 
-[Back to actions list](#coroutines-experimental)  
+[Back to coroutines list](#coroutines-experimental)  
 [Back to top](#table-of-content)
 
 #### Wait Ticks
@@ -508,12 +508,12 @@ FECFCoroutine UMyClass::SuspandableFunction()
 }
 ```
 
-[Back to actions list](#coroutines-experimental)  
+[Back to coroutines list](#coroutines-experimental)  
 [Back to top](#table-of-content)
 
 #### Wait Until
 
-Suspends the coroutine function until the given predicate 
+Suspends the coroutine function until the given predicate conditions are met.
 
 ``` cpp
 FECFCoroutine UMyClass::SuspandableFunction()
@@ -529,7 +529,7 @@ FECFCoroutine UMyClass::SuspandableFunction()
 }
 ```
 
-[Back to actions list](#coroutines-experimental)  
+[Back to coroutines list](#coroutines-experimental)  
 [Back to top](#table-of-content)
 
 # Pausing and Resuming
