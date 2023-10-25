@@ -16,6 +16,7 @@ The plugin has been tested on the Engine's versions: 4.27.2 and 5.3.1.
 - [Usage](#usage)
 - [Extra Settings](#extra-settings)
 - [Instanced Actions](#instanced-actions)
+- [Coroutines](#coroutines)
 - [Pausing and Resuming](#pausing-and-resuming)
 - [Stopping Actions](#stopping-actions)
 - [Measuring Performance](#measuring-performance)
@@ -36,6 +37,10 @@ The Changelog has been put into this file: **[Changelog.txt](Changelog.txt)**
 [Back to top](#table-of-content)
 
 ## **LEGACY VERSIONS**  
+
+Version `3.1.1` was the last one that had an example project implemented in UE4. Next versions' example projects require UE5 to run.  
+Version `3.1.1` can be found on a separate branch here: **[Legacy-3.1.1](https://github.com/zompi2/UE4EnhancedCodeFlow/tree/Legacy-3.1.1)**  
+
 Version `3.0.0` will probably break code and Blueprint nodes from previous version. Update with caution!  
 Version `2.1.2` can be found on a separate branch here: **[Legacy-2.1](https://github.com/zompi2/UE4EnhancedCodeFlow/tree/Legacy-2.1)**  
 
@@ -47,6 +52,9 @@ Version `1.6.1` can be found on a separate branch here: **[Legacy-1.6](https://g
 # Example Project
 
 The example project wich uses this plugin can be found in **[this repository](https://github.com/zompi2/UE4EnhancedCodeFlowExample)**. Example project is compatible with the newest version of the plugin only.
+
+> !!!IMPORTANT!!!  
+> Currently Example Project will work with **Unreal Engine 5**! The last version of example project that can be run on UE4 can be found **[here](https://github.com/zompi2/UE4EnhancedCodeFlowExample/tree/Legacy-3.1.1)**. This is a legacy example project which works with ECF 3.1.1. It is not guaranteed that it will work with the newest version of ECF.
 
 ![Main](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/87bf7f3f-2db6-42d5-9195-208a401d84d9)
 
@@ -449,6 +457,33 @@ There is additional BP node which will validate an `InstanceId` if it is not val
 
 ![instid](https://user-images.githubusercontent.com/7863125/180844002-8741634d-7c7e-4407-9736-f73417b366c7.png)
 
+[Back to top](#table-of-content)
+
+# Coroutines
+
+Coroutines are functions that can be suspended and resumed. They require C++20 which is supported in Unreal Engine verion 5.3 and newer. 
+
+
+
+- [Wait Seconds](#wait-seconds)
+- [Wait Ticks](#wait-ticks)
+- [Wait Until](#wait-until)
+
+[Back to top](#table-of-content)
+
+#### Wait Seconds
+
+[Back to actions list](#coroutines)  
+[Back to top](#table-of-content)
+
+#### Wait Ticks
+
+[Back to actions list](#coroutines)  
+[Back to top](#table-of-content)
+
+#### Wait Until
+
+[Back to actions list](#coroutines)  
 [Back to top](#table-of-content)
 
 # Pausing and Resuming

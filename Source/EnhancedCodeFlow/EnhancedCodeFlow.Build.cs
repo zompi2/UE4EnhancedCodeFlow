@@ -8,15 +8,8 @@ public class EnhancedCodeFlow : ModuleRules
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        // Ensure we use Cpp20 for UE5.3 and above.
-        bool bUseCpp20IfPossible = true;
-        if (Target.Version.MajorVersion == 5 && Target.Version.MinorVersion >= 3)
-        {
-            if (bUseCpp20IfPossible)
-            {
-                CppStandard = CppStandardVersion.Cpp20;
-            }
-        }
+        // Ensure the default cpp standard is supported (CPP20 for UE5.3 and above).
+        CppStandard = CppStandardVersion.Default;
 
         PrivateDependencyModuleNames.AddRange(
 			new string[]
