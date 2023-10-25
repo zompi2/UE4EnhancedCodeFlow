@@ -48,7 +48,7 @@ Version `1.6.1` can be found on a separate branch here: **[Legacy-1.6](https://g
 
 The example project wich uses this plugin can be found in **[this repository](https://github.com/zompi2/UE4EnhancedCodeFlowExample)**. Example project is compatible with the newest version of the plugin only.
 
-![Main](https://user-images.githubusercontent.com/7863125/218276144-932eba74-913f-4376-afac-26aa1ef13e30.png)
+![Main](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/87bf7f3f-2db6-42d5-9195-208a401d84d9)
 
 [Back to top](#table-of-content)
 
