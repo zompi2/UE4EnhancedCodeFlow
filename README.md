@@ -16,7 +16,7 @@ The plugin has been tested on the Engine's versions: 4.27.2 and 5.3.1.
 - [Usage](#usage)
 - [Extra Settings](#extra-settings)
 - [Instanced Actions](#instanced-actions)
-- [Coroutines](#coroutines)
+- [Coroutines (experimental)](#coroutines-experimental)
 - [Pausing and Resuming](#pausing-and-resuming)
 - [Stopping Actions](#stopping-actions)
 - [Measuring Performance](#measuring-performance)
@@ -459,11 +459,19 @@ There is additional BP node which will validate an `InstanceId` if it is not val
 
 [Back to top](#table-of-content)
 
-# Coroutines
+# Coroutines (experimental)
 
-Coroutines are functions that can be suspended and resumed. They require C++20 which is supported in Unreal Engine verion 5.3 and newer. 
+> Coroutines are treated as an **experimental** feature. You can use them on your own risk!
 
+Coroutines are functions that can be suspended and resumed. They require C++20 which is supported in Unreal Engine verion 5.3 and newer. To make sure that your project supports C++20 add the following line to your project's `Build.cs`:
 
+``` cs
+CppStandard = CppStandardVersion.Cpp20;
+```
+
+Every coroutine function must return the `FECFCoroutine`. ECF implements some helpful coroutines described below. Every coroutine implemented in ECF works simillar to normal actions, but they use the coroutine mechanisms instead of lambdas.  
+They can be paused, resumed, cancelled and they can accept `FECFActionSettings`.  
+Coroutines doesn't have BP nodes as they are purely code feature.
 
 - [Wait Seconds](#wait-seconds)
 - [Wait Ticks](#wait-ticks)
@@ -473,15 +481,53 @@ Coroutines are functions that can be suspended and resumed. They require C++20 w
 
 #### Wait Seconds
 
+Suspends the coroutine function for a specified amount of seconds. It works like Delay in Blueprints.
+
+``` cpp
+FECFCoroutine UMyClass::SuspandableFunction()
+{
+  // Do something
+  co_await FFlow::WaitSeconds(this, 2.f);
+  // Do something after 2 seconds
+}
+```
+
 [Back to actions list](#coroutines)  
 [Back to top](#table-of-content)
 
 #### Wait Ticks
 
+Suspends the coroutine function for a specified amount of tick.
+
+``` cpp
+FECFCoroutine UMyClass::SuspandableFunction()
+{
+  // Do something
+  co_await FFlow::WaitTicks(this, 1);
+  // Do something after 1 tick
+}
+```
+
 [Back to actions list](#coroutines)  
 [Back to top](#table-of-content)
 
 #### Wait Until
+
+Suspends the coroutine function until the given predicate 
+
+``` cpp
+FECFCoroutine UMyClass::SuspandableFunction()
+{
+  // Do something
+  co_await FFlow::WaitUntil(this, [this](float DeltaTime)
+  {
+    // Write your own predicate. 
+    // Return true when you want to resume the coroutine function.
+    return bIsReadyToUse;
+  }, TimeOut);
+  // Do something after conditions specified in the predicate are met. 
+}
+```
 
 [Back to actions list](#coroutines)  
 [Back to top](#table-of-content)
@@ -535,6 +581,8 @@ FFlow::StopAllActions(GetWorld(), false, Owner); // <- stops all of the actions 
 
 When the **completion** callback will run after the Stop Function, the `bStopped` argument in the completion function of the action will be set to `true`.
 
+**IMPORTANT!** If you stop the coroutine action be aware that if you won't set `bComplete` to true, the suspended function will never be resumed!
+
 ![stopping](https://user-images.githubusercontent.com/7863125/180849533-03cb9d37-977f-4c9e-8961-aebd60f8ee25.png)
 
 You can also stop a specific Instanced action with the **`FECFInstanceId`**:
@@ -561,6 +609,16 @@ FFlow::RemoveAllDoNoMoreThanXTimes(GetWorld());
 ```
 
 ![removeall](https://user-images.githubusercontent.com/7863125/201354733-31eed266-097a-45b6-8733-e4e17a306ed9.png)
+
+You can also stop all of the running coroutine actions.
+
+``` cpp
+FFlow::RemoveAllWaitSeconds(GetWorld(), true);
+FFlow::RemoveAllWaitTicks(GetWorld(), true);
+FFlow::RemoveAllWaitUntil(GetWorld(), true);
+```
+
+**IMPORTANT!** Be aware that if you stop the coroutine action without `bComplete` set to true, the suspended function will never be resumed!
 
 [Back to top](#table-of-content)
 
