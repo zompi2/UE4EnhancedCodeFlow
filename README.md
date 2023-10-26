@@ -54,7 +54,7 @@ Version `1.6.1` can be found on a separate branch here: **[Legacy-1.6](https://g
 The example project wich uses this plugin can be found in **[this repository](https://github.com/zompi2/UE4EnhancedCodeFlowExample)**. Example project is compatible with the newest version of the plugin only.
 
 > !!!IMPORTANT!!!  
-> Currently Example Project will work with **Unreal Engine 5**! The last version of example project that can be run on UE4 can be found **[here](https://github.com/zompi2/UE4EnhancedCodeFlowExample/tree/Legacy-3.1.1)**. This is a legacy example project which works with ECF 3.1.1. It is not guaranteed that it will work with the newest version of ECF.
+> Currently Example Project will work with **Unreal Engine 5**! The last version of the example project that can be run on UE4 can be found **[here](https://github.com/zompi2/UE4EnhancedCodeFlowExample/tree/Legacy-3.1.1)**. This is a legacy example project which works with ECF 3.1.1. It is not guaranteed that it will work with the newest version of ECF.
 
 ![Main](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/87bf7f3f-2db6-42d5-9195-208a401d84d9)
 
@@ -463,13 +463,13 @@ There is additional BP node which will validate an `InstanceId` if it is not val
 
 > Coroutines are treated as an **experimental** feature. You can use them on your own risk!
 
-Coroutines are functions that can be suspended and resumed. They require C++20 which is supported in Unreal Engine verion 5.3 and newer. To make sure that your project supports C++20 add the following line to your project's `Build.cs`:
+[Coroutines](https://en.cppreference.com/w/cpp/language/coroutines) are functions that can suspend execution and be resumed later. They require C++20 which is supported in Unreal Engine verion 5.3 and newer. To make sure that your project supports C++20 add the following line to your project's `Build.cs`:
 
 ``` cs
 CppStandard = CppStandardVersion.Cpp20;
 ```
 
-Every coroutine function must return the `FECFCoroutine`. ECF implements some helpful coroutines described below. Every coroutine implemented in ECF works simillar to normal actions, but they use the coroutine mechanisms instead of lambdas.  
+Every coroutine must return the `FECFCoroutine`. ECF implements some helpful coroutines described below. Every coroutine implemented in ECF works simillar to typical ECF action, but they use the coroutine suspension mechanisms instead of lambdas.  
 They can be paused, resumed, cancelled and they can accept `FECFActionSettings`.  
 Coroutines doesn't have BP nodes as they are purely code feature.
 
@@ -481,7 +481,7 @@ Coroutines doesn't have BP nodes as they are purely code feature.
 
 #### Wait Seconds
 
-Suspends the coroutine function for a specified amount of seconds. It works like Delay in Blueprints.
+Suspends the coroutine for a specified amount of seconds. It works like Delay in Blueprints.
 
 ``` cpp
 FECFCoroutine UMyClass::SuspandableFunction()
@@ -492,12 +492,12 @@ FECFCoroutine UMyClass::SuspandableFunction()
 }
 ```
 
-[Back to coroutines list](#coroutines-experimental)  
+[Back to coroutines](#coroutines-experimental)  
 [Back to top](#table-of-content)
 
 #### Wait Ticks
 
-Suspends the coroutine function for a specified amount of tick.
+Suspends the coroutine for a specified amount of tick.
 
 ``` cpp
 FECFCoroutine UMyClass::SuspandableFunction()
@@ -508,12 +508,12 @@ FECFCoroutine UMyClass::SuspandableFunction()
 }
 ```
 
-[Back to coroutines list](#coroutines-experimental)  
+[Back to coroutines](#coroutines-experimental)  
 [Back to top](#table-of-content)
 
 #### Wait Until
 
-Suspends the coroutine function until the given predicate conditions are met.
+Suspends the coroutine until the given predicate conditions are met.
 
 ``` cpp
 FECFCoroutine UMyClass::SuspandableFunction()
@@ -529,7 +529,7 @@ FECFCoroutine UMyClass::SuspandableFunction()
 }
 ```
 
-[Back to coroutines list](#coroutines-experimental)  
+[Back to coroutines](#coroutines-experimental)  
 [Back to top](#table-of-content)
 
 # Pausing and Resuming
@@ -581,8 +581,6 @@ FFlow::StopAllActions(GetWorld(), false, Owner); // <- stops all of the actions 
 
 When the **completion** callback will run after the Stop Function, the `bStopped` argument in the completion function of the action will be set to `true`.
 
-**IMPORTANT!** If you stop the coroutine action be aware that if you won't set `bComplete` to true, the suspended function will never be resumed!
-
 ![stopping](https://user-images.githubusercontent.com/7863125/180849533-03cb9d37-977f-4c9e-8961-aebd60f8ee25.png)
 
 You can also stop a specific Instanced action with the **`FECFInstanceId`**:
@@ -610,7 +608,7 @@ FFlow::RemoveAllDoNoMoreThanXTimes(GetWorld());
 
 ![removeall](https://user-images.githubusercontent.com/7863125/201354733-31eed266-097a-45b6-8733-e4e17a306ed9.png)
 
-You can also stop all of the running coroutine actions.
+You can also stop all of the running actions that handle coroutines.
 
 ``` cpp
 FFlow::RemoveAllWaitSeconds(GetWorld(), true);
@@ -618,7 +616,7 @@ FFlow::RemoveAllWaitTicks(GetWorld(), true);
 FFlow::RemoveAllWaitUntil(GetWorld(), true);
 ```
 
-**IMPORTANT!** Be aware that if you stop the coroutine action without `bComplete` set to true, the suspended function will never be resumed!
+**IMPORTANT!** If you stop the action which handles a coroutine be aware that if you won't set `bComplete` to true, the suspended coroutine will never be resumed!
 
 [Back to top](#table-of-content)
 
