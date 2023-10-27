@@ -6,6 +6,10 @@
 
 #include <coroutine>
 
+/**
+ * Defining coroutine handlers and promises in order to get coroutines work.
+ */
+
 struct FECFCoroutinePromise;
 using FECFCoroutineHandle = std::coroutine_handle<FECFCoroutinePromise>;
 
@@ -24,6 +28,10 @@ struct FECFCoroutinePromise
 };
 
 #else
+
+/**
+ * Create dummy implementations of coroutine handles if coroutines are not supported by a compiler.
+ */
 
 using FECFCoroutine = void;
 

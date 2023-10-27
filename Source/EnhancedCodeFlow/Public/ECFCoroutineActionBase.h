@@ -17,11 +17,12 @@ class ENHANCEDCODEFLOW_API UECFCoroutineActionBase : public UECFActionBase
 
 protected:
 
+	// Coroutine handle used to control the coroutine inside the Action
 	FECFCoroutineHandle CoroutineHandle;
 
 private:
 
-	// Sets the owner and handle id of this action.
+	// Additionally sets the coroutine handle
 	void SetCoroutineAction(const UObject* InOwner, FECFCoroutineHandle InCoroutineHandle, const FECFHandle& InHandleId, const FECFActionSettings& InSettings)
 	{
 		UECFActionBase::SetAction(InOwner, HandleId, {}, InSettings);
