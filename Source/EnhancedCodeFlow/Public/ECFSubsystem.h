@@ -10,7 +10,7 @@
 #include "ECFInstanceId.h"
 #include "ECFActionSettings.h"
 #include "ECFStats.h"
-#include "ECFCoroutines.h"
+#include "ECFCoroutine.h"
 #include "ECFSubsystem.generated.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION

@@ -461,9 +461,9 @@ There is additional BP node which will validate an `InstanceId` if it is not val
 
 # Coroutines (experimental)
 
-> Coroutines are treated as an **experimental** feature. You can use them on your own risk!
+> Coroutines are treated as an **experimental** feature. You can use them at your own risk!
 
-[Coroutines](https://en.cppreference.com/w/cpp/language/coroutines) are functions that can suspend execution and be resumed later. They require C++20 which is supported in Unreal Engine verion 5.3 and newer. To make sure that your project supports C++20 add the following line to your project's `Build.cs`:
+[Coroutines](https://en.cppreference.com/w/cpp/language/coroutines) are functions that can suspend their execution and be resumed later. They require C++20 which is supported in Unreal Engine from verion 5.3. To make sure that your project supports C++20 add the following line to your project's `Build.cs`:
 
 ``` cs
 CppStandard = CppStandardVersion.Cpp20;
@@ -702,6 +702,56 @@ FFlow::NewAction(this, 1, 2, [this](bool bStopped)
   // Callback code.
 }, ECF_IGNOREPAUSE);
 ```
+
+### Adding coroutines
+
+Adding actions that supports coroutine is simillar to adding new actions but there are few steps that must be made:
+
+1. Action class must inherits from `UECFCoroutineActionBase` instead of `UECFActionBase`.
+2. Add coroutine task to `ECFCoroutineTasks.h`
+```cpp
+class ENHANCEDCODEFLOW_API FECFCoroutineTask_NewCoroAction : public FECFCoroutineTask
+{
+public:
+
+	FECFCoroutineTask_NewCoroAction(const UObject* InOwner, const FECFActionSettings& InSettings, int32 InParam1);
+	void await_suspend(FECFCoroutineHandle CoroHandle);
+
+private:
+
+	int32 Param1 = 0;
+};
+```
+3. Implement coroutine task in `ECFCoroutineTasks.cpp`. Use `AddCoroutineAction`` function there.
+```cpp
+FECFCoroutineTask_NewCoroAction::FECFCoroutineTask_NewCoroAction(const UObject* InOwner, const FECFActionSettings& InSettings, int32 InParam1)
+{
+	Owner = InOwner;
+	Settings = InSettings;
+	Param1 = InParam1;
+}
+
+void FECFCoroutineTask_NewCoroAction::await_suspend(FECFCoroutineHandle CoroHandle)
+{
+	AddCoroutineAction<UNewCoroAction>(Owner, CoroHandle, Settings, Param1);
+}
+```
+4. Coroutine action implementation must resume coroutine in `Complete` function:
+```cpp
+void Complete(bool bStopped) override
+{
+	CoroutineHandle.resume();
+}
+```
+5. The coroutine should be called from `FEnhancedCodeFlow` class and it's implementation should return the defined coroutine task:
+```cpp
+FECFCoroutineTask_NewCoroAction FEnhancedCodeFlow::NewCoroAction(const UObject* InOwner, int32 InParam1, const FECFActionSettings& Settings)
+{
+	return FECFCoroutineTask_NewCoroAction(InOwner, Settings, InParam1);
+}
+```
+
+[Back to top](#table-of-content)
 
 ## Disabling build optimization
 You can temporarily disable plugin's build optimizations by setting the `bDisableOptimization` parameter in `EnhancedCodeFlow.Build.cs` file to `true`. It can help with debugging.

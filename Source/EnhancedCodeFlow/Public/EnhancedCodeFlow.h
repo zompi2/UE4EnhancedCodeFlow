@@ -31,7 +31,7 @@
 #include "ECFTypes.h"
 #include "ECFActionSettings.h"
 #include "ECFInstanceId.h"
-#include "ECFCoroutinesTypes.h"
+#include "ECFCoroutineTasks.h"
 
 class ENHANCEDCODEFLOW_API FEnhancedCodeFlow
 {

@@ -1,6 +1,6 @@
 // Copyright (c) 2023 Damian Nowakowski. All rights reserved.
 
-#include "ECFCoroutinesTypes.h"
+#include "ECFCoroutineTasks.h"
 
 #include "CodeFlowActions/Coroutines/ECFWaitSeconds.h"
 #include "CodeFlowActions/Coroutines/ECFWaitTicks.h"

@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "ECFCoroutines.h"
+#include "ECFCoroutine.h"
 #include "ECFSubsystem.h"
 
 class ENHANCEDCODEFLOW_API FECFCoroutineTask
