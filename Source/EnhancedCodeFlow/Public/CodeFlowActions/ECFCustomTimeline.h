@@ -22,11 +22,11 @@ protected:
 	TUniqueFunction<void(float, float, bool)> CallbackFunc;
 	FTimeline MyTimeline;
 
-	float CurrentValue;
-	float CurrentTime;
+	float CurrentValue = 0.f;
+	float CurrentTime = 0.f;
 
 	UPROPERTY(Transient)
-	UCurveFloat* CurveFloat;
+	UCurveFloat* CurveFloat = nullptr;
 
 	bool Setup(UCurveFloat* InCurveFloat, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float, bool)>&& InCallbackFunc = nullptr)
 	{

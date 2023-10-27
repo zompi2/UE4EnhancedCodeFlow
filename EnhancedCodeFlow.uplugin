@@ -1,9 +1,9 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "3.1.1",
+	"VersionName": "3.2.0",
 	"FriendlyName": "Enhanced Code Flow",
-	"Description": "Providing functionalities that improves implementation of game flow using code.",
+	"Description": "This code plugin provides functions that drastically improve the quality of life during the implementation of game flow in C++.",
 	"Category": "Programming",
 	"CreatedBy": "Damian Nowakowski",
 	"CreatedByURL": "https://zompidev.blogspot.com",

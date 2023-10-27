@@ -16,6 +16,7 @@ The plugin has been tested on the Engine's versions: 4.27.2 and 5.3.1.
 - [Usage](#usage)
 - [Extra Settings](#extra-settings)
 - [Instanced Actions](#instanced-actions)
+- [Coroutines (experimental)](#coroutines-experimental)
 - [Pausing and Resuming](#pausing-and-resuming)
 - [Stopping Actions](#stopping-actions)
 - [Measuring Performance](#measuring-performance)
@@ -36,6 +37,10 @@ The Changelog has been put into this file: **[Changelog.txt](Changelog.txt)**
 [Back to top](#table-of-content)
 
 ## **LEGACY VERSIONS**  
+
+Version `3.1.1` was the last one that had an example project implemented in UE4. Next versions' example projects require UE5 to run.  
+Version `3.1.1` can be found on a separate branch here: **[Legacy-3.1.1](https://github.com/zompi2/UE4EnhancedCodeFlow/tree/Legacy-3.1.1)**  
+
 Version `3.0.0` will probably break code and Blueprint nodes from previous version. Update with caution!  
 Version `2.1.2` can be found on a separate branch here: **[Legacy-2.1](https://github.com/zompi2/UE4EnhancedCodeFlow/tree/Legacy-2.1)**  
 
@@ -48,7 +53,10 @@ Version `1.6.1` can be found on a separate branch here: **[Legacy-1.6](https://g
 
 The example project wich uses this plugin can be found in **[this repository](https://github.com/zompi2/UE4EnhancedCodeFlowExample)**. Example project is compatible with the newest version of the plugin only.
 
-![Main](https://user-images.githubusercontent.com/7863125/218276144-932eba74-913f-4376-afac-26aa1ef13e30.png)
+> !!!IMPORTANT!!!  
+> Currently Example Project will work with **Unreal Engine 5**! The last version of the example project that can be run on UE4 can be found **[here](https://github.com/zompi2/UE4EnhancedCodeFlowExample/tree/Legacy-3.1.1)**. This is a legacy example project which works with ECF 3.1.1. It is not guaranteed that it will work with the newest version of ECF.
+
+![Main](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/87bf7f3f-2db6-42d5-9195-208a401d84d9)
 
 [Back to top](#table-of-content)
 
@@ -451,6 +459,79 @@ There is additional BP node which will validate an `InstanceId` if it is not val
 
 [Back to top](#table-of-content)
 
+# Coroutines (experimental)
+
+> Coroutines are treated as an **experimental** feature. You can use them at your own risk!
+
+[Coroutines](https://en.cppreference.com/w/cpp/language/coroutines) are functions that can suspend their execution and be resumed later. They require C++20 which is supported in Unreal Engine from verion 5.3. To make sure that your project supports C++20 add the following line to your project's `Build.cs`:
+
+``` cs
+CppStandard = CppStandardVersion.Cpp20;
+```
+
+Every coroutine must return the `FECFCoroutine`. ECF implements some helpful coroutines described below. Every coroutine implemented in ECF works simillar to typical ECF action, but they use the coroutine suspension mechanisms instead of lambdas.  
+They can be paused, resumed, cancelled and they can accept `FECFActionSettings`.  
+Coroutines doesn't have BP nodes as they are purely code feature.
+
+- [Wait Seconds](#wait-seconds)
+- [Wait Ticks](#wait-ticks)
+- [Wait Until](#wait-until)
+
+[Back to top](#table-of-content)
+
+#### Wait Seconds
+
+Suspends the coroutine for a specified amount of seconds. It works like Delay in Blueprints.
+
+``` cpp
+FECFCoroutine UMyClass::SuspandableFunction()
+{
+  // Do something
+  co_await FFlow::WaitSeconds(this, 2.f);
+  // Do something after 2 seconds
+}
+```
+
+[Back to coroutines](#coroutines-experimental)  
+[Back to top](#table-of-content)
+
+#### Wait Ticks
+
+Suspends the coroutine for a specified amount of tick.
+
+``` cpp
+FECFCoroutine UMyClass::SuspandableFunction()
+{
+  // Do something
+  co_await FFlow::WaitTicks(this, 1);
+  // Do something after 1 tick
+}
+```
+
+[Back to coroutines](#coroutines-experimental)  
+[Back to top](#table-of-content)
+
+#### Wait Until
+
+Suspends the coroutine until the given predicate conditions are met.
+
+``` cpp
+FECFCoroutine UMyClass::SuspandableFunction()
+{
+  // Do something
+  co_await FFlow::WaitUntil(this, [this](float DeltaTime)
+  {
+    // Write your own predicate. 
+    // Return true when you want to resume the coroutine function.
+    return bIsReadyToUse;
+  }, TimeOut);
+  // Do something after conditions specified in the predicate are met. 
+}
+```
+
+[Back to coroutines](#coroutines-experimental)  
+[Back to top](#table-of-content)
+
 # Pausing and Resuming
 ## Actions
 
@@ -526,6 +607,16 @@ FFlow::RemoveAllDoNoMoreThanXTimes(GetWorld());
 ```
 
 ![removeall](https://user-images.githubusercontent.com/7863125/201354733-31eed266-097a-45b6-8733-e4e17a306ed9.png)
+
+You can also stop all of the running actions that handle coroutines.
+
+``` cpp
+FFlow::RemoveAllWaitSeconds(GetWorld(), true);
+FFlow::RemoveAllWaitTicks(GetWorld(), true);
+FFlow::RemoveAllWaitUntil(GetWorld(), true);
+```
+
+**IMPORTANT!** If you stop the action which handles a coroutine be aware that if you won't set `bComplete` to true, the suspended coroutine will never be resumed!
 
 [Back to top](#table-of-content)
 
@@ -611,6 +702,56 @@ FFlow::NewAction(this, 1, 2, [this](bool bStopped)
   // Callback code.
 }, ECF_IGNOREPAUSE);
 ```
+
+### Adding coroutines
+
+Adding actions that supports coroutine is simillar to adding new actions but there are few steps that must be made:
+
+1. Action class must inherits from `UECFCoroutineActionBase` instead of `UECFActionBase`.
+2. Add coroutine task to `ECFCoroutineTasks.h`
+```cpp
+class ENHANCEDCODEFLOW_API FECFCoroutineTask_NewCoroAction : public FECFCoroutineTask
+{
+public:
+
+	FECFCoroutineTask_NewCoroAction(const UObject* InOwner, const FECFActionSettings& InSettings, int32 InParam1);
+	void await_suspend(FECFCoroutineHandle CoroHandle);
+
+private:
+
+	int32 Param1 = 0;
+};
+```
+3. Implement coroutine task in `ECFCoroutineTasks.cpp`. Use `AddCoroutineAction`` function there.
+```cpp
+FECFCoroutineTask_NewCoroAction::FECFCoroutineTask_NewCoroAction(const UObject* InOwner, const FECFActionSettings& InSettings, int32 InParam1)
+{
+	Owner = InOwner;
+	Settings = InSettings;
+	Param1 = InParam1;
+}
+
+void FECFCoroutineTask_NewCoroAction::await_suspend(FECFCoroutineHandle CoroHandle)
+{
+	AddCoroutineAction<UNewCoroAction>(Owner, CoroHandle, Settings, Param1);
+}
+```
+4. Coroutine action implementation must resume coroutine in `Complete` function:
+```cpp
+void Complete(bool bStopped) override
+{
+	CoroutineHandle.resume();
+}
+```
+5. The coroutine should be called from `FEnhancedCodeFlow` class and it's implementation should return the defined coroutine task:
+```cpp
+FECFCoroutineTask_NewCoroAction FEnhancedCodeFlow::NewCoroAction(const UObject* InOwner, int32 InParam1, const FECFActionSettings& Settings)
+{
+	return FECFCoroutineTask_NewCoroAction(InOwner, Settings, InParam1);
+}
+```
+
+[Back to top](#table-of-content)
 
 ## Disabling build optimization
 You can temporarily disable plugin's build optimizations by setting the `bDisableOptimization` parameter in `EnhancedCodeFlow.Build.cs` file to `true`. It can help with debugging.

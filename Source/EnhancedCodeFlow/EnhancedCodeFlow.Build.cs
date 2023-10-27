@@ -8,7 +8,10 @@ public class EnhancedCodeFlow : ModuleRules
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PrivateDependencyModuleNames.AddRange(
+        // Ensure the default cpp standard is supported (CPP20 for UE5.3 and above).
+        CppStandard = CppStandardVersion.Default;
+
+        PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
 				"Core",

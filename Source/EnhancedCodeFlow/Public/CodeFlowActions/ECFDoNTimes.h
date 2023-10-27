@@ -17,8 +17,8 @@ class ENHANCEDCODEFLOW_API UECFDoNTimes : public UECFActionBase
 protected:
 
 	TUniqueFunction<void(int32)> ExecFunc;
-	uint32 Times;
-	uint32 Counter;
+	uint32 Times = 0;
+	uint32 Counter = 0;
 
 	bool Setup(uint32 InTimes, TUniqueFunction<void(int32)>&& InExecFunc)
 	{

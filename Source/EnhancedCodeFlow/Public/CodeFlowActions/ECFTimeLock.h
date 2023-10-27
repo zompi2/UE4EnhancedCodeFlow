@@ -17,8 +17,8 @@ class ENHANCEDCODEFLOW_API UECFTimeLock : public UECFActionBase
 protected:
 
 	TUniqueFunction<void()> ExecFunc;
-	float LockTime;
-	float CurrentTime;
+	float LockTime = 0.f;
+	float CurrentTime = 0.f;
 
 	bool Setup(float InLockTime, TUniqueFunction<void()>&& InExecFunc)
 	{

@@ -18,9 +18,8 @@ protected:
 
 	TUniqueFunction<void(float, FECFHandle)> TickFunc;
 	TUniqueFunction<void(bool)> CallbackFunc;
-	float TickingTime;
-
-	float CurrentTime;
+	float TickingTime = 0.f;
+	float CurrentTime = 0.f;
 
 	bool Setup(float InTickingTime, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, TUniqueFunction<void(bool)>&& InCallbackFunc = nullptr)
 	{

@@ -17,10 +17,10 @@ class ENHANCEDCODEFLOW_API UECFDoNoMoreThanXTime : public UECFActionBase
 protected:
 
 	TUniqueFunction<void()> ExecFunc;
-	float LockTime;
-	float CurrentTime;
-	int32 ExecsEnqueued;
-	int32 MaxExecsEnqueued;
+	float LockTime = 0.f;
+	float CurrentTime = 0.f;
+	int32 ExecsEnqueued = 0;
+	int32 MaxExecsEnqueued = 0;
 
 
 	bool Setup(TUniqueFunction<void()>&& InExecFunc, float InTime, int32 InMaxExecsEnqueued)
@@ -42,7 +42,7 @@ protected:
 
 	void Init() override
 	{
-		CurrentTime = 0;
+		CurrentTime = 0.f;
 		ExecsEnqueued = 0;
 		ExecFunc();
 	}
