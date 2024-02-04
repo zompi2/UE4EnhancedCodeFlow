@@ -305,6 +305,29 @@ public:
 	 */
 	static void RemoveAllDoNoMoreThanXTimes(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
+	/*^^^ Run Async Then ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Runs the given task function on a separate thread and calls the callback function when this task ends.
+	 * @param InAsyncTaskFunc		- a task that will be running on a separate thread. Must be: []() -> void.
+	 * @param InCallbackFunc		- a callback with action to execute when the async task ends. Will return bool indicating if the callback was called because of the timeout. Must be: [](bool bTimedOut, bool bStopped) -> void.
+	 * @param InTimeOut				- if greater than 0.f it will apply timeout to this action. After this time the CallbackFunc will be called with a bTimedOut parameter set to true.
+	 *								  Have in mind, that the timeout will not stop the running async thread, it just won't trigger when the async task ends. Handle timeout on the side of the async task itself.
+	 * @param InThreadType			- thread type on which the asyn task should run.
+	 * @param Settings [optional]	- an extra settings to apply to this action.
+	 */
+	static FECFHandle RunAsyncThen(const UObject* InOwner, TUniqueFunction<void()>&& InAsyncTaskFunc, TUniqueFunction<void(bool, bool)>&& InCallbackFunc, float InTimeOut = 0.f, ENamedThreads::Type InThreadType = ENamedThreads::AnyBackgroundThreadNormalTask, const FECFActionSettings& Settings = {});
+
+	/**
+	 * Stops Run Async Thens. Have in mind it will not stop running async threads. 
+	 * It will just forget about them and won't trigger callbacks when async tasks ends.
+	 * Handle stopping async tasks inside themselves.
+	 * @param InOwner [optional] - if defined it will remove time locks only from the given owner.
+	 *                             Otherwise it will remove all time locks from everywhere.
+	 */
+	static void RemoveAllRunAsyncThen(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+
+
 	/*^^^ Wait Seconds (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 	/**

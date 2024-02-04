@@ -16,6 +16,7 @@
 #include "CodeFlowActions/ECFDoOnce.h"
 #include "CodeFlowActions/ECFDoNTimes.h"
 #include "CodeFlowActions/ECFDoNoMoreThanXTime.h"
+#include "CodeFlowActions/ECFRunAsyncThen.h"
 
 #include "CodeFlowActions/Coroutines/ECFWaitSeconds.h"
 #include "CodeFlowActions/Coroutines/ECFWaitTicks.h"
@@ -293,6 +294,22 @@ void FEnhancedCodeFlow::RemoveAllDoNoMoreThanXTimes(const UObject* WorldContextO
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
 		ECF->RemoveActionsOfClass<UECFDoNoMoreThanXTime>(false, InOwner);
+}
+
+/*^^^ Run Async Then ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFHandle FEnhancedCodeFlow::RunAsyncThen(const UObject* InOwner, TUniqueFunction<void()>&& InAsyncTaskFunc, TUniqueFunction<void(bool, bool)>&& InCallbackFunc, float InTimeOut, ENamedThreads::Type InThreadType, const FECFActionSettings& Settings)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFRunAsyncThen>(InOwner, Settings, FECFInstanceId(), MoveTemp(InAsyncTaskFunc), MoveTemp(InCallbackFunc), InTimeOut, InThreadType);
+	else
+		return FECFHandle();
+}
+
+void FEnhancedCodeFlow::RemoveAllRunAsyncThen(const UObject* WorldContextObject, UObject* InOwner)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		ECF->RemoveActionsOfClass<UECFRunAsyncThen>(false, InOwner);
 }
 
 /*^^^ Wait Seconds (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
