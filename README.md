@@ -66,6 +66,7 @@ Enhanced Code Flow has been used in the following projects:
 - [Achilles: Legends Untold](https://store.steampowered.com/app/1314000/Achilles_Legends_Untold)
 - [Wanderer's Sigil](https://store.steampowered.com/app/2436870/Wanderers_Sigil)
 - [Blaze in Space: Beat a-Maze](https://store.steampowered.com/app/2016110/Blaze_in_Space_Beat_aMaze)
+- [The Neon Hook](https://zompi.itch.io/the-neon-hook)
 
 If you are using ECF in your project, let me know :)
 
