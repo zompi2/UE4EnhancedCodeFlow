@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "ECFCoroutineActionBase.h"
+#include "Coroutines/ECFCoroutineActionBase.h"
 #include "ECFWaitSeconds.generated.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
