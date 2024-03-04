@@ -164,6 +164,13 @@ public:
 	static void RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/**
+	 * Removes all Run Async Then's. Have in mind it will not stop running async threads.
+	 * It will just forget about them and won't trigger callbacks when async tasks ends.
+	 */
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Run Async Thens"), Category = "ECF")
+	static void RemoveAllRunAsyncThen(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+
+	/**
 	 * Removes all running tickers.
 	 * If owner is defined it will remove all tickers from the given owner.
 	 * Otherwise it will stop all the tickers from everywhere.

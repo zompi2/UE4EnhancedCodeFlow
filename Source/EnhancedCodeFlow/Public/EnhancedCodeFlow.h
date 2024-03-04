@@ -312,7 +312,7 @@ public:
 	 * @param InAsyncTaskFunc		- a task that will be running on a separate thread. Must be: []() -> void.
 	 * @param InCallbackFunc		- a callback with action to execute when the async task ends. Will return bool indicating if the callback was called because of the timeout. Must be: [](bool bTimedOut, bool bStopped) -> void.
 	 * @param InTimeOut				- if greater than 0.f it will apply timeout to this action. After this time the CallbackFunc will be called with a bTimedOut parameter set to true.
-	 *								  Have in mind, that the timeout will not stop the running async thread, it just won't trigger when the async task ends. Handle timeout on the side of the async task itself.
+	 *								  Have in mind, that the timeout will not stop the running async thread, it just won't trigger callback when the async task ends. Handle timeout on the side of the async task itself.
 	 * @param InThreadPriority		- thread priority (can be Normal or HiPriority).
 	 * @param Settings [optional]	- an extra settings to apply to this action.
 	 */

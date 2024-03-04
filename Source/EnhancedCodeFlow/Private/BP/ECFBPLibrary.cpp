@@ -120,6 +120,11 @@ void UECFBPLibrary::RemoveAllWhileTrueExecutes(const UObject* WorldContextObject
 	FFlow::RemoveAllWhileTrueExecutes(WorldContextObject, bComplete, InOwner);
 }
 
+void UECFBPLibrary::RemoveAllRunAsyncThen(const UObject* WorldContextObject, UObject* InOwner/* = nullptr*/)
+{
+	FFlow::RemoveAllRunAsyncThen(WorldContextObject, InOwner);
+}
+
 void UECFBPLibrary::ECFRemoveAllTickers(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
 	FFlow::RemoveAllTickers(WorldContextObject, bComplete, InOwner);
