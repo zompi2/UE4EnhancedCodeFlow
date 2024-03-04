@@ -4,6 +4,7 @@
 
 #include "ECFCoroutine.h"
 #include "ECFSubsystem.h"
+#include "ECFTypes.h"
 
 class ENHANCEDCODEFLOW_API FECFCoroutineTask
 {
@@ -86,3 +87,24 @@ private:
 	TUniqueFunction<bool(float)> Predicate;
 	float TimeOut = 0.f;
 };
+
+/*^^^ Run Async And Wait Coroutine Task ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+class ENHANCEDCODEFLOW_API FECFCoroutineTask_RunAsyncAndWait : public FECFCoroutineTask
+{
+public:
+
+	// C-tor
+	FECFCoroutineTask_RunAsyncAndWait(const UObject* InOwner, const FECFActionSettings& InSettings, TUniqueFunction<void()>&& InAsyncTaskFunc, float InTimeOut, EECFAsyncPrio InThreadPriority);
+
+	// Called when the suspension begins
+	void await_suspend(FECFCoroutineHandle CoroHandle);
+
+private:
+
+	// Storing values in order to use them when await_suspend is called
+	TUniqueFunction<void()> AsyncTaskFunction;
+	float TimeOut = 0.f;
+	EECFAsyncPrio ThreadPriority = EECFAsyncPrio::Normal;
+};
+

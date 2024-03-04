@@ -5,6 +5,7 @@
 #include "CodeFlowActions/Coroutines/ECFWaitSeconds.h"
 #include "CodeFlowActions/Coroutines/ECFWaitTicks.h"
 #include "CodeFlowActions/Coroutines/ECFWaitUntil.h"
+#include "CodeFlowActions/Coroutines/ECFRunAsyncAndWait.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 
@@ -49,6 +50,22 @@ FECFCoroutineTask_WaitUntil::FECFCoroutineTask_WaitUntil(const UObject* InOwner,
 void FECFCoroutineTask_WaitUntil::await_suspend(FECFCoroutineHandle CoroHandle)
 {
 	AddCoroutineAction<UECFWaitUntil>(Owner, CoroHandle, Settings, MoveTemp(Predicate), TimeOut);
+}
+
+/*^^^ Run Async And Wait Coroutine Task ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFCoroutineTask_RunAsyncAndWait::FECFCoroutineTask_RunAsyncAndWait(const UObject* InOwner, const FECFActionSettings& InSettings, TUniqueFunction<void()>&& InAsyncTaskFunc, float InTimeOut, EECFAsyncPrio InThreadPriority)
+{
+	Owner = InOwner;
+	Settings = InSettings;
+	AsyncTaskFunction = MoveTemp(InAsyncTaskFunc);
+	TimeOut = InTimeOut;
+	ThreadPriority = InThreadPriority;
+}
+
+void FECFCoroutineTask_RunAsyncAndWait::await_suspend(FECFCoroutineHandle CoroHandle)
+{
+	AddCoroutineAction<UECFRunAsyncAndWait>(Owner, CoroHandle, Settings, MoveTemp(AsyncTaskFunction), TimeOut, ThreadPriority);
 }
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION

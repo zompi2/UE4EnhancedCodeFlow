@@ -15,3 +15,11 @@ enum class EECFBlendFunc : uint8
 	ECFBlend_EaseOut,
 	ECFBlend_EaseInOut
 };
+
+// Possible priorities for async tasks in ECF system.
+UENUM(BlueprintType)
+enum class EECFAsyncPrio : uint8
+{
+	Normal,
+	HiPriority
+};

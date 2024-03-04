@@ -21,6 +21,7 @@
 #include "CodeFlowActions/Coroutines/ECFWaitSeconds.h"
 #include "CodeFlowActions/Coroutines/ECFWaitTicks.h"
 #include "CodeFlowActions/Coroutines/ECFWaitUntil.h"
+#include "CodeFlowActions/Coroutines/ECFRunAsyncAndWait.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 
@@ -298,10 +299,10 @@ void FEnhancedCodeFlow::RemoveAllDoNoMoreThanXTimes(const UObject* WorldContextO
 
 /*^^^ Run Async Then ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-FECFHandle FEnhancedCodeFlow::RunAsyncThen(const UObject* InOwner, TUniqueFunction<void()>&& InAsyncTaskFunc, TUniqueFunction<void(bool, bool)>&& InCallbackFunc, float InTimeOut, ENamedThreads::Type InThreadType, const FECFActionSettings& Settings)
+FECFHandle FEnhancedCodeFlow::RunAsyncThen(const UObject* InOwner, TUniqueFunction<void()>&& InAsyncTaskFunc, TUniqueFunction<void(bool, bool)>&& InCallbackFunc, float InTimeOut, EECFAsyncPrio InThreadPriority, const FECFActionSettings& Settings)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-		return ECF->AddAction<UECFRunAsyncThen>(InOwner, Settings, FECFInstanceId(), MoveTemp(InAsyncTaskFunc), MoveTemp(InCallbackFunc), InTimeOut, InThreadType);
+		return ECF->AddAction<UECFRunAsyncThen>(InOwner, Settings, FECFInstanceId(), MoveTemp(InAsyncTaskFunc), MoveTemp(InCallbackFunc), InTimeOut, InThreadPriority);
 	else
 		return FECFHandle();
 }
@@ -349,6 +350,19 @@ void FEnhancedCodeFlow::RemoveAllWaitUntil(const UObject* WorldContextObject, bo
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
 		ECF->RemoveActionsOfClass<UECFWaitUntil>(bComplete, InOwner);
+}
+
+/*^^^ Run Async And Wait (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFCoroutineTask_RunAsyncAndWait FEnhancedCodeFlow::RunAsyncAndWait(const UObject* InOwner, TUniqueFunction<void()>&& InAsyncTaskFunc, float InTimeOut, EECFAsyncPrio InThreadPriority, const FECFActionSettings& Settings)
+{
+	return FECFCoroutineTask_RunAsyncAndWait(InOwner, Settings, MoveTemp(InAsyncTaskFunc), InTimeOut, InThreadPriority);
+}
+
+void FEnhancedCodeFlow::RemoveAllRunAsyncAndWait(const UObject* WorldContextObject, bool bComplete, UObject* InOwner)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		ECF->RemoveActionsOfClass<UECFRunAsyncAndWait>(bComplete, InOwner);
 }
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION

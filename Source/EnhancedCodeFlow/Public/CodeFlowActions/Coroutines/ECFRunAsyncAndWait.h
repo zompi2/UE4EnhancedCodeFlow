@@ -2,17 +2,17 @@
 
 #pragma once
 
-#include "ECFActionBase.h"
+#include "ECFCoroutineActionBase.h"
 #include "Templates/Atomic.h"
 #include "Async/Async.h"
 #include "ECFTypes.h"
 #include "Async/TaskGraphInterfaces.h"
-#include "ECFRunAsyncThen.generated.h"
+#include "ECFRunAsyncAndWait.generated.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 
 UCLASS()
-class ENHANCEDCODEFLOW_API UECFRunAsyncThen : public UECFActionBase
+class ENHANCEDCODEFLOW_API UECFRunAsyncAndWait: public UECFCoroutineActionBase
 {
 	GENERATED_BODY()
 
@@ -21,8 +21,6 @@ class ENHANCEDCODEFLOW_API UECFRunAsyncThen : public UECFActionBase
 protected:
 
 	TUniqueFunction<void()> AsyncTaskFunc;
-	TUniqueFunction<void(bool, bool)> Func;
-
 	float TimeOut = 0.f;
 	bool bWithTimeOut = false;
 	bool bTimedOut = false;
@@ -30,18 +28,17 @@ protected:
 	ENamedThreads::Type ThreadType = ENamedThreads::AnyBackgroundThreadNormalTask;
 	TAtomic<bool> bIsAsyncTaskDone = false;
 
-	bool Setup(TUniqueFunction<void()>&& InAsyncTaskFunc, TUniqueFunction<void(bool, bool)>&& InFunc, float InTimeOut, EECFAsyncPrio ThreadPriority)
+	bool Setup(TUniqueFunction<void()>&& InAsyncTaskFunc, float InTimeOut, EECFAsyncPrio InThreadPriority)
 	{
 		if (IsInGameThread() == false)
 		{
-			ensureMsgf(false, TEXT("ECF - Run Async Task and Run failed to start, because it was trying to start outside of the GameThread!"));
+			ensureMsgf(false, TEXT("ECF Coroutine - Run Async Task and Wait failed to start, because it was trying to start outside of the GameThread!"));
 			return false;
 		}
 
 		AsyncTaskFunc = MoveTemp(InAsyncTaskFunc);
-		Func = MoveTemp(InFunc);
 
-		switch (ThreadPriority)
+		switch (InThreadPriority)
 		{
 			case EECFAsyncPrio::Normal:
 				ThreadType = ENamedThreads::AnyBackgroundThreadNormalTask;
@@ -51,9 +48,9 @@ protected:
 				break;
 		}
 
-		if (AsyncTaskFunc && Func)
+		if (AsyncTaskFunc)
 		{
-			if (InTimeOut > 0.f)	
+			if (InTimeOut > 0.f)
 			{
 				bWithTimeOut = true;
 				bTimedOut = false;
@@ -77,15 +74,15 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Run Async Task and Run failed to start. Are you sure the AsyncTask and Function are set properly?"));
+			ensureMsgf(false, TEXT("ECF Coroutine - Run Async Task and Wait failed to start. Are you sure the AsyncTask function is set properly?"));
 			return false;
 		}
 	}
 
-	void Tick(float DeltaTime) override 
+	void Tick(float DeltaTime) override
 	{
 #if STATS
-		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("RunAsyncThen - Tick"), STAT_ECFDETAILS_RUNASYNCTHEN, STATGROUP_ECFDETAILS);
+		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("RunAsyncAndWait - Tick"), STAT_ECFDETAILS_RUNASYNCANDWAIT, STATGROUP_ECFDETAILS);
 #endif
 		if (bWithTimeOut)
 		{
@@ -108,7 +105,7 @@ protected:
 
 	void Complete(bool bStopped) override
 	{
-		Func(bTimedOut, bStopped);
+		CoroutineHandle.resume();
 	}
 };
 
