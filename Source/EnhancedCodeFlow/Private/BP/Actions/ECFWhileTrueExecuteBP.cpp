@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
 
 #include "ECFWhileTrueExecuteBP.h"
 #include "EnhancedCodeFlow.h"

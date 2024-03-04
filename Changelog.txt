@@ -1,3 +1,9 @@
+###### 3.3.0
+* Run Async Then action has been added, which allows to run code on a separate thread and waiting for it's completion.
+* Run Async And Wait coroutine has been added, which is a coroutine version of Run Async Then
+* Moved coroutine files to a separate directory to keep everything more organized
+* Updated year in every file copyright note
+
 ###### 3.2.0
 * COROUTINES! Now you can implement coroutine actions if your compiler supports c++20 (for UE5.3 and later).
 * WaitSeconds coroutine added.

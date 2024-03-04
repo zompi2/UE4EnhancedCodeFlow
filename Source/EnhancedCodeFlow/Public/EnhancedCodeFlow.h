@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
 
 /**
  * Library of static functions used to launch Code Flow Actions.
@@ -31,7 +31,7 @@
 #include "ECFTypes.h"
 #include "ECFActionSettings.h"
 #include "ECFInstanceId.h"
-#include "ECFCoroutineTasks.h"
+#include "Coroutines/ECFCoroutineTasks.h"
 
 class ENHANCEDCODEFLOW_API FEnhancedCodeFlow
 {
@@ -305,6 +305,29 @@ public:
 	 */
 	static void RemoveAllDoNoMoreThanXTimes(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
+	/*^^^ Run Async Then ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Runs the given task function on a separate thread and calls the callback function when this task ends.
+	 * @param InAsyncTaskFunc		- a task that will be running on a separate thread. Must be: []() -> void.
+	 * @param InCallbackFunc		- a callback with action to execute when the async task ends. Will return bool indicating if the callback was called because of the timeout. Must be: [](bool bTimedOut, bool bStopped) -> void.
+	 * @param InTimeOut				- if greater than 0.f it will apply timeout to this action. After this time the CallbackFunc will be called with a bTimedOut parameter set to true.
+	 *								  Have in mind, that the timeout will not stop the running async thread, it just won't trigger callback when the async task ends. Handle timeout on the side of the async task itself.
+	 * @param InThreadPriority		- thread priority (can be Normal or HiPriority).
+	 * @param Settings [optional]	- an extra settings to apply to this action.
+	 */
+	static FECFHandle RunAsyncThen(const UObject* InOwner, TUniqueFunction<void()>&& InAsyncTaskFunc, TUniqueFunction<void(bool, bool)>&& InCallbackFunc, float InTimeOut = 0.f, EECFAsyncPrio InThreadPriority = EECFAsyncPrio::Normal, const FECFActionSettings& Settings = {});
+
+	/**
+	 * Stops Run Async Thens. Have in mind it will not stop running async threads. 
+	 * It will just forget about them and won't trigger callbacks when async tasks ends.
+	 * Handle stopping async tasks inside themselves.
+	 * @param InOwner [optional] - if defined it will remove time locks only from the given owner.
+	 *                             Otherwise it will remove all time locks from everywhere.
+	 */
+	static void RemoveAllRunAsyncThen(const UObject* WorldContextObject, UObject* InOwner = nullptr);
+
+
 	/*^^^ Wait Seconds (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 	/**
@@ -350,7 +373,7 @@ public:
 	 * @param InTimeOut				- if greater than 0.f it will apply timeout to this action. After this timeout the suspended function will be resumed.
 	 * @param Settings [optional]	- an extra settings to apply to this action.
 	 */
-	static FECFCoroutineTask_WaitUntil WaitUntil(const UObject* InOwner, TUniqueFunction<bool(float)>&& InPredicate, float InTimeOut, const FECFActionSettings& Settings = {});
+	static FECFCoroutineTask_WaitUntil WaitUntil(const UObject* InOwner, TUniqueFunction<bool(float)>&& InPredicate, float InTimeOut = 0.f, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops all Wait Until coroutine actions.
@@ -360,6 +383,26 @@ public:
 	 *                             it will remove Wait Until actions from everywhere.
 	 */
 	static void RemoveAllWaitUntil(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
+
+	/*^^^ Run Async And Wait (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+	
+	/**
+	 * Suspends running coroutine function until the given predicate won't return true.
+	 * @param InPredicate			- a function that decides if the suspended function should be resumed.
+	 *								  If it returns true it means the suspended function must be resumed. Must be: [](float DeltaTime) -> bool
+	 * @param InTimeOut				- if greater than 0.f it will apply timeout to this action. After this timeout the suspended function will be resumed.
+	 * @param Settings [optional]	- an extra settings to apply to this action.
+	 */
+	static FECFCoroutineTask_RunAsyncAndWait RunAsyncAndWait(const UObject* InOwner, TUniqueFunction<void()>&& InAsyncTaskFunc, float InTimeOut = 0.f, EECFAsyncPrio InThreadPriority = EECFAsyncPrio::Normal, const FECFActionSettings& Settings = {});
+
+	/**
+	 * Stops all Wait Until coroutine actions.
+	 * @param bComplete			 - indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 *							   !!!Have in mind that not completed coroutine will suspend function forever!!!
+	 * @param InOwner [optional] - if defined it will remove Wait Until actions only from the given owner. Otherwise
+	 *                             it will remove Wait Until actions from everywhere.
+	 */
+	static void RemoveAllRunAsyncAndWait(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 };
 
 using FFlow = FEnhancedCodeFlow;

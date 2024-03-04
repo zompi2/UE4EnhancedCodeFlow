@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -118,6 +118,11 @@ void UECFBPLibrary::ECFRemoveAllWaitAndExecutes(const UObject* WorldContextObjec
 void UECFBPLibrary::RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
 	FFlow::RemoveAllWhileTrueExecutes(WorldContextObject, bComplete, InOwner);
+}
+
+void UECFBPLibrary::RemoveAllRunAsyncThen(const UObject* WorldContextObject, UObject* InOwner/* = nullptr*/)
+{
+	FFlow::RemoveAllRunAsyncThen(WorldContextObject, InOwner);
 }
 
 void UECFBPLibrary::ECFRemoveAllTickers(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)

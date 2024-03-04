@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
 
 /**
  * Library of static functions used to launch Code Flow functions via Blueprints.
@@ -162,6 +162,13 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All While True Executes"), Category = "ECF")
 	static void RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
+
+	/**
+	 * Removes all Run Async Then's. Have in mind it will not stop running async threads.
+	 * It will just forget about them and won't trigger callbacks when async tasks ends.
+	 */
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Run Async Thens"), Category = "ECF")
+	static void RemoveAllRunAsyncThen(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
 	/**
 	 * Removes all running tickers.

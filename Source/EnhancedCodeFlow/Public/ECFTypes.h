@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -14,4 +14,12 @@ enum class EECFBlendFunc : uint8
 	ECFBlend_EaseIn,
 	ECFBlend_EaseOut,
 	ECFBlend_EaseInOut
+};
+
+// Possible priorities for async tasks in ECF system.
+UENUM(BlueprintType)
+enum class EECFAsyncPrio : uint8
+{
+	Normal,
+	HiPriority
 };
