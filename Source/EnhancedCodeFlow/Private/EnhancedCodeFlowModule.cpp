@@ -1,8 +1,8 @@
 // Copyright (c) 2024 Damian Nowakowski. All rights reserved.
 
-#include "Modules/ModuleInterface.h"
+#include "Modules/ModuleManager.h"
 
-class FEnhancedCodeFlowModule : public IModuleInterface
+class ENHANCEDCODEFLOW_API FEnhancedCodeFlowModule : public IModuleInterface
 {};
 
 IMPLEMENT_MODULE(FEnhancedCodeFlowModule, EnhancedCodeFlow)

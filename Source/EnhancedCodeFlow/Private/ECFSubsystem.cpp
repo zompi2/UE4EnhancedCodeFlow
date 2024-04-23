@@ -2,6 +2,7 @@
 
 #include "ECFSubsystem.h"
 #include "ECFActionBase.h"
+#include "Engine/Engine.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 

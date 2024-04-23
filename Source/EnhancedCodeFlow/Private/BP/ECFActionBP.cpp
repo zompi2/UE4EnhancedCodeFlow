@@ -3,6 +3,7 @@
 #include "ECFActionBP.h"
 #include "EnhancedCodeFlow.h"
 #include "ECFStats.h"
+#include "Runtime/Launch/Resources/Version.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 

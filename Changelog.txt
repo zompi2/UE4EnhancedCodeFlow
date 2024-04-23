@@ -1,3 +1,6 @@
+###### 3.3.1
+* Fixes to prepare the plugin to be compiled for a marketplace
+
 ###### 3.3.0
 * Run Async Then action has been added, which allows to run code on a separate thread and waiting for it's completion.
 * Run Async And Wait coroutine has been added, which is a coroutine version of Run Async Then

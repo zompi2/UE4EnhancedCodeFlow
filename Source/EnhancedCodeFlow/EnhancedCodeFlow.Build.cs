@@ -6,11 +6,13 @@ public class EnhancedCodeFlow : ModuleRules
 {
 	public EnhancedCodeFlow(ReadOnlyTargetRules Target) : base(Target)
 	{
-		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+        // To ensure IWYU
+        PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        // Ensure the default cpp standard is supported (CPP20 for UE5.3 and above).
+        // Ensure the default cpp standard is supported (CPP20 for UE5.3 and above)
         CppStandard = CppStandardVersion.Default;
 
+        // Required modules
         PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
@@ -23,8 +25,8 @@ public class EnhancedCodeFlow : ModuleRules
         // Ensure there are no duplicated definitions already
         PublicDefinitions.RemoveAll(ECFDefinition => ECFDefinition.StartsWith("ECF_"));
 
-        // Disable optimization for non shipping builds (for easier debugging)
-        bool bDisableOptimization = true;
+        // Allow to disable optimization for non shipping builds (for easier debugging)
+        bool bDisableOptimization = false;
         if (bDisableOptimization && (Target.Configuration != UnrealTargetConfiguration.Shipping))
         {
             if (Target.Version.MajorVersion == 5 && Target.Version.MinorVersion >= 2)

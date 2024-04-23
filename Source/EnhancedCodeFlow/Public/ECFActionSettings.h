@@ -30,19 +30,19 @@ struct ENHANCEDCODEFLOW_API FECFActionSettings
 
 	}
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, Category = "ECF")
 	float TickInterval = 0.f;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, Category = "ECF")
 	float FirstDelay = 0.f;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, Category = "ECF")
 	bool bIgnorePause = false;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, Category = "ECF")
 	bool bIgnoreGlobalTimeDilation = false;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, Category = "ECF")
 	bool bStartPaused = false;
 };
 

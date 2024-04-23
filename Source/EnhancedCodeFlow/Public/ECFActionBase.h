@@ -3,13 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Subsystems/GameInstanceSubsystem.h"
-#include "Tickable.h"
 #include "ECFHandle.h"
 #include "ECFInstanceId.h"
 #include "ECFActionSettings.h"
-#include "Misc/AssertionMacros.h"
 #include "ECFStats.h"
+#include "Misc/AssertionMacros.h"
+#include "Engine/World.h"
+#include "GameFramework/WorldSettings.h"
 #include "ECFActionBase.generated.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
