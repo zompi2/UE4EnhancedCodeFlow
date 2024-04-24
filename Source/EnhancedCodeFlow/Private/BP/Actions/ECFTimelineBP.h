@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../ECFActionBP.h"
+#include "ECFTypes.h"
 #include "ECFTimelineBP.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnECFTimelineBPEvent, float, Value, float, Time, bool, bStopped);

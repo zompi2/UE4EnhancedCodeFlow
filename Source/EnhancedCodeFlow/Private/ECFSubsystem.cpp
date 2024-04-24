@@ -3,6 +3,7 @@
 #include "ECFSubsystem.h"
 #include "ECFActionBase.h"
 #include "Engine/Engine.h"
+#include "Engine/GameInstance.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 

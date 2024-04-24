@@ -1,3 +1,6 @@
+###### 3.3.2
+* Further fixes to prepare the plugin to be compiled for a marketplace. Tests against UE5.4.
+
 ###### 3.3.1
 * Fixes to prepare the plugin to be compiled for a marketplace
 
