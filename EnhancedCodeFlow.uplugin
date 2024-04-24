@@ -2,12 +2,14 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "3.3.2",
+	"EngineVersion": "5.4.0",
 	"FriendlyName": "Enhanced Code Flow",
 	"Description": "This code plugin provides functions that drastically improve the quality of life during the implementation of game flow in C++.",
 	"Category": "Programming",
 	"CreatedBy": "Damian Nowakowski",
 	"CreatedByURL": "https://zompidev.blogspot.com",
 	"DocsURL": "https://github.com/zompi2/UE4EnhancedCodeFlow",
+	"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/0e9dd2a8f807456da0fe6af280ab795c",
 	"SupportURL": "mailto:zompi2@gmail.com",
 	"CanContainContent": false,
 	"IsBetaVersion": false,
@@ -17,7 +19,10 @@
 		{
 			"Name": "EnhancedCodeFlow",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"PlatformAllowList": [
+				"Win64"
+			]
 		}
 	]
 }
