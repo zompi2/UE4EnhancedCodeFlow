@@ -14,6 +14,7 @@ The plugin has been tested on the Engine's versions: 4.27.2, 5.3.1 and 5.4.0.
 - [Example Project](#example-project)
 - [Used in...](#used-in)
 ---
+- [Installation](#installation)
 - [Usage](#usage)
 - [Extra Settings](#extra-settings)
 - [Instanced Actions](#instanced-actions)
@@ -80,6 +81,19 @@ Enhanced Code Flow has been used in the following projects:
 - [The Neon Hook](https://zompi.itch.io/the-neon-hook)
 
 If you are using ECF in your project, let me know :)
+
+[Back to top](#table-of-content)
+
+# Installation
+
+1. Get ECF plugin. You can do this by either:
+    * Getting if from the Epic Games Launcher. It will be installed in the Engine's directory: `Engine/Plugins/Marketplace/EnhancedCodeFlow`.
+    * Cloning it or downloading it from this repository and putting it into your project's (`MyProject/Plugins/EnhancedCodeFlow`) or engine's (`Engine/Plugins/EnhancedCodeFlow`) plugins directory.
+2. Add "EnhancedCodeFlow" entry to the `PublicDependencyModuleNames` list in your project's `.Build.cs` file.
+3. Enable the plugin in the Editor's Plugins manager (or by changing manually your project's `.uproject` file).
+4. If you want to use this plugin in your code add `#include "EnhancedCodeFlow.h` to the file in which you want to use the plugin.
+
+Check out the **[Example Project](https://github.com/zompi2/UE4EnhancedCodeFlowExample)** to see how the plugin is integrated into it.
 
 [Back to top](#table-of-content)
 
