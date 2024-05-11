@@ -87,7 +87,7 @@ If you are using ECF in your project, let me know :)
 # Installation
 
 1. Get ECF plugin. You can do this by either:
-    * Getting if from the Epic Games Launcher. It will be installed in the Engine's directory: `Engine/Plugins/Marketplace/EnhancedCodeFlow`.
+    * Getting it from the Epic Games Launcher. It will be installed in the Engine's directory: `Engine/Plugins/Marketplace/EnhancedCodeFlow`.
     * Cloning it or downloading it from this repository and putting it into your project's (`MyProject/Plugins/EnhancedCodeFlow`) or engine's (`Engine/Plugins/EnhancedCodeFlow`) plugins directory.
 2. Add "EnhancedCodeFlow" entry to the `PublicDependencyModuleNames` list in your project's `.Build.cs` file.
 3. Enable the plugin in the Editor's Plugins manager (or by changing manually your project's `.uproject` file).
