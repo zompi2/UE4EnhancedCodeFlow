@@ -7,12 +7,14 @@ The plugin has been tested on the Engine's versions: 4.27.2, 5.3.1 and 5.4.0.
 
 # Table of content
 
-- [Contact](#contact)
 - [Unreal Engine Marketplace](#unreal-engine-marketplace)
-- [Changelog](#changelog)
-- [LEGACY VERSIONS](#legacy-versions)
 - [Example Project](#example-project)
 - [Used in...](#used-in)
+- [Contact](#contact)
+- [Support and Contribution](#support-and-contribution)
+- [Changelog](#changelog)
+- [LEGACY VERSIONS](#legacy-versions)
+
 ---
 - [Installation](#installation)
 - [Usage](#usage)
@@ -26,12 +28,6 @@ The plugin has been tested on the Engine's versions: 4.27.2, 5.3.1 and 5.4.0.
 - [Extra Links](#extra-links)
 - [Special Thanks](#special-thanks)
 
-# Contact
-
-If you have any question or suggestion regardles this plugin simply add an **Issue** to the github project or write an e-mail to me: **zompi2@gmail.com** I will try my best to answer it quickly :)
-
-[Back to top](#table-of-content)
-
 # Unreal Engine Marketplace
 
 The plugin is finally available on the Unreal Engine Marketplace! It is free, of course.  
@@ -39,25 +35,6 @@ If you don't want to build this plugin by yourself, you can **[download it from 
 Unreal Engine Marketplace allow to publish the code plugins for new versions of the Unreal Engine only, so currently only 5.4, 5.3 and 5.2 are available.  
 If you are using 4.27 you can download the precompiled package **[from here](https://github.com/zompi2/UE4EnhancedCodeFlow/raw/build-4.27/EnhancedCodeFlow-4.27-Compiled.zip)**.  
 The plugin's version that's on the Marketplace is **3.3.2**.
-
-[Back to top](#table-of-content)
-
-# Changelog
-
-The Changelog has been put into this file: **[Changelog.txt](Changelog.txt)**
-
-[Back to top](#table-of-content)
-
-## **LEGACY VERSIONS**  
-
-Version `3.1.1` was the last one that had an example project implemented in UE4. Next versions' example projects require UE5 to run.  
-Version `3.1.1` can be found on a separate branch here: **[Legacy-3.1.1](https://github.com/zompi2/UE4EnhancedCodeFlow/tree/Legacy-3.1.1)**  
-
-Version `3.0.0` will probably break code and Blueprint nodes from previous version. Update with caution!  
-Version `2.1.2` can be found on a separate branch here: **[Legacy-2.1](https://github.com/zompi2/UE4EnhancedCodeFlow/tree/Legacy-2.1)**  
-
-Version `2.0.0` will probably break Blueprint nodes from previous versions. Update with caution!  
-Version `1.6.1` can be found on a separate branch here: **[Legacy-1.6](https://github.com/zompi2/UE4EnhancedCodeFlow/tree/Legacy-1.6)**
 
 [Back to top](#table-of-content)
 
@@ -83,6 +60,40 @@ Enhanced Code Flow has been used in the following projects:
 If you are using ECF in your project, let me know :)
 
 [Back to top](#table-of-content)
+
+# Contact
+
+If you have any question or suggestion regardles this plugin simply add an **Issue** to the github project or write an e-mail to me: **zompi2@gmail.com** I will try my best to answer it quickly :)
+
+[Back to top](#table-of-content)
+
+# Support and Contribution
+
+This plugin is free and open source forever. However, if you want to show appretiation to my work any support will warm my heart.  
+If you have any suggestions on how to fix or improve this plugin feel free to create a Pull Request.  
+
+[Back to top](#table-of-content)
+
+# Changelog
+
+The Changelog has been put into this file: **[Changelog.txt](Changelog.txt)**
+
+[Back to top](#table-of-content)
+
+## **LEGACY VERSIONS**  
+
+Version `3.1.1` was the last one that had an example project implemented in UE4. Next versions' example projects require UE5 to run.  
+Version `3.1.1` can be found on a separate branch here: **[Legacy-3.1.1](https://github.com/zompi2/UE4EnhancedCodeFlow/tree/Legacy-3.1.1)**  
+
+Version `3.0.0` will probably break code and Blueprint nodes from previous version. Update with caution!  
+Version `2.1.2` can be found on a separate branch here: **[Legacy-2.1](https://github.com/zompi2/UE4EnhancedCodeFlow/tree/Legacy-2.1)**  
+
+Version `2.0.0` will probably break Blueprint nodes from previous versions. Update with caution!  
+Version `1.6.1` can be found on a separate branch here: **[Legacy-1.6](https://github.com/zompi2/UE4EnhancedCodeFlow/tree/Legacy-1.6)**
+
+[Back to top](#table-of-content)
+
+
 
 # Installation
 
@@ -841,6 +852,7 @@ You can temporarily disable plugin's build optimizations by setting the `bDisabl
 
 # Extra links
 
+* [Unreal Engine Marketplace](https://www.unrealengine.com/marketplace/en-US/product/enhanced-code-flow)
 * [Unreal Engine Forum](https://forums.unrealengine.com/t/plugin-enhanced-code-flow/684237)
 * [Blog Entry](https://zompidev.blogspot.com/2021/03/enhanced-code-flow-plugin-for-ue4.html)
 * [Reddit Post](https://www.reddit.com/r/unrealengine/comments/mbkzqj/enhanced_code_flow_plugin)
