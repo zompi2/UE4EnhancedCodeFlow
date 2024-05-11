@@ -8,6 +8,7 @@ The plugin has been tested on the Engine's versions: 4.27.2, 5.3.1 and 5.4.0.
 # Table of content
 
 - [Contact](#contact)
+- [Unreal Engine Marketplace](#unreal-engine-marketplace)
 - [Changelog](#changelog)
 - [LEGACY VERSIONS](#legacy-versions)
 - [Example Project](#example-project)
@@ -27,6 +28,16 @@ The plugin has been tested on the Engine's versions: 4.27.2, 5.3.1 and 5.4.0.
 # Contact
 
 If you have any question or suggestion regardles this plugin simply add an **Issue** to the github project or write an e-mail to me: **zompi2@gmail.com** I will try my best to answer it quickly :)
+
+[Back to top](#table-of-content)
+
+# Unreal Engine Marketplace
+
+The plugin is finally available on the Unreal Engine Marketplace! It is free, of course.  
+If you don't want to build this plugin by yourself, you can **[download it from here](https://www.unrealengine.com/marketplace/en-US/product/enhanced-code-flow)**.  
+Unreal Engine Marketplace allow to publish the code plugins for new versions of the Unreal Engine only, so currently only 5.4, 5.3 and 5.2 are available.  
+If you are using 4.27 you can download the precompiled package **[from here](https://github.com/zompi2/UE4EnhancedCodeFlow/raw/build-4.27/EnhancedCodeFlow-4.27-Compiled.zip)**.  
+The plugin's version that's on the Marketplace is **3.3.2**.
 
 [Back to top](#table-of-content)
 
