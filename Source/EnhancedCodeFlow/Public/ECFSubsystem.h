@@ -40,7 +40,11 @@ protected:
 	FECFHandle AddAction(const UObject* InOwner, const FECFActionSettings& Settings, const FECFInstanceId& InstanceId, Ts&& ... Args)
 	{
 		// Ensure the Action has been started from the Game Thread.
-		checkf(IsInGameThread(), TEXT("ECF Actions must be started from the Game Thread!"));
+		if (IsInGameThread() == false)
+		{
+			checkf(false, TEXT("ECF Actions must be started from the Game Thread!"));
+			return FECFHandle();
+		}
 
 		// There can be only one instanced action running at the same time. When trying to add an
 		// action with existing instance id - return the currently running action's handle.
@@ -71,7 +75,11 @@ protected:
 	void AddCoroutineAction(const UObject* InOwner, FECFCoroutineHandle InCoroutineHandle, const FECFActionSettings& Settings, Ts&& ... Args)
 	{
 		// Ensure the Action has been started from the Game Thread.
-		checkf(IsInGameThread(), TEXT("ECF Coroutines must be started from the Game Thread!"));
+		if (IsInGameThread())
+		{
+			checkf(false, TEXT("ECF Coroutines must be started from the Game Thread!"));
+			return;
+		}
 
 		// Create and set new coroutine action.
 		T* NewAction = NewObject<T>(this);
