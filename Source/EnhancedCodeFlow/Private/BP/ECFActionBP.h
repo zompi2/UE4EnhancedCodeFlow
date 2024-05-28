@@ -40,7 +40,7 @@ protected:
 
 	// The World Context Object that started this action.
 	UPROPERTY(Transient)
-	const UObject* Proxy_WorldContextObject;
+	TObjectPtr<const UObject> Proxy_WorldContextObject;
 
 	// Handle of the Action to control.
 	FECFHandle Proxy_Handle;
@@ -51,6 +51,9 @@ protected:
 	// Just a handy flag to check if the action has been activated already.
 	bool bActivated = false;
 
-	// Mark this async node as ready to destroy
+	// Mark this async node as ready to destroy.
 	void ClearAsyncBPAction();
+
+	// Checks if the given proxy object is still valid and safe to use.
+	static bool IsProxyValid(const UObject* ProxyObject);
 };

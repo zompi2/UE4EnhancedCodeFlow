@@ -47,11 +47,16 @@ void UECFActionBP::Activate()
 void UECFActionBP::ClearAsyncBPAction()
 {
 	SetReadyToDestroy();
-#if ((ENGINE_MAJOR_VERSION == 5) && (ENGINE_MINOR_VERSION >= 0))
+#if (ENGINE_MAJOR_VERSION == 5)
 	MarkAsGarbage();
 #else
 	MarkPendingKill();
 #endif
+}
+
+bool UECFActionBP::IsProxyValid(const UObject* ProxyObject)
+{
+	return (IsValid(ProxyObject) && (ProxyObject->HasAnyFlags(RF_BeginDestroyed | RF_FinishDestroyed) == false));
 }
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION
