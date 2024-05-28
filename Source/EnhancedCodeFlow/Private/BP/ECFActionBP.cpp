@@ -56,7 +56,9 @@ void UECFActionBP::ClearAsyncBPAction()
 
 bool UECFActionBP::IsProxyValid(const UObject* ProxyObject)
 {
-	return (IsValid(ProxyObject) && (ProxyObject->HasAnyFlags(RF_BeginDestroyed | RF_FinishDestroyed) == false));
+	const bool bIsValid = (IsValid(ProxyObject) && (ProxyObject->HasAnyFlags(RF_BeginDestroyed | RF_FinishDestroyed) == false));
+	ensureAlwaysMsgf(bIsValid, TEXT("Invalid ProxyObject!"));
+	return bIsValid;
 }
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION

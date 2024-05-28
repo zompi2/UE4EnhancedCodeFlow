@@ -11,7 +11,6 @@ UECFRunAsyncThenBP* UECFRunAsyncThenBP::ECFRunAsyncThen(const UObject* WorldCont
 	if (Proxy)
 	{
 		Proxy->Init(WorldContextObject, Settings);
-
 		Proxy->Proxy_Handle = FFlow::RunAsyncThen(WorldContextObject,
 			[Proxy]()
 			{
