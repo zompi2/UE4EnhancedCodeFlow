@@ -8,20 +8,29 @@ ECF_PRAGMA_DISABLE_OPTIMIZATION
 UECFRunAsyncThenBP* UECFRunAsyncThenBP::ECFRunAsyncThen(const UObject* WorldContextObject, float InTimeOut, EECFAsyncPrio Priority, FECFActionSettings Settings, FECFHandleBP& Handle)
 {
 	UECFRunAsyncThenBP* Proxy = NewObject<UECFRunAsyncThenBP>();
-	Proxy->Init(WorldContextObject, Settings);
+	if (Proxy)
+	{
+		Proxy->Init(WorldContextObject, Settings);
 
-	Proxy->Proxy_Handle = FFlow::RunAsyncThen(WorldContextObject,
-		[Proxy]()
-		{
-			Proxy->AsyncTask.Broadcast(false, false);
-		},
-		[Proxy](bool bTimedOut, bool bStopped)
-		{
-			Proxy->OnExecute.Broadcast(bTimedOut, bStopped);
-			Proxy->ClearAsyncBPAction();
-		},
-	InTimeOut, Priority, Settings);
-	Handle = FECFHandleBP(Proxy->Proxy_Handle);
+		Proxy->Proxy_Handle = FFlow::RunAsyncThen(WorldContextObject,
+			[Proxy]()
+			{
+				if (IsProxyValid(Proxy))
+				{
+					Proxy->AsyncTask.Broadcast(false, false);
+				}
+			},
+			[Proxy](bool bTimedOut, bool bStopped)
+			{
+				if (IsProxyValid(Proxy))
+				{
+					Proxy->OnExecute.Broadcast(bTimedOut, bStopped);
+					Proxy->ClearAsyncBPAction();
+				}
+			},
+		InTimeOut, Priority, Settings);
+		Handle = FECFHandleBP(Proxy->Proxy_Handle);
+	}
 
 	return Proxy;
 }

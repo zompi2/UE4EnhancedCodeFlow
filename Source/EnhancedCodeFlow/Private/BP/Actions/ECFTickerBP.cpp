@@ -8,20 +8,28 @@ ECF_PRAGMA_DISABLE_OPTIMIZATION
 UECFTickerBP* UECFTickerBP::ECFTicker(const UObject* WorldContextObject, float TickingTime, FECFActionSettings Settings, FECFHandleBP& Handle)
 {
 	UECFTickerBP* Proxy = NewObject<UECFTickerBP>();
-	Proxy->Init(WorldContextObject, Settings);
-
-	Proxy->Proxy_Handle = FFlow::AddTicker(WorldContextObject, TickingTime,
-		[Proxy](float DeltaTime)
-		{
-			Proxy->OnTick.Broadcast(DeltaTime, false);
-		}, 
-		[Proxy](bool bStopped)
-		{
-			Proxy->OnComplete.Broadcast(0.f, bStopped);
-			Proxy->ClearAsyncBPAction();
-		}, 
-	Settings);
-	Handle = FECFHandleBP(Proxy->Proxy_Handle);
+	if (Proxy)
+	{
+		Proxy->Init(WorldContextObject, Settings);
+		Proxy->Proxy_Handle = FFlow::AddTicker(WorldContextObject, TickingTime,
+			[Proxy](float DeltaTime)
+			{
+				if (IsProxyValid(Proxy))
+				{
+					Proxy->OnTick.Broadcast(DeltaTime, false);
+				}
+			}, 
+			[Proxy](bool bStopped)
+			{
+				if (IsProxyValid(Proxy))
+				{
+					Proxy->OnComplete.Broadcast(0.f, bStopped);
+					Proxy->ClearAsyncBPAction();
+				}
+			}, 
+		Settings);
+		Handle = FECFHandleBP(Proxy->Proxy_Handle);
+	}
 
 	return Proxy;
 }
