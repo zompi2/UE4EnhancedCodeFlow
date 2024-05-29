@@ -40,7 +40,7 @@ protected:
 
 	// The World Context Object that started this action.
 	UPROPERTY(Transient)
-	TObjectPtr<const UObject> Proxy_WorldContextObject;
+	const UObject* Proxy_WorldContextObject;
 
 	// Handle of the Action to control.
 	FECFHandle Proxy_Handle;
