@@ -64,10 +64,15 @@ protected:
 			}
 
 			bIsAsyncTaskDone = false;
-			AsyncTask(ThreadType, [this]()
+
+			TWeakObjectPtr<ThisClass> WeakThis(this);
+			AsyncTask(ThreadType, [WeakThis]()
 			{
-				AsyncTaskFunc();
-				bIsAsyncTaskDone = true;
+				if (ThisClass* StrongThis = WeakThis.Get())
+				{
+					StrongThis->AsyncTaskFunc();
+					StrongThis->bIsAsyncTaskDone = true;
+				}
 			});
 
 			return true;
