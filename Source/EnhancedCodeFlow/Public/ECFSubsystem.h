@@ -75,7 +75,7 @@ protected:
 	void AddCoroutineAction(const UObject* InOwner, FECFCoroutineHandle InCoroutineHandle, const FECFActionSettings& Settings, Ts&& ... Args)
 	{
 		// Ensure the Action has been started from the Game Thread.
-		if (IsInGameThread())
+		if (IsInGameThread() == false)
 		{
 			checkf(false, TEXT("ECF Coroutines must be started from the Game Thread!"));
 			return;
