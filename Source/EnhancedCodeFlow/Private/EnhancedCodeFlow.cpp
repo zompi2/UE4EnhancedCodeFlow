@@ -136,6 +136,14 @@ FECFHandle FFlow::Delay(const UObject* InOwner, float InDelayTime, TUniqueFuncti
 		return FECFHandle();
 }
 
+FECFHandle FFlow::Delay(const UObject* InOwner, float InDelayTime, TUniqueFunction<void()>&& InCallbackFunc, const FECFActionSettings& Settings/* = {}*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFDelay>(InOwner, Settings, FECFInstanceId(), InDelayTime, MoveTemp(InCallbackFunc));
+	else
+		return FECFHandle();
+}
+
 void FFlow::RemoveAllDelays(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner/* = nullptr*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))

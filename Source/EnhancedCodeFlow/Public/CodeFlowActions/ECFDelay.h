@@ -20,6 +20,8 @@ protected:
 	float DelayTime = 0.f;
 	float CurrentTime = 0.f;
 
+	TUniqueFunction<void()> CallbackFunc_NobStopped;
+
 	bool Setup(float InDelayTime, TUniqueFunction<void(bool)>&& InCallbackFunc)
 	{
 		DelayTime = InDelayTime;
@@ -32,6 +34,23 @@ protected:
 				SetMaxActionTime(DelayTime);
 			}
 			return true;
+		}
+		else
+		{
+			ensureMsgf(false, TEXT("ECF - delay failed to start. Are you sure the DelayTime is not negative and Callback Function is set properly?"));
+			return false;
+		}
+	}
+
+	bool Setup(float InDelayTime, TUniqueFunction<void()>&& InCallbackFunc)
+	{
+		CallbackFunc_NobStopped = MoveTemp(InCallbackFunc);
+		if (CallbackFunc_NobStopped)
+		{
+			return Setup(InDelayTime, [this](bool bStopped)
+			{
+				CallbackFunc_NobStopped();
+			});			
 		}
 		else
 		{

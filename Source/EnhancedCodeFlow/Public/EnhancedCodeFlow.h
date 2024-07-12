@@ -125,6 +125,7 @@ public:
 	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
 	static FECFHandle Delay(const UObject* InOwner, float InDelayTime, TUniqueFunction<void(bool)>&& InCallbackFunc, const FECFActionSettings& Settings = {});
+	static FECFHandle Delay(const UObject* InOwner, float InDelayTime, TUniqueFunction<void()>&& InCallbackFunc, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops all delays.
