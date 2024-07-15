@@ -26,7 +26,7 @@ public class EnhancedCodeFlow : ModuleRules
         PublicDefinitions.RemoveAll(ECFDefinition => ECFDefinition.StartsWith("ECF_"));
 
         // Allow to disable optimization for non shipping builds (for easier debugging)
-        bool bDisableOptimization = false;
+        bool bDisableOptimization = true;
         if (bDisableOptimization && (Target.Configuration != UnrealTargetConfiguration.Shipping))
         {
             if (Target.Version.MajorVersion == 5 && Target.Version.MinorVersion >= 2)

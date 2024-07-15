@@ -15,10 +15,22 @@ class ENHANCEDCODEFLOW_API UECFCoroutineActionBase : public UECFActionBase
 
 	friend class UECFSubsystem;
 
+public:
+
+	void BeginDestroy() override
+	{
+		if (bHasValidCoroutineHandle)
+		{
+			CoroutineHandle.destroy();
+		}
+		Super::BeginDestroy();
+	}
+
 protected:
 
 	// Coroutine handle used to control the coroutine inside the Action
 	FECFCoroutineHandle CoroutineHandle;
+	bool bHasValidCoroutineHandle = false;
 
 private:
 
@@ -27,6 +39,7 @@ private:
 	{
 		UECFActionBase::SetAction(InOwner, HandleId, {}, InSettings);
 		CoroutineHandle = InCoroutineHandle;
+		bHasValidCoroutineHandle = true;
 	}
 };
 
