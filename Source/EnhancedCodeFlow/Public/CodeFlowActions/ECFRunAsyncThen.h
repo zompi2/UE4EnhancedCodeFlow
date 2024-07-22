@@ -32,12 +32,6 @@ protected:
 
 	bool Setup(TUniqueFunction<void()>&& InAsyncTaskFunc, TUniqueFunction<void(bool, bool)>&& InFunc, float InTimeOut, EECFAsyncPrio ThreadPriority)
 	{
-		if (IsInGameThread() == false)
-		{
-			ensureMsgf(false, TEXT("ECF - Run Async Task and Run failed to start, because it was trying to start outside of the GameThread!"));
-			return false;
-		}
-
 		AsyncTaskFunc = MoveTemp(InAsyncTaskFunc);
 		Func = MoveTemp(InFunc);
 
