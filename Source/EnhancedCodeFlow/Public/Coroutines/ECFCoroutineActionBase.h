@@ -17,6 +17,8 @@ class ENHANCEDCODEFLOW_API UECFCoroutineActionBase : public UECFActionBase
 
 public:
 
+	// Ensure the coroutine handle is properly destroyed.
+	// Remember, that the Promise has final_suspend set to always.
 	void BeginDestroy() override
 	{
 		if (bHasValidCoroutineHandle)
@@ -28,13 +30,15 @@ public:
 
 protected:
 
-	// Coroutine handle used to control the coroutine inside the Action
+	// Coroutine handle used to control the coroutine inside the Action.
 	FECFCoroutineHandle CoroutineHandle;
+
+	// 
 	bool bHasValidCoroutineHandle = false;
 
 private:
 
-	// Additionally sets the coroutine handle
+	// Setting up action. The same as in ActionBase, but it additionally sets the coroutine handle.
 	void SetCoroutineAction(const UObject* InOwner, FECFCoroutineHandle InCoroutineHandle, const FECFHandle& InHandleId, const FECFActionSettings& InSettings)
 	{
 		UECFActionBase::SetAction(InOwner, HandleId, {}, InSettings);
