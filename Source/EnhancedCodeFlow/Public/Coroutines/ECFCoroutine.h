@@ -21,7 +21,7 @@ struct FECFCoroutine : FECFCoroutineHandle
 struct FECFCoroutinePromise
 {
 	FECFCoroutine get_return_object() { return { FECFCoroutine::from_promise(*this) }; }
-	std::suspend_never initial_suspend() { return {}; }
+	std::suspend_never initial_suspend() noexcept { return {}; }
 	std::suspend_always final_suspend() noexcept { return {}; } // The handle will always be destroyed manually
 	void return_void() {}
 	void unhandled_exception() {}
