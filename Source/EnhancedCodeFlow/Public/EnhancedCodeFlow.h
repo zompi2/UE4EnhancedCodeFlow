@@ -31,7 +31,7 @@
 #include "ECFTypes.h"
 #include "ECFActionSettings.h"
 #include "ECFInstanceId.h"
-#include "Coroutines/ECFCoroutineTasks.h"
+#include "Coroutines/ECFCoroutineAwaiters.h"
 
 class ENHANCEDCODEFLOW_API FEnhancedCodeFlow
 {
@@ -336,7 +336,7 @@ public:
 	 * @param InTime - time in seconds the suspension will last.
 	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
-	static FECFCoroutineTask_WaitSeconds WaitSeconds(const UObject* InOwner, float InTime, const FECFActionSettings& Settings = {});
+	static FECFCoroutineAwaiter_WaitSeconds WaitSeconds(const UObject* InOwner, float InTime, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops all Wait Seconds coroutine actions.
@@ -354,7 +354,7 @@ public:
 	 * @param InTicks - the amount of ticks the suspension will last.
 	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
-	static FECFCoroutineTask_WaitTicks WaitTicks(const UObject* InOwner, int32 InTicks, const FECFActionSettings& Settings = {});
+	static FECFCoroutineAwaiter_WaitTicks WaitTicks(const UObject* InOwner, int32 InTicks, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops all Wait Ticks coroutine actions.
@@ -374,7 +374,7 @@ public:
 	 * @param InTimeOut				- if greater than 0.f it will apply timeout to this action. After this timeout the suspended function will be resumed.
 	 * @param Settings [optional]	- an extra settings to apply to this action.
 	 */
-	static FECFCoroutineTask_WaitUntil WaitUntil(const UObject* InOwner, TUniqueFunction<bool(float)>&& InPredicate, float InTimeOut = 0.f, const FECFActionSettings& Settings = {});
+	static FECFCoroutineAwaiter_WaitUntil WaitUntil(const UObject* InOwner, TUniqueFunction<bool(float)>&& InPredicate, float InTimeOut = 0.f, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops all Wait Until coroutine actions.
@@ -394,7 +394,7 @@ public:
 	 * @param InTimeOut				- if greater than 0.f it will apply timeout to this action. After this timeout the suspended function will be resumed.
 	 * @param Settings [optional]	- an extra settings to apply to this action.
 	 */
-	static FECFCoroutineTask_RunAsyncAndWait RunAsyncAndWait(const UObject* InOwner, TUniqueFunction<void()>&& InAsyncTaskFunc, float InTimeOut = 0.f, EECFAsyncPrio InThreadPriority = EECFAsyncPrio::Normal, const FECFActionSettings& Settings = {});
+	static FECFCoroutineAwaiter_RunAsyncAndWait RunAsyncAndWait(const UObject* InOwner, TUniqueFunction<void()>&& InAsyncTaskFunc, float InTimeOut = 0.f, EECFAsyncPrio InThreadPriority = EECFAsyncPrio::Normal, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops all Wait Until coroutine actions.

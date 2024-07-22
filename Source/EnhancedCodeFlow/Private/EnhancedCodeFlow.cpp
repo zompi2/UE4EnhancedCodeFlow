@@ -323,9 +323,9 @@ void FEnhancedCodeFlow::RemoveAllRunAsyncThen(const UObject* WorldContextObject,
 
 /*^^^ Wait Seconds (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-FECFCoroutineTask_WaitSeconds FEnhancedCodeFlow::WaitSeconds(const UObject* InOwner, float InTime, const FECFActionSettings& Settings /*= {}*/)
+FECFCoroutineAwaiter_WaitSeconds FEnhancedCodeFlow::WaitSeconds(const UObject* InOwner, float InTime, const FECFActionSettings& Settings /*= {}*/)
 {
-	return FECFCoroutineTask_WaitSeconds(InOwner, Settings, InTime);
+	return FECFCoroutineAwaiter_WaitSeconds(InOwner, Settings, InTime);
 }
 
 void FEnhancedCodeFlow::RemoveAllWaitSeconds(const UObject* WorldContextObject, bool bComplete, UObject* InOwner)
@@ -336,9 +336,9 @@ void FEnhancedCodeFlow::RemoveAllWaitSeconds(const UObject* WorldContextObject, 
 
 /*^^^ Wait Ticks (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-FECFCoroutineTask_WaitTicks FEnhancedCodeFlow::WaitTicks(const UObject* InOwner, int32 InTicks, const FECFActionSettings& Settings)
+FECFCoroutineAwaiter_WaitTicks FEnhancedCodeFlow::WaitTicks(const UObject* InOwner, int32 InTicks, const FECFActionSettings& Settings)
 {
-	return FECFCoroutineTask_WaitTicks(InOwner, Settings, InTicks);
+	return FECFCoroutineAwaiter_WaitTicks(InOwner, Settings, InTicks);
 }
 
 void FEnhancedCodeFlow::RemoveAllWaitTicks(const UObject* WorldContextObject, bool bComplete, UObject* InOwner)
@@ -349,9 +349,9 @@ void FEnhancedCodeFlow::RemoveAllWaitTicks(const UObject* WorldContextObject, bo
 
 /*^^^ Wait Until (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-FECFCoroutineTask_WaitUntil FEnhancedCodeFlow::WaitUntil(const UObject* InOwner, TUniqueFunction<bool(float)>&& InPredicate, float InTimeOut, const FECFActionSettings& Settings)
+FECFCoroutineAwaiter_WaitUntil FEnhancedCodeFlow::WaitUntil(const UObject* InOwner, TUniqueFunction<bool(float)>&& InPredicate, float InTimeOut, const FECFActionSettings& Settings)
 {
-	return FECFCoroutineTask_WaitUntil(InOwner, Settings, MoveTemp(InPredicate), InTimeOut);
+	return FECFCoroutineAwaiter_WaitUntil(InOwner, Settings, MoveTemp(InPredicate), InTimeOut);
 }
 
 void FEnhancedCodeFlow::RemoveAllWaitUntil(const UObject* WorldContextObject, bool bComplete, UObject* InOwner)
@@ -362,9 +362,9 @@ void FEnhancedCodeFlow::RemoveAllWaitUntil(const UObject* WorldContextObject, bo
 
 /*^^^ Run Async And Wait (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-FECFCoroutineTask_RunAsyncAndWait FEnhancedCodeFlow::RunAsyncAndWait(const UObject* InOwner, TUniqueFunction<void()>&& InAsyncTaskFunc, float InTimeOut, EECFAsyncPrio InThreadPriority, const FECFActionSettings& Settings)
+FECFCoroutineAwaiter_RunAsyncAndWait FEnhancedCodeFlow::RunAsyncAndWait(const UObject* InOwner, TUniqueFunction<void()>&& InAsyncTaskFunc, float InTimeOut, EECFAsyncPrio InThreadPriority, const FECFActionSettings& Settings)
 {
-	return FECFCoroutineTask_RunAsyncAndWait(InOwner, Settings, MoveTemp(InAsyncTaskFunc), InTimeOut, InThreadPriority);
+	return FECFCoroutineAwaiter_RunAsyncAndWait(InOwner, Settings, MoveTemp(InAsyncTaskFunc), InTimeOut, InThreadPriority);
 }
 
 void FEnhancedCodeFlow::RemoveAllRunAsyncAndWait(const UObject* WorldContextObject, bool bComplete, UObject* InOwner)
