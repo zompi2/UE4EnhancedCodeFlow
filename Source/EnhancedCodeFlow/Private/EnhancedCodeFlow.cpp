@@ -96,7 +96,20 @@ FECFHandle FFlow::AddTicker(const UObject* InOwner, TUniqueFunction<void(float)>
 	return FFlow::AddTicker(InOwner, -1.f, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc), Settings);
 }
 
+FECFHandle FFlow::AddTicker(const UObject* InOwner, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc/* = nullptr*/, const FECFActionSettings& Settings/* = {}*/)
+{
+	return FFlow::AddTicker(InOwner, -1.f, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc), Settings);
+}
+
 FECFHandle FFlow::AddTicker(const UObject* InOwner, float InTickingTime, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(bool)>&& InCallbackFunc/* = nullptr*/, const FECFActionSettings& Settings/* = {}*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFTicker>(InOwner, Settings, FECFInstanceId(), InTickingTime, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc));
+	else
+		return FECFHandle();
+}
+
+FECFHandle FFlow::AddTicker(const UObject* InOwner, float InTickingTime, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc/* = nullptr*/, const FECFActionSettings& Settings/* = {}*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
 		return ECF->AddAction<UECFTicker>(InOwner, Settings, FECFInstanceId(), InTickingTime, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc));
@@ -109,7 +122,20 @@ FECFHandle FFlow::AddTicker(const UObject* InOwner, TUniqueFunction<void(float, 
 	return FFlow::AddTicker(InOwner, -1.f, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc), Settings);
 }
 
+FECFHandle FFlow::AddTicker(const UObject* InOwner, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc/* = nullptr*/, const FECFActionSettings& Settings/* = {}*/)
+{
+	return FFlow::AddTicker(InOwner, -1.f, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc), Settings);
+}
+
 FECFHandle FFlow::AddTicker(const UObject* InOwner, float InTickingTime, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, TUniqueFunction<void(bool)>&& InCallbackFunc/* = nullptr*/, const FECFActionSettings& Settings/* = {}*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFTicker_WithHandle>(InOwner, Settings, FECFInstanceId(), InTickingTime, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc));
+	else
+		return FECFHandle();
+}
+
+FECFHandle FFlow::AddTicker(const UObject* InOwner, float InTickingTime, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc/* = nullptr*/, const FECFActionSettings& Settings/* = {}*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
 		return ECF->AddAction<UECFTicker_WithHandle>(InOwner, Settings, FECFInstanceId(), InTickingTime, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc));
@@ -160,6 +186,14 @@ FECFHandle FEnhancedCodeFlow::DelayTicks(const UObject* InOwner, int32 InDelayTi
 		return FECFHandle();
 }
 
+FECFHandle FEnhancedCodeFlow::DelayTicks(const UObject* InOwner, int32 InDelayTicks, TUniqueFunction<void()>&& InCallbackFunc, const FECFActionSettings& Settings)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFDelayTicks>(InOwner, Settings, FECFInstanceId(), InDelayTicks, MoveTemp(InCallbackFunc));
+	else
+		return FECFHandle();
+}
+
 void FEnhancedCodeFlow::RemoveAllDelayTicks(const UObject* WorldContextObject, bool bComplete, UObject* InOwner)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
@@ -176,7 +210,39 @@ FECFHandle FFlow::WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool()>
 		return FECFHandle();
 }
 
+FECFHandle FFlow::WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(bool)>&& InCallbackFunc, float InTimeOut/* = 0.f*/, const FECFActionSettings& Settings/* = {}*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFWaitAndExecute>(InOwner, Settings, FECFInstanceId(), MoveTemp(InPredicate), MoveTemp(InCallbackFunc), InTimeOut);
+	else
+		return FECFHandle();
+}
+
+FECFHandle FFlow::WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void()>&& InCallbackFunc, float InTimeOut/* = 0.f*/, const FECFActionSettings& Settings/* = {}*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFWaitAndExecute>(InOwner, Settings, FECFInstanceId(), MoveTemp(InPredicate), MoveTemp(InCallbackFunc), InTimeOut);
+	else
+		return FECFHandle();
+}
+
 FECFHandle FFlow::WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool(float)>&& InPredicate, TUniqueFunction<void(bool, bool)>&& InCallbackFunc, float InTimeOut, const FECFActionSettings& Settings)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFWaitAndExecute_WithDeltaTime>(InOwner, Settings, FECFInstanceId(), MoveTemp(InPredicate), MoveTemp(InCallbackFunc), InTimeOut);
+	else
+		return FECFHandle();
+}
+
+FECFHandle FFlow::WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool(float)>&& InPredicate, TUniqueFunction<void(bool)>&& InCallbackFunc, float InTimeOut, const FECFActionSettings& Settings)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFWaitAndExecute_WithDeltaTime>(InOwner, Settings, FECFInstanceId(), MoveTemp(InPredicate), MoveTemp(InCallbackFunc), InTimeOut);
+	else
+		return FECFHandle();
+}
+
+FECFHandle FFlow::WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool(float)>&& InPredicate, TUniqueFunction<void()>&& InCallbackFunc, float InTimeOut, const FECFActionSettings& Settings)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
 		return ECF->AddAction<UECFWaitAndExecute_WithDeltaTime>(InOwner, Settings, FECFInstanceId(), MoveTemp(InPredicate), MoveTemp(InCallbackFunc), InTimeOut);
@@ -203,6 +269,22 @@ FECFHandle FFlow::WhileTrueExecute(const UObject* InOwner, TUniqueFunction<bool(
 		return FECFHandle();
 }
 
+FECFHandle FFlow::WhileTrueExecute(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(bool)>&& InCompleteFunc, float InTimeOut/* = 0.f*/, const FECFActionSettings& Settings/* = {}*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFWhileTrueExecute>(InOwner, Settings, FECFInstanceId(), MoveTemp(InPredicate), MoveTemp(InTickFunc), MoveTemp(InCompleteFunc), InTimeOut);
+	else
+		return FECFHandle();
+}
+
+FECFHandle FFlow::WhileTrueExecute(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void()>&& InCompleteFunc, float InTimeOut/* = 0.f*/, const FECFActionSettings& Settings/* = {}*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFWhileTrueExecute>(InOwner, Settings, FECFInstanceId(), MoveTemp(InPredicate), MoveTemp(InTickFunc), MoveTemp(InCompleteFunc), InTimeOut);
+	else
+		return FECFHandle();
+}
+
 void FFlow::RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner/* = nullptr*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
@@ -219,6 +301,14 @@ FECFHandle FFlow::AddTimeline(const UObject* InOwner, float InStartValue, float 
 		return FECFHandle();
 }
 
+FECFHandle FFlow::AddTimeline(const UObject* InOwner, float InStartValue, float InStopValue, float InTime, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc/* = nullptr*/, EECFBlendFunc InBlendFunc/* = EECFBlendFunc::ECFBlend_Linear*/, float InBlendExp/* = 0.f*/, const FECFActionSettings& Settings/* = {}*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFTimeline>(InOwner, Settings, FECFInstanceId(), InStartValue, InStopValue, InTime, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc), InBlendFunc, InBlendExp);
+	else
+		return FECFHandle();
+}
+
 void FFlow::RemoveAllTimelines(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner/* = nullptr*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
@@ -228,6 +318,14 @@ void FFlow::RemoveAllTimelines(const UObject* WorldContextObject, bool bComplete
 /*^^^ Custom Timeline ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 FECFHandle FFlow::AddCustomTimeline(const UObject* InOwner, UCurveFloat* CurveFloat, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float, bool)>&& InCallbackFunc/* = nullptr*/, const FECFActionSettings& Settings/* = {}*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFCustomTimeline>(InOwner, Settings, FECFInstanceId(), CurveFloat, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc));
+	else
+		return FECFHandle();
+}
+
+FECFHandle FFlow::AddCustomTimeline(const UObject* InOwner, UCurveFloat* CurveFloat, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc/* = nullptr*/, const FECFActionSettings& Settings/* = {}*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
 		return ECF->AddAction<UECFCustomTimeline>(InOwner, Settings, FECFInstanceId(), CurveFloat, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc));
@@ -308,6 +406,22 @@ void FEnhancedCodeFlow::RemoveAllDoNoMoreThanXTimes(const UObject* WorldContextO
 /*^^^ Run Async Then ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 FECFHandle FEnhancedCodeFlow::RunAsyncThen(const UObject* InOwner, TUniqueFunction<void()>&& InAsyncTaskFunc, TUniqueFunction<void(bool, bool)>&& InCallbackFunc, float InTimeOut, EECFAsyncPrio InThreadPriority, const FECFActionSettings& Settings)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFRunAsyncThen>(InOwner, Settings, FECFInstanceId(), MoveTemp(InAsyncTaskFunc), MoveTemp(InCallbackFunc), InTimeOut, InThreadPriority);
+	else
+		return FECFHandle();
+}
+
+FECFHandle FEnhancedCodeFlow::RunAsyncThen(const UObject* InOwner, TUniqueFunction<void()>&& InAsyncTaskFunc, TUniqueFunction<void(bool)>&& InCallbackFunc, float InTimeOut, EECFAsyncPrio InThreadPriority, const FECFActionSettings& Settings)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFRunAsyncThen>(InOwner, Settings, FECFInstanceId(), MoveTemp(InAsyncTaskFunc), MoveTemp(InCallbackFunc), InTimeOut, InThreadPriority);
+	else
+		return FECFHandle();
+}
+
+FECFHandle FEnhancedCodeFlow::RunAsyncThen(const UObject* InOwner, TUniqueFunction<void()>&& InAsyncTaskFunc, TUniqueFunction<void()>&& InCallbackFunc, float InTimeOut, EECFAsyncPrio InThreadPriority, const FECFActionSettings& Settings)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
 		return ECF->AddAction<UECFRunAsyncThen>(InOwner, Settings, FECFInstanceId(), MoveTemp(InAsyncTaskFunc), MoveTemp(InCallbackFunc), InTimeOut, InThreadPriority);
