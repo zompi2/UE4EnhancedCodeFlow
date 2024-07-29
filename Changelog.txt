@@ -1,3 +1,6 @@
+###### 3.3.8
+* Fixed coroutines compilation for the environment without coroutines support (which has been broken in 3.3.6).
+
 ###### 3.3.7
 * Almost every action got alternative callbacks with the less amount of parameters that might not always be needed and are just confusing.
 * Better commented callbacks parameters.

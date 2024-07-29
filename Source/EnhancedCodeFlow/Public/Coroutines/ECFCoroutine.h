@@ -38,6 +38,7 @@ using FECFCoroutine = void;
 struct FECFCoroutineHandle 
 {
 	void resume() {};
+	void destroy() {};
 };
 
 #define co_await static_assert(false, "Trying to use co_await without coroutine support!")
