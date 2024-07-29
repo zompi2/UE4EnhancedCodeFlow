@@ -1,3 +1,7 @@
+###### 3.3.7
+* Almost every action got alternative callbacks with the less amount of parameters that might not always be needed and are just confusing.
+* Better commented callbacks parameters.
+
 ###### 3.3.6
 * Properly destroying coroutine handlers for actions that has been aborted.
 * Renamed CoroutineTasks to CoroutineAwaiters to keep proper naming conventions.
