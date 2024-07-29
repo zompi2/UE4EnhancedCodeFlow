@@ -17,6 +17,7 @@ class ENHANCEDCODEFLOW_API UECFDelayTicks : public UECFActionBase
 protected:
 
 	TUniqueFunction<void(bool)> CallbackFunc;
+	TUniqueFunction<void()> CallbackFunc_NoStopped;
 	int32 DelayTicks = 0;
 	int32 CurrentTicks = 0;
 
@@ -32,6 +33,23 @@ protected:
 		else
 		{
 			ensureMsgf(false, TEXT("ECF - delay ticks failed to start. Are you sure the DelayTicks is not negative and Callback Function is set properly?"));
+			return false;
+		}
+	}
+
+	bool Setup(int32 InDelayTicks, TUniqueFunction<void()>&& InCallbackFunc)
+	{
+		CallbackFunc_NoStopped = MoveTemp(InCallbackFunc);
+		if (CallbackFunc_NoStopped)
+		{
+			return Setup(InDelayTicks, [this](bool bStopped)
+			{
+				CallbackFunc_NoStopped();
+			});
+		}
+		else
+		{
+			ensureMsgf(false, TEXT("ECF - delay ticks failed to start. Are you sure the Callback Function is set properly?"));
 			return false;
 		}
 	}

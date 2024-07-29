@@ -19,6 +19,7 @@ protected:
 
 	TUniqueFunction<void(float, float)> TickFunc;
 	TUniqueFunction<void(float, float, bool)> CallbackFunc;
+	TUniqueFunction<void(float, float)> CallbackFunc_NoStopped;
 	float StartValue;
 	float StopValue;
 	float Time;
@@ -51,6 +52,18 @@ protected:
 			ensureMsgf(false, TEXT("ECF - Timeline failed to start. Are you sure the Ticking time is greater than 0 and Ticking Function are set properly? /n Remember, that BlendExp must be different than zero and StartValue and StopValue must not be the same!"));
 			return false;
 		}
+	}
+
+	bool Setup(float InStartValue, float InStopValue, float InTime, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc, EECFBlendFunc InBlendFunc, float InBlendExp)
+	{
+		CallbackFunc_NoStopped = MoveTemp(InCallbackFunc);
+		return Setup(InStartValue, InStopValue, InTime, MoveTemp(InTickFunc), [this](float Value, float Time, bool bStopped)
+		{
+			if (CallbackFunc_NoStopped)
+			{
+				CallbackFunc_NoStopped(Value, Time);
+			}
+		}, InBlendFunc, InBlendExp);
 	}
 
 	void Tick(float DeltaTime) override

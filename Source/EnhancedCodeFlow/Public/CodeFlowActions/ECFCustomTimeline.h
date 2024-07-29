@@ -20,6 +20,7 @@ protected:
 
 	TUniqueFunction<void(float, float)> TickFunc;
 	TUniqueFunction<void(float, float, bool)> CallbackFunc;
+	TUniqueFunction<void(float, float)> CallbackFunc_NoStopped;
 	FTimeline MyTimeline;
 
 	float CurrentValue = 0.f;
@@ -53,6 +54,18 @@ protected:
 			ensureMsgf(false, TEXT("ECF - custom timeline failed to start. Are you sure Tick Function and Curve are set properly?"));
 			return false;
 		}
+	}
+
+	bool Setup(UCurveFloat* InCurveFloat, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc = nullptr)
+	{
+		CallbackFunc_NoStopped = MoveTemp(InCallbackFunc);
+		return Setup(InCurveFloat, MoveTemp(InTickFunc), [this](float Value, float Time, bool bStopped)
+		{
+			if (CallbackFunc_NoStopped)
+			{
+				CallbackFunc_NoStopped(Value, Time);
+			}
+		});
 	}
 
 	void Tick(float DeltaTime) override
