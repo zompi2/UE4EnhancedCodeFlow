@@ -18,6 +18,8 @@ protected:
 
 	TUniqueFunction<bool(float)> Predicate;
 	TUniqueFunction<void(bool, bool)> Func;
+	TUniqueFunction<void(bool)> Func_NoStopped;
+	TUniqueFunction<void()> Func_NoTimeOut_NoStopped;
 
 	float TimeOut = 0.f;
 	bool bWithTimeOut = false;
@@ -52,6 +54,40 @@ protected:
 		else
 		{
 			ensureMsgf(false, TEXT("ECF - Wait and Execute failed to start. Are you sure the Predicate and Function are set properly?"));
+			return false;
+		}
+	}
+
+	bool Setup(TUniqueFunction<bool(float)>&& InPredicate, TUniqueFunction<void(bool)>&& InFunc, float InTimeOut)
+	{
+		Func_NoStopped = MoveTemp(InFunc);
+		if (Func_NoStopped)
+		{
+			return Setup(MoveTemp(InPredicate), [this](bool bTimeOut, bool bStopped)
+			{
+				Func_NoStopped(bTimeOut);
+			}, InTimeOut);
+		}
+		else
+		{
+			ensureMsgf(false, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
+			return false;
+		}
+	}
+
+	bool Setup(TUniqueFunction<bool(float)>&& InPredicate, TUniqueFunction<void()>&& InFunc, float InTimeOut)
+	{
+		Func_NoTimeOut_NoStopped = MoveTemp(InFunc);
+		if (Func_NoTimeOut_NoStopped)
+		{
+			return Setup(MoveTemp(InPredicate), [this](bool bTimeOut, bool bStopped)
+			{
+				Func_NoTimeOut_NoStopped();
+			}, InTimeOut);
+		}
+		else
+		{
+			ensureMsgf(false, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
 			return false;
 		}
 	}

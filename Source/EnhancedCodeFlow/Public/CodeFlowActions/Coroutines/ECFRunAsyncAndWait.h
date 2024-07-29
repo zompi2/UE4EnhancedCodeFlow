@@ -23,7 +23,6 @@ protected:
 	TUniqueFunction<void()> AsyncTaskFunc;
 	float TimeOut = 0.f;
 	bool bWithTimeOut = false;
-	bool bTimedOut = false;
 
 	ENamedThreads::Type ThreadType = ENamedThreads::AnyBackgroundThreadNormalTask;
 	TAtomic<bool> bIsAsyncTaskDone = false;
@@ -47,14 +46,12 @@ protected:
 			if (InTimeOut > 0.f)
 			{
 				bWithTimeOut = true;
-				bTimedOut = false;
 				TimeOut = InTimeOut;
 				SetMaxActionTime(TimeOut);
 			}
 			else
 			{
 				bWithTimeOut = false;
-				bTimedOut = false;
 			}
 
 			bIsAsyncTaskDone = false;
@@ -88,7 +85,6 @@ protected:
 			TimeOut -= DeltaTime;
 			if (TimeOut <= 0.f)
 			{
-				bTimedOut = true;
 				Complete(false);
 				MarkAsFinished();
 				return;
