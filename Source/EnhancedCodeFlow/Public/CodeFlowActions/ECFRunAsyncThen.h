@@ -22,6 +22,8 @@ protected:
 
 	TUniqueFunction<void()> AsyncTaskFunc;
 	TUniqueFunction<void(bool, bool)> Func;
+	TUniqueFunction<void(bool)> Func_NoStopped;
+	TUniqueFunction<void()> Func_NoTimeOut_NoStopped;
 
 	float TimeOut = 0.f;
 	bool bWithTimeOut = false;
@@ -32,12 +34,6 @@ protected:
 
 	bool Setup(TUniqueFunction<void()>&& InAsyncTaskFunc, TUniqueFunction<void(bool, bool)>&& InFunc, float InTimeOut, EECFAsyncPrio ThreadPriority)
 	{
-		if (IsInGameThread() == false)
-		{
-			ensureMsgf(false, TEXT("ECF - Run Async Task and Run failed to start, because it was trying to start outside of the GameThread!"));
-			return false;
-		}
-
 		AsyncTaskFunc = MoveTemp(InAsyncTaskFunc);
 		Func = MoveTemp(InFunc);
 
@@ -86,6 +82,41 @@ protected:
 			return false;
 		}
 	}
+
+	bool Setup(TUniqueFunction<void()>&& InAsyncTaskFunc, TUniqueFunction<void(bool)>&& InFunc, float InTimeOut, EECFAsyncPrio ThreadPriority)
+	{
+		Func_NoStopped = MoveTemp(InFunc);
+		if (Func_NoStopped)
+		{
+			return Setup(MoveTemp(InAsyncTaskFunc), [this](bool bTimeOut, bool bStopped)
+			{
+				Func_NoStopped(bTimeOut);
+			}, InTimeOut, ThreadPriority);
+		}
+		else
+		{
+			ensureMsgf(false, TEXT("ECF - Run Async Task and Run failed to start. Are you sure the Function is set properly?"));
+			return false;
+		}
+	}
+
+	bool Setup(TUniqueFunction<void()>&& InAsyncTaskFunc, TUniqueFunction<void()>&& InFunc, float InTimeOut, EECFAsyncPrio ThreadPriority)
+	{
+		Func_NoTimeOut_NoStopped = MoveTemp(InFunc);
+		if (Func_NoTimeOut_NoStopped)
+		{
+			return Setup(MoveTemp(InAsyncTaskFunc), [this](bool bTimeOut, bool bStopped)
+			{
+				Func_NoTimeOut_NoStopped();
+			}, InTimeOut, ThreadPriority);
+		}
+		else
+		{
+			ensureMsgf(false, TEXT("ECF - Run Async Task and Run failed to start. Are you sure the Function is set properly?"));
+			return false;
+		}
+	}
+
 
 	void Tick(float DeltaTime) override 
 	{

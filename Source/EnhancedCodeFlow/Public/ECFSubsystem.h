@@ -21,7 +21,7 @@ class ENHANCEDCODEFLOW_API UECFSubsystem : public UGameInstanceSubsystem, public
 	GENERATED_BODY()
 
 	friend class FEnhancedCodeFlow;
-	friend class FECFCoroutineTask;
+	friend class FECFCoroutineAwaiter;
 
 protected:
 

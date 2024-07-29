@@ -19,6 +19,8 @@ protected:
 	TUniqueFunction<bool()> Predicate;
 	TUniqueFunction<void(float)> TickFunc;
 	TUniqueFunction<void(bool, bool)> CompleteFunc;
+	TUniqueFunction<void(bool)> CompleteFunc_NoStopped;
+	TUniqueFunction<void()> CompleteFunc_NoTimeOut_NoStopped;
 
 	float TimeOut = 0.f;
 	bool bWithTimeOut = false;
@@ -59,6 +61,30 @@ protected:
 			ensureMsgf(false, TEXT("ECF - While True Execute failed to start. Are you sure the Predicate and Function are set properly?"));
 			return false;
 		}
+	}
+
+	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(bool)>&& InCompleteFunc, float InTimeOut)
+	{
+		CompleteFunc_NoStopped = MoveTemp(InCompleteFunc);
+		return Setup(MoveTemp(InPredicate), MoveTemp(InTickFunc), [this](bool bTimeOut, bool bStopped)
+		{
+			if (CompleteFunc_NoStopped)
+			{
+				CompleteFunc_NoStopped(bTimeOut);
+			}
+		}, InTimeOut);
+	}
+
+	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void()>&& InCompleteFunc, float InTimeOut)
+	{
+		CompleteFunc_NoTimeOut_NoStopped = MoveTemp(InCompleteFunc);
+		return Setup(MoveTemp(InPredicate), MoveTemp(InTickFunc), [this](bool bTimeOut, bool bStopped)
+		{
+			if (CompleteFunc_NoTimeOut_NoStopped)
+			{
+				CompleteFunc_NoTimeOut_NoStopped();
+			}
+		}, InTimeOut);
 	}
 
 	void Tick(float DeltaTime) override 

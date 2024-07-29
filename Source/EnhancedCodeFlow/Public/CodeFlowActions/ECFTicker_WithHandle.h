@@ -18,6 +18,7 @@ protected:
 
 	TUniqueFunction<void(float, FECFHandle)> TickFunc;
 	TUniqueFunction<void(bool)> CallbackFunc;
+	TUniqueFunction<void()> CallbackFunc_NoStopped;
 	float TickingTime = 0.f;
 	float CurrentTime = 0.f;
 
@@ -42,6 +43,18 @@ protected:
 			ensureMsgf(false, TEXT("ECF - Ticker(2) failed to start. Are you sure the Ticking time and Ticking Function are set properly?"));
 			return false;
 		}
+	}
+
+	bool Setup(float InTickingTime, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc = nullptr)
+	{
+		CallbackFunc_NoStopped = MoveTemp(InCallbackFunc);
+		return Setup(InTickingTime, MoveTemp(InTickFunc), [this](bool bStopped)
+		{
+			if (CallbackFunc_NoStopped)
+			{
+				CallbackFunc_NoStopped();
+			}
+		});
 	}
 
 	void Tick(float DeltaTime) override

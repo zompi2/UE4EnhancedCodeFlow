@@ -23,19 +23,12 @@ protected:
 	TUniqueFunction<void()> AsyncTaskFunc;
 	float TimeOut = 0.f;
 	bool bWithTimeOut = false;
-	bool bTimedOut = false;
 
 	ENamedThreads::Type ThreadType = ENamedThreads::AnyBackgroundThreadNormalTask;
 	TAtomic<bool> bIsAsyncTaskDone = false;
 
 	bool Setup(TUniqueFunction<void()>&& InAsyncTaskFunc, float InTimeOut, EECFAsyncPrio InThreadPriority)
 	{
-		if (IsInGameThread() == false)
-		{
-			ensureMsgf(false, TEXT("ECF Coroutine - Run Async Task and Wait failed to start, because it was trying to start outside of the GameThread!"));
-			return false;
-		}
-
 		AsyncTaskFunc = MoveTemp(InAsyncTaskFunc);
 
 		switch (InThreadPriority)
@@ -53,14 +46,12 @@ protected:
 			if (InTimeOut > 0.f)
 			{
 				bWithTimeOut = true;
-				bTimedOut = false;
 				TimeOut = InTimeOut;
 				SetMaxActionTime(TimeOut);
 			}
 			else
 			{
 				bWithTimeOut = false;
-				bTimedOut = false;
 			}
 
 			bIsAsyncTaskDone = false;
@@ -94,7 +85,6 @@ protected:
 			TimeOut -= DeltaTime;
 			if (TimeOut <= 0.f)
 			{
-				bTimedOut = true;
 				Complete(false);
 				MarkAsFinished();
 				return;

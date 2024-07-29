@@ -6,11 +6,11 @@
 #include "ECFSubsystem.h"
 #include "ECFTypes.h"
 
-class ENHANCEDCODEFLOW_API FECFCoroutineTask
+class ENHANCEDCODEFLOW_API FECFCoroutineAwaiter
 {
 public:
 
-	// Functions required by any coroutine task.
+	// Functions required by any coroutine awaiter.
 	void await_resume() {}
 	bool await_ready() { return false; }
 
@@ -33,14 +33,14 @@ protected:
 	FECFActionSettings Settings;
 };
 
-/*^^^ Wait Seconds Coroutine Task ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+/*^^^ Wait Seconds Coroutine Awaiter ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-class ENHANCEDCODEFLOW_API FECFCoroutineTask_WaitSeconds : public FECFCoroutineTask
+class ENHANCEDCODEFLOW_API FECFCoroutineAwaiter_WaitSeconds : public FECFCoroutineAwaiter
 {
 public:
 
 	// C-tor
-	FECFCoroutineTask_WaitSeconds(const UObject* InOwner, const FECFActionSettings& InSettings, float InTime);
+	FECFCoroutineAwaiter_WaitSeconds(const UObject* InOwner, const FECFActionSettings& InSettings, float InTime);
 	
 	// Called when the suspension begins
 	void await_suspend(FECFCoroutineHandle CoroHandle);
@@ -51,14 +51,14 @@ private:
 	float Time = 0.f;
 };
 
-/*^^^ Wait Ticks Coroutine Task ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+/*^^^ Wait Ticks Coroutine Awaiter ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-class ENHANCEDCODEFLOW_API FECFCoroutineTask_WaitTicks : public FECFCoroutineTask
+class ENHANCEDCODEFLOW_API FECFCoroutineAwaiter_WaitTicks : public FECFCoroutineAwaiter
 {
 public:
 
 	// C-tor
-	FECFCoroutineTask_WaitTicks(const UObject* InOwner, const FECFActionSettings& InSettings, int32 InTicks);
+	FECFCoroutineAwaiter_WaitTicks(const UObject* InOwner, const FECFActionSettings& InSettings, int32 InTicks);
 	
 	// Called when the suspension begins
 	void await_suspend(FECFCoroutineHandle CoroHandle);
@@ -69,14 +69,14 @@ private:
 	int32 Ticks = 0;
 };
 
-/*^^^ Wait Until Coroutine Task ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+/*^^^ Wait Until Coroutine Awaiter ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-class ENHANCEDCODEFLOW_API FECFCoroutineTask_WaitUntil : public FECFCoroutineTask
+class ENHANCEDCODEFLOW_API FECFCoroutineAwaiter_WaitUntil : public FECFCoroutineAwaiter
 {
 public:
 
 	// C-tor
-	FECFCoroutineTask_WaitUntil(const UObject* InOwner, const FECFActionSettings& InSettings, TUniqueFunction<bool(float)>&& InPredicate, float InTimeOut);
+	FECFCoroutineAwaiter_WaitUntil(const UObject* InOwner, const FECFActionSettings& InSettings, TUniqueFunction<bool(float)>&& InPredicate, float InTimeOut);
 	
 	// Called when the suspension begins
 	void await_suspend(FECFCoroutineHandle CoroHandle);
@@ -88,14 +88,14 @@ private:
 	float TimeOut = 0.f;
 };
 
-/*^^^ Run Async And Wait Coroutine Task ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+/*^^^ Run Async And Wait Coroutine Awaiter ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
-class ENHANCEDCODEFLOW_API FECFCoroutineTask_RunAsyncAndWait : public FECFCoroutineTask
+class ENHANCEDCODEFLOW_API FECFCoroutineAwaiter_RunAsyncAndWait : public FECFCoroutineAwaiter
 {
 public:
 
 	// C-tor
-	FECFCoroutineTask_RunAsyncAndWait(const UObject* InOwner, const FECFActionSettings& InSettings, TUniqueFunction<void()>&& InAsyncTaskFunc, float InTimeOut, EECFAsyncPrio InThreadPriority);
+	FECFCoroutineAwaiter_RunAsyncAndWait(const UObject* InOwner, const FECFActionSettings& InSettings, TUniqueFunction<void()>&& InAsyncTaskFunc, float InTimeOut, EECFAsyncPrio InThreadPriority);
 
 	// Called when the suspension begins
 	void await_suspend(FECFCoroutineHandle CoroHandle);
