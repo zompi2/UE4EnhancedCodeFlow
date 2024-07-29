@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "3.3.4",
+	"VersionName": "3.3.7",
 	"FriendlyName": "Enhanced Code Flow",
 	"Description": "This code plugin provides functions that drastically improve the quality of life during the implementation of game flow in C++.",
 	"Category": "Programming",

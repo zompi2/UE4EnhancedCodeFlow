@@ -1,3 +1,14 @@
+###### 3.3.7
+* Almost every action got alternative callbacks with the less amount of parameters that might not always be needed and are just confusing.
+* Better commented callbacks parameters.
+
+###### 3.3.6
+* Properly destroying coroutine handlers for actions that has been aborted.
+* Renamed CoroutineTasks to CoroutineAwaiters to keep proper naming conventions.
+
+###### 3.3.5
+* Removed few redundant IsInGameThread checks.
+
 ###### 3.3.4
 * Fixed bad IsInGameThread check when starting a coroutine.
 

@@ -17,6 +17,7 @@ class ENHANCEDCODEFLOW_API UECFDelay : public UECFActionBase
 protected:
 
 	TUniqueFunction<void(bool)> CallbackFunc;
+	TUniqueFunction<void()> CallbackFunc_NoStopped;
 	float DelayTime = 0.f;
 	float CurrentTime = 0.f;
 
@@ -36,6 +37,23 @@ protected:
 		else
 		{
 			ensureMsgf(false, TEXT("ECF - delay failed to start. Are you sure the DelayTime is not negative and Callback Function is set properly?"));
+			return false;
+		}
+	}
+
+	bool Setup(float InDelayTime, TUniqueFunction<void()>&& InCallbackFunc)
+	{
+		CallbackFunc_NoStopped = MoveTemp(InCallbackFunc);
+		if (CallbackFunc_NoStopped)
+		{
+			return Setup(InDelayTime, [this](bool bStopped)
+			{
+				CallbackFunc_NoStopped();
+			});			
+		}
+		else
+		{
+			ensureMsgf(false, TEXT("ECF - delay failed to start. Are you sure the Callback Function is set properly?"));
 			return false;
 		}
 	}

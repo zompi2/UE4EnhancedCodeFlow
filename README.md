@@ -34,7 +34,7 @@ The plugin is finally available on the Unreal Engine Marketplace! It is free, of
 If you don't want to build this plugin by yourself, you can **[download it from here](https://www.unrealengine.com/marketplace/en-US/product/enhanced-code-flow)**.  
 Unreal Engine Marketplace allow to publish the code plugins for new versions of the Unreal Engine only, so currently only 5.4, 5.3 and 5.2 are available.  
 If you are using 4.27 you can download the precompiled package **[from here](https://github.com/zompi2/UE4EnhancedCodeFlow/raw/build-4.27/EnhancedCodeFlow-4.27-Compiled.zip)**.  
-The plugin's version that's on the Marketplace is **3.3.3**.
+The plugin's version that's on the Marketplace is **3.3.4**.
 
 [Back to top](#table-of-content)
 
@@ -130,8 +130,8 @@ Run the following functions to use enhanced code flow!
 
 #### Delay
 
-Execute specified action after some time. This can be useful in many various situations. Everytime when I was using a Delay node
-in blueprints I wish there was an equivalent of it in c++. The `bStopped` tells if this action has been stopped by a Stop function.
+Execute specified action after some time. This can be useful in many various situations. Everytime when I was using a Delay node in blueprints I wish there was an equivalent of it in c++.  
+The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.
 
 ``` cpp
 FFlow::Delay(this, 2.f, [this](bool bStopped)
@@ -150,7 +150,8 @@ You can plan to execute delayed code without delaying the whole Blueprint, you c
 
 #### Delay Ticks
 
-Execute specified action after some ticks. Can be useful if we want to execute some code in next game tick.
+Execute specified action after some ticks. Can be useful if we want to execute some code in next game tick.  
+The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.
 
 ``` cpp
 FFlow::DelayTicks(this, 1, [this](bool bStopped)
@@ -188,6 +189,7 @@ FFlow::AddTicker(this, 10.f, [this](float DeltaTime)
 {
   // Code to execute when ticker finishes ticking.
   // The bStopped tells if this action has been stopped by a Stop function.
+  // The bStopped argument is optional.
 });
 ```
 
@@ -229,7 +231,8 @@ FFlow::StopAction(this, TickerHandle);
 Waits until specific conditions are met and then executes code.  
 The conditions are defined in a form of a predicate.  
 You can specify a timeout, which will stop this action after the given time. Setting the timeout value to less or equal 0 will cause this function to run infinitely untill the predicate returns true or when it is explicitly stopped.  
-The `bStopped` tells if this action has been stopped by a Stop function.  
+The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.  
+The `bTimedOut` tells if this action has been stopped because it timed out. This argument is optional.
 Perfect solution if code needs a reference to an object, which spawn moment is not clearly defined, or if you can execute a specific code only when the game reaches a specific state. 
 
 
@@ -276,6 +279,7 @@ FFlow::WhileTrueExecute(this, [this]()
 {
   // Optionally implement a code that runs when this action ends, even when the condition
   // in the predicate returns false or it is timed out or it is explicitly stopped.
+  // Both bTimedOut and bStopped arguments are optional.
 }, 0.f);
 ```
 
@@ -293,7 +297,7 @@ You can specify a timeout, which will stop this action after the given time.
 
 > Have in mind, that the neither the timeout nor stopping the action will not stop the running async thread. It just won't trigger the callback when the async task ends. Handle timeout on the side of the async task itself.  
 
-The `bStopped` tells if this action has been stopped by a Stop function.  
+The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.  
 You can define the priority of the running task as `Normal` (`AnyBackgroundThreadNormalTask`) or `HiPriority` (`AnyBackgroundHiPriTask`).
 
 > Have in mind, that you can start this function from GameThread only!
@@ -336,7 +340,7 @@ The function requires the following parameters:
   * EaseInOut
 * BlendExp - an exponent defining a shape of EaseIn, EaseOut and EaseInOut function shapes. *(default value: 1.f)*;
 
-The `bStopped` tells if this action has been stopped by a Stop function.  
+The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.  
 
 ``` cpp
 FFlow::AddTimeline(this, 0.f, 1.f, 2.f, [this](float Value, float Time)
@@ -366,7 +370,7 @@ FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
 }, 
 [this](float Value, float Time, bool bStopped)
 {
-  // Code to run when timeline stops
+  // Code to run when timeline stops. bStopped argument is optional.
 });
 ```
 
@@ -498,7 +502,7 @@ To make defining these settings easier there are few macros that creates a setti
 * `ECF_STARTPAUSED` - settings which makes this action started in paused state
 
 ``` cpp
-FFlow::Delay(this, 2.f, [this](bool bStopped)
+FFlow::Delay(this, 2.f, [this]()
 {
   // Run this code after 2 seconds, while ignoring game pause.
 }, ECF_IGNOREPAUSE);
