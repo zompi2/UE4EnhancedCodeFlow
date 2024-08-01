@@ -30,8 +30,10 @@ struct FECFCoroutinePromise
 	void return_void() {}
 	void unhandled_exception() {}
 
+#if ECF_USE_EXPLICIT_CORO_DESTROY
 	int32 HandleCounter = 0;
 	bool bDestroyed = false;
+#endif
 };
 
 #else
