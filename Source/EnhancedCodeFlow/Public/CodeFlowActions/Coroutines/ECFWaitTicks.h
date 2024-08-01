@@ -54,7 +54,10 @@ protected:
 
 	void Complete(bool bStopped) override
 	{
-		CoroutineHandle.resume();
+		if (bHasValidCoroutineHandle)
+		{
+			CoroutineHandle.resume();
+		}
 	}
 };
 
