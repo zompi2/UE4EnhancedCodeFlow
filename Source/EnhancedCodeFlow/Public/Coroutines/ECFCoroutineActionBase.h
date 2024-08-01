@@ -24,6 +24,7 @@ public:
 		if (bHasValidCoroutineHandle)
 		{
 			CoroutineHandle.destroy();
+			bHasValidCoroutineHandle = false;
 		}
 		Super::BeginDestroy();
 	}
@@ -33,7 +34,7 @@ protected:
 	// Coroutine handle used to control the coroutine inside the Action.
 	FECFCoroutineHandle CoroutineHandle;
 
-	// 
+	// Flag indicating if the coroutine handle is valid and safe to be destroyed.
 	bool bHasValidCoroutineHandle = false;
 
 private:
@@ -41,7 +42,7 @@ private:
 	// Setting up action. The same as in ActionBase, but it additionally sets the coroutine handle.
 	void SetCoroutineAction(const UObject* InOwner, FECFCoroutineHandle InCoroutineHandle, const FECFHandle& InHandleId, const FECFActionSettings& InSettings)
 	{
-		UECFActionBase::SetAction(InOwner, HandleId, {}, InSettings);
+		UECFActionBase::SetAction(InOwner, InHandleId, {}, InSettings);
 		CoroutineHandle = InCoroutineHandle;
 		bHasValidCoroutineHandle = true;
 	}
