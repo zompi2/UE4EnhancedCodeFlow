@@ -4,6 +4,7 @@
 
 #include "ECFActionBase.h"
 #include "ECFCoroutine.h"
+#include "ECFSubsystem.h"
 #include "ECFCoroutineActionBase.generated.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
@@ -15,27 +16,32 @@ class ENHANCEDCODEFLOW_API UECFCoroutineActionBase : public UECFActionBase
 
 	friend class UECFSubsystem;
 
-public:
-
-	// Ensure the coroutine handle is properly destroyed.
-	// Remember, that the Promise has final_suspend set to always.
-	void BeginDestroy() override
-	{
-		if (bHasValidCoroutineHandle)
-		{
-			CoroutineHandle.destroy();
-			bHasValidCoroutineHandle = false;
-		}
-		Super::BeginDestroy();
-	}
-
 protected:
 
 	// Coroutine handle used to control the coroutine inside the Action.
 	FECFCoroutineHandle CoroutineHandle;
 
-	// Flag indicating if the coroutine handle is valid and safe to be destroyed.
-	bool bHasValidCoroutineHandle = false;
+#ifdef __cpp_impl_coroutine
+#if ECF_USE_EXPLICIT_CORO_DESTROY
+	bool bHasValidCoroHandle = false;
+	void BeginDestroy() override
+	{
+		if (bHasValidCoroHandle)
+		{
+			if (CoroutineHandle.promise().bDestroyed == false)
+			{
+				CoroutineHandle.promise().HandleCounter--;
+				if (CoroutineHandle.promise().HandleCounter <= 0)
+				{
+					CoroutineHandle.promise().bDestroyed = true;
+					CoroutineHandle.destroy();
+				}
+			}
+		}
+		Super::BeginDestroy();
+	}
+#endif
+#endif
 
 private:
 
@@ -44,7 +50,13 @@ private:
 	{
 		UECFActionBase::SetAction(InOwner, InHandleId, {}, InSettings);
 		CoroutineHandle = InCoroutineHandle;
-		bHasValidCoroutineHandle = true;
+
+#ifdef __cpp_impl_coroutine
+#if ECF_USE_EXPLICIT_CORO_DESTROY
+		CoroutineHandle.promise().HandleCounter++;
+		bHasValidCoroHandle = true;
+#endif
+#endif
 	}
 };
 
