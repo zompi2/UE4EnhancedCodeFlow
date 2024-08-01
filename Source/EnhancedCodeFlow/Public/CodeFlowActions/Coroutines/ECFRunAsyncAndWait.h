@@ -100,10 +100,7 @@ protected:
 
 	void Complete(bool bStopped) override
 	{
-		if (bHasValidCoroutineHandle)
-		{
-			CoroutineHandle.resume();
-		}
+		CoroutineHandle.resume();
 	}
 };
 
