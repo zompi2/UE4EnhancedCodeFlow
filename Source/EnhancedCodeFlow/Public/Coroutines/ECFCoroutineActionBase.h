@@ -21,27 +21,20 @@ protected:
 	// Coroutine handle used to control the coroutine inside the Action.
 	FECFCoroutineHandle CoroutineHandle;
 
-#ifdef __cpp_impl_coroutine
-#if ECF_USE_EXPLICIT_CORO_DESTROY
-	bool bHasValidCoroHandle = false;
+	// Flag indicating if the coroutine handle has been set.
+	bool bHasCoroutineHandle = false;
+
 	void BeginDestroy() override
 	{
-		if (bHasValidCoroHandle)
+		// Handling a case when the owner has beed destroyed before the coroutine has been fully finished.
+		// In such case the handle must be explicitly destroyed.
+		if (bHasCoroutineHandle && (HasValidOwner() == false) && (CoroutineHandle.promise().bHasFinished == false))
 		{
-			if (CoroutineHandle.promise().bDestroyed == false)
-			{
-				CoroutineHandle.promise().HandleCounter--;
-				if (CoroutineHandle.promise().HandleCounter <= 0)
-				{
-					CoroutineHandle.promise().bDestroyed = true;
-					CoroutineHandle.destroy();
-				}
-			}
+			CoroutineHandle.promise().bHasFinished = true;
+			CoroutineHandle.destroy();
 		}
 		Super::BeginDestroy();
 	}
-#endif
-#endif
 
 private:
 
@@ -50,13 +43,7 @@ private:
 	{
 		UECFActionBase::SetAction(InOwner, InHandleId, {}, InSettings);
 		CoroutineHandle = InCoroutineHandle;
-
-#ifdef __cpp_impl_coroutine
-#if ECF_USE_EXPLICIT_CORO_DESTROY
-		CoroutineHandle.promise().HandleCounter++;
-		bHasValidCoroHandle = true;
-#endif
-#endif
+		bHasCoroutineHandle = true;
 	}
 };
 
