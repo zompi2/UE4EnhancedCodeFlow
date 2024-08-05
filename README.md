@@ -34,7 +34,7 @@ The plugin is finally available on the Unreal Engine Marketplace! It is free, of
 If you don't want to build this plugin by yourself, you can **[download it from here](https://www.unrealengine.com/marketplace/en-US/product/enhanced-code-flow)**.  
 Unreal Engine Marketplace allow to publish the code plugins for new versions of the Unreal Engine only, so currently only 5.4, 5.3 and 5.2 are available.  
 If you are using 4.27 you can download the precompiled package **[from here](https://github.com/zompi2/UE4EnhancedCodeFlow/raw/build-4.27/EnhancedCodeFlow-4.27-Compiled.zip)**.  
-The plugin's version that's on the Marketplace is **3.3.4**.
+The plugin's version that's on the Marketplace is **3.3.10**.
 
 [Back to top](#table-of-content)
 
@@ -535,6 +535,7 @@ There is additional BP node which will validate an `InstanceId` if it is not val
 # Coroutines (experimental)
 
 > Coroutines are treated as an **experimental** feature. You can use them at your own risk!
+> They are experimental, because c++ coroutines are relatively new features and I'm still learning how to implement them correctly. It is highly propable there will be stability or performance issues.
 
 [Coroutines](https://en.cppreference.com/w/cpp/language/coroutines) are functions that can suspend their execution and be resumed later. They require C++20 which is supported in Unreal Engine from verion 5.3. To make sure that your project supports C++20 add the following line to your project's `Build.cs`:
 

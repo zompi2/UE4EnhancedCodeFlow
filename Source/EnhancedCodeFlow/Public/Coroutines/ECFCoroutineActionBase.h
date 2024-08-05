@@ -4,6 +4,7 @@
 
 #include "ECFActionBase.h"
 #include "ECFCoroutine.h"
+#include "ECFSubsystem.h"
 #include "ECFCoroutineActionBase.generated.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
@@ -15,35 +16,34 @@ class ENHANCEDCODEFLOW_API UECFCoroutineActionBase : public UECFActionBase
 
 	friend class UECFSubsystem;
 
-public:
-
-	// Ensure the coroutine handle is properly destroyed.
-	// Remember, that the Promise has final_suspend set to always.
-	void BeginDestroy() override
-	{
-		if (bHasValidCoroutineHandle)
-		{
-			CoroutineHandle.destroy();
-		}
-		Super::BeginDestroy();
-	}
-
 protected:
 
 	// Coroutine handle used to control the coroutine inside the Action.
 	FECFCoroutineHandle CoroutineHandle;
 
-	// 
-	bool bHasValidCoroutineHandle = false;
+	// Flag indicating if the coroutine handle has been set.
+	bool bHasCoroutineHandle = false;
+
+	void BeginDestroy() override
+	{
+		// Handling a case when the owner has beed destroyed before the coroutine has been fully finished.
+		// In such case the handle must be explicitly destroyed.
+		if (bHasCoroutineHandle && (HasValidOwner() == false) && (CoroutineHandle.promise().bHasFinished == false))
+		{
+			CoroutineHandle.promise().bHasFinished = true;
+			CoroutineHandle.destroy();
+		}
+		Super::BeginDestroy();
+	}
 
 private:
 
 	// Setting up action. The same as in ActionBase, but it additionally sets the coroutine handle.
 	void SetCoroutineAction(const UObject* InOwner, FECFCoroutineHandle InCoroutineHandle, const FECFHandle& InHandleId, const FECFActionSettings& InSettings)
 	{
-		UECFActionBase::SetAction(InOwner, HandleId, {}, InSettings);
+		UECFActionBase::SetAction(InOwner, InHandleId, {}, InSettings);
 		CoroutineHandle = InCoroutineHandle;
-		bHasValidCoroutineHandle = true;
+		bHasCoroutineHandle = true;
 	}
 };
 

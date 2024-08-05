@@ -1,3 +1,13 @@
+###### 3.3.11
+* Proper coroutine handle destruction for dangling handles.
+
+###### 3.3.10
+* Reverted coroutines explicit destroy from 3.3.6 as it was breaking the heap allocator when running Garbage Collector.
+
+###### 3.3.9
+* Fixed ECFHandle badly passed to the coroutine action.
+* Ensuring coroutine handles are valid before resuming them.
+
 ###### 3.3.8
 * Fixed coroutines compilation for the environment without coroutines support (which has been broken in 3.3.6).
 
