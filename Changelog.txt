@@ -1,3 +1,6 @@
+###### 3.3.11
+* Proper coroutine handle destruction for dangling handles.
+
 ###### 3.3.10
 * Reverted coroutines explicit destroy from 3.3.6 as it was breaking the heap allocator when running Garbage Collector.
 

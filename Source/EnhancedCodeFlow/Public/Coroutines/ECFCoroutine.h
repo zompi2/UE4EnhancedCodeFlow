@@ -22,18 +22,10 @@ struct FECFCoroutinePromise
 {
 	FECFCoroutine get_return_object() { return { FECFCoroutine::from_promise(*this) }; }
 	std::suspend_never initial_suspend() noexcept { return {}; }
-#if ECF_USE_EXPLICIT_CORO_DESTROY
-	std::suspend_always final_suspend() noexcept { return {}; }
-#else
 	std::suspend_never final_suspend() noexcept { return {}; }
-#endif
-	void return_void() {}
+	void return_void() { bHasFinished = true; }
 	void unhandled_exception() {}
-
-#if ECF_USE_EXPLICIT_CORO_DESTROY
-	int32 HandleCounter = 0;
-	bool bDestroyed = false;
-#endif
+	bool bHasFinished = false;
 };
 
 #else
@@ -44,9 +36,18 @@ struct FECFCoroutinePromise
 
 using FECFCoroutine = void;
 
+struct FECFCoroutinePromise
+{
+	bool bHasFinished = false;
+};
+
 struct FECFCoroutineHandle 
 {
-	void resume() {};
+	void resume() {}
+	void destroy() {}
+
+	FECFCoroutinePromise CoroPromise;
+	FECFCoroutinePromise& promise() { return CoroPromise; }
 };
 
 #define co_await static_assert(false, "Trying to use co_await without coroutine support!")
