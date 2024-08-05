@@ -56,8 +56,5 @@ public class EnhancedCodeFlow : ModuleRules
         {
             PublicDefinitions.Add("ECF_INSIGHT_PROFILING=0");
         }
-
-        // Enable when testing coroutines explicit destroy
-        PublicDefinitions.Add("ECF_USE_EXPLICIT_CORO_DESTROY=0");
     }
 }
