@@ -535,6 +535,7 @@ There is additional BP node which will validate an `InstanceId` if it is not val
 # Coroutines (experimental)
 
 > Coroutines are treated as an **experimental** feature. You can use them at your own risk!
+> They are experimental, because c++ coroutines are relatively new features and I'm still learning how to implement them correctly. It is highly propable there will be stability or performance issues.
 
 [Coroutines](https://en.cppreference.com/w/cpp/language/coroutines) are functions that can suspend their execution and be resumed later. They require C++20 which is supported in Unreal Engine from verion 5.3. To make sure that your project supports C++20 add the following line to your project's `Build.cs`:
 
