@@ -25,7 +25,6 @@ The plugin has been tested on the Engine's versions: 4.27, 5.2, 5.3 and 5.4.
 - [Stopping Actions](#stopping-actions)
 - [Measuring Performance](#measuring-performance)
 - [Extending Plugin](#extending-plugin)
-- [Extra Links](#extra-links)
 - [Special Thanks](#special-thanks)
 
 # Unreal Engine Marketplace
@@ -852,15 +851,6 @@ FECFCoroutineTask_NewCoroAction FEnhancedCodeFlow::NewCoroAction(const UObject* 
 
 ## Disabling build optimization
 You can temporarily disable plugin's build optimizations by setting the `bDisableOptimization` parameter in `EnhancedCodeFlow.Build.cs` file to `true`. It can help with debugging.
-
-[Back to top](#table-of-content)
-
-# Extra links
-
-* [Unreal Engine Marketplace](https://www.unrealengine.com/marketplace/en-US/product/enhanced-code-flow)
-* [Unreal Engine Forum](https://forums.unrealengine.com/t/plugin-enhanced-code-flow/684237)
-* [Blog Entry](https://zompidev.blogspot.com/2021/03/enhanced-code-flow-plugin-for-ue4.html)
-* [Reddit Post](https://www.reddit.com/r/unrealengine/comments/mbkzqj/enhanced_code_flow_plugin)
 
 [Back to top](#table-of-content)
 
