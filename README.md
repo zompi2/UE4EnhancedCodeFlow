@@ -25,7 +25,6 @@ The plugin has been tested on the Engine's versions: 4.27, 5.2, 5.3 and 5.4.
 - [Stopping Actions](#stopping-actions)
 - [Measuring Performance](#measuring-performance)
 - [Extending Plugin](#extending-plugin)
-- [Extra Links](#extra-links)
 - [Special Thanks](#special-thanks)
 
 # Unreal Engine Marketplace
@@ -34,7 +33,7 @@ The plugin is finally available on the Unreal Engine Marketplace! It is free, of
 If you don't want to build this plugin by yourself, you can **[download it from here](https://www.unrealengine.com/marketplace/en-US/product/enhanced-code-flow)**.  
 Unreal Engine Marketplace allow to publish the code plugins for new versions of the Unreal Engine only, so currently only 5.4, 5.3 and 5.2 are available.  
 If you are using 4.27 you can download the precompiled package **[from here](https://github.com/zompi2/UE4EnhancedCodeFlow/raw/build-4.27/EnhancedCodeFlow-4.27-Compiled.zip)**.  
-The plugin's version that's on the Marketplace is **3.3.10**.
+The plugin's version that's on the Marketplace is **3.3.11**.
 
 [Back to top](#table-of-content)
 
@@ -63,7 +62,7 @@ If you are using ECF in your project, let me know :)
 
 # Contact
 
-If you have any question or suggestion regardles this plugin simply add an **Issue** to the github project or write an e-mail to me: **zompi2@gmail.com** I will try my best to answer it quickly :)
+If you have any question or suggestion regardles this plugin simply add an **Issue** to the github project. I will try my best to answer it quickly :) You can also write an e-mail to me: **zompi2@gmail.com**, however there is a risk that it will be filtered as spam.
 
 [Back to top](#table-of-content)
 
@@ -535,6 +534,7 @@ There is additional BP node which will validate an `InstanceId` if it is not val
 # Coroutines (experimental)
 
 > Coroutines are treated as an **experimental** feature. You can use them at your own risk!
+> They are experimental, because c++ coroutines are relatively new features and I'm still learning how to implement them correctly. It is highly probable there will be stability or performance issues.
 
 [Coroutines](https://en.cppreference.com/w/cpp/language/coroutines) are functions that can suspend their execution and be resumed later. They require C++20 which is supported in Unreal Engine from verion 5.3. To make sure that your project supports C++20 add the following line to your project's `Build.cs`:
 
@@ -851,15 +851,6 @@ FECFCoroutineTask_NewCoroAction FEnhancedCodeFlow::NewCoroAction(const UObject* 
 
 ## Disabling build optimization
 You can temporarily disable plugin's build optimizations by setting the `bDisableOptimization` parameter in `EnhancedCodeFlow.Build.cs` file to `true`. It can help with debugging.
-
-[Back to top](#table-of-content)
-
-# Extra links
-
-* [Unreal Engine Marketplace](https://www.unrealengine.com/marketplace/en-US/product/enhanced-code-flow)
-* [Unreal Engine Forum](https://forums.unrealengine.com/t/plugin-enhanced-code-flow/684237)
-* [Blog Entry](https://zompidev.blogspot.com/2021/03/enhanced-code-flow-plugin-for-ue4.html)
-* [Reddit Post](https://www.reddit.com/r/unrealengine/comments/mbkzqj/enhanced_code_flow_plugin)
 
 [Back to top](#table-of-content)
 
