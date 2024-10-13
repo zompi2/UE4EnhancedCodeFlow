@@ -1,3 +1,6 @@
+###### 3.3.13
+* uplugin fixes to prepare it for FAB
+
 ###### 3.3.12
 * Fixed shadow variable warnings which failed compilation with clang.
 
