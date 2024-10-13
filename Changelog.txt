@@ -1,5 +1,8 @@
+###### 3.3.13
+* uplugin fixes to prepare it for FAB
+
 ###### 3.3.12
-* Fixed shadow wariable warnings which failed compilation with clang.
+* Fixed shadow variable warnings which failed compilation with clang.
 
 ###### 3.3.11
 * Proper coroutine handle destruction for dangling handles.
