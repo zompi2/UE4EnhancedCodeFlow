@@ -20,7 +20,7 @@
 			"Name": "EnhancedCodeFlow",
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
-			"PlatformAllowList": [
+			"WhitelistPlatforms": [
 				"Win64"
 			]
 		}
