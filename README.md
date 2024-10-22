@@ -7,7 +7,7 @@ The plugin has been tested on the Engine's versions: 4.27, 5.2, 5.3 and 5.4.
 
 # Table of content
 
-- [Unreal Engine Marketplace](#unreal-engine-marketplace)
+- [Fab](#fab)
 - [Example Project](#example-project)
 - [Used in...](#used-in)
 - [Contact](#contact)
@@ -27,13 +27,13 @@ The plugin has been tested on the Engine's versions: 4.27, 5.2, 5.3 and 5.4.
 - [Extending Plugin](#extending-plugin)
 - [Special Thanks](#special-thanks)
 
-# Unreal Engine Marketplace
+# Fab
 
-The plugin is finally available on the Unreal Engine Marketplace! It is free, of course.  
-If you don't want to build this plugin by yourself, you can **[download it from here](https://www.unrealengine.com/marketplace/en-US/product/enhanced-code-flow)**.  
-Unreal Engine Marketplace allow to publish the code plugins for new versions of the Unreal Engine only, so currently only 5.4, 5.3 and 5.2 are available.  
-If you are using 4.27 you can download the precompiled package **[from here](https://github.com/zompi2/UE4EnhancedCodeFlow/raw/build-4.27/EnhancedCodeFlow-4.27-Compiled.zip)**.  
-The plugin's version that's on the Marketplace is **3.3.12**.
+The plugin is available on the Fab! It is free, of course.  
+If you don't want to build this plugin by yourself, you can **[download it from here](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0)**.  
+Currently Unreal Engine 5.4, 5.3, 5.2 and 4.27 are supported.  
+If you have troubles with downloading version for 4.27 you can download the precompiled package **[from here](https://github.com/zompi2/UE4EnhancedCodeFlow/raw/build-4.27/EnhancedCodeFlow-4.27-Compiled.zip)**.  
+The plugin's version that's on the Fab is **3.3.13**.
 
 [Back to top](#table-of-content)
 
