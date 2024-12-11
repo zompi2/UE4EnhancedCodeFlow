@@ -249,6 +249,46 @@ public:
 	 */
 	static void RemoveAllTimelines(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
+	/*^^^ Timeline Vector ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Adds a simple timeline with vector value that runs in a given range during a given time.
+	 * @param InStartValue -    the vector value from which this timeline will start.
+	 * @param InStopValue -     the vector value to which this timeline will go. Must be different than InStartValue.
+	 * @param InTime -          how long the timeline will be processed? Must be greater than 0.
+	 * @param InTickFunc -      ticking function executed when timeline is processed. It's param represents current value. Must be: [](FVector CurrentValue, float CurrentTime) -> void.
+	 * @param InCallbackFunc -  [optional] function which will be launched when timeline reaches end. Can be:
+	 *	[](FVector CurrentValue, float CurrentTime, bool bStoppped) -> void.
+	 *	[](FVector CurrentValue, float CurrentTime) -> void.
+	 * @param InBlendFunc -     [optional] a function used to update timeline. By default it is Linear.
+	 * @param InBlendExp -      [optional] an exponent, used by certain blend functions (EaseIn, EaseOut, EaseInOut) to control the shape of the timeline curve.
+	 * @param Settings [optional] - an extra settings to apply to this action.
+	 */
+	static FECFHandle AddTimelineVector(const UObject* InOwner, FVector InStartValue, FVector InStopValue, float InTime, TUniqueFunction<void(FVector/* Value*/, float/* Time*/)>&& InTickFunc, TUniqueFunction<void(FVector/* Value*/, float/* Time*/, bool/* bStopped*/)>&& InCallbackFunc = nullptr, EECFBlendFunc InBlendFunc = EECFBlendFunc::ECFBlend_Linear, float InBlendExp = 1.f, const FECFActionSettings& Settings = {});
+	static FECFHandle AddTimelineVector(const UObject* InOwner, FVector InStartValue, FVector InStopValue, float InTime, TUniqueFunction<void(FVector/* Value*/, float/* Time*/)>&& InTickFunc, TUniqueFunction<void(FVector/* Value*/, float/* Time*/)>&& InCallbackFunc = nullptr, EECFBlendFunc InBlendFunc = EECFBlendFunc::ECFBlend_Linear, float InBlendExp = 1.f, const FECFActionSettings& Settings = {});
+
+	static void RemoveAllTimelinesVector(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
+	
+	/*^^^ Timeline Linear Color ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Adds a simple timeline with linear color value that runs in a given range during a given time.
+	 * @param InStartValue -    the linear color value from which this timeline will start.
+	 * @param InStopValue -     the linear color value to which this timeline will go. Must be different than InStartValue.
+	 * @param InTime -          how long the timeline will be processed? Must be greater than 0.
+	 * @param InTickFunc -      ticking function executed when timeline is processed. It's param represents current value. Must be: [](FLinearColor CurrentValue, float CurrentTime) -> void.
+	 * @param InCallbackFunc -  [optional] function which will be launched when timeline reaches end. Can be:
+	 *	[](FLinearColor CurrentValue, float CurrentTime, bool bStoppped) -> void.
+	 *	[](FLinearColor CurrentValue, float CurrentTime) -> void.
+	 * @param InBlendFunc -     [optional] a function used to update timeline. By default it is Linear.
+	 * @param InBlendExp -      [optional] an exponent, used by certain blend functions (EaseIn, EaseOut, EaseInOut) to control the shape of the timeline curve.
+	 * @param Settings [optional] - an extra settings to apply to this action.
+	 */
+	static FECFHandle AddTimelineLinearColor(const UObject* InOwner, FLinearColor InStartValue, FLinearColor InStopValue, float InTime, TUniqueFunction<void(FLinearColor/* Value*/, float/* Time*/)>&& InTickFunc, TUniqueFunction<void(FLinearColor/* Value*/, float/* Time*/, bool/* bStopped*/)>&& InCallbackFunc = nullptr, EECFBlendFunc InBlendFunc = EECFBlendFunc::ECFBlend_Linear, float InBlendExp = 1.f, const FECFActionSettings& Settings = {});
+	static FECFHandle AddTimelineLinearColor(const UObject* InOwner, FLinearColor InStartValue, FLinearColor InStopValue, float InTime, TUniqueFunction<void(FLinearColor/* Value*/, float/* Time*/)>&& InTickFunc, TUniqueFunction<void(FLinearColor/* Value*/, float/* Time*/)>&& InCallbackFunc = nullptr, EECFBlendFunc InBlendFunc = EECFBlendFunc::ECFBlend_Linear, float InBlendExp = 1.f, const FECFActionSettings& Settings = {});
+
+	static void RemoveAllTimelinesLinearColor(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
+
 	/*^^^ Custom Timeline ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 	/**
