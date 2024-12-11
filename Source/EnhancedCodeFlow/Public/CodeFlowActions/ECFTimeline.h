@@ -57,11 +57,11 @@ protected:
 	bool Setup(float InStartValue, float InStopValue, float InTime, TUniqueFunction<void(float, float)>&& InTickFunc, TUniqueFunction<void(float, float)>&& InCallbackFunc, EECFBlendFunc InBlendFunc, float InBlendExp)
 	{
 		CallbackFunc_NoStopped = MoveTemp(InCallbackFunc);
-		return Setup(InStartValue, InStopValue, InTime, MoveTemp(InTickFunc), [this](float Value, float Time, bool bStopped)
+		return Setup(InStartValue, InStopValue, InTime, MoveTemp(InTickFunc), [this](float FwdValue, float FwdTime, bool bStopped)
 		{
 			if (CallbackFunc_NoStopped)
 			{
-				CallbackFunc_NoStopped(Value, Time);
+				CallbackFunc_NoStopped(FwdValue, FwdTime);
 			}
 		}, InBlendFunc, InBlendExp);
 	}
