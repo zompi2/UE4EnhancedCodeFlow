@@ -1,3 +1,12 @@
+###### 3.4.0
+* AddTimelineVector action added
+* AddTimelineLinearColor action added
+* AddCustomTimelineVector action added
+* AddCustomTimelineLinearColor action added
+
+###### 3.3.13
+* uplugin fixes to prepare it for FAB
+
 ###### 3.3.12
 * Fixed shadow variable warnings which failed compilation with clang.
 
