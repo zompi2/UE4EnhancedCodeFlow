@@ -3,7 +3,7 @@
 This code plugin provides functions that drastically improve the quality of life during the implementation of game flow in C++.  
 It works very well with gameplay programming, UI programming with a lot of transitions or in any other situation.
 
-The plugin has been tested on the Engine's versions: 4.27, 5.2, 5.3 and 5.4.
+The plugin has been tested on the Engine's versions: 4.27, 5.3, 5.4 and 5.5.
 
 # Table of content
 
@@ -31,9 +31,9 @@ The plugin has been tested on the Engine's versions: 4.27, 5.2, 5.3 and 5.4.
 
 The plugin is available on the Fab! It is free, of course.  
 If you don't want to build this plugin by yourself, you can **[download it from here](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0)**.  
-Currently plugin is available for Unreal Engine version 5.4, 5.3, 5.2 and 4.27.  
-If you have troubles with downloading version for 4.27 you can download the precompiled package **[from here](https://github.com/zompi2/UE4EnhancedCodeFlow/raw/build-4.27/EnhancedCodeFlow-4.27-Compiled.zip)**.  
-The plugin's version that's on the Fab is **3.3.13**.
+Currently plugin is available for Unreal Engine version 5.5, 5.4, 5.3, and 4.27.  
+If you have troubles with downloading version for 4.27 you can download the precompiled package **[from here](https://github.com/zompi2/UE4EnhancedCodeFlow/raw/refs/heads/ue4.27/Pack/EnhancedCodeFlow-4.27.zip)**.  
+The plugin's version that's on the Fab is **3.4.0**.
 
 [Back to top](#table-of-content)
 
