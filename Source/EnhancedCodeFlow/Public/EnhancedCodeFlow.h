@@ -300,8 +300,8 @@ public:
 	 *	[](float CurrentValue, float CurrentTime) -> void.
 	 * @param Settings [optional] - an extra settings to apply to this action.
 	 */
-	static FECFHandle AddCustomTimeline(const UObject* InOwner, UCurveFloat* CurveFloat, TUniqueFunction<void(float/* Value*/, float/* Time*/)>&& InTickFunc, TUniqueFunction<void(float/* Value*/, float/* Time*/, bool/* bStopped*/)>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
-	static FECFHandle AddCustomTimeline(const UObject* InOwner, UCurveFloat* CurveFloat, TUniqueFunction<void(float/* Value*/, float/* Time*/)>&& InTickFunc, TUniqueFunction<void(float/* Value*/, float/* Time*/)>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
+	static FECFHandle AddCustomTimeline(const UObject* InOwner, class UCurveFloat* CurveFloat, TUniqueFunction<void(float/* Value*/, float/* Time*/)>&& InTickFunc, TUniqueFunction<void(float/* Value*/, float/* Time*/, bool/* bStopped*/)>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
+	static FECFHandle AddCustomTimeline(const UObject* InOwner, class UCurveFloat* CurveFloat, TUniqueFunction<void(float/* Value*/, float/* Time*/)>&& InTickFunc, TUniqueFunction<void(float/* Value*/, float/* Time*/)>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops custom timelines. Will not launch callback functions.
@@ -310,6 +310,50 @@ public:
 	 *                             Otherwise it will remove all custom timelines from everywhere.
 	 */
 	static void RemoveAllCustomTimelines(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
+
+	/*^^^ Custom Timeline Vector ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Adds a custom timeline defined by a vector curve.
+	 * @param CurveVector - a curve that defines this timeline.
+	 * @param InTickFunc - a ticking executed when timeline is processed. IOt's param represents current value. Must be: [](FVector CurrentValue, float CurrentTime) -> void. 
+	 * @param InCallbackFunc - [optional] function which will be launched when timeline reaches end. Can be: 
+	 *	[](FVector CurrentValue, float CurrentTime, bool bStopped) -> void.
+	 *	[](FVector CurrentValue, float CurrentTime) -> void.
+	 * @param Settings [optional] - an extra settings to apply to this action.
+	 */
+	static FECFHandle AddCustomTimelineVector(const UObject* InOwner, class UCurveVector* CurveVector, TUniqueFunction<void(FVector/* Value*/, float/* Time*/)>&& InTickFunc, TUniqueFunction<void(FVector/* Value*/, float/* Time*/, bool/* bStopped*/)>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
+	static FECFHandle AddCustomTimelineVector(const UObject* InOwner, class UCurveVector* CurveVector, TUniqueFunction<void(FVector/* Value*/, float/* Time*/)>&& InTickFunc, TUniqueFunction<void(FVector/* Value*/, float/* Time*/)>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
+
+	/**
+	 * Stops custom timelines vector. Will not launch callback functions.
+	 * @param bComplete			 - indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 * @param InOwner [optional] - if defined it will remove custom timelines only from the given owner. 
+	 *                             Otherwise it will remove all custom timelines from everywhere.
+	 */
+	static void RemoveAllCustomTimelinesVector(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
+
+	/*^^^ Custom Timeline LinearColor ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Adds a custom timeline defined by a linear color curve.
+	 * @param CurveLinearColor - a curve that defines this timeline.
+	 * @param InTickFunc - a ticking executed when timeline is processed. IOt's param represents current value. Must be: [](LinearColor CurrentValue, float CurrentTime) -> void. 
+	 * @param InCallbackFunc - [optional] function which will be launched when timeline reaches end. Can be: 
+	 *	[](LinearColor CurrentValue, float CurrentTime, bool bStopped) -> void.
+	 *	[](LinearColor CurrentValue, float CurrentTime) -> void.
+	 * @param Settings [optional] - an extra settings to apply to this action.
+	 */
+	static FECFHandle AddCustomTimelineLinearColor(const UObject* InOwner, class UCurveLinearColor* CurveLinearColor, TUniqueFunction<void(FLinearColor/* Value*/, float/* Time*/)>&& InTickFunc, TUniqueFunction<void(FLinearColor/* Value*/, float/* Time*/, bool/* bStopped*/)>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
+	static FECFHandle AddCustomTimelineLinearColor(const UObject* InOwner, class UCurveLinearColor* CurveLinearColor, TUniqueFunction<void(FLinearColor/* Value*/, float/* Time*/)>&& InTickFunc, TUniqueFunction<void(FLinearColor/* Value*/, float/* Time*/)>&& InCallbackFunc = nullptr, const FECFActionSettings& Settings = {});
+
+	/**
+	 * Stops custom timelines linear color. Will not launch callback functions.
+	 * @param bComplete			 - indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 * @param InOwner [optional] - if defined it will remove custom timelines only from the given owner. 
+	 *                             Otherwise it will remove all custom timelines from everywhere.
+	 */
+	static void RemoveAllCustomTimelinesLinearColor(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^ Time Lock ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 

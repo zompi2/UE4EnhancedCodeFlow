@@ -69,7 +69,7 @@ protected:
 	void Tick(float DeltaTime) override
 	{
 #if STATS
-		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("Timeline Vector - Tick"), STAT_ECFDETAILS_TIMELINE, STATGROUP_ECFDETAILS);
+		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("Timeline Vector - Tick"), STAT_ECFDETAILS_TIMELINEVECTOR, STATGROUP_ECFDETAILS);
 #endif
 		CurrentTime = FMath::Clamp(CurrentTime + DeltaTime, 0.f, Time);
 

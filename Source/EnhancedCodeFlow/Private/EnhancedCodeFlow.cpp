@@ -14,6 +14,8 @@
 #include "CodeFlowActions/ECFTimelineVector.h"
 #include "CodeFlowActions/ECFTimelineLinearColor.h"
 #include "CodeFlowActions/ECFCustomTimeline.h"
+#include "CodeFlowActions/ECFCustomTimelineVector.h"
+#include "CodeFlowActions/ECFCustomTimelineLinearColor.h"
 #include "CodeFlowActions/ECFTimeLock.h"
 #include "CodeFlowActions/ECFDoOnce.h"
 #include "CodeFlowActions/ECFDoNTimes.h"
@@ -387,6 +389,54 @@ void FFlow::RemoveAllCustomTimelines(const UObject* WorldContextObject, bool bCo
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
 		ECF->RemoveActionsOfClass<UECFCustomTimeline>(bComplete, InOwner);
+}
+
+/*^^^ Custom Timeline Vector ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFHandle FFlow::AddCustomTimelineVector(const UObject* InOwner, UCurveVector* CurveVector, TUniqueFunction<void(FVector/* Value*/, float/* Time*/)>&& InTickFunc, TUniqueFunction<void(FVector/* Value*/, float/* Time*/, bool/* bStopped*/)>&& InCallbackFunc/* = nullptr*/, const FECFActionSettings& Settings/* = {}*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFCustomTimelineVector>(InOwner, Settings, FECFInstanceId(), CurveVector, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc));
+	else
+		return FECFHandle();
+}
+
+FECFHandle FFlow::AddCustomTimelineVector(const UObject* InOwner, UCurveVector* CurveVector, TUniqueFunction<void(FVector/* Value*/, float/* Time*/)>&& InTickFunc, TUniqueFunction<void(FVector/* Value*/, float/* Time*/)>&& InCallbackFunc/* = nullptr*/, const FECFActionSettings& Settings/* = {}*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFCustomTimelineVector>(InOwner, Settings, FECFInstanceId(), CurveVector, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc));
+	else
+		return FECFHandle();
+}
+
+void FFlow::RemoveAllCustomTimelinesVector(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner/* = nullptr*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		ECF->RemoveActionsOfClass<UECFCustomTimelineVector>(bComplete, InOwner);
+}
+
+/*^^^ Custom Timeline Linear Color ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFHandle FFlow::AddCustomTimelineLinearColor(const UObject* InOwner, UCurveLinearColor* CurveLinearColor, TUniqueFunction<void(FLinearColor/* Value*/, float/* Time*/)>&& InTickFunc, TUniqueFunction<void(FLinearColor/* Value*/, float/* Time*/, bool/* bStopped*/)>&& InCallbackFunc/* = nullptr*/, const FECFActionSettings& Settings/* = {}*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFCustomTimelineLinearColor>(InOwner, Settings, FECFInstanceId(), CurveLinearColor, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc));
+	else
+		return FECFHandle();
+}
+
+FECFHandle FFlow::AddCustomTimelineLinearColor(const UObject* InOwner, UCurveLinearColor* CurveLinearColor, TUniqueFunction<void(FLinearColor/* Value*/, float/* Time*/)>&& InTickFunc, TUniqueFunction<void(FLinearColor/* Value*/, float/* Time*/)>&& InCallbackFunc/* = nullptr*/, const FECFActionSettings& Settings/* = {}*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFCustomTimelineLinearColor>(InOwner, Settings, FECFInstanceId(), CurveLinearColor, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc));
+	else
+		return FECFHandle();
+}
+
+void FFlow::RemoveAllCustomTimelinesLinearColor(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner/* = nullptr*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		ECF->RemoveActionsOfClass<UECFCustomTimelineLinearColor>(bComplete, InOwner);
 }
 
 /*^^^ Time Lock ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
