@@ -135,9 +135,29 @@ void UECFBPLibrary::ECFRemoveAllTimelines(const UObject* WorldContextObject, boo
 	FFlow::RemoveAllTimelines(WorldContextObject, bComplete, InOwner);
 }
 
+void UECFBPLibrary::ECFRemoveAllTimelinesVector(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
+{
+	FFlow::RemoveAllTimelinesVector(WorldContextObject, bComplete, InOwner);
+}
+
+void UECFBPLibrary::ECFRemoveAllTimelinesLinearColor(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
+{
+	FFlow::RemoveAllTimelinesLinearColor(WorldContextObject, bComplete, InOwner);
+}
+
 void UECFBPLibrary::ECFRemoveAllCustomTimelines(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
 	FFlow::RemoveAllCustomTimelines(WorldContextObject, bComplete, InOwner);
+}
+
+void UECFBPLibrary::ECFRemoveAllCustomTimelinesVector(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
+{
+	FFlow::RemoveAllCustomTimelinesVector(WorldContextObject, bComplete, InOwner);
+}
+
+void UECFBPLibrary::ECFRemoveAllCustomTimelinesLinearColor(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
+{
+	FFlow::RemoveAllCustomTimelinesLinearColor(WorldContextObject, bComplete, InOwner);
 }
 
 void UECFBPLibrary::ECFRemoveAllDoNoMoreThanXTimes(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)

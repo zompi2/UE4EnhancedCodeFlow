@@ -776,12 +776,16 @@ FFlow::RemoveAllWaitAndExecutes(GetWorld());
 FFlow::RemoveAllWhileTrueExecutes(GetWorld());
 FFlow::RemoveAllRunAsyncThen(GetWorld());
 FFlow::RemoveAllTimelines(GetWorld());
+FFlow::RemoveAllTimelinesVector(GetWorld());
+FFlow::RemoveAllTimelinesLinearColor(GetWorld());
 FFlow::RemoveAllCustomTimelines(GetWorld());
+FFlow::RemoveAllCustomTimelinesVector(GetWorld());
+FFlow::RemoveAllCustomTimelinesLinearColor(GetWorld());
 FFlow::RemoveAllTimeLocks(GetWorld());
 FFlow::RemoveAllDoNoMoreThanXTimes(GetWorld());
 ```
 
-![allremove](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/933b9695-02ff-402d-947d-ac613b4dc14f)
+![stopall](https://github.com/user-attachments/assets/953e5379-b403-4400-91ad-31060f84a0a5)
 
 You can also stop all of the running actions that handle coroutines.
 
