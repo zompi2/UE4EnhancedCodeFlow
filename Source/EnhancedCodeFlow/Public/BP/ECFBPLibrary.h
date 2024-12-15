@@ -189,6 +189,24 @@ public:
 	static void ECFRemoveAllTimelines(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/**
+	 * Removes all running vector timelines.
+	 * If owner is defined it will remove all vector timelines from the given owner.
+	 * Otherwise it will stop all the vector timelines from everywhere.
+	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 */
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Timelines Vector"), Category = "ECF")
+	static void ECFRemoveAllTimelinesVector(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
+
+	/**
+	 * Removes all running linear color timelines.
+	 * If owner is defined it will remove all linear color timelines from the given owner.
+	 * Otherwise it will stop all the linear color timelines from everywhere.
+	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 */
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Timelines LinearColor"), Category = "ECF")
+	static void ECFRemoveAllTimelinesLinearColor(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
+
+	/**
 	 * Removes all running custom timelines.
 	 * If owner is defined it will remove all custom timelines from the given owner.
 	 * Otherwise it will stop all the custom timelines from everywhere.
@@ -196,6 +214,24 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Custom Timelines"), Category = "ECF")
 	static void ECFRemoveAllCustomTimelines(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
+
+	/**
+	 * Removes all running custom vector timelines.
+	 * If owner is defined it will remove all custom vector timelines from the given owner.
+	 * Otherwise it will stop all the custom vector timelines from everywhere.
+	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 */
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Custom Timelines Vector"), Category = "ECF")
+	static void ECFRemoveAllCustomTimelinesVector(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
+
+	/**
+	 * Removes all running custom linear color timelines.
+	 * If owner is defined it will remove all custom linear color timelines from the given owner.
+	 * Otherwise it will stop all the custom linear color timelines from everywhere.
+	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 */
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Custom Timelines LinearColor"), Category = "ECF")
+	static void ECFRemoveAllCustomTimelinesLinearColor(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/**
 	 * Removes all running "Do No More Than X Times" nodes.

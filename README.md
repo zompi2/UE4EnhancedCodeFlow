@@ -116,7 +116,11 @@ Check out the **[Example Project](https://github.com/zompi2/UE4EnhancedCodeFlowE
 - [While True Execute](#while-true-execute)
 - [Run Async Then](#run-async-then)
 - [Add Timeline](#add-timeline)
+  - [Add Timeline Vector](#add-timeline-vector)
+  - [Add Timeline Linear Color](#add-timeline-linear-color)
 - [Add Custom Timeline](#add-custom-timeline)
+  - [Add Custom Timeline Vector](#add-custom-timeline-vector)
+  - [Add Custom Timeline Linear Color](#add-custom-timeline-linear-color)
 - [Time Lock](#time-lock)
 - [Do Once](#do-once)
 - [Do N Times](#do-n-times)
@@ -355,8 +359,44 @@ EECFBlendFunc::ECFBlend_Linear, 2.f);
 
 ![Timeline](https://user-images.githubusercontent.com/7863125/218276147-80928cc9-5455-4edd-bd7c-2f50ae819ca3.png)
 
+#### Add timeline vector
+
+The same as `Add timeline`, but with a Vector instead of float
+
+``` cpp
+FFlow::AddTimelineVector(this, FVector(0.f, 0.f, 0.f), FVector(1.f, 1.f, 1.f), 2.f, [this](FVector Value, float Time)
+{
+  // Code to run every time the timeline tick
+}, 
+[this](FVector Value, float Time, bool bStopped)
+{
+  // Code to run when timeline stops
+}, 
+EECFBlendFunc::ECFBlend_Linear, 2.f);
+```
+
+![tlvec](https://github.com/user-attachments/assets/a98d8352-1fab-43fb-a15d-2cd9b1fbe0bd)
+
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
+
+#### Add timeline linear color
+
+The same as `Add timeline`, but with a LinearColor instead of float 
+
+``` cpp
+FFlow::AddTimelineLinearColor(this, FLinearColor(0.f, 0.f, 0.f, 1.f), FLinearColor(1.f, 1.f, 1.f, 1.f), 2.f, [this](FLinearColor Value, float Time)
+{
+  // Code to run every time the timeline tick
+}, 
+[this](FLinearColor Value, float Time, bool bStopped)
+{
+  // Code to run when timeline stops
+}, 
+EECFBlendFunc::ECFBlend_Linear, 2.f);
+```
+
+![tllc](https://github.com/user-attachments/assets/9555d519-8894-4c7e-a207-e58278abf97e)
 
 #### Add custom timeline
 
@@ -374,6 +414,46 @@ FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
 ```
 
 ![CustomTimeline](https://user-images.githubusercontent.com/7863125/218276141-1168dd7d-24ab-43bd-901a-bedb3fb9664b.png)
+
+[Back to actions list](#usage)  
+[Back to top](#table-of-content)
+
+#### Add custom timeline vector
+
+The same as `Add custom timeline` but with **UCurveVector** instead of **UCurveFloat**.
+
+``` cpp
+FFlow::AddCustomTimelineVector(this, Curve, [this](FVector Value, float Time)
+{
+  // Code to run every time the timeline tick
+}, 
+[this](FVector Value, float Time, bool bStopped)
+{
+  // Code to run when timeline stops. bStopped argument is optional.
+});
+```
+
+![ctlc](https://github.com/user-attachments/assets/08109d0f-112e-4664-ae4f-c5a7c59dedd4)
+
+[Back to actions list](#usage)  
+[Back to top](#table-of-content)
+
+#### Add custom timeline linear color
+
+The same as `Add custom timeline` but with **UCurveLinearColor** instead of **UCurveFloat**.
+
+``` cpp
+FFlow::AddCustomTimelineLinearColor(this, Curve, [this](FLinearColor Value, float Time)
+{
+  // Code to run every time the timeline tick
+}, 
+[this](FLinearColor Value, float Time, bool bStopped)
+{
+  // Code to run when timeline stops. bStopped argument is optional.
+});
+```
+
+![ctv](https://github.com/user-attachments/assets/e4b88d37-d3ee-4f5a-9b37-4f3ea83fe523)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -696,12 +776,16 @@ FFlow::RemoveAllWaitAndExecutes(GetWorld());
 FFlow::RemoveAllWhileTrueExecutes(GetWorld());
 FFlow::RemoveAllRunAsyncThen(GetWorld());
 FFlow::RemoveAllTimelines(GetWorld());
+FFlow::RemoveAllTimelinesVector(GetWorld());
+FFlow::RemoveAllTimelinesLinearColor(GetWorld());
 FFlow::RemoveAllCustomTimelines(GetWorld());
+FFlow::RemoveAllCustomTimelinesVector(GetWorld());
+FFlow::RemoveAllCustomTimelinesLinearColor(GetWorld());
 FFlow::RemoveAllTimeLocks(GetWorld());
 FFlow::RemoveAllDoNoMoreThanXTimes(GetWorld());
 ```
 
-![allremove](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/933b9695-02ff-402d-947d-ac613b4dc14f)
+![stopall](https://github.com/user-attachments/assets/953e5379-b403-4400-91ad-31060f84a0a5)
 
 You can also stop all of the running actions that handle coroutines.
 
