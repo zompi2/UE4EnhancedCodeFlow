@@ -42,6 +42,11 @@ protected:
 		RetriggeredInstancedAction();
 	}
 
+	void Reset(bool bCallUpdate) override
+	{
+		Counter = 0;
+	}
+
 	void RetriggeredInstancedAction() override
 	{
 		Counter++;

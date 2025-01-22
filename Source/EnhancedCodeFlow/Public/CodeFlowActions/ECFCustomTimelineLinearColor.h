@@ -82,10 +82,7 @@ protected:
 
 		if (bCallUpdate)
 		{
-			if (HasValidOwner())
-			{
-				TickFunc(CurrentValue, CurrentTime);
-			}
+			TickFunc(CurrentValue, CurrentTime);
 		}
 	}
 

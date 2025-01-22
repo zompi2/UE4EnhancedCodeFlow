@@ -17,6 +17,7 @@ class ENHANCEDCODEFLOW_API UECFDoOnce : public UECFActionBase
 protected:
 
 	TUniqueFunction<void()> ExecFunc;
+	bool bWasCalled = false;
 
 	bool Setup(TUniqueFunction<void()>&& InExecFunc)
 	{
@@ -35,7 +36,22 @@ protected:
 
 	void Init() override
 	{
+		bWasCalled = true;
 		ExecFunc();
+	}
+
+	void Reset(bool bCallUpdate) override
+	{
+		bWasCalled = false;
+	}
+
+	void RetriggeredInstancedAction() override
+	{
+		if (bWasCalled == false)
+		{
+			bWasCalled = true;
+			ExecFunc();
+		}
 	}
 };
 

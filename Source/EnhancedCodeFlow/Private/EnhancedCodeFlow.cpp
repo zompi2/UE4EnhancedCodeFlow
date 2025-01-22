@@ -4,7 +4,6 @@
 #include "ECFSubsystem.h"
 
 #include "CodeFlowActions/ECFTicker.h"
-#include "CodeFlowActions/ECFTicker_WithHandle.h"
 #include "CodeFlowActions/ECFDelay.h"
 #include "CodeFlowActions/ECFDelayTicks.h"
 #include "CodeFlowActions/ECFWaitAndExecute.h"
@@ -140,7 +139,7 @@ FECFHandle FFlow::AddTicker(const UObject* InOwner, TUniqueFunction<void(float/*
 FECFHandle FFlow::AddTicker(const UObject* InOwner, float InTickingTime, TUniqueFunction<void(float/* DeltaTime*/, FECFHandle/* ActionHandle*/)>&& InTickFunc, TUniqueFunction<void(bool/* bStopped*/)>&& InCallbackFunc/* = nullptr*/, const FECFActionSettings& Settings/* = {}*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-		return ECF->AddAction<UECFTicker_WithHandle>(InOwner, Settings, FECFInstanceId(), InTickingTime, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc));
+		return ECF->AddAction<UECFTicker>(InOwner, Settings, FECFInstanceId(), InTickingTime, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc));
 	else
 		return FECFHandle();
 }
@@ -148,7 +147,7 @@ FECFHandle FFlow::AddTicker(const UObject* InOwner, float InTickingTime, TUnique
 FECFHandle FFlow::AddTicker(const UObject* InOwner, float InTickingTime, TUniqueFunction<void(float/* DeltaTime*/, FECFHandle/* ActionHandle*/)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc/* = nullptr*/, const FECFActionSettings& Settings/* = {}*/)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-		return ECF->AddAction<UECFTicker_WithHandle>(InOwner, Settings, FECFInstanceId(), InTickingTime, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc));
+		return ECF->AddAction<UECFTicker>(InOwner, Settings, FECFInstanceId(), InTickingTime, MoveTemp(InTickFunc), MoveTemp(InCallbackFunc));
 	else
 		return FECFHandle();
 }
@@ -158,7 +157,6 @@ void FFlow::RemoveAllTickers(const UObject* WorldContextObject, bool bComplete/*
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
 	{
 		ECF->RemoveActionsOfClass<UECFTicker>(bComplete, InOwner);
-		ECF->RemoveActionsOfClass<UECFTicker_WithHandle>(bComplete, InOwner);
 	}
 }
 
