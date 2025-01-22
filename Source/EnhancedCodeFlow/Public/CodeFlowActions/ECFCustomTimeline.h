@@ -68,6 +68,27 @@ protected:
 		});
 	}
 
+	void Init() override
+	{
+		CurrentTime = 0.f;
+		CurrentValue = CurveFloat->GetFloatValue(CurrentTime);
+	}
+
+	void Reset(bool bCallUpdate) override
+	{
+		MyTimeline.SetPlaybackPosition(0.f, false, false);
+		CurrentTime = 0.f;
+		CurrentValue = CurveFloat->GetFloatValue(CurrentTime);
+
+		if (bCallUpdate)
+		{
+			if (HasValidOwner())
+			{
+				TickFunc(CurrentValue, CurrentTime);
+			}
+		}
+	}
+
 	void Tick(float DeltaTime) override
 	{
 #if STATS
