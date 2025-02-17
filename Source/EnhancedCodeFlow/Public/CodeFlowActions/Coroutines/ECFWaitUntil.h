@@ -18,6 +18,7 @@ protected:
 
 	TUniqueFunction<bool(float)> Predicate;
 	float TimeOut = 0.f;
+	float OriginTimeOut = 0.f;
 	bool bWithTimeOut = false;
 
 	bool Setup(TUniqueFunction<bool(float)>&& InPredicate, float InTimeOut)
@@ -35,6 +36,7 @@ protected:
 			{
 				bWithTimeOut = true;
 				TimeOut = InTimeOut;
+				OriginTimeOut = InTimeOut;
 				SetMaxActionTime(TimeOut);
 			}
 			else
@@ -47,6 +49,14 @@ protected:
 		{
 			ensureMsgf(false, TEXT("ECF Coroutine - Wait Until failed to start. Are you sure the Predicate is set properly?"));
 			return false;
+		}
+	}
+
+	void Reset(bool bCallUpdate) override
+	{
+		if (bWithTimeOut)
+		{
+			TimeOut = OriginTimeOut;
 		}
 	}
 

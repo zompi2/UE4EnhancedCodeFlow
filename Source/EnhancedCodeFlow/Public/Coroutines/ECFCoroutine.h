@@ -5,6 +5,7 @@
 #ifdef __cpp_impl_coroutine
 
 #include <coroutine>
+#include "ECFHandle.h"
 
 /**
  * Defining coroutine handlers and promises in order to get coroutines work.
@@ -26,6 +27,7 @@ struct FECFCoroutinePromise
 	void return_void() { bHasFinished = true; }
 	void unhandled_exception() {}
 	bool bHasFinished = false;
+	FECFHandle ActionHandle;
 };
 
 #else

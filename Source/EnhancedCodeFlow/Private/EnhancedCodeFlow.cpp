@@ -7,7 +7,6 @@
 #include "CodeFlowActions/ECFDelay.h"
 #include "CodeFlowActions/ECFDelayTicks.h"
 #include "CodeFlowActions/ECFWaitAndExecute.h"
-#include "CodeFlowActions/ECFWaitAndExecute_WithDeltaTime.h"
 #include "CodeFlowActions/ECFWhileTrueExecute.h"
 #include "CodeFlowActions/ECFTimeline.h"
 #include "CodeFlowActions/ECFTimelineVector.h"
@@ -237,7 +236,7 @@ FECFHandle FFlow::WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool/* 
 FECFHandle FFlow::WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool/* bHasFinished*/(float/* DeltaTime*/)>&& InPredicate, TUniqueFunction<void(bool/* bTimedOut*/, bool/* bStopped*/)>&& InCallbackFunc, float InTimeOut, const FECFActionSettings& Settings)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-		return ECF->AddAction<UECFWaitAndExecute_WithDeltaTime>(InOwner, Settings, FECFInstanceId(), MoveTemp(InPredicate), MoveTemp(InCallbackFunc), InTimeOut);
+		return ECF->AddAction<UECFWaitAndExecute>(InOwner, Settings, FECFInstanceId(), MoveTemp(InPredicate), MoveTemp(InCallbackFunc), InTimeOut);
 	else
 		return FECFHandle();
 }
@@ -245,7 +244,7 @@ FECFHandle FFlow::WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool/* 
 FECFHandle FFlow::WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool/* bHasFinished*/(float/* DeltaTime*/)>&& InPredicate, TUniqueFunction<void(bool/* bTimedOut*/)>&& InCallbackFunc, float InTimeOut, const FECFActionSettings& Settings)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-		return ECF->AddAction<UECFWaitAndExecute_WithDeltaTime>(InOwner, Settings, FECFInstanceId(), MoveTemp(InPredicate), MoveTemp(InCallbackFunc), InTimeOut);
+		return ECF->AddAction<UECFWaitAndExecute>(InOwner, Settings, FECFInstanceId(), MoveTemp(InPredicate), MoveTemp(InCallbackFunc), InTimeOut);
 	else
 		return FECFHandle();
 }
@@ -253,7 +252,7 @@ FECFHandle FFlow::WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool/* 
 FECFHandle FFlow::WaitAndExecute(const UObject* InOwner, TUniqueFunction<bool/* bHasFinished*/(float/* DeltaTime*/)>&& InPredicate, TUniqueFunction<void()>&& InCallbackFunc, float InTimeOut, const FECFActionSettings& Settings)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
-		return ECF->AddAction<UECFWaitAndExecute_WithDeltaTime>(InOwner, Settings, FECFInstanceId(), MoveTemp(InPredicate), MoveTemp(InCallbackFunc), InTimeOut);
+		return ECF->AddAction<UECFWaitAndExecute>(InOwner, Settings, FECFInstanceId(), MoveTemp(InPredicate), MoveTemp(InCallbackFunc), InTimeOut);
 	else
 		return FECFHandle();
 }
@@ -263,7 +262,6 @@ void FFlow::RemoveAllWaitAndExecutes(const UObject* WorldContextObject, bool bCo
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
 	{
 		ECF->RemoveActionsOfClass<UECFWaitAndExecute>(bComplete, InOwner);
-		ECF->RemoveActionsOfClass<UECFWaitAndExecute_WithDeltaTime>(bComplete, InOwner);
 	}
 }
 

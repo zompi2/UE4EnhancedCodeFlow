@@ -1,3 +1,8 @@
+###### 3.5.0
+* Function to reset Actions added
+* Action handle of the coroutine is now stored in the coroutine promise, and can be easily obtain when starting a coroutine and used to control the started Action.
+* WaitAndExecute and WaitAndExecute_WithDeltaTime has been merged into one single action with multiple Setups
+
 ###### 3.4.0
 * AddTimelineVector action added
 * AddTimelineLinearColor action added

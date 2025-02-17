@@ -16,23 +16,28 @@ class ENHANCEDCODEFLOW_API UECFWaitAndExecute : public UECFActionBase
 
 protected:
 
-	TUniqueFunction<bool()> Predicate;
+	TUniqueFunction<bool(float)> Predicate;
+	TUniqueFunction<bool()> Predicate_NoDeltaTime;
 	TUniqueFunction<void(bool, bool)> Func;
 	TUniqueFunction<void(bool)> Func_NoStopped;
 	TUniqueFunction<void()> Func_NoTimeOut_NoStopped;
 
 	float TimeOut = 0.f;
+	float OriginTimeOut = 0.f;
 	bool bWithTimeOut = false;
 	bool bTimedOut = false;
 
-	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(bool, bool)>&& InFunc, float InTimeOut)
+	// Predicate DeltaTime - YES
+	// Callback bStopped - YES
+	// Callback bTimedOut - YES
+	bool Setup(TUniqueFunction<bool(float)>&& InPredicate, TUniqueFunction<void(bool, bool)>&& InFunc, float InTimeOut)
 	{
 		Predicate = MoveTemp(InPredicate);
 		Func = MoveTemp(InFunc);
 
 		if (Predicate && Func)
 		{
-			if (Predicate())
+			if (Predicate(0.f))
 			{
 				Func(false, false);
 				return false;
@@ -42,6 +47,7 @@ protected:
 				bWithTimeOut = true;
 				bTimedOut = false;
 				TimeOut = InTimeOut;
+				OriginTimeOut = InTimeOut;
 				SetMaxActionTime(TimeOut);
 			}
 			else
@@ -58,7 +64,30 @@ protected:
 		}
 	}
 
-	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(bool)>&& InFunc, float InTimeOut)
+	// Predicate DeltaTime - NO
+	// Callback bStopped - YES
+	// Callback bTimedOut - YES
+	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(bool, bool)>&& InFunc, float InTimeOut)
+	{
+		Predicate_NoDeltaTime = MoveTemp(InPredicate);
+		if (Predicate_NoDeltaTime)
+		{
+			return Setup([this](float DeltaTime)
+			{
+				return Predicate_NoDeltaTime();
+			}, MoveTemp(InFunc), InTimeOut);
+		}
+		else
+		{
+			ensureMsgf(false, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
+			return false;
+		}
+	}
+
+	// Predicate DeltaTime - YES
+	// Callback bStopped - NO
+	// Callback bTimedOut - YES
+	bool Setup(TUniqueFunction<bool(float)>&& InPredicate, TUniqueFunction<void(bool)>&& InFunc, float InTimeOut)
 	{
 		Func_NoStopped = MoveTemp(InFunc);
 		if (Func_NoStopped)
@@ -75,7 +104,35 @@ protected:
 		}
 	}
 
-	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void()>&& InFunc, float InTimeOut)
+	// Predicate DeltaTime - NO
+	// Callback bStopped - NO
+	// Callback bTimedOut - YES
+	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(bool)>&& InFunc, float InTimeOut)
+	{
+		Func_NoStopped = MoveTemp(InFunc);
+		Predicate_NoDeltaTime = MoveTemp(InPredicate);
+		if (Func_NoStopped && Predicate_NoDeltaTime)
+		{
+			return Setup([this](float DeltaTime)
+				{
+					return Predicate_NoDeltaTime();
+				},
+				[this](bool bTimeOut, bool bStopped)
+				{
+					Func_NoStopped(bTimeOut);
+				}, InTimeOut);
+		}
+		else
+		{
+			ensureMsgf(false, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
+			return false;
+		}
+	}
+
+	// Predicate DeltaTime - YES
+	// Callback bStopped - NO
+	// Callback bTimedOut - NO
+	bool Setup(TUniqueFunction<bool(float)>&& InPredicate, TUniqueFunction<void()>&& InFunc, float InTimeOut)
 	{
 		Func_NoTimeOut_NoStopped = MoveTemp(InFunc);
 		if (Func_NoTimeOut_NoStopped)
@@ -89,6 +146,39 @@ protected:
 		{
 			ensureMsgf(false, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
 			return false;
+		}
+	}
+
+	// Predicate DeltaTime - NO
+	// Callback bStopped - NO
+	// Callback bTimedOut - NO
+	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void()>&& InFunc, float InTimeOut)
+	{
+		Func_NoTimeOut_NoStopped = MoveTemp(InFunc);
+		Predicate_NoDeltaTime = MoveTemp(InPredicate);
+		if (Func_NoTimeOut_NoStopped && Predicate_NoDeltaTime)
+		{
+			return Setup([this](float DeltaTime)
+			{
+				return Predicate_NoDeltaTime();
+			},
+			[this](bool bTimeOut, bool bStopped)
+			{
+				Func_NoTimeOut_NoStopped();
+			}, InTimeOut);
+		}
+		else
+		{
+			ensureMsgf(false, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
+			return false;
+		}
+	}
+
+	void Reset(bool bCallUpdate) override
+	{
+		if (bWithTimeOut)
+		{
+			TimeOut = OriginTimeOut;
 		}
 	}
 
@@ -109,7 +199,7 @@ protected:
 			}
 		}
 
-		if (Predicate())
+		if (Predicate(DeltaTime))
 		{
 			Complete(false);
 			MarkAsFinished();

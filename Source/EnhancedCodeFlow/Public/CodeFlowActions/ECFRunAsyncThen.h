@@ -26,6 +26,7 @@ protected:
 	TUniqueFunction<void()> Func_NoTimeOut_NoStopped;
 
 	float TimeOut = 0.f;
+	float OriginTimeOut = 0.f;
 	bool bWithTimeOut = false;
 	bool bTimedOut = false;
 
@@ -54,6 +55,7 @@ protected:
 				bWithTimeOut = true;
 				bTimedOut = false;
 				TimeOut = InTimeOut;
+				OriginTimeOut = InTimeOut;
 				SetMaxActionTime(TimeOut);
 			}
 			else
@@ -117,6 +119,13 @@ protected:
 		}
 	}
 
+	void Reset(bool bCallUpdate) override
+	{
+		if (bWithTimeOut)
+		{
+			TimeOut = OriginTimeOut;
+		}
+	}
 
 	void Tick(float DeltaTime) override 
 	{

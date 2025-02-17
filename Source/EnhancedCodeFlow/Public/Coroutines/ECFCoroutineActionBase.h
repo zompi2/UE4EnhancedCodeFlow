@@ -43,6 +43,7 @@ private:
 	{
 		UECFActionBase::SetAction(InOwner, InHandleId, {}, InSettings);
 		CoroutineHandle = InCoroutineHandle;
+		CoroutineHandle.promise().ActionHandle = InHandleId;
 		bHasCoroutineHandle = true;
 	}
 };
