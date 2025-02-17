@@ -148,6 +148,17 @@ bool UECFSubsystem::IsActionPaused(const FECFHandle& HandleId, bool& bIsPaused) 
 	return false;
 }
 
+void UECFSubsystem::ResetAction(const FECFHandle& HandleId, bool bCallUpdate)
+{
+	if (UECFActionBase* ActionFound = FindAction(HandleId))
+	{
+		if (IsActionValid(ActionFound))
+		{
+			ActionFound->Reset(bCallUpdate);
+		}
+	}
+}
+
 void UECFSubsystem::RemoveAction(FECFHandle& HandleId, bool bComplete)
 {
 	if (UECFActionBase* ActionFound = FindAction(HandleId))

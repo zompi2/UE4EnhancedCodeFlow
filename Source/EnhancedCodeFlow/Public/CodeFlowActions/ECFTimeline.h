@@ -15,6 +15,26 @@ class ENHANCEDCODEFLOW_API UECFTimeline : public UECFActionBase
 
 	friend class UECFSubsystem;
 
+private:
+	
+	float GetValue()
+	{
+		switch (BlendFunc)
+		{
+			case EECFBlendFunc::ECFBlend_Linear:
+				return FMath::Lerp(StartValue, StopValue, CurrentTime / Time);
+			case EECFBlendFunc::ECFBlend_Cubic:
+				return FMath::CubicInterp(StartValue, 0.f, StopValue, 0.f, CurrentTime / Time);
+			case EECFBlendFunc::ECFBlend_EaseIn:
+				return FMath::Lerp(StartValue, StopValue, FMath::Pow(CurrentTime / Time, BlendExp));
+			case EECFBlendFunc::ECFBlend_EaseOut:
+				return FMath::Lerp(StartValue, StopValue, FMath::Pow(CurrentTime / Time, 1.f / BlendExp));
+			case EECFBlendFunc::ECFBlend_EaseInOut:
+				return FMath::InterpEaseInOut(StartValue, StopValue, CurrentTime / Time, BlendExp);
+		}
+		return 0.f;
+	}
+
 protected:
 
 	TUniqueFunction<void(float, float)> TickFunc;
@@ -66,31 +86,24 @@ protected:
 		}, InBlendFunc, InBlendExp);
 	}
 
+	void Reset(bool bCallUpdate) override
+	{
+		CurrentTime = 0.f;
+		CurrentValue = GetValue();
+
+		if (bCallUpdate)
+		{
+			TickFunc(CurrentValue, CurrentTime);
+		}
+	}
+
 	void Tick(float DeltaTime) override
 	{
 #if STATS
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("Timeline - Tick"), STAT_ECFDETAILS_TIMELINE, STATGROUP_ECFDETAILS);
 #endif
 		CurrentTime = FMath::Clamp(CurrentTime + DeltaTime, 0.f, Time);
-
-		switch (BlendFunc)
-		{
-		case EECFBlendFunc::ECFBlend_Linear:
-			CurrentValue = FMath::Lerp(StartValue, StopValue, CurrentTime / Time);
-			break;
-		case EECFBlendFunc::ECFBlend_Cubic:
-			CurrentValue = FMath::CubicInterp(StartValue, 0.f, StopValue, 0.f, CurrentTime / Time);
-			break;
-		case EECFBlendFunc::ECFBlend_EaseIn:
-			CurrentValue = FMath::Lerp(StartValue, StopValue, FMath::Pow(CurrentTime / Time, BlendExp));
-			break;
-		case EECFBlendFunc::ECFBlend_EaseOut:
-			CurrentValue = FMath::Lerp(StartValue, StopValue, FMath::Pow(CurrentTime / Time, 1.f / BlendExp));
-			break;
-		case EECFBlendFunc::ECFBlend_EaseInOut:
-			CurrentValue = FMath::InterpEaseInOut(StartValue, StopValue, CurrentTime / Time, BlendExp);
-			break;
-		}
+		CurrentValue = GetValue();
 
 		TickFunc(CurrentValue, CurrentTime);
 

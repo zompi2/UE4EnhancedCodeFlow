@@ -92,6 +92,12 @@ protected:
 	// Function called when this action is instanced and something tried to call it again.
 	virtual void RetriggeredInstancedAction() {}
 
+	// Function called when this action is resetted. Have in mind that not every action has
+	// reset functionality.
+	// If bCallUpdate is true - the action should run an update event (if there is any) 
+	// after it's reset.
+	virtual void Reset(bool bCallUpdate) {}
+
 	// For any action that should last only the given time - set this function
 	// inside the action's Setup step. 
 	// WARNING! This is only to help ticker run ticks with proper delta times.

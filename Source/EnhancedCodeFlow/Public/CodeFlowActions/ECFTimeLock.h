@@ -43,6 +43,11 @@ protected:
 		ExecFunc();
 	}
 
+	void Reset(bool bCallUpdate) override
+	{
+		CurrentTime = 0.f;
+	}
+
 	void Tick(float DeltaTime) override
 	{
 #if STATS

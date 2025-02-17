@@ -22,6 +22,7 @@ protected:
 
 	TUniqueFunction<void()> AsyncTaskFunc;
 	float TimeOut = 0.f;
+	float OriginTimeOut = 0.f;
 	bool bWithTimeOut = false;
 
 	ENamedThreads::Type ThreadType = ENamedThreads::AnyBackgroundThreadNormalTask;
@@ -47,6 +48,7 @@ protected:
 			{
 				bWithTimeOut = true;
 				TimeOut = InTimeOut;
+				OriginTimeOut = InTimeOut;
 				SetMaxActionTime(TimeOut);
 			}
 			else
@@ -72,6 +74,14 @@ protected:
 		{
 			ensureMsgf(false, TEXT("ECF Coroutine - Run Async Task and Wait failed to start. Are you sure the AsyncTask function is set properly?"));
 			return false;
+		}
+	}
+
+	void Reset(bool bCallUpdate) override
+	{
+		if (bWithTimeOut)
+		{
+			TimeOut = OriginTimeOut;
 		}
 	}
 

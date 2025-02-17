@@ -15,6 +15,26 @@ class ENHANCEDCODEFLOW_API UECFTimelineLinearColor: public UECFActionBase
 
 	friend class UECFSubsystem;
 
+private:
+
+	FLinearColor GetValue()
+	{
+		switch (BlendFunc)
+		{
+		case EECFBlendFunc::ECFBlend_Linear:
+			return FMath::Lerp(StartValue, StopValue, CurrentTime / Time);
+		case EECFBlendFunc::ECFBlend_Cubic:
+			return FMath::CubicInterp(StartValue, FLinearColor::Black, StopValue, FLinearColor::Black, CurrentTime / Time);
+		case EECFBlendFunc::ECFBlend_EaseIn:
+			return FMath::Lerp(StartValue, StopValue, FMath::Pow(CurrentTime / Time, BlendExp));
+		case EECFBlendFunc::ECFBlend_EaseOut:
+			return FMath::Lerp(StartValue, StopValue, FMath::Pow(CurrentTime / Time, 1.f / BlendExp));
+		case EECFBlendFunc::ECFBlend_EaseInOut:
+			return FMath::InterpEaseInOut(StartValue, StopValue, CurrentTime / Time, BlendExp);
+		}
+		return FLinearColor::Black;
+	}
+
 protected:
 
 	TUniqueFunction<void(FLinearColor, float)> TickFunc;
@@ -66,37 +86,28 @@ protected:
 		}, InBlendFunc, InBlendExp);
 	}
 
+	void Reset(bool bCallUpdate) override
+	{
+		CurrentTime = 0.f;
+		CurrentValue = GetValue();
+
+		if (bCallUpdate)
+		{
+			TickFunc(CurrentValue, CurrentTime);
+		}
+	}
+
 	void Tick(float DeltaTime) override
 	{
 #if STATS
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("Timeline Linear Color - Tick"), STAT_ECFDETAILS_TIMELINELINEARCOLOR, STATGROUP_ECFDETAILS);
 #endif
 		CurrentTime = FMath::Clamp(CurrentTime + DeltaTime, 0.f, Time);
-
-		const float LerpValue = CurrentTime / Time;
-
-		switch (BlendFunc)
-		{
-		case EECFBlendFunc::ECFBlend_Linear:
-			CurrentValue = FMath::Lerp(StartValue, StopValue, LerpValue);
-			break;
-		case EECFBlendFunc::ECFBlend_Cubic:
-			CurrentValue = FMath::CubicInterp(StartValue, FLinearColor::Black, StopValue, FLinearColor::Black, LerpValue);
-			break;
-		case EECFBlendFunc::ECFBlend_EaseIn:
-			CurrentValue = FMath::Lerp(StartValue, StopValue, FMath::Pow(LerpValue, BlendExp));
-			break;
-		case EECFBlendFunc::ECFBlend_EaseOut:
-			CurrentValue = FMath::Lerp(StartValue, StopValue, FMath::Pow(LerpValue, 1.f / BlendExp));
-			break;
-		case EECFBlendFunc::ECFBlend_EaseInOut:
-			CurrentValue = FMath::InterpEaseInOut(StartValue, StopValue, LerpValue, BlendExp);
-			break;
-		}
+		CurrentValue = GetValue();
 
 		TickFunc(CurrentValue, CurrentTime);
 
-		if (LerpValue >= 1.f)
+		if (CurrentTime >= Time)
 		{
 			Complete(false);
 			MarkAsFinished();

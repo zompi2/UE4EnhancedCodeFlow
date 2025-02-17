@@ -39,6 +39,11 @@ protected:
 		CurrentTicks = 0;
 	}
 
+	void Reset(bool bCallUpdate) override
+	{
+		CurrentTicks = 0;
+	}
+
 	void Tick(float DeltaTime) override
 	{
 #if STATS

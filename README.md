@@ -23,6 +23,7 @@ The plugin has been tested on the Engine's versions: 4.27, 5.3, 5.4 and 5.5.
 - [Coroutines (experimental)](#coroutines-experimental)
 - [Pausing and Resuming](#pausing-and-resuming)
 - [Stopping Actions](#stopping-actions)
+- [Resetting Actions](#resetting-actions)
 - [Measuring Performance](#measuring-performance)
 - [Extending Plugin](#extending-plugin)
 - [Special Thanks](#special-thanks)
@@ -623,13 +624,14 @@ CppStandard = CppStandardVersion.Cpp20;
 ```
 
 Every coroutine must return the `FECFCoroutine`. ECF implements some helpful coroutines described below. Every coroutine implemented in ECF works simillar to typical ECF action, but they use the coroutine suspension mechanisms instead of lambdas.  
-They can be paused, resumed, cancelled and they can accept `FECFActionSettings`.  
+They can be paused, resumed, cancelled, resetted and they can accept `FECFActionSettings`.  
 Coroutines doesn't have BP nodes as they are purely code feature.
 
 - [Wait Seconds](#wait-seconds)
 - [Wait Ticks](#wait-ticks)
 - [Wait Until](#wait-until)
 - [Run Async And Wait](#run-async-and-wait)
+- [Getting FECFHandle from FECFCoroutine](#getting-fecfhandle-from-fecfcoroutine)
 
 [Back to top](#table-of-content)
 
@@ -701,6 +703,14 @@ FECFCoroutine UMyClass::SuspandableFunction()
   }, TimeOut, EECFAsyncPrio::Normal);
   // Do something after the above code has finished.
 }
+```
+
+## Getting FECFHandle from FECFCoroutine
+
+In order to run any cancel, reset or pause actions on coroutine actions you need to have it's `FECFHandle`. You can obtain it from the coroutine handle:
+
+``` cpp
+FECFHandle ActionHandle = SuspandableFunction().promise().ActionHandle
 ```
 
 [Back to coroutines](#coroutines-experimental)  
@@ -797,6 +807,24 @@ FFlow::RemoveAllRunAsyncAndWait(GetWorld(), true);
 ```
 
 **IMPORTANT!** If you stop the action which handles a coroutine be aware that if you won't set `bComplete` to true, the suspended coroutine will never be resumed!
+
+[Back to top](#table-of-content)
+
+# Resetting actions
+
+Every running action, if we know it's handle, can be resetted.
+
+``` cpp
+FFlow::ResetAction(GetWorld(), ActionHandle, false);
+```
+
+The third parameter tells if after reset the action's callback should run immediately.  
+For example, if we reset Timeline Action, running callback immediately will run the callback with initial Timeline values right after the reset.  
+Otherwise, ECF will wait for the first next update of the Timeline to run callback.
+
+There is also a node to run this in Blueprints.
+
+![resa](https://github.com/user-attachments/assets/6acc9703-c68f-4c2b-9976-522dda2150b3)
 
 [Back to top](#table-of-content)
 
