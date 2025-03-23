@@ -31,7 +31,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - DoNTimes failed to start. Are you sure Exec Fuinction and Times number are set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - DoNTimes failed to start. Are you sure Exec Fuinction and Times number are set properly?"));
+#endif
 			return false;
 		}
 	}

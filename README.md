@@ -25,6 +25,7 @@ The plugin has been tested on the Engine's versions: 4.27, 5.3, 5.4 and 5.5.
 - [Stopping Actions](#stopping-actions)
 - [Resetting Actions](#resetting-actions)
 - [Measuring Performance](#measuring-performance)
+- [Logs](#logs)
 - [Extending Plugin](#extending-plugin)
 - [Special Thanks](#special-thanks)
 
@@ -870,10 +871,26 @@ You can also display more detailed plugin's performance info with `stat ecfdetai
 
 ## Unreal Insights
 
-You can measure performence using [Unreal Insights](https://docs.unrealengine.com/4.26/en-US/TestingAndOptimization/PerformanceAndProfiling/UnrealInsights/) tool. Currently there is only one cpu timing trace available:
-* ECF-Actions-Tick - measures the time the plugin needs to perform one full update.
+You can measure performence using [Unreal Insights](https://docs.unrealengine.com/4.26/en-US/TestingAndOptimization/PerformanceAndProfiling/UnrealInsights/) tool.  
+It measures the overall time the plugin needs to perform one full update and the time every single action needs to perform their ticks.
 
-You can disable Unreal Insights traces for this plugin by setting `bEnableInsightProfiling` in `EnhancedCodeFlow.Build.cs` to `false`.
+You can disable Unreal Insights traces for this plugin by setting `bShowLogs` and `bShowVerboseLogs` in `EnhancedCodeFlow.Build.cs` to `false`.
+
+![insight](https://github.com/user-attachments/assets/9fdf838a-722a-4e64-bfc9-bf7bc81cb1ea)
+
+[Back to top](#table-of-content)
+
+# Logs  
+
+ECF will print any error and warning that occurred to the output log. You can enable more verbose logging, which will show in more details what ECF is doing.  
+To enable verbose logging add the following block to `DefaultEngine.ini`:
+
+```ini
+[Core.Log]
+LogECF=Verbose
+```
+
+You can disable Logs entirely by setting `bEnableInsightProfiling` in `EnhancedCodeFlow.Build.cs` to `false`.
 
 [Back to top](#table-of-content)
 

@@ -32,7 +32,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Timelock failed to start. Are you sure the Lock time is greater than 0 and the Exec Function is set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - Timelock failed to start. Are you sure the Lock time is greater than 0 and the Exec Function is set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -53,6 +55,11 @@ protected:
 #if STATS
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("TimeLock - Tick"), STAT_ECFDETAILS_TIMELOCK, STATGROUP_ECFDETAILS);
 #endif
+
+#if ECF_INSIGHT_PROFILING
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - TimeLock Tick");
+#endif
+
 		CurrentTime += DeltaTime;
 		if (CurrentTime >= LockTime)
 		{

@@ -69,7 +69,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Timeline failed to start. Are you sure the Ticking time is greater than 0 and Ticking Function are set properly? /n Remember, that BlendExp must be different than zero and StartValue and StopValue must not be the same!"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - Timeline failed to start. Are you sure the Ticking time is greater than 0 and Ticking Function are set properly? /n Remember, that BlendExp must be different than zero and StartValue and StopValue must not be the same!"));
+#endif
 			return false;
 		}
 	}
@@ -102,6 +104,11 @@ protected:
 #if STATS
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("Timeline - Tick"), STAT_ECFDETAILS_TIMELINE, STATGROUP_ECFDETAILS);
 #endif
+
+#if ECF_INSIGHT_PROFILING
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - Timeline Tick");
+#endif
+
 		CurrentTime = FMath::Clamp(CurrentTime + DeltaTime, 0.f, Time);
 		CurrentValue = GetValue();
 
@@ -109,8 +116,8 @@ protected:
 
 		if ((StopValue > StartValue && CurrentValue >= StopValue) || (StopValue < StartValue && CurrentValue <= StopValue))
 		{
-			Complete(false);
 			MarkAsFinished();
+			Complete(false);
 		}
 	}
 

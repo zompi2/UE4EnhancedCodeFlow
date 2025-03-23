@@ -59,7 +59,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Wait and Execute failed to start. Are you sure the Predicate and Function are set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - Wait and Execute failed to start. Are you sure the Predicate and Function are set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -79,7 +81,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -99,7 +103,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -124,7 +130,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -144,7 +152,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -169,7 +179,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -187,22 +199,27 @@ protected:
 #if STATS
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("WaitAndExecute - Tick"), STAT_ECFDETAILS_WAITANDEXECUTE, STATGROUP_ECFDETAILS);
 #endif
+
+#if ECF_INSIGHT_PROFILING
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - WaitAndExecute Tick");
+#endif
+
 		if (bWithTimeOut)
 		{
 			TimeOut -= DeltaTime;
 			if (TimeOut <= 0.f)
 			{
 				bTimedOut = true;
-				Complete(false);
 				MarkAsFinished();
+				Complete(false);
 				return;
 			}
 		}
 
 		if (Predicate(DeltaTime))
 		{
-			Complete(false);
 			MarkAsFinished();
+			Complete(false);
 		}
 	}
 

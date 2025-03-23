@@ -36,11 +36,14 @@ struct FECFCoroutinePromise
  * Create dummy implementations of coroutine handles if coroutines are not supported by a compiler.
  */
 
+#include "ECFHandle.h"
+
 using FECFCoroutine = void;
 
 struct FECFCoroutinePromise
 {
 	bool bHasFinished = false;
+	FECFHandle ActionHandle;
 };
 
 struct FECFCoroutineHandle 

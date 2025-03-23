@@ -42,7 +42,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Ticker(2) failed to start. Are you sure the Ticking time and Ticking Function are set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - Ticker(2) failed to start. Are you sure the Ticking time and Ticking Function are set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -111,13 +113,18 @@ protected:
 #if STATS
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("Ticker - Tick"), STAT_ECFDETAILS_TICKER, STATGROUP_ECFDETAILS);
 #endif
+
+#if ECF_INSIGHT_PROFILING
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - Ticker Tick");
+#endif
+
 		TickFunc(DeltaTime, HandleId);
 		CurrentTime += DeltaTime;
 
 		if (TickingTime > 0.f && CurrentTime >= TickingTime)
 		{
-			Complete(false);
 			MarkAsFinished();
+			Complete(false);
 		}
 	}
 

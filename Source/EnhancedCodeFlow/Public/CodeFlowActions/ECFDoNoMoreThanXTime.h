@@ -35,7 +35,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Do No More Than Times failed to start. Are you sure the Lock time and Max Execs Eneueud are greater than 0 and the Exec Function is set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - Do No More Than Times failed to start. Are you sure the Lock time and Max Execs Eneueud are greater than 0 and the Exec Function is set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -78,6 +80,11 @@ protected:
 #if STATS
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("DoNoMoreThanXTime - Tick"), STAT_ECFDETAILS_DONOMORETHANXTIMES, STATGROUP_ECFDETAILS);
 #endif
+
+#if ECF_INSIGHT_PROFILING
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - DoNoMoreThanXTime Tick");
+#endif
+
 		if (CurrentTime < LockTime)
 		{
 			CurrentTime += DeltaTime;

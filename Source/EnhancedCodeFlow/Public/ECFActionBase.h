@@ -10,6 +10,7 @@
 #include "Misc/AssertionMacros.h"
 #include "Engine/World.h"
 #include "GameFramework/WorldSettings.h"
+#include "ECFLogs.h"
 #include "ECFActionBase.generated.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
@@ -57,6 +58,9 @@ public:
 	// This action will be deleted soon.
 	void MarkAsFinished()
 	{
+#if (ECF_LOGS && ECF_LOGS_VERBOSE)
+		UE_LOG(LogECF, Verbose, TEXT("Action of class %s marked as finished"), *GetName());
+#endif
 		bHasFinished = true;
 	}
 

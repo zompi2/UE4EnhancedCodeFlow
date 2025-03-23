@@ -51,7 +51,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - custom timeline LinearColor failed to start. Are you sure Tick Function and Curve are set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - custom timeline LinearColor failed to start. Are you sure Tick Function and Curve are set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -91,6 +93,11 @@ protected:
 #if STATS
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("CustomTimelineLinearColor - Tick"), STAT_ECFDETAILS_CUSTOMTIMELINELINEARCOLOR, STATGROUP_ECFDETAILS);
 #endif
+
+#if ECF_INSIGHT_PROFILING
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - CustomTimelineLinearColor Tick");
+#endif
+
 		MyTimeline.TickTimeline(DeltaTime);
 	}
 
@@ -118,11 +125,11 @@ private:
 	UFUNCTION()
 	void HandleFinish()
 	{
+		MarkAsFinished();
 		if (HasValidOwner())
 		{
 			Complete(false);
 		}
-		MarkAsFinished();
 	}
 };
 

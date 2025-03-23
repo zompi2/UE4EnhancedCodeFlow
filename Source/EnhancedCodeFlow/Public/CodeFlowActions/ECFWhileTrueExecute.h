@@ -60,7 +60,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - While True Execute failed to start. Are you sure the Predicate and Function are set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - While True Execute failed to start. Are you sure the Predicate and Function are set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -102,14 +104,19 @@ protected:
 #if STATS
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("WhileTrueExecute - Tick"), STAT_ECFDETAILS_WHILETRUEEXECUTE, STATGROUP_ECFDETAILS);
 #endif
+
+#if ECF_INSIGHT_PROFILING
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - WhileTrueExecute Tick");
+#endif
+
 		if (bWithTimeOut)
 		{
 			TimeOut -= DeltaTime;
 			if (TimeOut <= 0.f)
 			{
 				bTimedOut = true;
-				Complete(false);
 				MarkAsFinished();
+				Complete(false);
 				return;
 			}
 		}
@@ -120,8 +127,8 @@ protected:
 		}
 		else
 		{
-			Complete(false);
 			MarkAsFinished();
+			Complete(false);
 		}
 	}
 

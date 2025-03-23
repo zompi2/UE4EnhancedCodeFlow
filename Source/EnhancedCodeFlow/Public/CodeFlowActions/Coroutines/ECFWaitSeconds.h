@@ -33,7 +33,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF Coroutine - wait seconds failed to start. Are you sure the WaitTime is not negative?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF Coroutine - wait seconds failed to start. Are you sure the WaitTime is not negative?"));
+#endif
 			return false;
 		}
 	}
@@ -53,11 +55,16 @@ protected:
 #if STATS
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("WaitSeconds - Tick"), STAT_ECFDETAILS_WAITSECONDS, STATGROUP_ECFDETAILS);
 #endif
+
+#if ECF_INSIGHT_PROFILING
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - WaitSeconds Tick");
+#endif
+
 		CurrentTime += DeltaTime;
 		if (CurrentTime > WaitTime)
 		{
-			Complete(false);
 			MarkAsFinished();
+			Complete(false);
 		}
 	}
 

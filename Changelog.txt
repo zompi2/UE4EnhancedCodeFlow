@@ -1,3 +1,13 @@
+###### 3.5.1
+* Added more tracers for Unreal Insight
+* Fixed compilation for compilers not supporting coroutines
+* Changed order of the Copmlete and MarkAsFinished order. Now MarkAsFinished is called first, then Complete. 
+  Thanks to this, when the game receives the completion callback it is no longer possible to perform any operation on
+  the action which will be invalid  soon anyway.
+* Printing to log for better visibility of what ECF is doing
+* Small comments and documentation fixes
+* Fixed FAB link
+
 ###### 3.5.0
 * Function to reset Actions added
 * Action handle of the coroutine is now stored in the coroutine promise, and can be easily obtain when starting a coroutine and used to control the started Action.

@@ -80,7 +80,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Run Async Task and Run failed to start. Are you sure the AsyncTask and Function are set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - Run Async Task and Run failed to start. Are you sure the AsyncTask and Function are set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -97,7 +99,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Run Async Task and Run failed to start. Are you sure the Function is set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - Run Async Task and Run failed to start. Are you sure the Function is set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -114,7 +118,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Run Async Task and Run failed to start. Are you sure the Function is set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - Run Async Task and Run failed to start. Are you sure the Function is set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -132,22 +138,27 @@ protected:
 #if STATS
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("RunAsyncThen - Tick"), STAT_ECFDETAILS_RUNASYNCTHEN, STATGROUP_ECFDETAILS);
 #endif
+
+#if ECF_INSIGHT_PROFILING
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - RunAsyncThen Tick");
+#endif
+
 		if (bWithTimeOut)
 		{
 			TimeOut -= DeltaTime;
 			if (TimeOut <= 0.f)
 			{
 				bTimedOut = true;
-				Complete(false);
 				MarkAsFinished();
+				Complete(false);
 				return;
 			}
 		}
 
 		if (bIsAsyncTaskDone)
 		{
-			Complete(false);
 			MarkAsFinished();
+			Complete(false);
 		}
 	}
 
