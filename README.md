@@ -136,6 +136,7 @@ Run the following functions to use enhanced code flow!
 
 Execute specified action after some time. This can be useful in many various situations. Everytime when I was using a Delay node in blueprints I wish there was an equivalent of it in c++.  
 The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.
+If a time parameter is set to 0 it will execute in the next frame. If a time parameter is set less than 0 the action will not execute and will print an error to the log.
 
 ``` cpp
 FFlow::Delay(this, 2.f, [this](bool bStopped)
@@ -156,6 +157,7 @@ You can plan to execute delayed code without delaying the whole Blueprint, you c
 
 Execute specified action after some ticks. Can be useful if we want to execute some code in next game tick.  
 The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.
+If a number of ticks parameter is set to 0 it will execute in the next frame. If a number of ticks parameter is set less than 0 the action will not execute and will print an error to the log.
 
 ``` cpp
 FFlow::DelayTicks(this, 1, [this](bool bStopped)
