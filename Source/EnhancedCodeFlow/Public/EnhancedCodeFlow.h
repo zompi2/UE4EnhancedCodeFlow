@@ -134,7 +134,7 @@ public:
 
 	/**
 	 * Execute specified action after some time.
-	 * @param InDelayTime - time in seconds to wait before executing action.
+	 * @param InDelayTime - time in seconds to wait before executing action. If set to 0 it will execute in the next frame.
 	 * @param InCallbackFunc - a callback with action to execute. Can be: 
 	 *	[](bool bStopped) -> void.
 	 *	[]() -> void.
@@ -155,7 +155,7 @@ public:
 
 	/**
 	 * Execute specified action after some ticks.
-	 * @param InDelayTicks - number of ticks after which the action will be executed.
+	 * @param InDelayTicks - number of ticks after which the action will be executed. If set to 0 it will execute in the nest frame.
 	 * @param InCallbackFunc - a callback with action to execute. Can be: 
 	 *	[](bool bStopped) -> void.
 	 *	[]() -> void.
