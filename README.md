@@ -753,15 +753,16 @@ Every function described earlier can be checked if it's running and it can be st
 
 ``` cpp
 FFlow::IsActionRunning(GetWorld(), Handle); // <- is this action running?
-FFlow::StopAction(GetWorld(), Handle); // <- stops this action!
+FFlow::StopAction(GetWorld(), Handle); // <- stops this action and do not call it's callback.
+FFlow::StopAction(GetWorld(), Handle, true); // <- stops this action and call it's callback.
 ```
 
 You can also stop all of the actions from a specific owner or from everywhere.  
 Stopped actions can launch their **completion** callbacks or not, depending on the given argument:
 
 ``` cpp
-FFlow::StopAllActions(GetWorld()); // <- stops all of the actions
-FFlow::StopAllActions(GetWorld(), true); // <- stops all of the actions and launch their callbacks
+FFlow::StopAllActions(GetWorld()); // <- stops all of the actions (do not call their callbacks)
+FFlow::StopAllActions(GetWorld(), true); // <- stops all of the actions and call their callbacks
 FFlow::StopAllActions(GetWorld(), false, Owner); // <- stops all of the actions started from this specific owner
 ```
 
