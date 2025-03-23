@@ -617,7 +617,7 @@ There is additional BP node which will validate an `InstanceId` if it is not val
 # Coroutines (experimental)
 
 > Coroutines are treated as an **experimental** feature. You can use them at your own risk!
-> They are experimental, because c++ coroutines are relatively new features and I'm still learning how to implement them correctly. It is highly probable there will be stability or performance issues.
+> They are experimental, because c++ coroutines are relatively new features and I'm still learning how to implement them correctly. It is possible there will be stability issues.
 
 [Coroutines](https://en.cppreference.com/w/cpp/language/coroutines) are functions that can suspend their execution and be resumed later. They require C++20 which is supported in Unreal Engine from verion 5.3. To make sure that your project supports C++20 add the following line to your project's `Build.cs`:
 
@@ -634,6 +634,7 @@ Coroutines doesn't have BP nodes as they are purely code feature.
 - [Wait Until](#wait-until)
 - [Run Async And Wait](#run-async-and-wait)
 - [Getting FECFHandle from FECFCoroutine](#getting-fecfhandle-from-fecfcoroutine)
+- [Checking for coroutine support](#checking-for-coroutine-support)
 
 [Back to top](#table-of-content)
 
@@ -712,8 +713,21 @@ FECFCoroutine UMyClass::SuspandableFunction()
 In order to run any cancel, reset or pause actions on coroutine actions you need to have it's `FECFHandle`. You can obtain it from the coroutine handle:
 
 ``` cpp
-FECFHandle ActionHandle = SuspandableFunction().promise().ActionHandle
+FECFHandle ActionHandle = SuspandableFunction().promise().ActionHandle;
 ```
+
+[Back to coroutines](#coroutines-experimental)  
+[Back to top](#table-of-content)
+
+## Checking for coroutine support
+
+If you compile your code on multiple compilers and some of them do not support coroutines put the coroutine code into the block:
+``` cpp
+#ifdef __cpp_impl_coroutine
+// coroutine code
+#endif
+```
+This applies especially to places where you use coroutine keywords, like `co_awai` or `.promise()`.
 
 [Back to coroutines](#coroutines-experimental)  
 [Back to top](#table-of-content)
