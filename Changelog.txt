@@ -1,3 +1,6 @@
+###### 3.5.2
+* The FAB link was correct in the end...
+
 ###### 3.5.1
 * Added more tracers for Unreal Insight
 * Fixed compilation for compilers not supporting coroutines
