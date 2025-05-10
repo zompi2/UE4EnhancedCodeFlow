@@ -1,3 +1,6 @@
+###### 3.5.3
+* Using static delegates in timeline interp functions instead of dynamic ones
+
 ###### 3.5.2
 * The FAB link was correct in the end...
 
