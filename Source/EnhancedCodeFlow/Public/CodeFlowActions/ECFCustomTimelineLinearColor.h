@@ -37,14 +37,8 @@ protected:
 
 		if (TickFunc && CurveLinearColor)
 		{
-			FOnTimelineLinearColor ProgressFunction;
-			ProgressFunction.BindUFunction(this, FName("HandleProgress"));
-			MyTimeline.AddInterpLinearColor(CurveLinearColor, ProgressFunction);
-
-			FOnTimelineEvent FinishFunction;
-			FinishFunction.BindUFunction(this, FName("HandleFinish"));
-			MyTimeline.SetTimelineFinishedFunc(FinishFunction);
-
+			MyTimeline.AddInterpLinearColor(CurveLinearColor, FOnTimelineLinearColorStatic::CreateUObject(this, &UECFCustomTimelineLinearColor::HandleProgress));
+			MyTimeline.SetTimelineFinishedFunc(FOnTimelineEventStatic::CreateUObject(this, &UECFCustomTimelineLinearColor::HandleFinish));
 			MyTimeline.PlayFromStart();
 
 			return true;
@@ -111,7 +105,6 @@ protected:
 
 private:
 
-	UFUNCTION()
 	void HandleProgress(FLinearColor Value)
 	{
 		CurrentValue = Value;
@@ -122,7 +115,6 @@ private:
 		}
 	}
 
-	UFUNCTION()
 	void HandleFinish()
 	{
 		MarkAsFinished();

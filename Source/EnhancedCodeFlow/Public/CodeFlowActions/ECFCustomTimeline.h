@@ -37,14 +37,8 @@ protected:
 
 		if (TickFunc && CurveFloat)
 		{
-			FOnTimelineFloat ProgressFunction;
-			ProgressFunction.BindUFunction(this, FName("HandleProgress"));
-			MyTimeline.AddInterpFloat(CurveFloat, ProgressFunction);
-
-			FOnTimelineEvent FinishFunction;
-			FinishFunction.BindUFunction(this, FName("HandleFinish"));
-			MyTimeline.SetTimelineFinishedFunc(FinishFunction);
-
+			MyTimeline.AddInterpFloat(CurveFloat, FOnTimelineFloatStatic::CreateUObject(this, &UECFCustomTimeline::HandleProgress));
+			MyTimeline.SetTimelineFinishedFunc(FOnTimelineEventStatic::CreateUObject(this, &UECFCustomTimeline::HandleFinish));
 			MyTimeline.PlayFromStart();
 
 			return true;
@@ -111,7 +105,6 @@ protected:
 
 private:
 
-	UFUNCTION()
 	void HandleProgress(float Value)
 	{
 		CurrentValue = Value;
@@ -122,7 +115,6 @@ private:
 		}
 	}
 
-	UFUNCTION()
 	void HandleFinish()
 	{
 		MarkAsFinished();

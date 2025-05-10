@@ -37,14 +37,8 @@ protected:
 
 		if (TickFunc && CurveVector)
 		{
-			FOnTimelineVector ProgressFunction;
-			ProgressFunction.BindUFunction(this, FName("HandleProgress"));
-			MyTimeline.AddInterpVector(CurveVector, ProgressFunction);
-
-			FOnTimelineEvent FinishFunction;
-			FinishFunction.BindUFunction(this, FName("HandleFinish"));
-			MyTimeline.SetTimelineFinishedFunc(FinishFunction);
-
+			MyTimeline.AddInterpVector(CurveVector, FOnTimelineVectorStatic::CreateUObject(this, &UECFCustomTimelineVector::HandleProgress));
+			MyTimeline.SetTimelineFinishedFunc(FOnTimelineEventStatic::CreateUObject(this, &UECFCustomTimelineVector::HandleFinish));
 			MyTimeline.PlayFromStart();
 
 			return true;
@@ -111,7 +105,6 @@ protected:
 
 private:
 
-	UFUNCTION()
 	void HandleProgress(FVector Value)
 	{
 		CurrentValue = Value;
@@ -122,7 +115,6 @@ private:
 		}
 	}
 
-	UFUNCTION()
 	void HandleFinish()
 	{
 		MarkAsFinished();
