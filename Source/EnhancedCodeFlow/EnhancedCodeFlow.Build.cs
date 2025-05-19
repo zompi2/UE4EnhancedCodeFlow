@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 using UnrealBuildTool;
 
@@ -55,6 +55,27 @@ public class EnhancedCodeFlow : ModuleRules
         else
         {
             PublicDefinitions.Add("ECF_INSIGHT_PROFILING=0");
+        }
+
+        // Enable or disable logs displayed 
+        bool bShowLogs = true;
+        bool bShowVerboseLogs = true;
+        if (bShowLogs)
+        {
+            PublicDefinitions.Add("ECF_LOGS=1");
+            if (bShowVerboseLogs)
+            {
+                PublicDefinitions.Add("ECF_LOGS_VERBOSE=1");
+            }
+            else
+            {
+                PublicDefinitions.Add("ECF_LOGS_VERBOSE=0");
+            }
+        }
+        else
+        {
+            PublicDefinitions.Add("ECF_LOGS=0");
+            PublicDefinitions.Add("ECF_LOGS_VERBOSE=0");
         }
     }
 }

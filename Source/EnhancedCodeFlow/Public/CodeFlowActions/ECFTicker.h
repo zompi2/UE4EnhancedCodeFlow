@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -16,13 +16,15 @@ class ENHANCEDCODEFLOW_API UECFTicker : public UECFActionBase
 
 protected:
 
-	TUniqueFunction<void(float)> TickFunc;
+	TUniqueFunction<void(float, FECFHandle)> TickFunc;
+	TUniqueFunction<void(float)> TickFunc_NoHandle;
 	TUniqueFunction<void(bool)> CallbackFunc;
 	TUniqueFunction<void()> CallbackFunc_NoStopped;
 	float TickingTime = 0.f;
 	float CurrentTime = 0.f;
 
-	bool Setup(float InTickingTime, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(bool)>&& InCallbackFunc = nullptr)
+	// Handle - yes, bStopped - yes
+	bool Setup(float InTickingTime, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, TUniqueFunction<void(bool)>&& InCallbackFunc = nullptr)
 	{
 		TickingTime = InTickingTime;
 		TickFunc = MoveTemp(InTickFunc);
@@ -40,12 +42,15 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Ticker failed to start. Are you sure the Ticking time and Ticking Function are set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - Ticker(2) failed to start. Are you sure the Ticking time and Ticking Function are set properly?"));
+#endif
 			return false;
 		}
 	}
 
-	bool Setup(float InTickingTime, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc = nullptr)
+	// Handle - yes, bStopped - no
+	bool Setup(float InTickingTime, TUniqueFunction<void(float, FECFHandle)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc = nullptr)
 	{
 		CallbackFunc_NoStopped = MoveTemp(InCallbackFunc);
 		return Setup(InTickingTime, MoveTemp(InTickFunc), [this](bool bStopped)
@@ -57,17 +62,69 @@ protected:
 		});
 	}
 
+	// Handle - no, bStopped - yes
+	bool Setup(float InTickingTime, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void(bool)>&& InCallbackFunc = nullptr)
+	{
+		TickFunc_NoHandle = MoveTemp(InTickFunc);
+		return Setup(InTickingTime, [this](float DeltaTime, FECFHandle Handle) 
+		{
+			if (TickFunc_NoHandle)
+			{
+				TickFunc_NoHandle(DeltaTime);
+			}
+		}, MoveTemp(InCallbackFunc));
+	}
+
+	// Handle - no, bStopped - no
+	bool Setup(float InTickingTime, TUniqueFunction<void(float)>&& InTickFunc, TUniqueFunction<void()>&& InCallbackFunc = nullptr)
+	{
+		CallbackFunc_NoStopped = MoveTemp(InCallbackFunc);
+		TickFunc_NoHandle = MoveTemp(InTickFunc);
+		return Setup(InTickingTime, [this](float DeltaTime, FECFHandle Handle)
+		{
+			if (TickFunc_NoHandle)
+			{
+				TickFunc_NoHandle(DeltaTime);
+			}
+		}, [this](bool bStopped)
+		{
+			if (CallbackFunc_NoStopped)
+			{
+				CallbackFunc_NoStopped();
+			}
+		});
+	}
+
+	void Init() override
+	{
+		CurrentTime = 0.f;
+	}
+
+	void Reset(bool bCallUpdate) override
+	{
+		CurrentTime = 0.f;
+		// Can't call update, because the DeltaTime is unknown.
+		// Updating with DT=0 will cause confusion.
+		// The app just need to wait for it's next update.
+	}
+
 	void Tick(float DeltaTime) override
 	{
 #if STATS
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("Ticker - Tick"), STAT_ECFDETAILS_TICKER, STATGROUP_ECFDETAILS);
 #endif
-		TickFunc(DeltaTime);
+
+#if ECF_INSIGHT_PROFILING
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - Ticker Tick");
+#endif
+
+		TickFunc(DeltaTime, HandleId);
 		CurrentTime += DeltaTime;
+
 		if (TickingTime > 0.f && CurrentTime >= TickingTime)
 		{
-			Complete(false);
 			MarkAsFinished();
+			Complete(false);
 		}
 	}
 

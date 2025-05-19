@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -23,6 +23,7 @@ protected:
 	TUniqueFunction<void()> CompleteFunc_NoTimeOut_NoStopped;
 
 	float TimeOut = 0.f;
+	float OriginTimeOut = 0.f;
 	bool bWithTimeOut = false;
 	bool bTimedOut = false;
 
@@ -46,6 +47,7 @@ protected:
 			{
 				bWithTimeOut = true;
 				TimeOut = InTimeOut;
+				OriginTimeOut = InTimeOut;
 				bTimedOut = false;
 				SetMaxActionTime(TimeOut);
 			}
@@ -58,7 +60,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - While True Execute failed to start. Are you sure the Predicate and Function are set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - While True Execute failed to start. Are you sure the Predicate and Function are set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -87,19 +91,32 @@ protected:
 		}, InTimeOut);
 	}
 
+	void Reset(bool bCallUpdate) override
+	{
+		if (bWithTimeOut)
+		{
+			TimeOut = OriginTimeOut;
+		}
+	}
+
 	void Tick(float DeltaTime) override 
 	{
 #if STATS
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("WhileTrueExecute - Tick"), STAT_ECFDETAILS_WHILETRUEEXECUTE, STATGROUP_ECFDETAILS);
 #endif
+
+#if ECF_INSIGHT_PROFILING
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - WhileTrueExecute Tick");
+#endif
+
 		if (bWithTimeOut)
 		{
 			TimeOut -= DeltaTime;
 			if (TimeOut <= 0.f)
 			{
 				bTimedOut = true;
-				Complete(false);
 				MarkAsFinished();
+				Complete(false);
 				return;
 			}
 		}
@@ -110,8 +127,8 @@ protected:
 		}
 		else
 		{
-			Complete(false);
 			MarkAsFinished();
+			Complete(false);
 		}
 	}
 

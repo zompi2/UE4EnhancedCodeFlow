@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -11,6 +11,7 @@
 #include "ECFActionSettings.h"
 #include "ECFStats.h"
 #include "Coroutines/ECFCoroutine.h"
+#include "ECFLogs.h"
 #include "ECFSubsystem.generated.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
@@ -42,13 +43,16 @@ protected:
 		// Ensure the Action has been started from the Game Thread.
 		if (IsInGameThread() == false)
 		{
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF Actions must be started from the Game Thread!"));
+#endif
 			checkf(false, TEXT("ECF Actions must be started from the Game Thread!"));
 			return FECFHandle();
 		}
 
 		// There can be only one instanced action running at the same time. When trying to add an
 		// action with existing instance id - return the currently running action's handle.
-		UECFActionBase* PossibleInstancedAction = GetInstancedAction(InstanceId);
+		UECFActionBase* PossibleInstancedAction = GetInstancedAction(InstanceId, false);
 		if (IsActionValid(PossibleInstancedAction))
 		{
 			// Re-trigger active instanced action for any extra logic.
@@ -63,7 +67,23 @@ protected:
 		{
 			NewAction->Init();
 			PendingAddActions.Add(NewAction);
+#if (ECF_LOGS && ECF_LOGS_VERBOSE)
+			if (InstanceId.IsValid())
+			{
+				UE_LOG(LogECF, Verbose, TEXT("Started Instanced Action of class: %s, with HandleId: %s, and InstanceId: %s"), *NewAction->GetName(), *LastHandleId.ToString(), *InstanceId.ToString());
+			}
+			else
+			{
+				UE_LOG(LogECF, Verbose, TEXT("Started Action of class: %s, with HandleId: %s"), *NewAction->GetName(), *LastHandleId.ToString());
+			}
+#endif
 			return NewAction->GetHandleId();
+		}
+		else
+		{
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("Failed to Setup Action of class: %s"), *NewAction->GetName());
+#endif
 		}
 
 		// If the action couldn't be created for any reason - return invalid id.
@@ -77,6 +97,9 @@ protected:
 		// Ensure the Action has been started from the Game Thread.
 		if (IsInGameThread() == false)
 		{
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF Coroutines must be started from the Game Thread!"));
+#endif
 			checkf(false, TEXT("ECF Coroutines must be started from the Game Thread!"));
 			return;
 		}
@@ -87,7 +110,16 @@ protected:
 		if (NewAction->Setup(Forward<Ts>(Args)...))
 		{
 			NewAction->Init();
+#if (ECF_LOGS && ECF_LOGS_VERBOSE)
+			UE_LOG(LogECF, Verbose, TEXT("Started Coroutine Action of class: %s"), *NewAction->GetName());
+#endif
 			PendingAddActions.Add(NewAction);
+		}
+		else
+		{
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("Failed to Setup Coroutine Action of class: %s"), *NewAction->GetName());
+#endif
 		}
 	}
 
@@ -105,6 +137,9 @@ protected:
 
 	// Checks if this action is not paused. Returns false if there is no action.
 	bool IsActionPaused(const FECFHandle& HandleId, bool &bIsPaused) const;
+
+	// Resets the action
+	void ResetAction(const FECFHandle& HandleId, bool bCallUpdate);
 
 	// Remove Action of given HandleId from list. 
 	void RemoveAction(FECFHandle& HandleId, bool bComplete);
@@ -126,7 +161,7 @@ protected:
 	void RemoveAllActions(bool bComplete, UObject* InOwner);
 
 	// Check if there is an instanced action running with the given instance id and returns it.
-	UECFActionBase* GetInstancedAction(const FECFInstanceId& InstanceId) const;
+	UECFActionBase* GetInstancedAction(const FECFInstanceId& InstanceId, bool bPrintErrorIfFailed = true) const;
 	
 	// List of active actions.
 	UPROPERTY(Transient)

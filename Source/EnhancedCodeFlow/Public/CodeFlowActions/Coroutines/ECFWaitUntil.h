@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -18,6 +18,7 @@ protected:
 
 	TUniqueFunction<bool(float)> Predicate;
 	float TimeOut = 0.f;
+	float OriginTimeOut = 0.f;
 	bool bWithTimeOut = false;
 
 	bool Setup(TUniqueFunction<bool(float)>&& InPredicate, float InTimeOut)
@@ -35,6 +36,7 @@ protected:
 			{
 				bWithTimeOut = true;
 				TimeOut = InTimeOut;
+				OriginTimeOut = InTimeOut;
 				SetMaxActionTime(TimeOut);
 			}
 			else
@@ -45,8 +47,18 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF Coroutine - Wait Until failed to start. Are you sure the Predicate is set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF Coroutine - Wait Until failed to start. Are you sure the Predicate is set properly?"));
+#endif
 			return false;
+		}
+	}
+
+	void Reset(bool bCallUpdate) override
+	{
+		if (bWithTimeOut)
+		{
+			TimeOut = OriginTimeOut;
 		}
 	}
 
@@ -55,21 +67,26 @@ protected:
 #if STATS
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("WaitUntil - Tick"), STAT_ECFDETAILS_WAITUNTIL, STATGROUP_ECFDETAILS);
 #endif
+
+#if ECF_INSIGHT_PROFILING
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - WaitUntil Tick");
+#endif
+
 		if (bWithTimeOut)
 		{
 			TimeOut -= DeltaTime;
 			if (TimeOut <= 0.f)
 			{
-				Complete(false);
 				MarkAsFinished();
+				Complete(false);
 				return;
 			}
 		}
 
 		if (Predicate(DeltaTime))
 		{
-			Complete(false);
 			MarkAsFinished();
+			Complete(false);
 		}
 	}
 

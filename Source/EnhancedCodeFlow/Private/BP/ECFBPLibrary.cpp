@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -24,11 +24,6 @@ void UECFBPLibrary::ECFIsActionRunning(bool& bIsRunning, const UObject* WorldCon
 	bIsRunning = FFlow::IsActionRunning(WorldContextObject, Handle.Handle);
 }
 
-void UECFBPLibrary::ECFIsActionPaused(bool& bIsRunning, bool& bIsPaused, const UObject* WorldContextObject, const FECFHandleBP& Handle)
-{
-	bIsRunning = FFlow::IsActionPaused(WorldContextObject, Handle.Handle, bIsPaused);
-}
-
 void UECFBPLibrary::ECFPauseAction(const UObject* WorldContextObject, const FECFHandleBP& Handle)
 {
 	FFlow::PauseAction(WorldContextObject, Handle.Handle);
@@ -37,6 +32,16 @@ void UECFBPLibrary::ECFPauseAction(const UObject* WorldContextObject, const FECF
 void UECFBPLibrary::ECFResumeAction(const UObject* WorldContextObject, const FECFHandleBP& Handle)
 {
 	FFlow::ResumeAction(WorldContextObject, Handle.Handle);
+}
+
+void UECFBPLibrary::ECFIsActionPaused(bool& bIsRunning, bool& bIsPaused, const UObject* WorldContextObject, const FECFHandleBP& Handle)
+{
+	bIsRunning = FFlow::IsActionPaused(WorldContextObject, Handle.Handle, bIsPaused);
+}
+
+void UECFBPLibrary::ECFResetAction(const UObject* WorldContextObject, const FECFHandleBP& Handle, bool bCallUpdate)
+{
+	FFlow::ResetAction(WorldContextObject, Handle.Handle, bCallUpdate);
 }
 
 /*^^^ Stopping ECF Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/

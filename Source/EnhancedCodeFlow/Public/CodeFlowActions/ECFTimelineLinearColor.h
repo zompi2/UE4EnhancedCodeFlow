@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -14,6 +14,26 @@ class ENHANCEDCODEFLOW_API UECFTimelineLinearColor: public UECFActionBase
 	GENERATED_BODY()
 
 	friend class UECFSubsystem;
+
+private:
+
+	FLinearColor GetValue()
+	{
+		switch (BlendFunc)
+		{
+		case EECFBlendFunc::ECFBlend_Linear:
+			return FMath::Lerp(StartValue, StopValue, CurrentTime / Time);
+		case EECFBlendFunc::ECFBlend_Cubic:
+			return FMath::CubicInterp(StartValue, FLinearColor::Black, StopValue, FLinearColor::Black, CurrentTime / Time);
+		case EECFBlendFunc::ECFBlend_EaseIn:
+			return FMath::Lerp(StartValue, StopValue, FMath::Pow(CurrentTime / Time, BlendExp));
+		case EECFBlendFunc::ECFBlend_EaseOut:
+			return FMath::Lerp(StartValue, StopValue, FMath::Pow(CurrentTime / Time, 1.f / BlendExp));
+		case EECFBlendFunc::ECFBlend_EaseInOut:
+			return FMath::InterpEaseInOut(StartValue, StopValue, CurrentTime / Time, BlendExp);
+		}
+		return FLinearColor::Black;
+	}
 
 protected:
 
@@ -49,7 +69,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Timeline Linear Color failed to start. Are you sure the Ticking time is greater than 0 and Ticking Function are set properly? /n Remember, that BlendExp must be different than zero and StartValue and StopValue must not be the same!"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - Timeline Linear Color failed to start. Are you sure the Ticking time is greater than 0 and Ticking Function are set properly? /n Remember, that BlendExp must be different than zero and StartValue and StopValue must not be the same!"));
+#endif
 			return false;
 		}
 	}
@@ -66,40 +88,36 @@ protected:
 		}, InBlendFunc, InBlendExp);
 	}
 
+	void Reset(bool bCallUpdate) override
+	{
+		CurrentTime = 0.f;
+		CurrentValue = GetValue();
+
+		if (bCallUpdate)
+		{
+			TickFunc(CurrentValue, CurrentTime);
+		}
+	}
+
 	void Tick(float DeltaTime) override
 	{
 #if STATS
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("Timeline Linear Color - Tick"), STAT_ECFDETAILS_TIMELINELINEARCOLOR, STATGROUP_ECFDETAILS);
 #endif
+
+#if ECF_INSIGHT_PROFILING
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - Timeline Linear Color Tick");
+#endif
+
 		CurrentTime = FMath::Clamp(CurrentTime + DeltaTime, 0.f, Time);
-
-		const float LerpValue = CurrentTime / Time;
-
-		switch (BlendFunc)
-		{
-		case EECFBlendFunc::ECFBlend_Linear:
-			CurrentValue = FMath::Lerp(StartValue, StopValue, LerpValue);
-			break;
-		case EECFBlendFunc::ECFBlend_Cubic:
-			CurrentValue = FMath::CubicInterp(StartValue, FLinearColor::Black, StopValue, FLinearColor::Black, LerpValue);
-			break;
-		case EECFBlendFunc::ECFBlend_EaseIn:
-			CurrentValue = FMath::Lerp(StartValue, StopValue, FMath::Pow(LerpValue, BlendExp));
-			break;
-		case EECFBlendFunc::ECFBlend_EaseOut:
-			CurrentValue = FMath::Lerp(StartValue, StopValue, FMath::Pow(LerpValue, 1.f / BlendExp));
-			break;
-		case EECFBlendFunc::ECFBlend_EaseInOut:
-			CurrentValue = FMath::InterpEaseInOut(StartValue, StopValue, LerpValue, BlendExp);
-			break;
-		}
+		CurrentValue = GetValue();
 
 		TickFunc(CurrentValue, CurrentTime);
 
-		if (LerpValue >= 1.f)
+		if (CurrentTime >= Time)
 		{
-			Complete(false);
 			MarkAsFinished();
+			Complete(false);
 		}
 	}
 

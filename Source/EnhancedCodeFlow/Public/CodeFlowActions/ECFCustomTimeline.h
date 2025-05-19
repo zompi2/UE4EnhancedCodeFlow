@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -37,21 +37,17 @@ protected:
 
 		if (TickFunc && CurveFloat)
 		{
-			FOnTimelineFloat ProgressFunction;
-			ProgressFunction.BindUFunction(this, FName("HandleProgress"));
-			MyTimeline.AddInterpFloat(CurveFloat, ProgressFunction);
-
-			FOnTimelineEvent FinishFunction;
-			FinishFunction.BindUFunction(this, FName("HandleFinish"));
-			MyTimeline.SetTimelineFinishedFunc(FinishFunction);
-
+			MyTimeline.AddInterpFloat(CurveFloat, FOnTimelineFloatStatic::CreateUObject(this, &UECFCustomTimeline::HandleProgress));
+			MyTimeline.SetTimelineFinishedFunc(FOnTimelineEventStatic::CreateUObject(this, &UECFCustomTimeline::HandleFinish));
 			MyTimeline.PlayFromStart();
 
 			return true;
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - custom timeline failed to start. Are you sure Tick Function and Curve are set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - custom timeline failed to start. Are you sure Tick Function and Curve are set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -68,11 +64,34 @@ protected:
 		});
 	}
 
+	void Init() override
+	{
+		CurrentTime = 0.f;
+		CurrentValue = CurveFloat->GetFloatValue(CurrentTime);
+	}
+
+	void Reset(bool bCallUpdate) override
+	{
+		MyTimeline.SetPlaybackPosition(0.f, false, false);
+		CurrentTime = 0.f;
+		CurrentValue = CurveFloat->GetFloatValue(CurrentTime);
+
+		if (bCallUpdate)
+		{
+			TickFunc(CurrentValue, CurrentTime);
+		}
+	}
+
 	void Tick(float DeltaTime) override
 	{
 #if STATS
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("CustomTimeline - Tick"), STAT_ECFDETAILS_CUSTOMTIMELINE, STATGROUP_ECFDETAILS);
 #endif
+
+#if ECF_INSIGHT_PROFILING
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - CustomTimeline Tick");
+#endif
+
 		MyTimeline.TickTimeline(DeltaTime);
 	}
 
@@ -86,7 +105,6 @@ protected:
 
 private:
 
-	UFUNCTION()
 	void HandleProgress(float Value)
 	{
 		CurrentValue = Value;
@@ -97,14 +115,13 @@ private:
 		}
 	}
 
-	UFUNCTION()
 	void HandleFinish()
 	{
+		MarkAsFinished();
 		if (HasValidOwner())
 		{
 			Complete(false);
 		}
-		MarkAsFinished();
 	}
 };
 

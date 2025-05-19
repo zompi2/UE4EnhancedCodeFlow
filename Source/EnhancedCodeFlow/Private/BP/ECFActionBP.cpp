@@ -1,8 +1,9 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 #include "ECFActionBP.h"
 #include "EnhancedCodeFlow.h"
 #include "ECFStats.h"
+#include "ECFLogs.h"
 #include "Runtime/Launch/Resources/Version.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
@@ -57,7 +58,13 @@ void UECFActionBP::ClearAsyncBPAction()
 bool UECFActionBP::IsProxyValid(const UObject* ProxyObject)
 {
 	const bool bIsValid = (IsValid(ProxyObject) && (ProxyObject->HasAnyFlags(RF_BeginDestroyed | RF_FinishDestroyed) == false));
-	ensureAlwaysMsgf(bIsValid, TEXT("Invalid ProxyObject!"));
+#if ECF_LOGS
+	if (bIsValid == false)
+	{
+		UE_LOG(LogECF, Error, TEXT("Invalid Proxy Object occurred!"));
+	}
+#endif
+	ensureAlwaysMsgf(bIsValid, TEXT("Invalid Proxy Object occurred!"));
 	return bIsValid;
 }
 
