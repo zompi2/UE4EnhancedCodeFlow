@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -26,6 +26,7 @@ protected:
 	TUniqueFunction<void()> Func_NoTimeOut_NoStopped;
 
 	float TimeOut = 0.f;
+	float OriginTimeOut = 0.f;
 	bool bWithTimeOut = false;
 	bool bTimedOut = false;
 
@@ -54,6 +55,7 @@ protected:
 				bWithTimeOut = true;
 				bTimedOut = false;
 				TimeOut = InTimeOut;
+				OriginTimeOut = InTimeOut;
 				SetMaxActionTime(TimeOut);
 			}
 			else
@@ -78,7 +80,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Run Async Task and Run failed to start. Are you sure the AsyncTask and Function are set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - Run Async Task and Run failed to start. Are you sure the AsyncTask and Function are set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -95,7 +99,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Run Async Task and Run failed to start. Are you sure the Function is set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - Run Async Task and Run failed to start. Are you sure the Function is set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -112,33 +118,47 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Run Async Task and Run failed to start. Are you sure the Function is set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - Run Async Task and Run failed to start. Are you sure the Function is set properly?"));
+#endif
 			return false;
 		}
 	}
 
+	void Reset(bool bCallUpdate) override
+	{
+		if (bWithTimeOut)
+		{
+			TimeOut = OriginTimeOut;
+		}
+	}
 
 	void Tick(float DeltaTime) override 
 	{
 #if STATS
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("RunAsyncThen - Tick"), STAT_ECFDETAILS_RUNASYNCTHEN, STATGROUP_ECFDETAILS);
 #endif
+
+#if ECF_INSIGHT_PROFILING
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - RunAsyncThen Tick");
+#endif
+
 		if (bWithTimeOut)
 		{
 			TimeOut -= DeltaTime;
 			if (TimeOut <= 0.f)
 			{
 				bTimedOut = true;
-				Complete(false);
 				MarkAsFinished();
+				Complete(false);
 				return;
 			}
 		}
 
 		if (bIsAsyncTaskDone)
 		{
-			Complete(false);
 			MarkAsFinished();
+			Complete(false);
 		}
 	}
 

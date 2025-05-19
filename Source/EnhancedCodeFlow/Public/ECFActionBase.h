@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -10,6 +10,7 @@
 #include "Misc/AssertionMacros.h"
 #include "Engine/World.h"
 #include "GameFramework/WorldSettings.h"
+#include "ECFLogs.h"
 #include "ECFActionBase.generated.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
@@ -57,6 +58,9 @@ public:
 	// This action will be deleted soon.
 	void MarkAsFinished()
 	{
+#if (ECF_LOGS && ECF_LOGS_VERBOSE)
+		UE_LOG(LogECF, Verbose, TEXT("Action of class %s marked as finished"), *GetName());
+#endif
 		bHasFinished = true;
 	}
 
@@ -91,6 +95,12 @@ protected:
 
 	// Function called when this action is instanced and something tried to call it again.
 	virtual void RetriggeredInstancedAction() {}
+
+	// Function called when this action is resetted. Have in mind that not every action has
+	// reset functionality.
+	// If bCallUpdate is true - the action should run an update event (if there is any) 
+	// after it's reset.
+	virtual void Reset(bool bCallUpdate) {}
 
 	// For any action that should last only the given time - set this function
 	// inside the action's Setup step. 

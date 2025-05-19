@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -43,6 +43,7 @@ private:
 	{
 		UECFActionBase::SetAction(InOwner, InHandleId, {}, InSettings);
 		CoroutineHandle = InCoroutineHandle;
+		CoroutineHandle.promise().ActionHandle = InHandleId;
 		bHasCoroutineHandle = true;
 	}
 };

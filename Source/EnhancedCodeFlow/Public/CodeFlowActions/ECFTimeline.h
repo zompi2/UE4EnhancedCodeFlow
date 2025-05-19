@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -14,6 +14,26 @@ class ENHANCEDCODEFLOW_API UECFTimeline : public UECFActionBase
 	GENERATED_BODY()
 
 	friend class UECFSubsystem;
+
+private:
+	
+	float GetValue()
+	{
+		switch (BlendFunc)
+		{
+			case EECFBlendFunc::ECFBlend_Linear:
+				return FMath::Lerp(StartValue, StopValue, CurrentTime / Time);
+			case EECFBlendFunc::ECFBlend_Cubic:
+				return FMath::CubicInterp(StartValue, 0.f, StopValue, 0.f, CurrentTime / Time);
+			case EECFBlendFunc::ECFBlend_EaseIn:
+				return FMath::Lerp(StartValue, StopValue, FMath::Pow(CurrentTime / Time, BlendExp));
+			case EECFBlendFunc::ECFBlend_EaseOut:
+				return FMath::Lerp(StartValue, StopValue, FMath::Pow(CurrentTime / Time, 1.f / BlendExp));
+			case EECFBlendFunc::ECFBlend_EaseInOut:
+				return FMath::InterpEaseInOut(StartValue, StopValue, CurrentTime / Time, BlendExp);
+		}
+		return 0.f;
+	}
 
 protected:
 
@@ -49,7 +69,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - Timeline failed to start. Are you sure the Ticking time is greater than 0 and Ticking Function are set properly? /n Remember, that BlendExp must be different than zero and StartValue and StopValue must not be the same!"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - Timeline failed to start. Are you sure the Ticking time is greater than 0 and Ticking Function are set properly? /n Remember, that BlendExp must be different than zero and StartValue and StopValue must not be the same!"));
+#endif
 			return false;
 		}
 	}
@@ -66,38 +88,36 @@ protected:
 		}, InBlendFunc, InBlendExp);
 	}
 
+	void Reset(bool bCallUpdate) override
+	{
+		CurrentTime = 0.f;
+		CurrentValue = GetValue();
+
+		if (bCallUpdate)
+		{
+			TickFunc(CurrentValue, CurrentTime);
+		}
+	}
+
 	void Tick(float DeltaTime) override
 	{
 #if STATS
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("Timeline - Tick"), STAT_ECFDETAILS_TIMELINE, STATGROUP_ECFDETAILS);
 #endif
-		CurrentTime = FMath::Clamp(CurrentTime + DeltaTime, 0.f, Time);
 
-		switch (BlendFunc)
-		{
-		case EECFBlendFunc::ECFBlend_Linear:
-			CurrentValue = FMath::Lerp(StartValue, StopValue, CurrentTime / Time);
-			break;
-		case EECFBlendFunc::ECFBlend_Cubic:
-			CurrentValue = FMath::CubicInterp(StartValue, 0.f, StopValue, 0.f, CurrentTime / Time);
-			break;
-		case EECFBlendFunc::ECFBlend_EaseIn:
-			CurrentValue = FMath::Lerp(StartValue, StopValue, FMath::Pow(CurrentTime / Time, BlendExp));
-			break;
-		case EECFBlendFunc::ECFBlend_EaseOut:
-			CurrentValue = FMath::Lerp(StartValue, StopValue, FMath::Pow(CurrentTime / Time, 1.f / BlendExp));
-			break;
-		case EECFBlendFunc::ECFBlend_EaseInOut:
-			CurrentValue = FMath::InterpEaseInOut(StartValue, StopValue, CurrentTime / Time, BlendExp);
-			break;
-		}
+#if ECF_INSIGHT_PROFILING
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - Timeline Tick");
+#endif
+
+		CurrentTime = FMath::Clamp(CurrentTime + DeltaTime, 0.f, Time);
+		CurrentValue = GetValue();
 
 		TickFunc(CurrentValue, CurrentTime);
 
 		if ((StopValue > StartValue && CurrentValue >= StopValue) || (StopValue < StartValue && CurrentValue <= StopValue))
 		{
-			Complete(false);
 			MarkAsFinished();
+			Complete(false);
 		}
 	}
 

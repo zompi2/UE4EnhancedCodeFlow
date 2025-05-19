@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -36,7 +36,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - delay failed to start. Are you sure the DelayTime is not negative and Callback Function is set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - delay failed to start. Are you sure the DelayTime is not negative and Callback Function is set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -53,7 +55,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - delay failed to start. Are you sure the Callback Function is set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - delay failed to start. Are you sure the Callback Function is set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -63,16 +67,26 @@ protected:
 		CurrentTime = 0;
 	}
 
+	void Reset(bool bCallUpdate) override
+	{
+		CurrentTime = 0;
+	}
+
 	void Tick(float DeltaTime) override
 	{
 #if STATS
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("Delay - Tick"), STAT_ECFDETAILS_DELAY, STATGROUP_ECFDETAILS);
 #endif
+
+#if ECF_INSIGHT_PROFILING
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - Delay Tick");
+#endif
+
 		CurrentTime += DeltaTime;
 		if (CurrentTime > DelayTime)
 		{
-			Complete(false);
 			MarkAsFinished();
+			Complete(false);
 		}
 	}
 

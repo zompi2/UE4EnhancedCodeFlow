@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -40,7 +40,7 @@ protected:
 
 	// The World Context Object that started this action.
 	UPROPERTY(Transient)
-	TObjectPtr<const UObject> Proxy_WorldContextObject;
+	const UObject* Proxy_WorldContextObject;
 
 	// Handle of the Action to control.
 	FECFHandle Proxy_Handle;

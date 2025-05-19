@@ -3,7 +3,7 @@
 This code plugin provides functions that drastically improve the quality of life during the implementation of game flow in C++.  
 It works very well with gameplay programming, UI programming with a lot of transitions or in any other situation.
 
-The plugin has been tested on the Engine's versions: 4.27, 5.2, 5.3 and 5.4.
+The plugin has been tested on the Engine's versions: 4.27, 5.3, 5.4 and 5.5.
 
 # Table of content
 
@@ -23,7 +23,9 @@ The plugin has been tested on the Engine's versions: 4.27, 5.2, 5.3 and 5.4.
 - [Coroutines (experimental)](#coroutines-experimental)
 - [Pausing and Resuming](#pausing-and-resuming)
 - [Stopping Actions](#stopping-actions)
+- [Resetting Actions](#resetting-actions)
 - [Measuring Performance](#measuring-performance)
+- [Logs](#logs)
 - [Extending Plugin](#extending-plugin)
 - [Special Thanks](#special-thanks)
 
@@ -31,9 +33,9 @@ The plugin has been tested on the Engine's versions: 4.27, 5.2, 5.3 and 5.4.
 
 The plugin is available on the Fab! It is free, of course.  
 If you don't want to build this plugin by yourself, you can **[download it from here](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0)**.  
-Currently plugin is available for Unreal Engine version 5.4, 5.3, 5.2 and 4.27.  
-If you have troubles with downloading version for 4.27 you can download the precompiled package **[from here](https://github.com/zompi2/UE4EnhancedCodeFlow/raw/build-4.27/EnhancedCodeFlow-4.27-Compiled.zip)**.  
-The plugin's version that's on the Fab is **3.3.13**.
+Currently plugin is available for Unreal Engine version 5.5, 5.4, 5.3, and 4.27.  
+If you have troubles with downloading version for 4.27 you can download the precompiled package **[from here](https://github.com/zompi2/UE4EnhancedCodeFlow/raw/refs/heads/ue4.27/Pack/EnhancedCodeFlow-4.27.zip)**.  
+The plugin's version that's on the Fab is **3.4.0**.
 
 [Back to top](#table-of-content)
 
@@ -135,6 +137,7 @@ Run the following functions to use enhanced code flow!
 
 Execute specified action after some time. This can be useful in many various situations. Everytime when I was using a Delay node in blueprints I wish there was an equivalent of it in c++.  
 The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.
+If a time parameter is set to 0 it will execute in the next frame. If a time parameter is set less than 0 the action will not execute and will print an error to the log.
 
 ``` cpp
 FFlow::Delay(this, 2.f, [this](bool bStopped)
@@ -155,6 +158,7 @@ You can plan to execute delayed code without delaying the whole Blueprint, you c
 
 Execute specified action after some ticks. Can be useful if we want to execute some code in next game tick.  
 The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.
+If a number of ticks parameter is set to 0 it will execute in the next frame. If a number of ticks parameter is set less than 0 the action will not execute and will print an error to the log.
 
 ``` cpp
 FFlow::DelayTicks(this, 1, [this](bool bStopped)
@@ -614,7 +618,7 @@ There is additional BP node which will validate an `InstanceId` if it is not val
 # Coroutines (experimental)
 
 > Coroutines are treated as an **experimental** feature. You can use them at your own risk!
-> They are experimental, because c++ coroutines are relatively new features and I'm still learning how to implement them correctly. It is highly probable there will be stability or performance issues.
+> They are experimental, because c++ coroutines are relatively new features and I'm still learning how to implement them correctly. It is possible there will be stability issues.
 
 [Coroutines](https://en.cppreference.com/w/cpp/language/coroutines) are functions that can suspend their execution and be resumed later. They require C++20 which is supported in Unreal Engine from verion 5.3. To make sure that your project supports C++20 add the following line to your project's `Build.cs`:
 
@@ -623,13 +627,15 @@ CppStandard = CppStandardVersion.Cpp20;
 ```
 
 Every coroutine must return the `FECFCoroutine`. ECF implements some helpful coroutines described below. Every coroutine implemented in ECF works simillar to typical ECF action, but they use the coroutine suspension mechanisms instead of lambdas.  
-They can be paused, resumed, cancelled and they can accept `FECFActionSettings`.  
+They can be paused, resumed, cancelled, resetted and they can accept `FECFActionSettings`.  
 Coroutines doesn't have BP nodes as they are purely code feature.
 
 - [Wait Seconds](#wait-seconds)
 - [Wait Ticks](#wait-ticks)
 - [Wait Until](#wait-until)
 - [Run Async And Wait](#run-async-and-wait)
+- [Getting FECFHandle from FECFCoroutine](#getting-fecfhandle-from-fecfcoroutine)
+- [Checking for coroutine support](#checking-for-coroutine-support)
 
 [Back to top](#table-of-content)
 
@@ -703,6 +709,27 @@ FECFCoroutine UMyClass::SuspandableFunction()
 }
 ```
 
+## Getting FECFHandle from FECFCoroutine
+
+In order to run any cancel, reset or pause actions on coroutine actions you need to have it's `FECFHandle`. You can obtain it from the coroutine handle:
+
+``` cpp
+FECFHandle ActionHandle = SuspandableFunction().promise().ActionHandle;
+```
+
+[Back to coroutines](#coroutines-experimental)  
+[Back to top](#table-of-content)
+
+## Checking for coroutine support
+
+If you compile your code on multiple compilers and some of them do not support coroutines put the coroutine code into the block:
+``` cpp
+#ifdef __cpp_impl_coroutine
+// coroutine code
+#endif
+```
+This applies especially to places where you use coroutine keywords, like `co_awai` or `.promise()`.
+
 [Back to coroutines](#coroutines-experimental)  
 [Back to top](#table-of-content)
 
@@ -741,15 +768,16 @@ Every function described earlier can be checked if it's running and it can be st
 
 ``` cpp
 FFlow::IsActionRunning(GetWorld(), Handle); // <- is this action running?
-FFlow::StopAction(GetWorld(), Handle); // <- stops this action!
+FFlow::StopAction(GetWorld(), Handle); // <- stops this action and do not call it's callback.
+FFlow::StopAction(GetWorld(), Handle, true); // <- stops this action and call it's callback.
 ```
 
 You can also stop all of the actions from a specific owner or from everywhere.  
 Stopped actions can launch their **completion** callbacks or not, depending on the given argument:
 
 ``` cpp
-FFlow::StopAllActions(GetWorld()); // <- stops all of the actions
-FFlow::StopAllActions(GetWorld(), true); // <- stops all of the actions and launch their callbacks
+FFlow::StopAllActions(GetWorld()); // <- stops all of the actions (do not call their callbacks)
+FFlow::StopAllActions(GetWorld(), true); // <- stops all of the actions and call their callbacks
 FFlow::StopAllActions(GetWorld(), false, Owner); // <- stops all of the actions started from this specific owner
 ```
 
@@ -800,6 +828,24 @@ FFlow::RemoveAllRunAsyncAndWait(GetWorld(), true);
 
 [Back to top](#table-of-content)
 
+# Resetting actions
+
+Every running action, if we know it's handle, can be resetted.
+
+``` cpp
+FFlow::ResetAction(GetWorld(), ActionHandle, false);
+```
+
+The third parameter tells if after reset the action's callback should run immediately.  
+For example, if we reset Timeline Action, running callback immediately will run the callback with initial Timeline values right after the reset.  
+Otherwise, ECF will wait for the first next update of the Timeline to run callback.
+
+There is also a node to run this in Blueprints.
+
+![resa](https://github.com/user-attachments/assets/6acc9703-c68f-4c2b-9976-522dda2150b3)
+
+[Back to top](#table-of-content)
+
 # Measuring Performance
 
 ## Stats
@@ -825,10 +871,26 @@ You can also display more detailed plugin's performance info with `stat ecfdetai
 
 ## Unreal Insights
 
-You can measure performence using [Unreal Insights](https://docs.unrealengine.com/4.26/en-US/TestingAndOptimization/PerformanceAndProfiling/UnrealInsights/) tool. Currently there is only one cpu timing trace available:
-* ECF-Actions-Tick - measures the time the plugin needs to perform one full update.
+You can measure performence using [Unreal Insights](https://docs.unrealengine.com/4.26/en-US/TestingAndOptimization/PerformanceAndProfiling/UnrealInsights/) tool.  
+It measures the overall time the plugin needs to perform one full update and the time every single action needs to perform their ticks.
 
-You can disable Unreal Insights traces for this plugin by setting `bEnableInsightProfiling` in `EnhancedCodeFlow.Build.cs` to `false`.
+You can disable Unreal Insights traces for this plugin by setting `bShowLogs` and `bShowVerboseLogs` in `EnhancedCodeFlow.Build.cs` to `false`.
+
+![insight](https://github.com/user-attachments/assets/9fdf838a-722a-4e64-bfc9-bf7bc81cb1ea)
+
+[Back to top](#table-of-content)
+
+# Logs  
+
+ECF will print any error and warning that occurred to the output log. You can enable more verbose logging, which will show in more details what ECF is doing.  
+To enable verbose logging add the following block to `DefaultEngine.ini`:
+
+```ini
+[Core.Log]
+LogECF=Verbose
+```
+
+You can disable Logs entirely by setting `bEnableInsightProfiling` in `EnhancedCodeFlow.Build.cs` to `false`.
 
 [Back to top](#table-of-content)
 

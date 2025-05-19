@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -29,7 +29,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF Coroutine - wait ticks failed to start. Are you sure the WaitTicks is not negative?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF Coroutine - wait ticks failed to start. Are you sure the WaitTicks is not negative?"));
+#endif
 			return false;
 		}
 	}
@@ -39,16 +41,26 @@ protected:
 		CurrentTicks = 0;
 	}
 
+	void Reset(bool bCallUpdate) override
+	{
+		CurrentTicks = 0;
+	}
+
 	void Tick(float DeltaTime) override
 	{
 #if STATS
 		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("WaitTicks - Tick"), STAT_ECFDETAILS_WAITTICKS, STATGROUP_ECFDETAILS);
 #endif
+
+#if ECF_INSIGHT_PROFILING
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - WaitTicks Tick");
+#endif
+
 		CurrentTicks++;
 		if (CurrentTicks > WaitTicks)
 		{
-			Complete(false);
 			MarkAsFinished();
+			Complete(false);
 		}
 	}
 

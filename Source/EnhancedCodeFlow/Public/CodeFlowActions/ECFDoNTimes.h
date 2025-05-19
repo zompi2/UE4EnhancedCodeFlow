@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -31,7 +31,9 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - DoNTimes failed to start. Are you sure Exec Fuinction and Times number are set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - DoNTimes failed to start. Are you sure Exec Fuinction and Times number are set properly?"));
+#endif
 			return false;
 		}
 	}
@@ -40,6 +42,11 @@ protected:
 	{
 		Counter = 0;
 		RetriggeredInstancedAction();
+	}
+
+	void Reset(bool bCallUpdate) override
+	{
+		Counter = 0;
 	}
 
 	void RetriggeredInstancedAction() override

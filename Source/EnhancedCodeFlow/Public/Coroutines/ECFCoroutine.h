@@ -1,10 +1,11 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
 #ifdef __cpp_impl_coroutine
 
 #include <coroutine>
+#include "ECFHandle.h"
 
 /**
  * Defining coroutine handlers and promises in order to get coroutines work.
@@ -26,6 +27,7 @@ struct FECFCoroutinePromise
 	void return_void() { bHasFinished = true; }
 	void unhandled_exception() {}
 	bool bHasFinished = false;
+	FECFHandle ActionHandle;
 };
 
 #else
@@ -34,11 +36,14 @@ struct FECFCoroutinePromise
  * Create dummy implementations of coroutine handles if coroutines are not supported by a compiler.
  */
 
+#include "ECFHandle.h"
+
 using FECFCoroutine = void;
 
 struct FECFCoroutinePromise
 {
 	bool bHasFinished = false;
+	FECFHandle ActionHandle;
 };
 
 struct FECFCoroutineHandle 

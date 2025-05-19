@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 /**
  * Library of static functions used to launch Code Flow functions via Blueprints.
@@ -65,6 +65,12 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject", DisplayName = "ECF - Is Action Paused"), Category = "ECF")
 	static void ECFIsActionPaused(UPARAM(DisplayName = "IsRunning") bool& bIsRunning, UPARAM(DisplayName = "IsPaused") bool& bIsPaused, const UObject* WorldContextObject, const FECFHandleBP& Handle);
+
+	/**
+	 * Resets the action pointed by given handle.
+	 */
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", DisplayName = "ECF - Reset Action"), Category = "ECF")
+	static void ECFResetAction(const UObject* WorldContextObject, const FECFHandleBP& Handle, UPARAM(DisplayName = "CallUpdate") bool bCallUpdate);
 	
 	/*^^^ Stopping ECF Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 

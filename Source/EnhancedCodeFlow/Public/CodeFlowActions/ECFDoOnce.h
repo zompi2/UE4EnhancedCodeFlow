@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -17,6 +17,7 @@ class ENHANCEDCODEFLOW_API UECFDoOnce : public UECFActionBase
 protected:
 
 	TUniqueFunction<void()> ExecFunc;
+	bool bWasCalled = false;
 
 	bool Setup(TUniqueFunction<void()>&& InExecFunc)
 	{
@@ -28,14 +29,31 @@ protected:
 		}
 		else
 		{
-			ensureMsgf(false, TEXT("ECF - do once failed to start. Are you sure the Exec Function is is set properly?"));
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF - do once failed to start. Are you sure the Exec Function is is set properly?"));
+#endif
 			return false;
 		}
 	}
 
 	void Init() override
 	{
+		bWasCalled = true;
 		ExecFunc();
+	}
+
+	void Reset(bool bCallUpdate) override
+	{
+		bWasCalled = false;
+	}
+
+	void RetriggeredInstancedAction() override
+	{
+		if (bWasCalled == false)
+		{
+			bWasCalled = true;
+			ExecFunc();
+		}
 	}
 };
 

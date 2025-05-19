@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
 
 /**
  * Library of static functions used to launch Code Flow Actions.
@@ -60,6 +60,12 @@ public:
 	 * Returns false if there is no action.
 	 */
 	static bool IsActionPaused(const UObject* WorldContextObject, const FECFHandle& Handle, bool &bIsPaused);
+
+	/**
+	 * 	Resets the action. Have in mind that not every action has reset functionality.
+	 *  If bCallUpdate is true - the action should run an update event (if there is any) after it's reset.
+	 */
+	static void ResetAction(const UObject* WorldContextObject, const FECFHandle& Handle, bool bCallUpdate);
 
 	/**
 	 * Sets if the ECF system is paused or not.
@@ -128,7 +134,7 @@ public:
 
 	/**
 	 * Execute specified action after some time.
-	 * @param InDelayTime - time in seconds to wait before executing action.
+	 * @param InDelayTime - time in seconds to wait before executing action. If set to 0 it will execute in the next frame.
 	 * @param InCallbackFunc - a callback with action to execute. Can be: 
 	 *	[](bool bStopped) -> void.
 	 *	[]() -> void.
@@ -149,7 +155,7 @@ public:
 
 	/**
 	 * Execute specified action after some ticks.
-	 * @param InDelayTicks - number of ticks after which the action will be executed.
+	 * @param InDelayTicks - number of ticks after which the action will be executed. If set to 0 it will execute in the nest frame.
 	 * @param InCallbackFunc - a callback with action to execute. Can be: 
 	 *	[](bool bStopped) -> void.
 	 *	[]() -> void.
