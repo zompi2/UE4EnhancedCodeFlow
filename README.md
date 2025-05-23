@@ -36,7 +36,6 @@ If you don't want to build the plugin from the source you can get the prebuilt b
 | UE version | Plugin version | Link |
 | :--------- | :------------- | :--- |
 | 4.27       | 3.5.3          | [Zip](https://github.com/zompi2/UE4EnhancedCodeFlow/raw/packs/Packs/EnhancedCodeFlow-3.5.3-4.27-Prebuild.zip) |
-| 5.2        | 3.4.0          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
 | 5.3        | 3.4.0          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
 | 5.4        | 3.4.0          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
 | 5.5        | 3.4.0          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
