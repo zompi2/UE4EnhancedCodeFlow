@@ -32,7 +32,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF - DoNTimes failed to start. Are you sure Exec Fuinction and Times number are set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF - [%s] Do N Times failed to start. Are you sure the Exec Function is set properly?"), *Settings.Label);
 #endif
 			return false;
 		}

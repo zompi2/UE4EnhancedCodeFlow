@@ -36,7 +36,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF - Do No More Than Times failed to start. Are you sure the Lock time and Max Execs Eneueud are greater than 0 and the Exec Function is set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF - [%s] Do No More Than Times failed to start. Are you sure the Lock time and Max Execs Eneueud are greater than 0 and the Exec Function is set properly?"), *Settings.Label);
 #endif
 			return false;
 		}

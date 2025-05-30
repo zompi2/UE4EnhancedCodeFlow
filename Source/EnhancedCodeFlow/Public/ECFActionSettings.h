@@ -15,19 +15,20 @@ struct ENHANCEDCODEFLOW_API FECFActionSettings
 		FirstDelay(0.f),
 		bIgnorePause(false),
 		bIgnoreGlobalTimeDilation(false),
-		bStartPaused(false)
+		bStartPaused(false),
+		Label(TEXT(""))
 	{
 
 	}
 
-	FECFActionSettings(float InTickInterval, float InFirstDelay = 0.f, bool InIgnorePause = false, bool InIgnoreTimeDilation = false, bool InStartPaused = false) :
+	FECFActionSettings(float InTickInterval, float InFirstDelay = 0.f, bool InIgnorePause = false, bool InIgnoreTimeDilation = false, bool InStartPaused = false, const FString& InLabel = TEXT("")) :
 		TickInterval(InTickInterval),
 		FirstDelay(InFirstDelay),
 		bIgnorePause(InIgnorePause),
 		bIgnoreGlobalTimeDilation(InIgnoreTimeDilation),
-		bStartPaused(InStartPaused)
+		bStartPaused(InStartPaused),
+		Label(InLabel)
 	{
-
 	}
 
 	UPROPERTY(BlueprintReadWrite, Category = "ECF")
@@ -44,11 +45,14 @@ struct ENHANCEDCODEFLOW_API FECFActionSettings
 
 	UPROPERTY(BlueprintReadWrite, Category = "ECF")
 	bool bStartPaused = false;
+
+	UPROPERTY(BlueprintReadWrite, Category = "ECF")
+	FString Label;
 };
 
-#define ECF_TICKINTERVAL(_Interval) FECFActionSettings(_Interval, 0.f, false, false, false)
-#define ECF_DELAYFIRST(_Delay) FECFActionSettings(0.f, _Delay, false, false, false)
-#define ECF_IGNOREPAUSE FECFActionSettings(0.f, 0.f, true, false, false)
-#define ECF_IGNORETIMEDILATION FECFActionSettings(0.f, 0.f, false, true, false)
-#define ECF_IGNOREPAUSEDILATION FECFActionSettings(0.f, 0.f, true, true, false)
-#define ECF_STARTPAUSED FECFActionSettings(0.f, 0.f, false, false, true)
+#define ECF_TICKINTERVAL(_Interval) FECFActionSettings(_Interval, 0.f, false, false, false, TEXT(""))
+#define ECF_DELAYFIRST(_Delay) FECFActionSettings(0.f, _Delay, false, false, false, TEXT(""))
+#define ECF_IGNOREPAUSE FECFActionSettings(0.f, 0.f, true, false, false, TEXT(""))
+#define ECF_IGNORETIMEDILATION FECFActionSettings(0.f, 0.f, false, true, false, TEXT(""))
+#define ECF_IGNOREPAUSEDILATION FECFActionSettings(0.f, 0.f, true, true, false, TEXT(""))
+#define ECF_STARTPAUSED FECFActionSettings(0.f, 0.f, false, false, true, TEXT(""))
