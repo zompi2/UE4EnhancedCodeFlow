@@ -60,7 +60,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF - Wait and Execute failed to start. Are you sure the Predicate and Function are set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF - [%s] Wait and Execute failed to start. Are you sure the Predicate and Function are set properly?"), *Settings.Label);
 #endif
 			return false;
 		}
@@ -82,7 +82,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF - [%s] Wait and Execute failed to start. Are you sure the Function is set properly?"), *Settings.Label);
 #endif
 			return false;
 		}
@@ -104,7 +104,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF - [%s] Wait and Execute failed to start. Are you sure the Function is set properly?"), *Settings.Label);
 #endif
 			return false;
 		}
@@ -131,7 +131,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF - [%s] Wait and Execute failed to start. Are you sure the Function is set properly?"), *Settings.Label);
 #endif
 			return false;
 		}
@@ -153,7 +153,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF - [%s] Wait and Execute failed to start. Are you sure the Function is set properly?"), *Settings.Label);
 #endif
 			return false;
 		}
@@ -180,7 +180,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF - Wait and Execute failed to start. Are you sure the Function is set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF - [%s] Wait and Execute failed to start. Are you sure the Function is set properly?"), *Settings.Label);
 #endif
 			return false;
 		}

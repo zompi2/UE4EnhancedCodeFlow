@@ -589,4 +589,11 @@ void FEnhancedCodeFlow::RemoveAllRunAsyncAndWait(const UObject* WorldContextObje
 		ECF->RemoveActionsOfClass<UECFRunAsyncAndWait>(bComplete, InOwner);
 }
 
+FECFHandle FEnhancedCodeFlow::FindActionByLabel(const UObject* WorldContextObject, const FString& Label)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		return ECF->FindActionByLabel(Label);
+	return FECFHandle();
+}
+
 ECF_PRAGMA_ENABLE_OPTIMIZATION

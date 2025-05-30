@@ -261,5 +261,11 @@ public:
 	UFUNCTION(BlueprintPure, meta = (DisplayName = "ToString (FECFInstanceIdBP)", CompactNodeTitle = "->", BlueprintAutocast), Category = "ECF")
 	static FString Conv_ECFInstanceIdToString(const FECFInstanceIdBP& InstanceId);
 
+	/**
+	 * Finds the first running or pending action with the given Label and returns its handle (for Blueprints).
+	 */
+	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject", DisplayName = "ECF - Find Action By Label"), Category = "ECF")
+	static FECFHandleBP FindActionByLabel(const UObject* WorldContextObject, const FString& Label);
+
 	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 };
