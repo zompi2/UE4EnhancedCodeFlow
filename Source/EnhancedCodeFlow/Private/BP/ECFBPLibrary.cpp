@@ -184,4 +184,9 @@ FString UECFBPLibrary::Conv_ECFInstanceIdToString(const FECFInstanceIdBP& Instan
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
+FECFHandleBP UECFBPLibrary::FindActionByLabel(const UObject* WorldContextObject, const FString& Label)
+{
+	return FECFHandleBP(FFlow::FindActionByLabel(WorldContextObject, Label));
+}
+
 ECF_PRAGMA_ENABLE_OPTIMIZATION

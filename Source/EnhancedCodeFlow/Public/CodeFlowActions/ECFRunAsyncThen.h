@@ -81,7 +81,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF - Run Async Task and Run failed to start. Are you sure the AsyncTask and Function are set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF - [%s] Run Async Task and Run failed to start. Are you sure the AsyncTask and Function are set properly?"), *Settings.Label);
 #endif
 			return false;
 		}
@@ -100,7 +100,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF - Run Async Task and Run failed to start. Are you sure the Function is set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF - [%s] Run Async Task and Run failed to start. Are you sure the Function is set properly?"), *Settings.Label);
 #endif
 			return false;
 		}
@@ -119,7 +119,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF - Run Async Task and Run failed to start. Are you sure the Function is set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF - [%s] Run Async Task and Run failed to start. Are you sure the Function is set properly?"), *Settings.Label);
 #endif
 			return false;
 		}
