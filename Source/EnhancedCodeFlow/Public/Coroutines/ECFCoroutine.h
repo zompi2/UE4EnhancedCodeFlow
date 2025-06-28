@@ -40,8 +40,6 @@ struct FECFCoroutinePromise
 
 #include "ECFHandle.h"
 
-#define ECF_WITH_COROUTINES 0
-
 using FECFCoroutine = void;
 
 struct FECFCoroutinePromise
