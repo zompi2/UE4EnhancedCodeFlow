@@ -1,3 +1,7 @@
+###### 3.5.4
+* Better detection of if the compiler supports coroutines or not.
+* ECF_WITH_COROUTINES macro added for excluding coroutine code for compilers that do not support them.
+
 ###### 3.5.3
 * Using static delegates in timeline interp functions instead of dynamic ones
 
