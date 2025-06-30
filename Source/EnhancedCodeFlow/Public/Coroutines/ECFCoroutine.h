@@ -2,7 +2,9 @@
 
 #pragma once
 
-#ifdef __cpp_impl_coroutine
+#if defined(__cpp_impl_coroutine) && __has_include(<coroutine>)
+
+#define ECF_WITH_COROUTINES 1
 
 #include <coroutine>
 #include "ECFHandle.h"
@@ -37,6 +39,8 @@ struct FECFCoroutinePromise
  */
 
 #include "ECFHandle.h"
+
+#define ECF_WITH_COROUTINES 0
 
 using FECFCoroutine = void;
 
