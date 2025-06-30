@@ -43,6 +43,12 @@ If you don't want to build the plugin from the source you can get the prebuilt b
 
 [Back to top](#table-of-content)
 
+# Other platforms support
+
+The plugin has been tested by me only on Windows platform, however, there should be no obstacles to use them on any other platform supported by Unreal Engine.  
+Thanks to @Tutul- for testing and confirming that the plugin also works on `6.12.34-1-MANJARO (based on Archlinux)` and `Android` with the default Unreal settings (however to use coroutines it requires at least `NDK r26d`).  
+Feel free to test the source code on any platforms you can imagine :)  
+
 # Example Project
 
 The example project wich uses this plugin can be found in **[this repository](https://github.com/zompi2/UE4EnhancedCodeFlowExample)**. Example project is compatible with the newest version of the plugin only.
