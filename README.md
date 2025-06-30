@@ -722,13 +722,13 @@ FECFHandle ActionHandle = SuspandableFunction().promise().ActionHandle;
 
 ## Checking for coroutine support
 
-If you compile your code on multiple compilers and some of them do not support coroutines put the coroutine code into the block:
+If you compile your code on multiple platforms and some of them do not support coroutines put the coroutine code into the block:
 ``` cpp
-#ifdef __cpp_impl_coroutine
+#if ECF_WITH_COROUTINES
 // coroutine code
 #endif
 ```
-This applies especially to places where you use coroutine keywords, like `co_awai` or `.promise()`.
+This applies especially to places where you use coroutine keywords, like `co_await` or `.promise()`.
 
 [Back to coroutines](#coroutines-experimental)  
 [Back to top](#table-of-content)
