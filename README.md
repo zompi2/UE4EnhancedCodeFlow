@@ -1015,7 +1015,7 @@ You can temporarily disable plugin's build optimizations by setting the `bDisabl
 
 # Special thanks
 
-I want to send special thanks to Monika, because she always supports me and believes in me, to Pawel, for allowing me to test this plugin on his project and to everyone that contributed to this project.  
+I want to send special thanks to Monika, because she always supports me and believes in me, to Pawel, for allowing me to test this plugin on his project, to [Tutul-](https://github.com/Tutul-) for doing extensive tests on Linux and Android platforms and to everyone that contributed to this project.  
 Also, I want to thank You for using this plugin! It is very important for me that my work is useful for someone!  
 Happy coding!
 
