@@ -8,6 +8,7 @@ The plugin works on Unreal Engine: 4.27, 5.2, 5.3, 5.4, 5.5, 5.6.
 # Table of content
 
 - [Plugin prebuilt binaries](#plugin-prebuilt-binaries)
+- [Other platforms support](#other-platforms-support)
 - [Example Project](#example-project)
 - [Used in...](#used-in)
 - [Contact](#contact)
@@ -42,6 +43,14 @@ If you don't want to build the plugin from the source you can get the prebuilt b
 | 5.6        | 3.5.3          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
 
 [Back to top](#table-of-content)
+
+# Other platforms support
+
+The plugin has been tested by me only on Windows platform, however, there should be no obstacles to use them on any other platform supported by Unreal Engine.  
+Thanks to [Tutul-](https://github.com/Tutul-) for testing and confirming that the plugin also works on UE5.6 on `6.12.34-1-MANJARO (based on Archlinux)` and on `Android` with the default Unreal settings (however the coroutines requires at least `NDK r26d`).  
+Feel free to test the source code on any platforms you can imagine :)  
+
+[Back to top](#table-of-content)  
 
 # Example Project
 
@@ -1006,7 +1015,7 @@ You can temporarily disable plugin's build optimizations by setting the `bDisabl
 
 # Special thanks
 
-I want to send special thanks to Monika, because she always supports me and believes in me, to Pawel, for allowing me to test this plugin on his project and to everyone that contributed to this project.  
+I want to send special thanks to Monika, because she always supports me and believes in me, to Pawel, for allowing me to test this plugin on his project, to [Tutul-](https://github.com/Tutul-) for doing extensive tests on Linux and Android platforms and to everyone that contributed to this project.  
 Also, I want to thank You for using this plugin! It is very important for me that my work is useful for someone!  
 Happy coding!
 
