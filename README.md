@@ -47,7 +47,12 @@ If you don't want to build the plugin from the source you can get the prebuilt b
 # Other platforms support
 
 The plugin has been tested by me only on Windows platform, however, there should be no obstacles to use them on any other platform supported by Unreal Engine.  
-Thanks to [Tutul-](https://github.com/Tutul-) for testing and confirming that the plugin also works on UE5.6 on `6.12.34-1-MANJARO (based on Archlinux)` and on `Android` with the default Unreal settings (however the coroutines requires at least `NDK r26d`).  
+
+Thanks to [Tutul-](https://github.com/Tutul-) for testing and confirming that the plugin also works on UE5.6 on Linux/LinuxArm64 and Android.
+On Linux, the demo project was compiled on a `6.12.34-1-MANJARO` and ran on the same system. LinuxArm64 was cross-compiled and ran on an emulation of `Ubuntu-ARM`
+For the `Android` target, the project work with the default Unreal recommandation for the platform target.
+However, the coroutines requires at least the `NDK r26`, but the target can still follow Unreal's minimum and target API level.
+
 Feel free to test the source code on any platforms you can imagine :)  
 
 [Back to top](#table-of-content)  
