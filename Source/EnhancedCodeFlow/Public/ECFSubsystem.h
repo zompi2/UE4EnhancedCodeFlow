@@ -126,6 +126,10 @@ protected:
 	// Try to find running or pending action.
 	UECFActionBase* FindAction(const FECFHandle& HandleId) const;
 
+
+	// Finds the first running or pending action with the given Label and returns its FECFHandle. Returns invalid handle if not found.
+	FECFHandle FindActionByLabel(const FString& Label) const;
+
 	// Check if the action is running or pending to run.
 	bool HasAction(const FECFHandle& HandleId) const;
 

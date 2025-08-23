@@ -43,7 +43,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF - Ticker(2) failed to start. Are you sure the Ticking time and Ticking Function are set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF - [%s] ticker failed to start. Are you sure the Ticking time is greater than 0 and Ticking Function are set properly?"), *Settings.Label);
 #endif
 			return false;
 		}

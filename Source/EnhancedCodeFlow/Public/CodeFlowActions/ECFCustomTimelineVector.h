@@ -46,7 +46,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF - custom timeline vector failed to start. Are you sure Tick Function and Curve are set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF - [%s] custom timeline vector failed to start. Are you sure Tick Function and Curve are set properly?"), *Settings.Label);
 #endif
 			return false;
 		}

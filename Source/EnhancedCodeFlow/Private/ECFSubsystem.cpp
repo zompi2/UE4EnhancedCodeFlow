@@ -138,6 +138,31 @@ UECFActionBase* UECFSubsystem::FindAction(const FECFHandle& HandleId) const
 	return nullptr;
 }
 
+FECFHandle UECFSubsystem::FindActionByLabel(const FString& Label) const
+{
+	if (Label.IsEmpty())
+	{
+		return FECFHandle();
+	}
+	// Search in active actions
+	for (UECFActionBase* Action : Actions)
+	{
+		if (IsActionValid(Action) && Action->Settings.Label == Label)
+		{
+			return Action->GetHandleId();
+		}
+	}
+	// Search in pending actions
+	for (UECFActionBase* PendingAction : PendingAddActions)
+	{
+		if (IsActionValid(PendingAction) && PendingAction->Settings.Label == Label)
+		{
+			return PendingAction->GetHandleId();
+		}
+	}
+	return FECFHandle();
+}
+
 void UECFSubsystem::PauseAction(const FECFHandle& HandleId)
 {
 	if (UECFActionBase* ActionFound = FindAction(HandleId))

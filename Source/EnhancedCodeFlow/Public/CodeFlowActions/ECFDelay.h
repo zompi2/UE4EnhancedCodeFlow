@@ -37,7 +37,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF - delay failed to start. Are you sure the DelayTime is not negative and Callback Function is set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF - [%s] delay failed to start. Are you sure the DelayTime is not negative and Callback Function is set properly?"), *Settings.Label);
 #endif
 			return false;
 		}
@@ -56,7 +56,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF - delay failed to start. Are you sure the Callback Function is set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF - [%s] delay failed to start. Are you sure the Callback Function is set properly?"), *Settings.Label);
 #endif
 			return false;
 		}
