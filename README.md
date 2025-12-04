@@ -3,11 +3,12 @@
 This code plugin provides functions that drastically improve the quality of life during the implementation of game flow in C++.  
 It works very well with gameplay programming, UI programming with a lot of transitions or in any other situation.
 
-The plugin has been tested on the Engine's versions: 4.27, 5.3, 5.4 and 5.5.
+The plugin works on Unreal Engine: 4.27, 5.2, 5.3, 5.4, 5.5, 5.6.
 
 # Table of content
 
-- [Fab](#fab)
+- [Plugin prebuilt binaries](#plugin-prebuilt-binaries)
+- [Other platforms support](#other-platforms-support)
 - [Example Project](#example-project)
 - [Used in...](#used-in)
 - [Contact](#contact)
@@ -29,15 +30,32 @@ The plugin has been tested on the Engine's versions: 4.27, 5.3, 5.4 and 5.5.
 - [Extending Plugin](#extending-plugin)
 - [Special Thanks](#special-thanks)
 
-# Fab
+# Plugin prebuilt binaries
 
-The plugin is available on the Fab! It is free, of course.  
-If you don't want to build this plugin by yourself, you can **[download it from here](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0)**.  
-Currently plugin is available for Unreal Engine version 5.5, 5.4, 5.3, and 4.27.  
-If you have troubles with downloading version for 4.27 you can download the precompiled package **[from here](https://github.com/zompi2/UE4EnhancedCodeFlow/raw/refs/heads/ue4.27/Pack/EnhancedCodeFlow-4.27.zip)**.  
-The plugin's version that's on the Fab is **3.4.0**.
+If you don't want to build the plugin from the source you can get the prebuilt binaries:
+
+| UE version | Plugin version | Link |
+| :--------- | :------------- | :--- |
+| 4.27       | 3.5.3          | [Zip](https://github.com/zompi2/UE4EnhancedCodeFlow/raw/packs/Packs/EnhancedCodeFlow-3.5.3-4.27-Prebuild.zip) |
+| 5.3        | 3.5.3          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
+| 5.4        | 3.5.3          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
+| 5.5        | 3.5.3          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
+| 5.6        | 3.5.3          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
 
 [Back to top](#table-of-content)
+
+# Other platforms support
+
+The plugin has been tested by me only on Windows platform, however, there should be no obstacles to use them on any other platform supported by Unreal Engine.  
+
+Thanks to [Tutul-](https://github.com/Tutul-) for testing and confirming that the plugin also works on UE5.6 on Linux/LinuxArm64 and Android.
+On Linux, the demo project was compiled on a `6.12.34-1-MANJARO` and ran on the same system. LinuxArm64 was cross-compiled and ran on an emulation of `Ubuntu-ARM`
+For the `Android` target, the project work with the default Unreal recommandation for the platform target.
+However, the coroutines requires at least the `NDK r26`, but the target can still follow Unreal's minimum and target API level.
+
+Feel free to test the source code on any platforms you can imagine :)  
+
+[Back to top](#table-of-content)  
 
 # Example Project
 
@@ -722,13 +740,13 @@ FECFHandle ActionHandle = SuspandableFunction().promise().ActionHandle;
 
 ## Checking for coroutine support
 
-If you compile your code on multiple compilers and some of them do not support coroutines put the coroutine code into the block:
+If you compile your code on multiple platforms and some of them do not support coroutines put the coroutine code into the block:
 ``` cpp
-#ifdef __cpp_impl_coroutine
+#if ECF_WITH_COROUTINES
 // coroutine code
 #endif
 ```
-This applies especially to places where you use coroutine keywords, like `co_awai` or `.promise()`.
+This applies especially to places where you use coroutine keywords, like `co_await` or `.promise()`.
 
 [Back to coroutines](#coroutines-experimental)  
 [Back to top](#table-of-content)
@@ -1002,7 +1020,7 @@ You can temporarily disable plugin's build optimizations by setting the `bDisabl
 
 # Special thanks
 
-I want to send special thanks to Monika, because she always supports me and believes in me, to Pawel, for allowing me to test this plugin on his project and to everyone that contributed to this project.  
+I want to send special thanks to Monika, because she always supports me and believes in me, to Pawel, for allowing me to test this plugin on his project, to [Tutul-](https://github.com/Tutul-) for doing extensive tests on Linux and Android platforms and to everyone that contributed to this project.  
 Also, I want to thank You for using this plugin! It is very important for me that my work is useful for someone!  
 Happy coding!
 
