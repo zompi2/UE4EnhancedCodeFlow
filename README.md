@@ -806,8 +806,6 @@ FFlow::GetPause(GetWorld()); // Check if the whole ECF Subsystem is paused or no
 
 # Stopping actions
 
-<img width="1021" height="366" alt="ecfstopall" src="https://github.com/user-attachments/assets/64527bff-38f4-46a2-b8d7-9f1ebb905f8d" />
-
 Every function described earlier can be checked if it's running and it can be stopped.
 
 ``` cpp
@@ -827,7 +825,15 @@ FFlow::StopAllActions(GetWorld(), false, Owner); // <- stops all of the actions 
 
 When the **completion** callback will run after the Stop Function, the `bStopped` argument in the completion function of the action will be set to `true`.
 
-![stopping](https://user-images.githubusercontent.com/7863125/180849533-03cb9d37-977f-4c9e-8961-aebd60f8ee25.png)
+You can also stop all of the **specific** actions of the given class or with a label. In this case you can also optionally specifiy an owner of this actions, or simply stop all of them.
+You can also specify if stopped actions should launch their **completion** callbacks or not.
+
+``` cpp
+FFlow::StopAllActionsOfClass<UECFDelay>(GetWorld()); // <- stops all Delay actions
+FFlow::StopAllActionsWithLabel(GetWorld(), TEXT("MyLabel")); // <- stops all actions with "MyLabel" label
+```
+
+<img width="1021" height="366" alt="ecfstopall" src="https://github.com/user-attachments/assets/64527bff-38f4-46a2-b8d7-9f1ebb905f8d" />
 
 You can also stop a specific Instanced action with the **`FECFInstanceId`**:
 
@@ -837,36 +843,6 @@ FFlow::StopInstancedAction(GetWorld(), InstanceId, true); // <- stops all action
 ```
 
 ![stopinst](https://user-images.githubusercontent.com/7863125/180849970-246f8d85-33c0-406c-af23-da4cd9244019.png)
-
-You can also stop all of the **specific** actions. In this case you can also optionally specifiy an owner of this actions, or simply stop all of them.
-You can also specify if stopped actions should launch their **completion** callbacks or not.
-
-``` cpp
-FFlow::RemoveAllDelays(GetWorld());
-FFlow::RemoveAllTickers(GetWorld());
-FFlow::RemoveAllWaitAndExecutes(GetWorld());
-FFlow::RemoveAllWhileTrueExecutes(GetWorld());
-FFlow::RemoveAllRunAsyncThen(GetWorld());
-FFlow::RemoveAllTimelines(GetWorld());
-FFlow::RemoveAllTimelinesVector(GetWorld());
-FFlow::RemoveAllTimelinesLinearColor(GetWorld());
-FFlow::RemoveAllCustomTimelines(GetWorld());
-FFlow::RemoveAllCustomTimelinesVector(GetWorld());
-FFlow::RemoveAllCustomTimelinesLinearColor(GetWorld());
-FFlow::RemoveAllTimeLocks(GetWorld());
-FFlow::RemoveAllDoNoMoreThanXTimes(GetWorld());
-```
-
-![stopall](https://github.com/user-attachments/assets/953e5379-b403-4400-91ad-31060f84a0a5)
-
-You can also stop all of the running actions that handle coroutines.
-
-``` cpp
-FFlow::RemoveAllWaitSeconds(GetWorld(), true);
-FFlow::RemoveAllWaitTicks(GetWorld(), true);
-FFlow::RemoveAllWaitUntil(GetWorld(), true);
-FFlow::RemoveAllRunAsyncAndWait(GetWorld(), true);
-```
 
 **IMPORTANT!** If you stop the action which handles a coroutine be aware that if you won't set `bComplete` to true, the suspended coroutine will never be resumed!
 
