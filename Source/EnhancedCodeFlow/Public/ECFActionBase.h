@@ -54,14 +54,16 @@ public:
 		return InstanceId;
 	}
 
-	// Marks this action as finished. It makes it invalid. 
-	// This action will be deleted soon.
-	void MarkAsFinished()
+	// Returns this action Label
+	FString GetLabel() const
 	{
-#if (ECF_LOGS && ECF_LOGS_VERBOSE)
-		UE_LOG(LogECF, Verbose, TEXT("Action of class %s marked as finished"), *GetName());
-#endif
-		bHasFinished = true;
+		return Settings.Label;
+	}
+
+	// Checks if this action is paused
+	bool IsPaused() const
+	{
+		return bIsPaused;
 	}
 
 	// Checks if this action has this instance id.
@@ -92,6 +94,16 @@ protected:
 
 	// Function called when the action is requested to be completed before it ends.
 	virtual void Complete(bool bStopped) {}
+
+	// Marks this action as finished. It makes it invalid. 
+	// This action will be deleted soon.
+	void MarkAsFinished()
+	{
+#if (ECF_LOGS && ECF_LOGS_VERBOSE)
+		UE_LOG(LogECF, Verbose, TEXT("Action of class %s marked as finished, Label: %s"), *GetName(), *GetLabel());
+#endif
+		bHasFinished = true;
+	}
 
 	// Function called when this action is instanced and something tried to call it again.
 	virtual void RetriggeredInstancedAction() {}

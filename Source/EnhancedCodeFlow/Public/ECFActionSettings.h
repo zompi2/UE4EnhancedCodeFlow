@@ -56,3 +56,4 @@ struct ENHANCEDCODEFLOW_API FECFActionSettings
 #define ECF_IGNORETIMEDILATION FECFActionSettings(0.f, 0.f, false, true, false, TEXT(""))
 #define ECF_IGNOREPAUSEDILATION FECFActionSettings(0.f, 0.f, true, true, false, TEXT(""))
 #define ECF_STARTPAUSED FECFActionSettings(0.f, 0.f, false, false, true, TEXT(""))
+#define ECF_LABEL(_Label) FECFActionSettings(0.f, 0.f, false, false, false, _Label)

@@ -22,16 +22,13 @@ The plugin works on Unreal Engine: 4.27, 5.2-5.7.
 - [Extra Settings](#extra-settings)
 - [Instanced Actions](#instanced-actions)
 - [Coroutines (experimental)](#coroutines-experimental)
+- [Getting Running Actions](#getting-running-actions)
 - [Pausing and Resuming](#pausing-and-resuming)
 - [Stopping Actions](#stopping-actions)
 - [Resetting Actions](#resetting-actions)
 - [Measuring Performance](#measuring-performance)
 - [Logs](#logs)
 - [Extending Plugin](#extending-plugin)
-
-<img width="335" height="121" alt="ecffindbyclass" src="https://github.com/user-attachments/assets/c0ed2205-8f6a-4c15-9282-3f21938d0af6" />
-<img width="313" height="94" alt="ecffindbylabel" src="https://github.com/user-attachments/assets/5982c741-a064-4e02-a02b-72caa64f49cb" />
-
 - [Special Thanks](#special-thanks)
 
 # Plugin prebuilt binaries
@@ -573,6 +570,7 @@ You can define extra settings at the end of each action launch. Currently the fo
 * Ignore Game Pause - it will ignore the game pause.
 * Ignore Global Time Dilation - it will ignore global time dilation when ticking.
 * Start Paused - the action will start in paused state and must be resumed manually.
+* Label - the string that can be used to identify the action.
 
 ``` cpp
 FFlow::AddTicker(this, 10.f, [this](float DeltaTime)
@@ -754,6 +752,27 @@ If you compile your code on multiple platforms and some of them do not support c
 This applies especially to places where you use coroutine keywords, like `co_await` or `.promise()`.
 
 [Back to coroutines](#coroutines-experimental)  
+[Back to top](#table-of-content)
+
+# Getting Running Actions
+To get running action's handles use one of the following functions:
+
+#### Get Actions Handles by Class
+
+```cpp
+TArray<FECFHandle> Handles = FFlow::GetActionsHandlesByClass<UECFDelay>(GetWorld());
+```
+
+<img width="335" height="121" alt="ecffindbyclass" src="https://github.com/user-attachments/assets/c0ed2205-8f6a-4c15-9282-3f21938d0af6" />
+
+#### Get Actions Handles by Label
+
+```cpp
+TArray<FECFHandle> Handles = FFlow::GetActionsHandlesByLabel<UECFDelay>(TEXT("MyLabel"));
+```
+
+<img width="313" height="94" alt="ecffindbylabel" src="https://github.com/user-attachments/assets/5982c741-a064-4e02-a02b-72caa64f49cb" />
+
 [Back to top](#table-of-content)
 
 # Pausing and Resuming
