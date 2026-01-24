@@ -27,6 +27,10 @@ The plugin works on Unreal Engine: 4.27, 5.2, 5.3, 5.4, 5.5, 5.6.
 - [Measuring Performance](#measuring-performance)
 - [Logs](#logs)
 - [Extending Plugin](#extending-plugin)
+
+<img width="335" height="121" alt="ecffindbyclass" src="https://github.com/user-attachments/assets/c0ed2205-8f6a-4c15-9282-3f21938d0af6" />
+<img width="313" height="94" alt="ecffindbylabel" src="https://github.com/user-attachments/assets/5982c741-a064-4e02-a02b-72caa64f49cb" />
+
 - [Special Thanks](#special-thanks)
 
 # Plugin prebuilt binaries
