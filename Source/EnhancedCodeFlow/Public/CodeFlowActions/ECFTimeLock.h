@@ -33,7 +33,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF - Timelock failed to start. Are you sure the Lock time is greater than 0 and the Exec Function is set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF - [%s] Timelock failed to start. Are you sure the Lock time is greater than 0 and the Exec Function is set properly?"), *Settings.Label);
 #endif
 			return false;
 		}

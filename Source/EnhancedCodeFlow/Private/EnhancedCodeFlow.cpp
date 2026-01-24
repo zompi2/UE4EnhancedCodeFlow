@@ -37,6 +37,48 @@ bool FFlow::IsActionRunning(const UObject* WorldContextObject, const FECFHandle&
 		return false;
 }
 
+TArray<FECFHandle> FEnhancedCodeFlow::GetActionsHandlesByClass(const UObject* WorldContextObject, TSubclassOf<UECFActionBase> Class)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		return ECF->GetActionsHandlesByClass(Class);
+	return {};
+}
+
+TArray<FECFHandle> FEnhancedCodeFlow::GetActionsHandlesByLabel(const UObject* WorldContextObject, const FString& Label)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		return ECF->GetActionsHandlesByLabel(Label);
+	return {};
+}
+
+TArray<UECFActionBase*> FEnhancedCodeFlow::GetAllActions(const UObject* WorldContextObject)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		return ECF->GetAllActions();
+	return {};
+}
+
+int32 FEnhancedCodeFlow::GetActionsCount(const UObject* WorldContextObject)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		return ECF->GetActionsCount();
+	return 0;
+}
+
+UECFActionBase* FEnhancedCodeFlow::GetActionFromHandle(const UObject* WorldContextObject, const FECFHandle& Handle)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		return ECF->FindAction(Handle);
+	return nullptr;
+}
+
+UECFActionBase* FEnhancedCodeFlow::GetActionFromHandle(const UObject* WorldContextObject, const FECFInstanceId& InstancedId)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		return ECF->GetInstancedAction(InstancedId);
+	return nullptr;
+}
+
 void FEnhancedCodeFlow::PauseAction(const UObject* WorldContextObject, const FECFHandle& Handle)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))

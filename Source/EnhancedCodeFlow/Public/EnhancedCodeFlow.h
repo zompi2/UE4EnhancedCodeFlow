@@ -46,6 +46,42 @@ public:
 	static bool IsActionRunning(const UObject* WorldContextObject, const FECFHandle& Handle);
 
 	/**
+	 * Finds handles of running or pending action of the given Class its FECFHandles.
+	 */
+	static TArray<FECFHandle> GetActionsHandlesByClass(const UObject* WorldContextObject, TSubclassOf<UECFActionBase> Class);
+
+	template<typename T>
+	static TArray<FECFHandle> GetActionsHandlesByClass(const UObject* WorldContextObject)
+	{
+		return GetActionsHandlesByClass(WorldContextObject, T::StaticClass());
+	}
+
+	/**
+	 * Finds handles of running or pending action of the given Label its FECFHandles.
+	 */
+	static TArray<FECFHandle> GetActionsHandlesByLabel(const UObject* WorldContextObject, const FString& Label);
+
+	/**
+	 * Returns the array of all running and pending actions. Use it mostly for debugging purposes.
+	 */
+	static TArray<UECFActionBase*> GetAllActions(const UObject* WorldContextObject);
+
+	/**
+	 * Returns the number of all running and pending actions. Use it mostly for debugging purposes.
+	 */
+	static int32 GetActionsCount(const UObject* WorldContextObject);
+
+	/**
+	 * Returns the popinter to the Action. Use it mostly for debugging purposes.
+	 */
+	static UECFActionBase* GetActionFromHandle(const UObject* WorldContextObject, const FECFHandle& Handle);
+
+	/**
+	 * Returns the popinter to the Instanced Action. Use it mostly for debugging purposes.
+	 */
+	static UECFActionBase* GetActionFromHandle(const UObject* WorldContextObject, const FECFInstanceId& InstancedId);
+
+	/**
 	 * Pause ticking in the action pointed by given handle.
 	 */
 	static void PauseAction(const UObject* WorldContextObject, const FECFHandle& Handle);
@@ -533,6 +569,8 @@ public:
 	 *                             it will remove Wait Until actions from everywhere.
 	 */
 	static void RemoveAllRunAsyncAndWait(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
+
+
 };
 
 using FFlow = FEnhancedCodeFlow;

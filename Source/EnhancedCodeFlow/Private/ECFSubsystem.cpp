@@ -138,12 +138,78 @@ UECFActionBase* UECFSubsystem::FindAction(const FECFHandle& HandleId) const
 	return nullptr;
 }
 
+TArray<FECFHandle> UECFSubsystem::GetActionsHandlesByClass(TSubclassOf<UECFActionBase> Class) const
+{
+	TArray<FECFHandle> Result;
+	if (Class == nullptr)
+	{
+		return Result;
+	}
+	// Search in active actions
+	for (UECFActionBase* Action : Actions)
+	{
+		if (IsActionValid(Action) && (Action->GetClass() == Class))
+		{
+			Result.Add(Action->GetHandleId());
+		}
+	}
+	// Search in pending actions
+	for (UECFActionBase* PendingAction : PendingAddActions)
+	{
+		if (IsActionValid(PendingAction) && (PendingAction->GetClass() == Class))
+		{
+			Result.Add(PendingAction->GetHandleId());
+		}
+	}
+	return Result;
+}
+
+TArray<FECFHandle> UECFSubsystem::GetActionsHandlesByLabel(const FString& Label) const
+{
+	TArray<FECFHandle> Result;
+	if (Label.IsEmpty())
+	{
+		return Result;
+	}
+	// Search in active actions
+	for (UECFActionBase* Action : Actions)
+	{
+		if (IsActionValid(Action) && (Action->Settings.Label == Label))
+		{
+			Result.Add(Action->GetHandleId());
+		}
+	}
+	// Search in pending actions
+	for (UECFActionBase* PendingAction : PendingAddActions)
+	{
+		if (IsActionValid(PendingAction) && (PendingAction->Settings.Label == Label))
+		{
+			Result.Add(PendingAction->GetHandleId());
+		}
+	}
+	return Result;
+}
+
+TArray<UECFActionBase*> UECFSubsystem::GetAllActions() const
+{
+	TArray<UECFActionBase*> Result;
+	Result.Reserve(GetActionsCount());
+	Result.Append(Actions);
+	Result.Append(PendingAddActions);
+	return Result;
+}
+
+int32 UECFSubsystem::GetActionsCount() const
+{
+	return Actions.Num() + PendingAddActions.Num();
+}
+
 void UECFSubsystem::PauseAction(const FECFHandle& HandleId)
 {
 	if (UECFActionBase* ActionFound = FindAction(HandleId))
 	{
 #if (ECF_LOGS && ECF_LOGS_VERBOSE)
-		UE_LOG(LogECF, Verbose, TEXT("Paused Action of class: %s"), *ActionFound->GetName());
+		UE_LOG(LogECF, Verbose, TEXT("Paused Action of class: %s, Label: %s"), *ActionFound->GetName(), *ActionFound->GetLabel());
 #endif
 		ActionFound->bIsPaused = true;
 	}
@@ -160,7 +226,7 @@ void UECFSubsystem::ResumeAction(const FECFHandle& HandleId)
 	if (UECFActionBase* ActionFound = FindAction(HandleId))
 	{
 #if (ECF_LOGS && ECF_LOGS_VERBOSE)
-		UE_LOG(LogECF, Verbose, TEXT("Resume Action of class: %s"), *ActionFound->GetName());
+		UE_LOG(LogECF, Verbose, TEXT("Resume Action of class: %s, Label: %s"), *ActionFound->GetName(), *ActionFound->GetLabel());
 #endif
 		ActionFound->bIsPaused = false;
 	}
@@ -189,7 +255,7 @@ void UECFSubsystem::ResetAction(const FECFHandle& HandleId, bool bCallUpdate)
 		if (IsActionValid(ActionFound))
 		{
 #if (ECF_LOGS && ECF_LOGS_VERBOSE)
-			UE_LOG(LogECF, Verbose, TEXT("Reset Action of class: %s"), *ActionFound->GetName());
+			UE_LOG(LogECF, Verbose, TEXT("Reset Action of class: %s, Label: %s"), *ActionFound->GetName(), *ActionFound->GetLabel());
 #endif
 			ActionFound->Reset(bCallUpdate);
 			return;
@@ -206,7 +272,7 @@ void UECFSubsystem::RemoveAction(FECFHandle& HandleId, bool bComplete)
 	if (UECFActionBase* ActionFound = FindAction(HandleId))
 	{
 #if (ECF_LOGS && ECF_LOGS_VERBOSE)
-		UE_LOG(LogECF, Verbose, TEXT("Remove Action of class: %s"), *ActionFound->GetName());
+		UE_LOG(LogECF, Verbose, TEXT("Remove Action of class: %s, Label: %s"), *ActionFound->GetName(), *ActionFound->GetLabel());
 #endif
 		FinishAction(ActionFound, bComplete);
 		HandleId.Invalidate();

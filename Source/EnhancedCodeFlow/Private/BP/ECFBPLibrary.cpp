@@ -24,6 +24,30 @@ void UECFBPLibrary::ECFIsActionRunning(bool& bIsRunning, const UObject* WorldCon
 	bIsRunning = FFlow::IsActionRunning(WorldContextObject, Handle.Handle);
 }
 
+TArray<FECFHandleBP> UECFBPLibrary::GetActionsHandlesByClass(const UObject* WorldContextObject, TSubclassOf<UECFActionBase> Class)
+{
+	TArray<FECFHandle> Result = FFlow::GetActionsHandlesByClass(WorldContextObject, Class);
+	TArray<FECFHandleBP> ResultBP;
+	ResultBP.Reserve(Result.Num());
+	for (const FECFHandle& Handle : Result)
+	{
+		ResultBP.Add(FECFHandleBP(Handle));
+	}
+	return ResultBP;
+}
+
+TArray<FECFHandleBP> UECFBPLibrary::GetActionsHandlesByLabel(const UObject* WorldContextObject, const FString& Label)
+{
+	TArray<FECFHandle> Result = FFlow::GetActionsHandlesByLabel(WorldContextObject, Label);
+	TArray<FECFHandleBP> ResultBP;
+	ResultBP.Reserve(Result.Num());
+	for (const FECFHandle& Handle : Result)
+	{
+		ResultBP.Add(FECFHandleBP(Handle));
+	}
+	return ResultBP;
+}
+
 void UECFBPLibrary::ECFPauseAction(const UObject* WorldContextObject, const FECFHandleBP& Handle)
 {
 	FFlow::PauseAction(WorldContextObject, Handle.Handle);
@@ -182,6 +206,5 @@ FString UECFBPLibrary::Conv_ECFInstanceIdToString(const FECFInstanceIdBP& Instan
 	return InstanceId.InstanceId.ToString();
 }
 
-/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION

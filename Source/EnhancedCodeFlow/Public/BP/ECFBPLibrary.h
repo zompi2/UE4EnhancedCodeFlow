@@ -48,6 +48,18 @@ public:
 	static void ECFIsActionRunning(UPARAM(DisplayName = "IsRunning") bool& bIsRunning, const UObject* WorldContextObject, const FECFHandleBP& Handle);
 
 	/**
+	 * Finds handles of running or pending action of the given Class its FECFHandles.
+	 */
+	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject", DisplayName = "ECF - Get Actions Handles By Class"), Category = "ECF")
+	static TArray<FECFHandleBP> GetActionsHandlesByClass(const UObject* WorldContextObject, TSubclassOf<UECFActionBase> Class);
+
+	/**
+	 * Finds handles of running or pending action of the given Label its FECFHandles (for Blueprints).
+	 */
+	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject", DisplayName = "ECF - Get Actions Handles By Label"), Category = "ECF")
+	static TArray<FECFHandleBP> GetActionsHandlesByLabel(const UObject* WorldContextObject, const FString& Label);
+
+	/**
 	 * Pause running action.
 	 */
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", DisplayName = "ECF - Pause Action"), Category = "ECF")
