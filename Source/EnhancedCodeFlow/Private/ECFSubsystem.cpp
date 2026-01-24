@@ -287,6 +287,14 @@ void UECFSubsystem::RemoveAction(FECFHandle& HandleId, bool bComplete)
 
 void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass, bool bComplete, UObject* InOwner)
 {
+	if (ActionClass == nullptr)
+	{
+#if (ECF_LOGS && ECF_LOGS_VERBOSE)
+		UE_LOG(LogECF, Warning, TEXT("Trying to remove Actions of empty class!"));
+#endif
+		return;
+	}
+
 #if (ECF_LOGS && ECF_LOGS_VERBOSE)
 	UE_LOG(LogECF, Verbose, TEXT("Removing Actions of class: %s"), *ActionClass->GetName());
 #endif
@@ -312,6 +320,51 @@ void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass
 		if (IsActionValid(PendingAction))
 		{
 			if (PendingAction->IsA(ActionClass))
+			{
+				if (InOwner == nullptr || InOwner == PendingAction->Owner)
+				{
+					FinishAction(PendingAction, bComplete);
+				}
+			}
+		}
+	}
+}
+
+void UECFSubsystem::RemoveActionsOfLabel(const FString& Label, bool bComplete, UObject* InOwner)
+{
+	if (Label.IsEmpty())
+	{
+#if (ECF_LOGS && ECF_LOGS_VERBOSE)
+		UE_LOG(LogECF, Warning, TEXT("Trying to remove Actions of Label, but Label is empty!"));
+#endif
+		return;
+	}
+
+#if (ECF_LOGS && ECF_LOGS_VERBOSE)
+	UE_LOG(LogECF, Verbose, TEXT("Removing Actions of Label: %s"), *Label);
+#endif
+
+	// Find running actions of given class assigned to a specific owner (if specified) and set it as finished.
+	for (UECFActionBase* Action : Actions)
+	{
+		if (IsActionValid(Action))
+		{
+			if (Action->GetLabel() == Label)
+			{
+				if (InOwner == nullptr || InOwner == Action->Owner)
+				{
+					FinishAction(Action, bComplete);
+				}
+			}
+		}
+	}
+
+	// Also check pending actions to prevent from launching it.
+	for (UECFActionBase* PendingAction : PendingAddActions)
+	{
+		if (IsActionValid(PendingAction))
+		{
+			if (PendingAction->GetLabel() == Label)
 			{
 				if (InOwner == nullptr || InOwner == PendingAction->Owner)
 				{

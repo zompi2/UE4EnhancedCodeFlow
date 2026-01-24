@@ -109,6 +109,22 @@ public:
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Stop All Actions"), Category = "ECF")
 	static void ECFStopAllActions(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
+	/**
+	 * Stops all running actions of the given class.
+	 * If owner is defined it will remove only actions from the given owner.
+	 * bComplete param indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 */
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Stop All Actions Of Class"), Category = "ECF")
+	static void ECFStopAllActionsOfClass(const UObject* WorldContextObject, TSubclassOf<UECFActionBase> Class, bool bComplete = false, UObject* InOwner = nullptr);
+
+	/**
+	 * Stops all running actions with the given Label. Label can't be empty.
+	 * If owner is defined it will remove only actions from the given owner.
+	 * bComplete param indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 */
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Stop All Actions With Label"), Category = "ECF")
+	static void ECFStopAllActionsWithLabel(const UObject* WorldContextObject, FString Label, bool bComplete = false, UObject* InOwner = nullptr);
+
 	/*^^^ Handle and Instance Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 	
 	/**
@@ -148,7 +164,7 @@ public:
 	 * @param InOwner [optional] - if defined it will remove time locks only from the given owner.
 	 *                             Otherwise it will remove all time locks from everywhere.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "InOwner", DisplayName = "ECF - Remove All Time Locks"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (DeprecatedFunction, DeprecationMessage = "Function is deprecated. Use 'Stop All Actions Of Class' instead.", WorldContext = "WorldContextObject", AdvancedDisplay = "InOwner", DisplayName = "ECF - Remove All Time Locks"), Category = "ECF")
 	static void ECFRemoveAllTimeLocks(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
 
@@ -160,7 +176,7 @@ public:
 	 * Otherwise it will stop all the delays from everywhere.
 	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Delays"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (DeprecatedFunction, DeprecationMessage = "Function is deprecated. Use 'Stop All Actions Of Class' instead.", WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Delays"), Category = "ECF")
 	static void ECFRemoveAllDelays(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/**
@@ -169,7 +185,7 @@ public:
 	 * Otherwise it will stop all the "wait and execute"s from everywhere.
 	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Wait And Executes"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (DeprecatedFunction, DeprecationMessage = "Function is deprecated. Use 'Stop All Actions Of Class' instead.", WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Wait And Executes"), Category = "ECF")
 	static void ECFRemoveAllWaitAndExecutes(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/**
@@ -178,14 +194,14 @@ public:
 	 * Otherwise it will stop all the "while true execute"s from everywhere.
 	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All While True Executes"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (DeprecatedFunction, DeprecationMessage = "Function is deprecated. Use 'Stop All Actions Of Class' instead.", WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All While True Executes"), Category = "ECF")
 	static void RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/**
 	 * Removes all Run Async Then's. Have in mind it will not stop running async threads.
 	 * It will just forget about them and won't trigger callbacks when async tasks ends.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Run Async Thens"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (DeprecatedFunction, DeprecationMessage = "Function is deprecated. Use 'Stop All Actions Of Class' instead.", WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Run Async Thens"), Category = "ECF")
 	static void RemoveAllRunAsyncThen(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
 	/**
@@ -194,7 +210,7 @@ public:
 	 * Otherwise it will stop all the tickers from everywhere.
 	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Tickers"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (DeprecatedFunction, DeprecationMessage = "Function is deprecated. Use 'Stop All Actions Of Class' instead.", DeprecatedFunction, DeprecationMessage = "Function is deprecated. Use 'Stop All Actions Of Class' instead.", WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Tickers"), Category = "ECF")
 	static void ECFRemoveAllTickers(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/**
@@ -203,7 +219,7 @@ public:
 	 * Otherwise it will stop all the timelines from everywhere.
 	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Timelines"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (DeprecatedFunction, DeprecationMessage = "Function is deprecated. Use 'Stop All Actions Of Class' instead.", WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Timelines"), Category = "ECF")
 	static void ECFRemoveAllTimelines(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/**
@@ -212,7 +228,7 @@ public:
 	 * Otherwise it will stop all the vector timelines from everywhere.
 	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Timelines Vector"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (DeprecatedFunction, DeprecationMessage = "Function is deprecated. Use 'Stop All Actions Of Class' instead.", WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Timelines Vector"), Category = "ECF")
 	static void ECFRemoveAllTimelinesVector(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/**
@@ -221,7 +237,7 @@ public:
 	 * Otherwise it will stop all the linear color timelines from everywhere.
 	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Timelines LinearColor"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (DeprecatedFunction, DeprecationMessage = "Function is deprecated. Use 'Stop All Actions Of Class' instead.", WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Timelines LinearColor"), Category = "ECF")
 	static void ECFRemoveAllTimelinesLinearColor(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/**
@@ -230,7 +246,7 @@ public:
 	 * Otherwise it will stop all the custom timelines from everywhere.
 	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Custom Timelines"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (DeprecatedFunction, DeprecationMessage = "Function is deprecated. Use 'Stop All Actions Of Class' instead.", WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Custom Timelines"), Category = "ECF")
 	static void ECFRemoveAllCustomTimelines(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/**
@@ -239,7 +255,7 @@ public:
 	 * Otherwise it will stop all the custom vector timelines from everywhere.
 	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Custom Timelines Vector"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (DeprecatedFunction, DeprecationMessage = "Function is deprecated. Use 'Stop All Actions Of Class' instead.", WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Custom Timelines Vector"), Category = "ECF")
 	static void ECFRemoveAllCustomTimelinesVector(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/**
@@ -248,7 +264,7 @@ public:
 	 * Otherwise it will stop all the custom linear color timelines from everywhere.
 	 * bComplete indicates if the action should be completed when stopped (run callback), or simply stopped.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Custom Timelines LinearColor"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (DeprecatedFunction, DeprecationMessage = "Function is deprecated. Use 'Stop All Actions Of Class' instead.", WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Custom Timelines LinearColor"), Category = "ECF")
 	static void ECFRemoveAllCustomTimelinesLinearColor(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/**
@@ -256,7 +272,7 @@ public:
 	 * If owner is defined it will remove all running actions from the given owner.
 	 * Otherwise it will stop all running actions from everywhere.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Do No More Than X Times"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (DeprecatedFunction, DeprecationMessage = "Function is deprecated. Use 'Stop All Actions Of Class' instead.", WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Remove All Do No More Than X Times"), Category = "ECF")
 	static void ECFRemoveAllDoNoMoreThanXTimes(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
 	/*^^^ Casting ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/

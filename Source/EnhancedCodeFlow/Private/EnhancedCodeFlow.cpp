@@ -2,28 +2,7 @@
 
 #include "EnhancedCodeFlow.h"
 #include "ECFSubsystem.h"
-
-#include "CodeFlowActions/ECFTicker.h"
-#include "CodeFlowActions/ECFDelay.h"
-#include "CodeFlowActions/ECFDelayTicks.h"
-#include "CodeFlowActions/ECFWaitAndExecute.h"
-#include "CodeFlowActions/ECFWhileTrueExecute.h"
-#include "CodeFlowActions/ECFTimeline.h"
-#include "CodeFlowActions/ECFTimelineVector.h"
-#include "CodeFlowActions/ECFTimelineLinearColor.h"
-#include "CodeFlowActions/ECFCustomTimeline.h"
-#include "CodeFlowActions/ECFCustomTimelineVector.h"
-#include "CodeFlowActions/ECFCustomTimelineLinearColor.h"
-#include "CodeFlowActions/ECFTimeLock.h"
-#include "CodeFlowActions/ECFDoOnce.h"
-#include "CodeFlowActions/ECFDoNTimes.h"
-#include "CodeFlowActions/ECFDoNoMoreThanXTime.h"
-#include "CodeFlowActions/ECFRunAsyncThen.h"
-
-#include "CodeFlowActions/Coroutines/ECFWaitSeconds.h"
-#include "CodeFlowActions/Coroutines/ECFWaitTicks.h"
-#include "CodeFlowActions/Coroutines/ECFWaitUntil.h"
-#include "CodeFlowActions/Coroutines/ECFRunAsyncAndWait.h"
+#include "ECFActionsHeader.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 
@@ -72,7 +51,7 @@ UECFActionBase* FEnhancedCodeFlow::GetActionFromHandle(const UObject* WorldConte
 	return nullptr;
 }
 
-UECFActionBase* FEnhancedCodeFlow::GetActionFromHandle(const UObject* WorldContextObject, const FECFInstanceId& InstancedId)
+UECFActionBase* FEnhancedCodeFlow::GetActionFromInstancedId(const UObject* WorldContextObject, const FECFInstanceId& InstancedId)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
 		return ECF->GetInstancedAction(InstancedId);
@@ -139,6 +118,18 @@ void FFlow::StopAllActions(const UObject* WorldContextObject, bool bComplete/* =
 		ECF->RemoveAllActions(bComplete, InOwner);
 }
 
+void FFlow::StopAllActionsOfClass(const UObject* WorldContextObject, TSubclassOf<UECFActionBase> Class, bool bComplete/* = false*/, UObject* InOwner/* = nullptr*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		ECF->RemoveActionsOfClass(Class, bComplete, InOwner);
+}
+
+void FFlow::StopAllActionsWithLabel(const UObject* WorldContextObject, const FString& Label, bool bComplete/* = false*/, UObject* InOwner/* = nullptr*/)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		ECF->RemoveActionsOfLabel(Label, bComplete, InOwner);
+}
+
 /*^^^ Ticker ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 FECFHandle FFlow::AddTicker(const UObject* InOwner, TUniqueFunction<void(float/* DeltaTime*/)>&& InTickFunc, TUniqueFunction<void(bool/* bStopped*/)>&& InCallbackFunc/* = nullptr*/, const FECFActionSettings& Settings/* = {}*/)
@@ -195,10 +186,7 @@ FECFHandle FFlow::AddTicker(const UObject* InOwner, float InTickingTime, TUnique
 
 void FFlow::RemoveAllTickers(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner/* = nullptr*/)
 {
-	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
-	{
-		ECF->RemoveActionsOfClass<UECFTicker>(bComplete, InOwner);
-	}
+	StopAllActionsOfClass<UECFTicker>(WorldContextObject, bComplete, InOwner);
 }
 
 /*^^^ Delay ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/

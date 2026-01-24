@@ -128,6 +128,12 @@ protected:
 
 	// Finds handles of running or pending action of the given Class its FECFHandles.
 	TArray<FECFHandle> GetActionsHandlesByClass(TSubclassOf<UECFActionBase> Class) const;
+	
+	template<typename T>
+	TArray<FECFHandle> GetActionsHandlesByClass() const
+	{
+		return GetActionsHandlesByClass(T::StaticClass());
+	}
 
 	// Finds handles of running or pending action of the given Label its FECFHandles.
 	TArray<FECFHandle> GetActionsHandlesByLabel(const FString& Label) const;
@@ -165,6 +171,9 @@ protected:
 	{
 		RemoveActionsOfClass(T::StaticClass(), bComplete, InOwner);
 	}
+
+	// Remove all Actions of async tasks with the given Label from list.
+	void RemoveActionsOfLabel(const FString& Label, bool bComplete, UObject* InOwner);
 
 	// Remove action with the given InstanceId.
 	void RemoveInstancedAction(const FECFInstanceId& InstanceId, bool bComplete);
