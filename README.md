@@ -806,6 +806,8 @@ FFlow::GetPause(GetWorld()); // Check if the whole ECF Subsystem is paused or no
 
 # Stopping actions
 
+<img width="1021" height="366" alt="ecfstopall" src="https://github.com/user-attachments/assets/64527bff-38f4-46a2-b8d7-9f1ebb905f8d" />
+
 Every function described earlier can be checked if it's running and it can be stopped.
 
 ``` cpp
