@@ -1,5 +1,6 @@
 ###### 3.6.2
 * Coroutines now returns the information if the resumed coroutine Action has been stopped or timed out.
+* Added WaitUntil coroutine variant with a predicate WITHOUT the DeltaTime.
 
 ###### 3.6.1
 * ResetAction function now returns true if the Action has actually resetted or false if it didn't. 
