@@ -853,16 +853,16 @@ FFlow::StopInstancedAction(GetWorld(), InstanceId, true); // <- stops all action
 Every running action, if we know it's handle, can be resetted.
 
 ``` cpp
-FFlow::ResetAction(GetWorld(), ActionHandle, false);
+bool bHasResetted = FFlow::ResetAction(GetWorld(), ActionHandle, false);
 ```
 
 The third parameter tells if after reset the action's callback should run immediately.  
 For example, if we reset Timeline Action, running callback immediately will run the callback with initial Timeline values right after the reset.  
-Otherwise, ECF will wait for the first next update of the Timeline to run callback.
+Otherwise, ECF will wait for the first next update of the Timeline to run callback.  
+The function returns true if the Action has actually resetted. False if it didn't (for example it doesn't support reset or Action is invalid).
 
 There is also a node to run this in Blueprints.
-
-![resa](https://github.com/user-attachments/assets/6acc9703-c68f-4c2b-9976-522dda2150b3)
+![resa](https://github.com/user-attachments/assets/59cc9a27-3223-449c-8bc5-799469362325)
 
 [Back to top](#table-of-content)
 
