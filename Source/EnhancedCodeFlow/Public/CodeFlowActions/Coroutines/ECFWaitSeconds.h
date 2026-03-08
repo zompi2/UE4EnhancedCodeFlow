@@ -71,6 +71,7 @@ protected:
 
 	void Complete(bool bStopped) override
 	{
+		CoroutineHandle.promise().bStopped = bStopped;
 		CoroutineHandle.resume();
 	}
 };

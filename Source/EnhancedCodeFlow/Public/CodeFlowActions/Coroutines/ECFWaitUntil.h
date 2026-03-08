@@ -18,28 +18,20 @@ protected:
 
 	TUniqueFunction<bool(float)> Predicate;
 	TUniqueFunction<bool()> Predicate_NoDeltaTime;
-	TUniqueFunction<void(bool, bool)> Func;
-	TUniqueFunction<void(bool)> Func_NoStopped;
-	TUniqueFunction<void()> Func_NoTimeOut_NoStopped;
-
 	float TimeOut = 0.f;
 	float OriginTimeOut = 0.f;
 	bool bWithTimeOut = false;
 	bool bTimedOut = false;
 
-	// Predicate DeltaTime - YES
-	// Callback bStopped - YES
-	// Callback bTimedOut - YES
-	bool Setup(TUniqueFunction<bool(float)>&& InPredicate, TUniqueFunction<void(bool, bool)>&& InFunc, float InTimeOut)
+	bool Setup(TUniqueFunction<bool(float)>&& InPredicate, float InTimeOut)
 	{
 		Predicate = MoveTemp(InPredicate);
-		Func = MoveTemp(InFunc);
 
-		if (Predicate && Func)
+		if (Predicate)
 		{
 			if (Predicate(0.f))
 			{
-				Func(false, false);
+				CoroutineHandle.resume();
 				return false;
 			}
 			if (InTimeOut > 0.f)
@@ -53,134 +45,32 @@ protected:
 			else
 			{
 				bWithTimeOut = false;
-				bTimedOut = false;
 			}
 			return true;
 		}
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF Coroutine - [%s] Wait Until failed to start. Are you sure the Predicate and Function are set properly?"), *Settings.Label);
+			UE_LOG(LogECF, Error, TEXT("ECF Coroutine [%s] - Wait Until failed to start. Are you sure the Predicate is set properly?"), *Settings.Label);
 #endif
 			return false;
 		}
 	}
 
-	// Predicate DeltaTime - NO
-	// Callback bStopped - YES
-	// Callback bTimedOut - YES
-	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(bool, bool)>&& InFunc, float InTimeOut)
+	bool Setup(TUniqueFunction<bool()>&& InPredicate, float InTimeOut)
 	{
 		Predicate_NoDeltaTime = MoveTemp(InPredicate);
 		if (Predicate_NoDeltaTime)
 		{
 			return Setup([this](float DeltaTime)
-				{
-					return Predicate_NoDeltaTime();
-				}, MoveTemp(InFunc), InTimeOut);
+			{
+				return Predicate_NoDeltaTime();
+			}, InTimeOut);
 		}
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF Coroutine - [%s] Wait Until failed to start. Are you sure the Predicate and Function are set properly?"), *Settings.Label);
-#endif
-			return false;
-		}
-	}
-
-	// Predicate DeltaTime - YES
-	// Callback bStopped - NO
-	// Callback bTimedOut - YES
-	bool Setup(TUniqueFunction<bool(float)>&& InPredicate, TUniqueFunction<void(bool)>&& InFunc, float InTimeOut)
-	{
-		Func_NoStopped = MoveTemp(InFunc);
-		if (Func_NoStopped)
-		{
-			return Setup(MoveTemp(InPredicate), [this](bool bTimeOut, bool bStopped)
-				{
-					Func_NoStopped(bTimeOut);
-				}, InTimeOut);
-		}
-		else
-		{
-#if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF Coroutine - [%s] Wait Until failed to start. Are you sure the Predicate and Function are set properly?"), *Settings.Label);
-#endif
-			return false;
-		}
-	}
-
-	// Predicate DeltaTime - NO
-	// Callback bStopped - NO
-	// Callback bTimedOut - YES
-	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(bool)>&& InFunc, float InTimeOut)
-	{
-		Func_NoStopped = MoveTemp(InFunc);
-		Predicate_NoDeltaTime = MoveTemp(InPredicate);
-		if (Func_NoStopped && Predicate_NoDeltaTime)
-		{
-			return Setup([this](float DeltaTime)
-				{
-					return Predicate_NoDeltaTime();
-				},
-				[this](bool bTimeOut, bool bStopped)
-				{
-					Func_NoStopped(bTimeOut);
-				}, InTimeOut);
-		}
-		else
-		{
-#if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF Coroutine - [%s] Wait Until failed to start. Are you sure the Predicate and Function are set properly?"), *Settings.Label);
-#endif
-			return false;
-		}
-	}
-
-	// Predicate DeltaTime - YES
-	// Callback bStopped - NO
-	// Callback bTimedOut - NO
-	bool Setup(TUniqueFunction<bool(float)>&& InPredicate, TUniqueFunction<void()>&& InFunc, float InTimeOut)
-	{
-		Func_NoTimeOut_NoStopped = MoveTemp(InFunc);
-		if (Func_NoTimeOut_NoStopped)
-		{
-			return Setup(MoveTemp(InPredicate), [this](bool bTimeOut, bool bStopped)
-				{
-					Func_NoTimeOut_NoStopped();
-				}, InTimeOut);
-		}
-		else
-		{
-#if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF Coroutine - [%s] Wait Until failed to start. Are you sure the Predicate and Function are set properly?"), *Settings.Label);
-#endif
-			return false;
-		}
-	}
-
-	// Predicate DeltaTime - NO
-	// Callback bStopped - NO
-	// Callback bTimedOut - NO
-	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void()>&& InFunc, float InTimeOut)
-	{
-		Func_NoTimeOut_NoStopped = MoveTemp(InFunc);
-		Predicate_NoDeltaTime = MoveTemp(InPredicate);
-		if (Func_NoTimeOut_NoStopped && Predicate_NoDeltaTime)
-		{
-			return Setup([this](float DeltaTime)
-				{
-					return Predicate_NoDeltaTime();
-				},
-				[this](bool bTimeOut, bool bStopped)
-				{
-					Func_NoTimeOut_NoStopped();
-				}, InTimeOut);
-		}
-		else
-		{
-#if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF Coroutine - [%s] Wait Until failed to start. Are you sure the Predicate and Function are set properly?"), *Settings.Label);
+			UE_LOG(LogECF, Error, TEXT("ECF Coroutine [%s] - Wait Until failed to start. Are you sure the Predicate is set properly?"), *Settings.Label);
 #endif
 			return false;
 		}
@@ -226,6 +116,8 @@ protected:
 
 	void Complete(bool bStopped) override
 	{
+		CoroutineHandle.promise().bTimedOut = bTimedOut;
+		CoroutineHandle.promise().bStopped = bStopped;
 		CoroutineHandle.resume();
 	}
 };
