@@ -723,7 +723,8 @@ FECFCoroutine UMyClass::SuspandableFunction()
   auto [bStopped, bTimedOut] = co_await FFlow::WaitUntil(this, [this](float DeltaTime)
   {
     // Write your own predicate. 
-    // Return true when you want to resume the coroutine function.
+    // Return true when you want to execute the code below.
+    // The DeltaTime parameter is optional.
     return bIsReadyToUse;
   }, TimeOut);
   // Do something after conditions specified in the predicate are met. 
