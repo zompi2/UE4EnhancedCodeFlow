@@ -73,7 +73,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF Coroutine - Run Async Task and Wait failed to start. Are you sure the AsyncTask function is set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF Coroutine [%s] - Run Async Task and Wait failed to start. Are you sure the AsyncTask function is set properly?"), *Settings.Label);
 #endif
 			return false;
 		}
