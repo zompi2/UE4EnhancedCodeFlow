@@ -930,7 +930,7 @@ You can also display more detailed plugin's performance info with `stat ecfdetai
 You can measure performence using [Unreal Insights](https://docs.unrealengine.com/4.26/en-US/TestingAndOptimization/PerformanceAndProfiling/UnrealInsights/) tool.  
 It measures the overall time the plugin needs to perform one full update and the time every single action needs to perform their ticks.
 
-You can disable Unreal Insights traces for this plugin by setting `bShowLogs` and `bShowVerboseLogs` in `EnhancedCodeFlow.Build.cs` to `false`.
+You can disable Unreal Insights traces for this plugin by setting `bEnableInsightProfiling` in `EnhancedCodeFlow.Build.cs` to `false`.
 
 ![insight](https://github.com/user-attachments/assets/9fdf838a-722a-4e64-bfc9-bf7bc81cb1ea)
 
@@ -946,7 +946,7 @@ To enable verbose logging add the following block to `DefaultEngine.ini`:
 LogECF=Verbose
 ```
 
-You can disable Logs entirely by setting `bEnableInsightProfiling` in `EnhancedCodeFlow.Build.cs` to `false`.
+You can disable Logs entirely for this plugin by setting `bShowLogs` and `bShowVerboseLogs` in `EnhancedCodeFlow.Build.cs` to `false`.
 
 [Back to top](#table-of-content)
 
