@@ -248,7 +248,7 @@ bool UECFSubsystem::IsActionPaused(const FECFHandle& HandleId, bool& bIsPaused) 
 	return false;
 }
 
-void UECFSubsystem::ResetAction(const FECFHandle& HandleId, bool bCallUpdate)
+bool UECFSubsystem::ResetAction(const FECFHandle& HandleId, bool bCallUpdate)
 {
 	if (UECFActionBase* ActionFound = FindAction(HandleId))
 	{
@@ -257,14 +257,15 @@ void UECFSubsystem::ResetAction(const FECFHandle& HandleId, bool bCallUpdate)
 #if (ECF_LOGS && ECF_LOGS_VERBOSE)
 			UE_LOG(LogECF, Verbose, TEXT("Reset Action of class: %s, Label: %s"), *ActionFound->GetName(), *ActionFound->GetLabel());
 #endif
-			ActionFound->Reset(bCallUpdate);
-			return;
+			return ActionFound->Reset(bCallUpdate);
 		}
 	}
 
 #if ECF_LOGS
 	UE_LOG(LogECF, Error, TEXT("Can't find Action of id %s to reset"), *HandleId.ToString());
 #endif
+
+	return false;
 }
 
 void UECFSubsystem::RemoveAction(FECFHandle& HandleId, bool bComplete)

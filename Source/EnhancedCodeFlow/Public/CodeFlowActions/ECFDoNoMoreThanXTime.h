@@ -49,7 +49,7 @@ protected:
 		ExecFunc();
 	}
 
-	void Reset(bool bCallUpdate) override
+	bool Reset(bool bCallUpdate) override
 	{
 		CurrentTime = 0.f;
 		ExecsEnqueued = 0;
@@ -57,6 +57,7 @@ protected:
 		{
 			ExecFunc();
 		}
+		return true;
 	}
 
 	void RetriggeredInstancedAction() override

@@ -64,9 +64,9 @@ void UECFBPLibrary::ECFIsActionPaused(bool& bIsRunning, bool& bIsPaused, const U
 	bIsRunning = FFlow::IsActionPaused(WorldContextObject, Handle.Handle, bIsPaused);
 }
 
-void UECFBPLibrary::ECFResetAction(const UObject* WorldContextObject, const FECFHandleBP& Handle, bool bCallUpdate)
+bool UECFBPLibrary::ECFResetAction(const UObject* WorldContextObject, const FECFHandleBP& Handle, bool bCallUpdate)
 {
-	FFlow::ResetAction(WorldContextObject, Handle.Handle, bCallUpdate);
+	return FFlow::ResetAction(WorldContextObject, Handle.Handle, bCallUpdate);
 }
 
 /*^^^ Stopping ECF Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/

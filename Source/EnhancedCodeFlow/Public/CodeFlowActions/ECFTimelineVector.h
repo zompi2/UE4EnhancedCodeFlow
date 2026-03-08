@@ -88,7 +88,7 @@ protected:
 		}, InBlendFunc, InBlendExp);
 	}
 
-	void Reset(bool bCallUpdate) override
+	bool Reset(bool bCallUpdate) override
 	{
 		CurrentTime = 0.f;
 		CurrentValue = GetValue();
@@ -97,6 +97,8 @@ protected:
 		{
 			TickFunc(CurrentValue, CurrentTime);
 		}
+
+		return true;
 	}
 
 	void Tick(float DeltaTime) override

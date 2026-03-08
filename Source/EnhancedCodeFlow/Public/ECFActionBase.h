@@ -112,7 +112,8 @@ protected:
 	// reset functionality.
 	// If bCallUpdate is true - the action should run an update event (if there is any) 
 	// after it's reset.
-	virtual void Reset(bool bCallUpdate) {}
+	// Return true if the action was resetted, false otherwise.
+	virtual bool Reset(bool bCallUpdate) { return false; }
 
 	// For any action that should last only the given time - set this function
 	// inside the action's Setup step. 

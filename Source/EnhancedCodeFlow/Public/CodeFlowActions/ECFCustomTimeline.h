@@ -70,7 +70,7 @@ protected:
 		CurrentValue = CurveFloat->GetFloatValue(CurrentTime);
 	}
 
-	void Reset(bool bCallUpdate) override
+	bool Reset(bool bCallUpdate) override
 	{
 		MyTimeline.SetPlaybackPosition(0.f, false, false);
 		CurrentTime = 0.f;
@@ -80,6 +80,8 @@ protected:
 		{
 			TickFunc(CurrentValue, CurrentTime);
 		}
+
+		return true;
 	}
 
 	void Tick(float DeltaTime) override

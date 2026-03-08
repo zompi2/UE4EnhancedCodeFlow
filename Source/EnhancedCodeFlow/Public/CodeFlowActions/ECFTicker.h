@@ -100,12 +100,13 @@ protected:
 		CurrentTime = 0.f;
 	}
 
-	void Reset(bool bCallUpdate) override
+	bool Reset(bool bCallUpdate) override
 	{
 		CurrentTime = 0.f;
 		// Can't call update, because the DeltaTime is unknown.
 		// Updating with DT=0 will cause confusion.
 		// The app just need to wait for it's next update.
+		return true;
 	}
 
 	void Tick(float DeltaTime) override

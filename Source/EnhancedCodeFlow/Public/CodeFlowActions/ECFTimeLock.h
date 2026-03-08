@@ -45,9 +45,10 @@ protected:
 		ExecFunc();
 	}
 
-	void Reset(bool bCallUpdate) override
+	bool Reset(bool bCallUpdate) override
 	{
 		CurrentTime = 0.f;
+		return true;
 	}
 
 	void Tick(float DeltaTime) override

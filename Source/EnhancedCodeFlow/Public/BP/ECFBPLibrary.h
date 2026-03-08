@@ -82,7 +82,7 @@ public:
 	 * Resets the action pointed by given handle.
 	 */
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", DisplayName = "ECF - Reset Action"), Category = "ECF")
-	static void ECFResetAction(const UObject* WorldContextObject, const FECFHandleBP& Handle, UPARAM(DisplayName = "CallUpdate") bool bCallUpdate);
+	static UPARAM(DisplayName = "HasResetted") bool ECFResetAction(const UObject* WorldContextObject, const FECFHandleBP& Handle, UPARAM(DisplayName = "CallUpdate") bool bCallUpdate);
 	
 	/*^^^ Stopping ECF Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 

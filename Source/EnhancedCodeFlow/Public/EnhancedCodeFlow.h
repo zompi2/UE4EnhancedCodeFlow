@@ -98,10 +98,11 @@ public:
 	static bool IsActionPaused(const UObject* WorldContextObject, const FECFHandle& Handle, bool &bIsPaused);
 
 	/**
-	 * 	Resets the action. Have in mind that not every action has reset functionality.
-	 *  If bCallUpdate is true - the action should run an update event (if there is any) after it's reset.
+	 * Resets the action. Have in mind that not every action has reset functionality.
+	 * If bCallUpdate is true - the action should run an update event (if there is any) after it's reset.
+	 * Returns true if the action was reset, false if there is no action or the action doesn't support resetting.
 	 */
-	static void ResetAction(const UObject* WorldContextObject, const FECFHandle& Handle, bool bCallUpdate);
+	static bool ResetAction(const UObject* WorldContextObject, const FECFHandle& Handle, bool bCallUpdate);
 
 	/**
 	 * Sets if the ECF system is paused or not.

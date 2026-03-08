@@ -45,9 +45,10 @@ protected:
 		CurrentTime = 0;
 	}
 
-	void Reset(bool bCallUpdate) override
+	bool Reset(bool bCallUpdate) override
 	{
 		CurrentTime = 0;
+		return true;
 	}
 
 	void Tick(float DeltaTime) override

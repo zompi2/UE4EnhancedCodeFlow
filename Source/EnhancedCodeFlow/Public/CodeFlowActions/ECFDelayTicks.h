@@ -63,9 +63,10 @@ protected:
 		CurrentTicks = 0;
 	}
 
-	void Reset(bool bCallUpdate) override
+	bool Reset(bool bCallUpdate) override
 	{
 		CurrentTicks = 0;
+		return true;
 	}
 
 	void Tick(float DeltaTime) override

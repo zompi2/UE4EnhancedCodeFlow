@@ -42,9 +42,10 @@ protected:
 		ExecFunc();
 	}
 
-	void Reset(bool bCallUpdate) override
+	bool Reset(bool bCallUpdate) override
 	{
 		bWasCalled = false;
+		return true;
 	}
 
 	void RetriggeredInstancedAction() override

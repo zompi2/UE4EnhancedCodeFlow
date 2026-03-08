@@ -79,12 +79,13 @@ protected:
 		}
 	}
 
-	void Reset(bool bCallUpdate) override
+	bool Reset(bool bCallUpdate) override
 	{
 		if (bWithTimeOut)
 		{
 			TimeOut = OriginTimeOut;
 		}
+		return true;
 	}
 
 	void Tick(float DeltaTime) override

@@ -156,8 +156,10 @@ protected:
 	// Checks if this action is not paused. Returns false if there is no action.
 	bool IsActionPaused(const FECFHandle& HandleId, bool &bIsPaused) const;
 
-	// Resets the action
-	void ResetAction(const FECFHandle& HandleId, bool bCallUpdate);
+	// Resets the action. 
+	// Returns false if there was no action or action doesn't support resetting. 
+	// If bCallUpdate is true - the action should run an update event (if there is any) after it's reset.
+	bool ResetAction(const FECFHandle& HandleId, bool bCallUpdate);
 
 	// Remove Action of given HandleId from list. 
 	void RemoveAction(FECFHandle& HandleId, bool bComplete);
