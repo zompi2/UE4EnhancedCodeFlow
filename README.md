@@ -157,7 +157,8 @@ Run the following functions to use enhanced code flow!
 
 Execute specified action after some time. This can be useful in many various situations. Everytime when I was using a Delay node in blueprints I wish there was an equivalent of it in c++.  
 The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.
-If a time parameter is set to 0 it will execute in the next frame. If a time parameter is set less than 0 the action will not execute and will print an error to the log.
+If a time parameter is set to 0 it will execute in the next frame. If a time parameter is set less than 0 the action will not execute and will print an error to the log.  
+Can be resetted.
 
 ``` cpp
 FFlow::Delay(this, 2.f, [this](bool bStopped)
@@ -178,7 +179,8 @@ You can plan to execute delayed code without delaying the whole Blueprint, you c
 
 Execute specified action after some ticks. Can be useful if we want to execute some code in next game tick.  
 The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.
-If a number of ticks parameter is set to 0 it will execute in the next frame. If a number of ticks parameter is set less than 0 the action will not execute and will print an error to the log.
+If a number of ticks parameter is set to 0 it will execute in the next frame. If a number of ticks parameter is set less than 0 the action will not execute and will print an error to the log.  
+Can be resetted.
 
 ``` cpp
 FFlow::DelayTicks(this, 1, [this](bool bStopped)
@@ -195,7 +197,8 @@ FFlow::DelayTicks(this, 1, [this](bool bStopped)
 #### Add Ticker
 
 Creates a ticker. It can tick specified amount of time or until it won't be stopped or when owning object won't be destroyed.  
-Useful for actors and components that you don't want to be tickeable, but needs one tick to do something.
+Useful for actors and components that you don't want to be tickeable, but needs one tick to do something.  
+Can be resetted.
 
 **Run ticker for 10 seconds**
 
@@ -261,7 +264,7 @@ You can specify a timeout, which will stop this action after the given time. Set
 The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.  
 The `bTimedOut` tells if this action has been stopped because it timed out. This argument is optional.
 Perfect solution if code needs a reference to an object, which spawn moment is not clearly defined, or if you can execute a specific code only when the game reaches a specific state. 
-
+Can be resetted. The reset resets the timeout.
 
 ``` cpp
 FFlow::WaitAndExecute(this, [this](float DeltaTime)
@@ -290,6 +293,7 @@ While the specified conditions are true tick the given code.
 This one is useful when you want to write a loop that executes one run every tick until it finishes it's job.  
 You can specify a timeout, which will stop this action after the given time. Setting the timeout value to less or equal 0 will cause this function to run infinitely untill the predicate returns false or when it is explicitly stopped.  
 You can optionally defined what happens when the loop ends.  
+Can be resetted. It resets the timeout.
 
 ``` cpp
 FFlow::WhileTrueExecute(this, [this]()
@@ -325,7 +329,8 @@ You can specify a timeout, which will stop this action after the given time.
 > Have in mind, that the neither the timeout nor stopping the action will not stop the running async thread. It just won't trigger the callback when the async task ends. Handle timeout on the side of the async task itself.  
 
 The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.  
-You can define the priority of the running task as `Normal` (`AnyBackgroundThreadNormalTask`) or `HiPriority` (`AnyBackgroundHiPriTask`).
+You can define the priority of the running task as `Normal` (`AnyBackgroundThreadNormalTask`) or `HiPriority` (`AnyBackgroundHiPriTask`).  
+Can be resetted (it will reset the timeout)
 
 > Have in mind, that you can start this function from GameThread only!
 
@@ -368,6 +373,7 @@ The function requires the following parameters:
 * BlendExp - an exponent defining a shape of EaseIn, EaseOut and EaseInOut function shapes. *(default value: 1.f)*;
 
 The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.  
+Can be resetted.
 
 ``` cpp
 FFlow::AddTimeline(this, 0.f, 1.f, 2.f, [this](float Value, float Time)
@@ -406,7 +412,8 @@ EECFBlendFunc::ECFBlend_Linear, 2.f);
 
 #### Add timeline linear color
 
-The same as `Add timeline`, but with a LinearColor instead of float 
+The same as `Add timeline`, but with a LinearColor instead of float   
+Can be resetted.
 
 ``` cpp
 FFlow::AddTimelineLinearColor(this, FLinearColor(0.f, 0.f, 0.f, 1.f), FLinearColor(1.f, 1.f, 1.f, 1.f), 2.f, [this](FLinearColor Value, float Time)
@@ -424,7 +431,8 @@ EECFBlendFunc::ECFBlend_Linear, 2.f);
 
 #### Add custom timeline
 
-Creates a discrete timeline which shape is based on a **UCurveFloat**. Works like the previously described timeline, but an asset with a curve must be given.
+Creates a discrete timeline which shape is based on a **UCurveFloat**. Works like the previously described timeline, but an asset with a curve must be given.  
+Can be resetted.
 
 ``` cpp
 FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
@@ -444,7 +452,8 @@ FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
 
 #### Add custom timeline vector
 
-The same as `Add custom timeline` but with **UCurveVector** instead of **UCurveFloat**.
+The same as `Add custom timeline` but with **UCurveVector** instead of **UCurveFloat**.  
+Can be resetted.
 
 ``` cpp
 FFlow::AddCustomTimelineVector(this, Curve, [this](FVector Value, float Time)
@@ -464,7 +473,8 @@ FFlow::AddCustomTimelineVector(this, Curve, [this](FVector Value, float Time)
 
 #### Add custom timeline linear color
 
-The same as `Add custom timeline` but with **UCurveLinearColor** instead of **UCurveFloat**.
+The same as `Add custom timeline` but with **UCurveLinearColor** instead of **UCurveFloat**.  
+Can be resetted.
 
 ``` cpp
 FFlow::AddCustomTimelineLinearColor(this, Curve, [this](FLinearColor Value, float Time)
@@ -486,7 +496,8 @@ FFlow::AddCustomTimelineLinearColor(this, Curve, [this](FLinearColor Value, floa
 
 **(Instanced)**
 
-Blocks execution of the block of code until the given time has passed.
+Blocks execution of the block of code until the given time has passed.  
+Can be resetted.
 
 ``` cpp
 static FECFInstanceId InstanceId = FECFInstanceId::NewId();
@@ -507,7 +518,8 @@ BP version of this function requires `InstanceId` too. The BP node will validate
 
 **(Instanced)**
 
-Allow to execute the given block of code only once.
+Allow to execute the given block of code only once.  
+Can be resetted.
 
 ``` cpp
 static FECFInstanceId InstanceId = FECFInstanceId::NewId();
@@ -525,7 +537,8 @@ FFlow::DoOnce(this, [this]()
 
 **(Instanced)**
 
-Allow to execute the given block of code only given amount of times.
+Allow to execute the given block of code only given amount of times.  
+Can be resetted.
 
 ``` cpp
 static FECFInstanceId InstanceId = FECFInstanceId::NewId();
@@ -544,7 +557,8 @@ FFlow::DoNTimes(this, 5, [this](int32 Counter)
 
 **(Instanced)**
 
-It will execute the given block of code immediately, but the next execution will be enqueued and will be called after specified time. There is a parameter which allow to define how many next executions can be enqueued (must be at least 1). If this code will be used when the queue is full - the code will be discarded (not enqueued).
+It will execute the given block of code immediately, but the next execution will be enqueued and will be called after specified time. There is a parameter which allow to define how many next executions can be enqueued (must be at least 1). If this code will be used when the queue is full - the code will be discarded (not enqueued).  
+Can be resetted.
 
 ``` cpp
 static FECFInstanceId InstanceId = FECFInstanceId::NewId();
@@ -662,7 +676,8 @@ Coroutines doesn't have BP nodes as they are purely code feature.
 
 #### Wait Seconds
 
-Suspends the coroutine for a specified amount of seconds. It works like Delay in Blueprints.
+Suspends the coroutine for a specified amount of seconds. It works like Delay in Blueprints.  
+Can be resetted.
 
 ``` cpp
 FECFCoroutine UMyClass::SuspandableFunction()
@@ -678,7 +693,8 @@ FECFCoroutine UMyClass::SuspandableFunction()
 
 #### Wait Ticks
 
-Suspends the coroutine for a specified amount of tick.
+Suspends the coroutine for a specified amount of tick.  
+Can be resetted.
 
 ``` cpp
 FECFCoroutine UMyClass::SuspandableFunction()
@@ -694,7 +710,8 @@ FECFCoroutine UMyClass::SuspandableFunction()
 
 #### Wait Until
 
-Suspends the coroutine until the given predicate conditions are met.
+Suspends the coroutine until the given predicate conditions are met.  
+Can be resetted. It resets the timeout.
 
 ``` cpp
 FECFCoroutine UMyClass::SuspandableFunction()
@@ -715,7 +732,8 @@ FECFCoroutine UMyClass::SuspandableFunction()
 
 #### Run Async And Wait
 
-Runs the given block of code on a background thread and wait for it's completion before moving on.
+Runs the given block of code on a background thread and wait for it's completion before moving on.  
+Can be resetted. It will reset the timeout.
 > Have in mind, that you can start this coroutine from GameThread only!
 
 ``` cpp
@@ -863,6 +881,18 @@ The function returns true if the Action has actually resetted. False if it didn'
 
 There is also a node to run this in Blueprints.
 ![resa](https://github.com/user-attachments/assets/59cc9a27-3223-449c-8bc5-799469362325)
+
+Coroutine Actions also can be resetted. To get their handle you must first get a Coroutine Handle from a suspendable function.
+
+``` cpp
+FECFCoroutine SuspendableFunction()
+{
+	co_await FFlow::WaitSeconds(GetWorld(), 2.f);
+}
+
+FECFCoroutine Handle = SuspendableFunction();
+FFlow::ResetAction(GetWorld(), Handle.promise().ActionHandle, true);
+```
 
 [Back to top](#table-of-content)
 
