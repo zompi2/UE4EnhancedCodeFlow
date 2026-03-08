@@ -677,13 +677,14 @@ Coroutines doesn't have BP nodes as they are purely code feature.
 #### Wait Seconds
 
 Suspends the coroutine for a specified amount of seconds. It works like Delay in Blueprints.  
+Coroutine returns `bStopped` bool informing if the Action has been prematurely terminated.  
 Can be resetted.
 
 ``` cpp
 FECFCoroutine UMyClass::SuspandableFunction()
 {
   // Do something
-  co_await FFlow::WaitSeconds(this, 2.f);
+  bool bStopped = co_await FFlow::WaitSeconds(this, 2.f);
   // Do something after 2 seconds
 }
 ```
@@ -694,13 +695,14 @@ FECFCoroutine UMyClass::SuspandableFunction()
 #### Wait Ticks
 
 Suspends the coroutine for a specified amount of tick.  
+Coroutine returns `bStopped` bool informing if the Action has been prematurely terminated.  
 Can be resetted.
 
 ``` cpp
 FECFCoroutine UMyClass::SuspandableFunction()
 {
   // Do something
-  co_await FFlow::WaitTicks(this, 1);
+  bool bStopped = co_await FFlow::WaitTicks(this, 1);
   // Do something after 1 tick
 }
 ```
@@ -711,13 +713,14 @@ FECFCoroutine UMyClass::SuspandableFunction()
 #### Wait Until
 
 Suspends the coroutine until the given predicate conditions are met.  
+Coroutine returns `bStopped` bool informing if the Action has been prematurely terminated and `bTimedOut` informing if the Action reached it's time out.  
 Can be resetted. It resets the timeout.
 
 ``` cpp
 FECFCoroutine UMyClass::SuspandableFunction()
 {
   // Do something
-  co_await FFlow::WaitUntil(this, [this](float DeltaTime)
+  auto [bStopped, bTimedOut] = co_await FFlow::WaitUntil(this, [this](float DeltaTime)
   {
     // Write your own predicate. 
     // Return true when you want to resume the coroutine function.
@@ -733,14 +736,15 @@ FECFCoroutine UMyClass::SuspandableFunction()
 #### Run Async And Wait
 
 Runs the given block of code on a background thread and wait for it's completion before moving on.  
-Can be resetted. It will reset the timeout.
+Coroutine returns `bStopped` bool informing if the Action has been prematurely terminated and `bTimedOut` informing if the Action reached it's time out.  
+Can be resetted. It will reset the timeout.  
 > Have in mind, that you can start this coroutine from GameThread only!
 
 ``` cpp
 FECFCoroutine UMyClass::SuspandableFunction()
 {
   // Do something
-  co_await FFlow::RunAsyncAndWait(this, [this]()
+  auto [bStopped, bTimedOut] = co_await FFlow::RunAsyncAndWait(this, [this]()
   {
     // This code will run on a separate background thread.
   }, TimeOut, EECFAsyncPrio::Normal);
@@ -1033,6 +1037,7 @@ void FECFCoroutineTask_NewCoroAction::await_suspend(FECFCoroutineHandle CoroHand
 ```cpp
 void Complete(bool bStopped) override
 {
+	CoroutineHandle.promise().bStopped = bStopped;
 	CoroutineHandle.resume();
 }
 ```
