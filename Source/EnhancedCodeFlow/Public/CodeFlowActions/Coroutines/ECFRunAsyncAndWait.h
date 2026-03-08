@@ -24,6 +24,7 @@ protected:
 	float TimeOut = 0.f;
 	float OriginTimeOut = 0.f;
 	bool bWithTimeOut = false;
+	bool bTimedOut = false;
 
 	ENamedThreads::Type ThreadType = ENamedThreads::AnyBackgroundThreadNormalTask;
 	TAtomic<bool> bIsAsyncTaskDone = false;
@@ -73,7 +74,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF Coroutine - Run Async Task and Wait failed to start. Are you sure the AsyncTask function is set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF Coroutine [%s] - Run Async Task and Wait failed to start. Are you sure the AsyncTask function is set properly?"), *Settings.Label);
 #endif
 			return false;
 		}
@@ -103,6 +104,7 @@ protected:
 			TimeOut -= DeltaTime;
 			if (TimeOut <= 0.f)
 			{
+				bTimedOut = true;
 				MarkAsFinished();
 				Complete(false);
 				return;
@@ -118,6 +120,8 @@ protected:
 
 	void Complete(bool bStopped) override
 	{
+		CoroutineHandle.promise().bTimedOut = bTimedOut;
+		CoroutineHandle.promise().bStopped = bStopped;
 		CoroutineHandle.resume();
 	}
 };

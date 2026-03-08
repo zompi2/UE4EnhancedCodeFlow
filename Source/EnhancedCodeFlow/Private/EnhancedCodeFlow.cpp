@@ -601,6 +601,11 @@ FECFCoroutineAwaiter_WaitUntil FEnhancedCodeFlow::WaitUntil(const UObject* InOwn
 	return FECFCoroutineAwaiter_WaitUntil(InOwner, Settings, MoveTemp(InPredicate), InTimeOut);
 }
 
+FECFCoroutineAwaiter_WaitUntil FEnhancedCodeFlow::WaitUntil(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, float InTimeOut, const FECFActionSettings& Settings)
+{
+	return FECFCoroutineAwaiter_WaitUntil(InOwner, Settings, MoveTemp(InPredicate), InTimeOut);
+}
+
 void FEnhancedCodeFlow::RemoveAllWaitUntil(const UObject* WorldContextObject, bool bComplete, UObject* InOwner)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))

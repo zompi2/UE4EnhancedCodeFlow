@@ -575,11 +575,14 @@ public:
 	/**
 	 * Suspends running coroutine function until the given predicate won't return true.
 	 * @param InPredicate			- a function that decides if the suspended function should be resumed.
-	 *								  If it returns true it means the suspended function must be resumed. Must be: [](float DeltaTime) -> bool
+	 *								  If it returns true it means the suspended function must be resumed. Can be: 
+	 *									[]() -> bool, 
+	 *									[](float DeltaTime) -> bool
 	 * @param InTimeOut				- if greater than 0.f it will apply timeout to this action. After this timeout the suspended function will be resumed.
 	 * @param Settings [optional]	- an extra settings to apply to this action.
 	 */
 	static FECFCoroutineAwaiter_WaitUntil WaitUntil(const UObject* InOwner, TUniqueFunction<bool(float/* DeltaTime*/)>&& InPredicate, float InTimeOut = 0.f, const FECFActionSettings& Settings = {});
+	static FECFCoroutineAwaiter_WaitUntil WaitUntil(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, float InTimeOut = 0.f, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops all Wait Until coroutine actions.

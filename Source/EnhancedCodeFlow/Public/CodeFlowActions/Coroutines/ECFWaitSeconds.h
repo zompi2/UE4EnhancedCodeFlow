@@ -34,7 +34,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF Coroutine - wait seconds failed to start. Are you sure the WaitTime is not negative?"));
+			UE_LOG(LogECF, Error, TEXT("ECF Coroutine [%s] - wait seconds failed to start. Are you sure the WaitTime is not negative?"), *Settings.Label);
 #endif
 			return false;
 		}
@@ -71,6 +71,7 @@ protected:
 
 	void Complete(bool bStopped) override
 	{
+		CoroutineHandle.promise().bStopped = bStopped;
 		CoroutineHandle.resume();
 	}
 };

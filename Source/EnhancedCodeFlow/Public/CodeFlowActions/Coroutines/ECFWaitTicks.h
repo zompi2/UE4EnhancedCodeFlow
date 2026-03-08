@@ -30,7 +30,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF Coroutine - wait ticks failed to start. Are you sure the WaitTicks is not negative?"));
+			UE_LOG(LogECF, Error, TEXT("ECF Coroutine [%s]- wait ticks failed to start. Are you sure the WaitTicks is not negative?"), *Settings.Label);
 #endif
 			return false;
 		}
@@ -67,6 +67,7 @@ protected:
 
 	void Complete(bool bStopped) override
 	{
+		CoroutineHandle.promise().bStopped = bStopped;
 		CoroutineHandle.resume();
 	}
 };
