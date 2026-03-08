@@ -879,7 +879,8 @@ For example, if we reset Timeline Action, running callback immediately will run 
 Otherwise, ECF will wait for the first next update of the Timeline to run callback.  
 The function returns true if the Action has actually resetted. False if it didn't (for example it doesn't support reset or Action is invalid).
 
-There is also a node to run this in Blueprints.
+There is also a node to run this in Blueprints.  
+
 ![resa](https://github.com/user-attachments/assets/59cc9a27-3223-449c-8bc5-799469362325)
 
 Coroutine Actions also can be resetted. To get their handle you must first get a Coroutine Handle from a suspendable function.
