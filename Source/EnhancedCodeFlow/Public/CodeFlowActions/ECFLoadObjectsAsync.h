@@ -3,7 +3,7 @@
 #pragma once
 
 #include "ECFActionBase.h"
-#include "Engine/StreamableManager.h"
+#include "Async/StreamableManager.h"
 #include "ECFLoadObjectsAsync.generated.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
@@ -22,6 +22,7 @@ protected:
 
 	TUniqueFunction<void(bool)> CallbackFunc;
 	TUniqueFunction<void()> CallbackFunc_NoStopped;
+	bool bLoadingFinished = false;
 
 	bool Setup(const TArray<FSoftObjectPath>& InObjectsToLoad, TUniqueFunction<void(bool)>&& InCallbackFunc)
 	{
@@ -43,6 +44,7 @@ protected:
 
 		ObjectsToLoad = InObjectsToLoad;
 		CallbackFunc = MoveTemp(InCallbackFunc);
+		bLoadingFinished = false;
 
 #if ECF_LOGS
 		UE_LOG(LogECF, Log, TEXT("ECF - [%s] Loading %d objects asynchronously."), *Settings.Label, ObjectsToLoad.Num());

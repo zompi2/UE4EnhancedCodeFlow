@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Coroutines/ECFCoroutineActionBase.h"
-#include "Engine/StreamableManager.h"
+#include "Async/StreamableManager.h"
 #include "ECFWaitLoadObjects.generated.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
@@ -55,34 +55,26 @@ protected:
 	{
 		UECFCoroutineActionBase::Init();
 
-		if (UWorld* World = GetWorld())
-		{
-			if (UECFSubsystem* ECFSubsystem = World->GetSubsystem<UECFSubsystem>())
+		TWeakObjectPtr<ThisClass> WeakThis(this);
+
+		// Load all objects asynchronously using the global StreamableManager
+		StreamableHandle = FStreamableManager::Get().RequestAsyncLoad(
+			ObjectsToLoad,
+			[WeakThis]()
 			{
-				FStreamableManager& StreamableManager = ECFSubsystem->GetStreamableManager();
-
-				TWeakObjectPtr<ThisClass> WeakThis(this);
-
-				// Load all objects asynchronously
-				StreamableHandle = StreamableManager.RequestAsyncLoad(
-					ObjectsToLoad,
-					[WeakThis]()
+				if (ThisClass* StrongThis = WeakThis.Get())
+				{
+					if (StrongThis->IsValid())
 					{
-						if (ThisClass* StrongThis = WeakThis.Get())
-						{
-							if (StrongThis->IsValid())
-							{
 #if ECF_LOGS
-								UE_LOG(LogECF, Log, TEXT("ECF Coroutine [%s] - Finished loading %d objects."), *StrongThis->Settings.Label, StrongThis->ObjectsToLoad.Num());
+						UE_LOG(LogECF, Log, TEXT("ECF Coroutine [%s] - Finished loading %d objects."), *StrongThis->Settings.Label, StrongThis->ObjectsToLoad.Num());
 #endif
-								StrongThis->MarkAsFinished();
-								StrongThis->Complete(false);
-							}
-						}
+						StrongThis->MarkAsFinished();
+						StrongThis->Complete(false);
 					}
-				);
+				}
 			}
-		}
+		);
 	}
 
 	void Tick(float DeltaTime) override
@@ -94,16 +86,6 @@ protected:
 #if ECF_INSIGHT_PROFILING
 		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - WaitLoadObjects Tick");
 #endif
-
-		// Tick is handled by the callback, but we check if handle is invalid
-		if (!StreamableHandle.IsValid() || !StreamableHandle->IsLoading())
-		{
-			if (!bHasFinished)
-			{
-				MarkAsFinished();
-				Complete(false);
-			}
-		}
 	}
 
 	void Complete(bool bStopped) override
