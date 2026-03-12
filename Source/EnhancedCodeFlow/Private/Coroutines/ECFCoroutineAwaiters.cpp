@@ -6,6 +6,7 @@
 #include "CodeFlowActions/Coroutines/ECFWaitTicks.h"
 #include "CodeFlowActions/Coroutines/ECFWaitUntil.h"
 #include "CodeFlowActions/Coroutines/ECFRunAsyncAndWait.h"
+#include "CodeFlowActions/Coroutines/ECFWaitLoadObjects.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 
@@ -86,6 +87,20 @@ FECFCoroutineAwaiter_RunAsyncAndWait::FECFCoroutineAwaiter_RunAsyncAndWait(const
 void FECFCoroutineAwaiter_RunAsyncAndWait::await_suspend(FECFCoroutineHandle InCoroHandle)
 {
 	AddCoroutineAction<UECFRunAsyncAndWait>(Owner, InCoroHandle, Settings, MoveTemp(AsyncTaskFunction), TimeOut, ThreadPriority);
+}
+
+/*^^^ Wait Load Objects Coroutine Awaiter ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFCoroutineAwaiter_WaitLoadObjects::FECFCoroutineAwaiter_WaitLoadObjects(const UObject* InOwner, const FECFActionSettings& InSettings, const TArray<FSoftObjectPath>& InObjectsToLoad)
+{
+	Owner = InOwner;
+	Settings = InSettings;
+	ObjectsToLoad = InObjectsToLoad;
+}
+
+void FECFCoroutineAwaiter_WaitLoadObjects::await_suspend(FECFCoroutineHandle InCoroHandle)
+{
+	AddCoroutineAction<UECFWaitLoadObjects>(Owner, InCoroHandle, Settings, ObjectsToLoad);
 }
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION
