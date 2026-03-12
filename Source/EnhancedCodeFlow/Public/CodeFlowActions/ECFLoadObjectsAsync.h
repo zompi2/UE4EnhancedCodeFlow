@@ -22,7 +22,6 @@ protected:
 
 	TUniqueFunction<void(bool)> CallbackFunc;
 	TUniqueFunction<void()> CallbackFunc_NoStopped;
-	bool bLoadingFinished = false;
 
 	bool Setup(const TArray<FSoftObjectPath>& InObjectsToLoad, TUniqueFunction<void(bool)>&& InCallbackFunc)
 	{
@@ -44,7 +43,6 @@ protected:
 
 		ObjectsToLoad = InObjectsToLoad;
 		CallbackFunc = MoveTemp(InCallbackFunc);
-		bLoadingFinished = false;
 
 #if ECF_LOGS
 		UE_LOG(LogECF, Log, TEXT("ECF - [%s] Loading %d objects asynchronously."), *Settings.Label, ObjectsToLoad.Num());
@@ -95,13 +93,58 @@ protected:
 		return Setup(Paths, MoveTemp(InCallbackFunc));
 	}
 
-	virtual void Init() override;
-	virtual void Tick(float DeltaTime) override;
-	virtual void Complete(bool bStopped) override;
+	void Init() override
+	{
+		TWeakObjectPtr<ThisClass> WeakThis(this);
 
-public:
+		// Load all objects asynchronously using the global StreamableManager
+		FStreamableManager& StreamableManager = UGameGlobals::Get().StreamableManager;
+		StreamableHandle = StreamableManager.RequestAsyncLoad(
+			ObjectsToLoad,
+			[WeakThis]()
+			{
+				if (ThisClass* StrongThis = WeakThis.Get())
+				{
+					if (StrongThis->IsValid())
+					{
+#if ECF_LOGS
+						UE_LOG(LogECF, Log, TEXT("ECF - [%s] Finished loading %d objects."), *StrongThis->Settings.Label, StrongThis->ObjectsToLoad.Num());
+#endif
+						StrongThis->MarkAsFinished();
+					}
+				}
+			}
+		);
+	}
 
-	virtual bool HasValidOwner() const override;
+	void Tick(float DeltaTime) override
+	{
+#if STATS
+		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("LoadObjectsAsync - Tick"), STAT_ECFDETAILS_LOADOBJECTSASYNC, STATGROUP_ECFDETAILS);
+#endif
+
+#if ECF_INSIGHT_PROFILING
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - LoadObjectsAsync Tick");
+#endif
+	}
+
+	void Complete(bool bStopped) override
+	{
+		if (bStopped && StreamableHandle.IsValid())
+		{
+			// Release the streamable handle
+			StreamableHandle.Reset();
+
+#if ECF_LOGS
+			UE_LOG(LogECF, Log, TEXT("ECF - [%s] Stopped loading objects."), *Settings.Label);
+#endif
+		}
+
+		if (CallbackFunc)
+		{
+			CallbackFunc(bStopped);
+		}
+	}
 };
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION

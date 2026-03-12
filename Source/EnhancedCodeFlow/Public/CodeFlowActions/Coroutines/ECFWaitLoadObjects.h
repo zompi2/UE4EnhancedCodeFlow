@@ -58,7 +58,8 @@ protected:
 		TWeakObjectPtr<ThisClass> WeakThis(this);
 
 		// Load all objects asynchronously using the global StreamableManager
-		StreamableHandle = FStreamableManager::Get().RequestAsyncLoad(
+		FStreamableManager& StreamableManager = UGameGlobals::Get().StreamableManager;
+		StreamableHandle = StreamableManager.RequestAsyncLoad(
 			ObjectsToLoad,
 			[WeakThis]()
 			{
