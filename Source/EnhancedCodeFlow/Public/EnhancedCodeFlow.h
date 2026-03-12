@@ -546,20 +546,6 @@ public:
 	static FECFHandle LoadObjectsAsync(const UObject* InOwner, const TArray<FSoftObjectPath>& InObjectsToLoad, TUniqueFunction<void(bool/* bStopped*/)>&& InCallbackFunc, const FECFActionSettings& Settings = {});
 	static FECFHandle LoadObjectsAsync(const UObject* InOwner, const TArray<FSoftObjectPath>& InObjectsToLoad, TUniqueFunction<void()>&& InCallbackFunc, const FECFActionSettings& Settings = {});
 
-	template<CIsSoftPtrType T>
-	static TArray<FSoftObjectPath> ConvertSoftPtrToSoftPath(const TArray<T>& InSoftPtrs)
-	{
-		TArray<FSoftObjectPath> Paths;
-		for (const auto& SoftPtr : InSoftPtrs)
-		{
-			if (SoftPtr.IsNull() == false)
-			{
-				Paths.Add(SoftPtr.ToSoftObjectPath());
-			}
-		}
-		return Paths;
-	}
-
 	/*^^^ Wait Seconds (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 	/**
@@ -651,6 +637,23 @@ public:
 	 * @param Settings [optional]	- an extra settings to apply to this action.
 	 */
 	static FECFCoroutineAwaiter_WaitLoadObjects WaitLoadObjects(const UObject* InOwner, const TArray<FSoftObjectPath>& InObjectsToLoad, const FECFActionSettings& Settings = {});
+
+	/**
+	 * Utility function for converting an array of soft pointers to an array of soft object paths.
+	 */
+	template<CIsSoftPtrType T>
+	static TArray<FSoftObjectPath> ConvertSoftPtrToSoftPath(const TArray<T>& InSoftPtrs)
+	{
+		TArray<FSoftObjectPath> Paths;
+		for (const auto& SoftPtr : InSoftPtrs)
+		{
+			if (SoftPtr.IsNull() == false)
+			{
+				Paths.Add(SoftPtr.ToSoftObjectPath());
+			}
+		}
+		return Paths;
+	}
 };
 
 using FFlow = FEnhancedCodeFlow;
