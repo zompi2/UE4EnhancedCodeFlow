@@ -535,7 +535,7 @@ public:
 
 	/**
 	 * Asynchronously loads a list of assets using StreamableManager and calls a callback when all assets are loaded.
-	 * @param InObjectsToLoad		- an array of soft object paths to load. Can contain TSoftObjectPtr, TSoftClassPtr, or FSoftObjectPath.
+	 * @param InObjectsToLoad		- an array of soft object paths to load.
 	 * @param InCallbackFunc		- a callback function to execute when loading is complete. Can be:
 	 *	[](bool bStopped) -> void.
 	 *	[]() -> void.
@@ -544,6 +544,82 @@ public:
 	 */
 	static FECFHandle LoadObjectsAsync(const UObject* InOwner, const TArray<FSoftObjectPath>& InObjectsToLoad, TUniqueFunction<void(bool/* bStopped*/)>&& InCallbackFunc, const FECFActionSettings& Settings = {});
 	static FECFHandle LoadObjectsAsync(const UObject* InOwner, const TArray<FSoftObjectPath>& InObjectsToLoad, TUniqueFunction<void()>&& InCallbackFunc, const FECFActionSettings& Settings = {});
+
+	/**
+	 * Asynchronously loads a list of TSoftObjectPtr assets and calls a callback when all assets are loaded.
+	 * Only valid (non-null) pointers will be loaded.
+	 * @param InObjectsToLoad		- an array of soft object pointers to load.
+	 * @param InCallbackFunc		- a callback function to execute when loading is complete. Can be:
+	 *	[](bool bStopped) -> void.
+	 *	[]() -> void.
+	 * @param Settings [optional]	- an extra settings to apply to this action.
+	 * @return FECFHandle			- handle to the loading action. Can be used to pause, resume, or stop the loading.
+	 */
+	template<typename T>
+	static FECFHandle LoadObjectsAsync(const UObject* InOwner, const TArray<TSoftObjectPtr<T>>& InObjectsToLoad, TUniqueFunction<void(bool/* bStopped*/)>&& InCallbackFunc, const FECFActionSettings& Settings = {})
+	{
+		TArray<FSoftObjectPath> Paths;
+		for (const auto& Object : InObjectsToLoad)
+		{
+			if (!Object.IsNull())
+			{
+				Paths.Add(Object.ToSoftObjectPath());
+			}
+		}
+		return LoadObjectsAsync(InOwner, Paths, MoveTemp(InCallbackFunc), Settings);
+	}
+
+	template<typename T>
+	static FECFHandle LoadObjectsAsync(const UObject* InOwner, const TArray<TSoftObjectPtr<T>>& InObjectsToLoad, TUniqueFunction<void()>&& InCallbackFunc, const FECFActionSettings& Settings = {})
+	{
+		TArray<FSoftObjectPath> Paths;
+		for (const auto& Object : InObjectsToLoad)
+		{
+			if (!Object.IsNull())
+			{
+				Paths.Add(Object.ToSoftObjectPath());
+			}
+		}
+		return LoadObjectsAsync(InOwner, Paths, MoveTemp(InCallbackFunc), Settings);
+	}
+
+	/**
+	 * Asynchronously loads a list of TSoftClassPtr assets and calls a callback when all assets are loaded.
+	 * Only valid (non-null) pointers will be loaded.
+	 * @param InObjectsToLoad		- an array of soft class pointers to load.
+	 * @param InCallbackFunc		- a callback function to execute when loading is complete. Can be:
+	 *	[](bool bStopped) -> void.
+	 *	[]() -> void.
+	 * @param Settings [optional]	- an extra settings to apply to this action.
+	 * @return FECFHandle			- handle to the loading action. Can be used to pause, resume, or stop the loading.
+	 */
+	template<typename T>
+	static FECFHandle LoadObjectsAsync(const UObject* InOwner, const TArray<TSoftClassPtr<T>>& InObjectsToLoad, TUniqueFunction<void(bool/* bStopped*/)>&& InCallbackFunc, const FECFActionSettings& Settings = {})
+	{
+		TArray<FSoftObjectPath> Paths;
+		for (const auto& Class : InObjectsToLoad)
+		{
+			if (!Class.IsNull())
+			{
+				Paths.Add(Class.ToSoftObjectPath());
+			}
+		}
+		return LoadObjectsAsync(InOwner, Paths, MoveTemp(InCallbackFunc), Settings);
+	}
+
+	template<typename T>
+	static FECFHandle LoadObjectsAsync(const UObject* InOwner, const TArray<TSoftClassPtr<T>>& InObjectsToLoad, TUniqueFunction<void()>&& InCallbackFunc, const FECFActionSettings& Settings = {})
+	{
+		TArray<FSoftObjectPath> Paths;
+		for (const auto& Class : InObjectsToLoad)
+		{
+			if (!Class.IsNull())
+			{
+				Paths.Add(Class.ToSoftObjectPath());
+			}
+		}
+		return LoadObjectsAsync(InOwner, Paths, MoveTemp(InCallbackFunc), Settings);
+	}
 
 	/*^^^ Wait Seconds (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
@@ -632,10 +708,50 @@ public:
 
 	/**
 	 * Suspends running coroutine function until all assets are loaded.
-	 * @param InObjectsToLoad		- an array of soft object paths to load. Can contain TSoftObjectPtr, TSoftClassPtr, or FSoftObjectPath.
+	 * @param InObjectsToLoad		- an array of soft object paths to load.
 	 * @param Settings [optional]	- an extra settings to apply to this action.
 	 */
 	static FECFCoroutineAwaiter_WaitLoadObjects WaitLoadObjects(const UObject* InOwner, const TArray<FSoftObjectPath>& InObjectsToLoad, const FECFActionSettings& Settings = {});
+
+	/**
+	 * Suspends running coroutine function until all TSoftObjectPtr assets are loaded.
+	 * Only valid (non-null) pointers will be loaded.
+	 * @param InObjectsToLoad		- an array of soft object pointers to load.
+	 * @param Settings [optional]	- an extra settings to apply to this action.
+	 */
+	template<typename T>
+	static FECFCoroutineAwaiter_WaitLoadObjects WaitLoadObjects(const UObject* InOwner, const TArray<TSoftObjectPtr<T>>& InObjectsToLoad, const FECFActionSettings& Settings = {})
+	{
+		TArray<FSoftObjectPath> Paths;
+		for (const auto& Object : InObjectsToLoad)
+		{
+			if (!Object.IsNull())
+			{
+				Paths.Add(Object.ToSoftObjectPath());
+			}
+		}
+		return WaitLoadObjects(InOwner, Paths, Settings);
+	}
+
+	/**
+	 * Suspends running coroutine function until all TSoftClassPtr assets are loaded.
+	 * Only valid (non-null) pointers will be loaded.
+	 * @param InObjectsToLoad		- an array of soft class pointers to load.
+	 * @param Settings [optional]	- an extra settings to apply to this action.
+	 */
+	template<typename T>
+	static FECFCoroutineAwaiter_WaitLoadObjects WaitLoadObjects(const UObject* InOwner, const TArray<TSoftClassPtr<T>>& InObjectsToLoad, const FECFActionSettings& Settings = {})
+	{
+		TArray<FSoftObjectPath> Paths;
+		for (const auto& Class : InObjectsToLoad)
+		{
+			if (!Class.IsNull())
+			{
+				Paths.Add(Class.ToSoftObjectPath());
+			}
+		}
+		return WaitLoadObjects(InOwner, Paths, Settings);
+	}
 };
 
 using FFlow = FEnhancedCodeFlow;
