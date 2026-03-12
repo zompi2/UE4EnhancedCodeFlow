@@ -545,16 +545,6 @@ public:
 	static FECFHandle LoadObjectsAsync(const UObject* InOwner, const TArray<FSoftObjectPath>& InObjectsToLoad, TUniqueFunction<void(bool/* bStopped*/)>&& InCallbackFunc, const FECFActionSettings& Settings = {});
 	static FECFHandle LoadObjectsAsync(const UObject* InOwner, const TArray<FSoftObjectPath>& InObjectsToLoad, TUniqueFunction<void()>&& InCallbackFunc, const FECFActionSettings& Settings = {});
 
-	/**
-	 * Stops all Load Objects Async actions.
-	 * @param bComplete			 - indicates if the action should be completed when stopped (run callback), or simply stopped.
-	 * @param InOwner [optional] - if defined it will remove Load Objects Async actions only from the given owner.
-	 *                             Otherwise it will remove all Load Objects Async actions from everywhere.
-	 */
-	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFLoadObjectsAsync> instead.")]]
-	static void RemoveAllLoadObjectsAsync(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
-
-
 	/*^^^ Wait Seconds (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 	/**
@@ -646,16 +636,6 @@ public:
 	 * @param Settings [optional]	- an extra settings to apply to this action.
 	 */
 	static FECFCoroutineAwaiter_WaitLoadObjects WaitLoadObjects(const UObject* InOwner, const TArray<FSoftObjectPath>& InObjectsToLoad, const FECFActionSettings& Settings = {});
-
-	/**
-	 * Stops all Wait Load Objects coroutine actions.
-	 * @param bComplete			 - indicates if the action should be completed when stopped (run callback), or simply stopped.
-	 *							   !!!Have in mind that not completed coroutine will suspend function forever!!!
-	 * @param InOwner [optional] - if defined it will remove Wait Load Objects actions only from the given owner. Otherwise
-	 *                             it will remove Wait Load Objects actions from everywhere.
-	 */
-	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFWaitLoadObjects> instead.")]]
-	static void RemoveAllWaitLoadObjects(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 };
 
 using FFlow = FEnhancedCodeFlow;
