@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Coroutines/ECFCoroutineActionBase.h"
-#include "Async/StreamableManager.h"
+#include "Engine/AssetManager.h"
 #include "ECFWaitLoadObjects.generated.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
@@ -58,7 +58,7 @@ protected:
 		TWeakObjectPtr<ThisClass> WeakThis(this);
 
 		// Load all objects asynchronously using the global StreamableManager
-		FStreamableManager& StreamableManager = UGameGlobals::Get().StreamableManager;
+		FStreamableManager& StreamableManager = UAssetManager::GetStreamableManager();
 		StreamableHandle = StreamableManager.RequestAsyncLoad(
 			ObjectsToLoad,
 			[WeakThis]()
