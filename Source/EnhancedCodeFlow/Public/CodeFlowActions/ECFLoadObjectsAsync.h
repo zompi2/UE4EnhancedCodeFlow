@@ -44,6 +44,8 @@ protected:
 		ObjectsToLoad = InObjectsToLoad;
 		CallbackFunc = MoveTemp(InCallbackFunc);
 
+
+
 #if ECF_LOGS
 		UE_LOG(LogECF, Log, TEXT("ECF - [%s] Loading %d objects asynchronously."), *Settings.Label, ObjectsToLoad.Num());
 #endif
@@ -70,37 +72,11 @@ protected:
 		}
 	}
 
-	// Template version supporting TSoftObjectPtr and TSoftClassPtr
-	template<typename T>
-	bool Setup(const TArray<TSoftObjectPtr<T>>& InObjectsToLoad, TUniqueFunction<void(bool)>&& InCallbackFunc)
-	{
-		TArray<FSoftObjectPath> Paths;
-		for (const auto& Object : InObjectsToLoad)
-		{
-			Paths.Add(Object.ToSoftObjectPath());
-		}
-		return Setup(Paths, MoveTemp(InCallbackFunc));
-	}
-
-	template<typename T>
-	bool Setup(const TArray<TSoftObjectPtr<T>>& InObjectsToLoad, TUniqueFunction<void()>&& InCallbackFunc)
-	{
-		TArray<FSoftObjectPath> Paths;
-		for (const auto& Object : InObjectsToLoad)
-		{
-			Paths.Add(Object.ToSoftObjectPath());
-		}
-		return Setup(Paths, MoveTemp(InCallbackFunc));
-	}
-
 	void Init() override
 	{
 		TWeakObjectPtr<ThisClass> WeakThis(this);
-
-		// Load all objects asynchronously using the global StreamableManager
 		FStreamableManager& StreamableManager = UAssetManager::GetStreamableManager();
-		StreamableHandle = StreamableManager.RequestAsyncLoad(
-			ObjectsToLoad,
+		StreamableHandle = StreamableManager.RequestAsyncLoad(ObjectsToLoad,
 			[WeakThis]()
 			{
 				if (ThisClass* StrongThis = WeakThis.Get())
@@ -111,33 +87,22 @@ protected:
 						UE_LOG(LogECF, Log, TEXT("ECF - [%s] Finished loading %d objects."), *StrongThis->Settings.Label, StrongThis->ObjectsToLoad.Num());
 #endif
 						StrongThis->MarkAsFinished();
+						StrongThis->Complete(false);
 					}
 				}
 			}
 		);
 	}
 
-	void Tick(float DeltaTime) override
-	{
-#if STATS
-		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("LoadObjectsAsync - Tick"), STAT_ECFDETAILS_LOADOBJECTSASYNC, STATGROUP_ECFDETAILS);
-#endif
-
-#if ECF_INSIGHT_PROFILING
-		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - LoadObjectsAsync Tick");
-#endif
-	}
-
 	void Complete(bool bStopped) override
 	{
-		if (bStopped && StreamableHandle.IsValid())
+		if (StreamableHandle.IsValid())
 		{
-			// Release the streamable handle
+			if (StreamableHandle->IsActive())
+			{
+				StreamableHandle->CancelHandle();
+			}
 			StreamableHandle.Reset();
-
-#if ECF_LOGS
-			UE_LOG(LogECF, Log, TEXT("ECF - [%s] Stopped loading objects."), *Settings.Label);
-#endif
 		}
 
 		if (CallbackFunc)

@@ -99,6 +99,12 @@ protected:
 	// This action will be deleted soon.
 	void MarkAsFinished()
 	{
+		// Do not finish twice (to avoid weird logs).
+		if (bHasFinished)
+		{
+			return;
+		}
+
 #if (ECF_LOGS && ECF_LOGS_VERBOSE)
 		UE_LOG(LogECF, Verbose, TEXT("Action of class %s marked as finished, Label: %s"), *GetName(), *GetLabel());
 #endif

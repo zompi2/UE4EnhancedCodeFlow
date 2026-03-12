@@ -39,25 +39,9 @@ protected:
 		return true;
 	}
 
-	// Template version supporting TSoftObjectPtr and TSoftClassPtr
-	template<typename T>
-	bool Setup(const TArray<TSoftObjectPtr<T>>& InObjectsToLoad)
-	{
-		TArray<FSoftObjectPath> Paths;
-		for (const auto& Object : InObjectsToLoad)
-		{
-			Paths.Add(Object.ToSoftObjectPath());
-		}
-		return Setup(Paths);
-	}
-
 	void Init() override
 	{
-		UECFCoroutineActionBase::Init();
-
 		TWeakObjectPtr<ThisClass> WeakThis(this);
-
-		// Load all objects asynchronously using the global StreamableManager
 		FStreamableManager& StreamableManager = UAssetManager::GetStreamableManager();
 		StreamableHandle = StreamableManager.RequestAsyncLoad(
 			ObjectsToLoad,
@@ -78,19 +62,17 @@ protected:
 		);
 	}
 
-	void Tick(float DeltaTime) override
-	{
-#if STATS
-		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("WaitLoadObjects - Tick"), STAT_ECFDETAILS_WAITLOADOBJECTS, STATGROUP_ECFDETAILS);
-#endif
-
-#if ECF_INSIGHT_PROFILING
-		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - WaitLoadObjects Tick");
-#endif
-	}
-
 	void Complete(bool bStopped) override
 	{
+		if (StreamableHandle.IsValid())
+		{
+			if (StreamableHandle->IsActive())
+			{
+				StreamableHandle->CancelHandle();
+			}
+			StreamableHandle.Reset();
+		}
+
 		CoroutineHandle.promise().bStopped = bStopped;
 		CoroutineHandle.resume();
 	}
