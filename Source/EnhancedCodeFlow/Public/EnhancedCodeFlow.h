@@ -32,6 +32,7 @@
 #include "ECFActionSettings.h"
 #include "ECFInstanceId.h"
 #include "Coroutines/ECFCoroutineAwaiters.h"
+#include "ECFConcepts.h"
 
 class ENHANCEDCODEFLOW_API FEnhancedCodeFlow
 {
@@ -531,6 +532,19 @@ public:
 	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFRunAsyncThen> instead.")]]
 	static void RemoveAllRunAsyncThen(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
+	/*^^^ Load Objects Async ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Asynchronously loads a list of assets using StreamableManager and calls a callback when all assets are loaded.
+	 * @param InObjectsToLoad		- an array of soft object paths to load.
+	 * @param InCallbackFunc		- a callback function to execute when loading is complete. Can be:
+	 *	[](bool bStopped) -> void.
+	 *	[]() -> void.
+	 * @param Settings [optional]	- an extra settings to apply to this action.
+	 * @return FECFHandle			- handle to the loading action. Can be used to pause, resume, or stop the loading.
+	 */
+	static FECFHandle LoadObjectsAsync(const UObject* InOwner, const TArray<FSoftObjectPath>& InObjectsToLoad, TUniqueFunction<void(bool/* bStopped*/)>&& InCallbackFunc, const FECFActionSettings& Settings = {});
+	static FECFHandle LoadObjectsAsync(const UObject* InOwner, const TArray<FSoftObjectPath>& InObjectsToLoad, TUniqueFunction<void()>&& InCallbackFunc, const FECFActionSettings& Settings = {});
 
 	/*^^^ Wait Seconds (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
@@ -614,6 +628,32 @@ public:
 	 */
 	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFRunAsyncAndWait> instead.")]]
 	static void RemoveAllRunAsyncAndWait(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
+
+	/*^^^ Wait Load Objects (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Suspends running coroutine function until all assets are loaded.
+	 * @param InObjectsToLoad		- an array of soft object paths to load.
+	 * @param Settings [optional]	- an extra settings to apply to this action.
+	 */
+	static FECFCoroutineAwaiter_WaitLoadObjects WaitLoadObjects(const UObject* InOwner, const TArray<FSoftObjectPath>& InObjectsToLoad, const FECFActionSettings& Settings = {});
+
+	/**
+	 * Utility function for converting an array of soft pointers to an array of soft object paths.
+	 */
+	template<CIsSoftPtrType T>
+	static TArray<FSoftObjectPath> ConvertSoftPtrToSoftPath(const TArray<T>& InSoftPtrs)
+	{
+		TArray<FSoftObjectPath> Paths;
+		for (const auto& SoftPtr : InSoftPtrs)
+		{
+			if (SoftPtr.IsNull() == false)
+			{
+				Paths.Add(SoftPtr.ToSoftObjectPath());
+			}
+		}
+		return Paths;
+	}
 };
 
 using FFlow = FEnhancedCodeFlow;

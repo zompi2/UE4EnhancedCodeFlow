@@ -153,3 +153,20 @@ private:
 	EECFAsyncPrio ThreadPriority = EECFAsyncPrio::Normal;
 };
 
+/*^^^ Wait Load Objects Coroutine Awaiter ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+class ENHANCEDCODEFLOW_API FECFCoroutineAwaiter_WaitLoadObjects : public FECFCoroutineAwaiter
+{
+public:
+
+	// C-tor
+	FECFCoroutineAwaiter_WaitLoadObjects(const UObject* InOwner, const FECFActionSettings& InSettings, const TArray<FSoftObjectPath>& InObjectsToLoad);
+
+	// Called when the suspension begins
+	void await_suspend(FECFCoroutineHandle InCoroHandle);
+
+private:
+
+	// Storing values in order to use them when await_suspend is called
+	TArray<FSoftObjectPath> ObjectsToLoad;
+};

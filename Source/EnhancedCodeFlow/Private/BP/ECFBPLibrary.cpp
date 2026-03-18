@@ -205,7 +205,7 @@ void UECFBPLibrary::ECFRemoveAllDoNoMoreThanXTimes(const UObject* WorldContextOb
 	FFlow::StopAllActionsOfClass<UECFDoNoMoreThanXTime>(WorldContextObject, false,  InOwner);
 }
 
-/*^^^ Casting ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/	
+/*^^^ Casting and converting ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 FString UECFBPLibrary::Conv_ECFHandleToString(const FECFHandleBP& Handle)
 {
@@ -217,5 +217,14 @@ FString UECFBPLibrary::Conv_ECFInstanceIdToString(const FECFInstanceIdBP& Instan
 	return InstanceId.InstanceId.ToString();
 }
 
+TArray<FSoftObjectPath> UECFBPLibrary::ConvertSoftObjectPtrToSoftPath(const TArray<TSoftObjectPtr<UObject>>& InSoftPtrs)
+{
+	return FFlow::ConvertSoftPtrToSoftPath(InSoftPtrs);
+}
+
+TArray<FSoftObjectPath> UECFBPLibrary::ConvertSoftClassPtrToSoftPath(const TArray<TSoftClassPtr<UObject>>& InSoftPtrs)
+{
+	return FFlow::ConvertSoftPtrToSoftPath(InSoftPtrs);
+}
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION

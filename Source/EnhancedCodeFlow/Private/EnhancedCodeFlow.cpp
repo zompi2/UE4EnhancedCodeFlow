@@ -568,6 +568,24 @@ void FEnhancedCodeFlow::RemoveAllRunAsyncThen(const UObject* WorldContextObject,
 		ECF->RemoveActionsOfClass<UECFRunAsyncThen>(false, InOwner);
 }
 
+/*^^^ Load Objects Async ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFHandle FEnhancedCodeFlow::LoadObjectsAsync(const UObject* InOwner, const TArray<FSoftObjectPath>& InObjectsToLoad, TUniqueFunction<void(bool/* bStopped*/)>&& InCallbackFunc, const FECFActionSettings& Settings)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFLoadObjectsAsync>(InOwner, Settings, FECFInstanceId(), InObjectsToLoad, MoveTemp(InCallbackFunc));
+	else
+		return FECFHandle();
+}
+
+FECFHandle FEnhancedCodeFlow::LoadObjectsAsync(const UObject* InOwner, const TArray<FSoftObjectPath>& InObjectsToLoad, TUniqueFunction<void()>&& InCallbackFunc, const FECFActionSettings& Settings)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(InOwner))
+		return ECF->AddAction<UECFLoadObjectsAsync>(InOwner, Settings, FECFInstanceId(), InObjectsToLoad, MoveTemp(InCallbackFunc));
+	else
+		return FECFHandle();
+}
+
 /*^^^ Wait Seconds (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 FECFCoroutineAwaiter_WaitSeconds FEnhancedCodeFlow::WaitSeconds(const UObject* InOwner, float InTime, const FECFActionSettings& Settings /*= {}*/)
@@ -623,6 +641,13 @@ void FEnhancedCodeFlow::RemoveAllRunAsyncAndWait(const UObject* WorldContextObje
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
 		ECF->RemoveActionsOfClass<UECFRunAsyncAndWait>(bComplete, InOwner);
+}
+
+/*^^^ Wait Load Objects (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFCoroutineAwaiter_WaitLoadObjects FEnhancedCodeFlow::WaitLoadObjects(const UObject* InOwner, const TArray<FSoftObjectPath>& InObjectsToLoad, const FECFActionSettings& Settings)
+{
+	return FECFCoroutineAwaiter_WaitLoadObjects(InOwner, Settings, InObjectsToLoad);
 }
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION

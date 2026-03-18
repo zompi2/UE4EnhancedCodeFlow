@@ -143,6 +143,7 @@ Check out the **[Example Project](https://github.com/zompi2/UE4EnhancedCodeFlowE
 - [Add Custom Timeline](#add-custom-timeline)
   - [Add Custom Timeline Vector](#add-custom-timeline-vector)
   - [Add Custom Timeline Linear Color](#add-custom-timeline-linear-color)
+- [Load Objects Async](#load-objects-async)
 - [Time Lock](#time-lock)
 - [Do Once](#do-once)
 - [Do N Times](#do-n-times)
@@ -492,6 +493,39 @@ FFlow::AddCustomTimelineLinearColor(this, Curve, [this](FLinearColor Value, floa
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
 
+#### Load Objects Async
+
+Loads a list of soft objects. The same thing can be achieved by using `FStreamableManager::RequestAsyncLoad` function.  
+However, the plugin exposes this functionality to BP and coroutines.
+
+```cpp
+TArray<FSoftObjectPath> ObjectsToLoad;
+FFlow::LoadObjectsAsync(this, ObjectsToLoad, [this](bool bStopped)
+{
+  // Code to run when loading has finished
+});
+```
+
+You can convert the list of `TSoftObjectPtr` and `TSoftClassPtr` to the list of `FSoftObjectPath` using the provided function:
+
+```cpp
+TArray<TSoftObjectPtr<AMyClass>> ActorsToLoad;
+FFlow::LoadObjectsAsync(this, FFlow::ConvertSoftPtrToSoftPath(ActorsToLoad), [this](bool bStopped)
+{
+  // Code to run when loading has finished
+});
+
+TArray<TSoftClassPtr<AMyClass>> ActorsClassesToLoad;
+FFlow::LoadObjectsAsync(this, FFlow::ConvertSoftPtrToSoftPath(ActorsClassesToLoad), [this](bool bStopped)
+{
+  // Code to run when loading has finished
+});
+```
+![loadas](https://github.com/user-attachments/assets/af3d040a-c5f1-435f-8253-3b5a78d06d07)
+
+[Back to actions list](#usage)  
+[Back to top](#table-of-content)
+
 #### Time Lock
 
 **(Instanced)**
@@ -669,6 +703,7 @@ Coroutines doesn't have BP nodes as they are purely code feature.
 - [Wait Ticks](#wait-ticks)
 - [Wait Until](#wait-until)
 - [Run Async And Wait](#run-async-and-wait)
+- [Wait Load Objects](#wait-load-objects)
 - [Getting FECFHandle from FECFCoroutine](#getting-fecfhandle-from-fecfcoroutine)
 - [Checking for coroutine support](#checking-for-coroutine-support)
 
@@ -752,6 +787,24 @@ FECFCoroutine UMyClass::SuspandableFunction()
   // Do something after the above code has finished.
 }
 ```
+
+#### Wait Load Objects
+
+Starts loading the list of soft objects and waits until they are all loaded.  
+You can convert the list of `TSoftObjectPtr` and `TSoftClassPtr` to the list of `FSoftObjectPath` using the `FFlow::ConvertSoftPtrToSoftPath` as described in [Load Objects Async](#load-objects-async).
+
+``` cpp
+TArray<FSoftObjectPath> ObjectsToLoad;
+FECFCoroutine UMyClass::SuspandableFunction()
+{
+  // Do something
+  bool bStopped = co_await FFlow::WaitLoadObjects(this, ObjectsToLoad);
+  // Do something after objects are loaded
+}
+```
+
+[Back to coroutines](#coroutines-experimental)  
+[Back to top](#table-of-content)
 
 ## Getting FECFHandle from FECFCoroutine
 
