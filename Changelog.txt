@@ -1,3 +1,7 @@
+###### 3.7.0
+* LoadObjectsAsync action added, which allows to load objects asynchronously and wait for their loading to be completed. 
+* WaitLoadObjects coroutine added, which is a coroutine version of LoadObjectsAsync.
+
 ###### 3.6.2
 * Coroutines now returns the information if the resumed coroutine Action has been stopped or timed out.
 * Added WaitUntil coroutine variant with a predicate WITHOUT the DeltaTime.
