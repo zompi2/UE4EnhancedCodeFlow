@@ -1064,3 +1064,6 @@ Also, I want to thank You for using this plugin! It is very important for me tha
 Happy coding!
 
 [Back to top](#table-of-content)
+
+
+<img width="357" height="481" alt="obraz" src="https://github.com/user-attachments/assets/a7a11e9d-8760-462b-b308-fd8918c87f4f" />
