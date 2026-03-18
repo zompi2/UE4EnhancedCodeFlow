@@ -495,7 +495,34 @@ FFlow::AddCustomTimelineLinearColor(this, Curve, [this](FLinearColor Value, floa
 
 #### Load Objects Async
 
-Loads a list of soft objects. The same 
+Loads a list of soft objects. The same thing can be achieved by using `FStreamableManager::RequestAsyncLoad` function.  
+However, the plugin exposes this functionality to BP and coroutines.
+
+```cpp
+TArray<FSoftObjectPath> ObjectsToLoad;
+FFlow::LoadObjectsAsync(this, ObjectsToLoad, [this](bool bStopped)
+{
+  // Code to run when loading has finished
+});
+```
+
+You can convert the list of `TSoftObjectPtr` and `TSoftClassPtr` to the list of `FSoftObjectPath` using the provided function:
+
+```cpp
+TArray<TSoftObjectPtr<AMyClass>> ActorsToLoad;
+FFlow::LoadObjectsAsync(this, FFlow::ConvertSoftPtrToSoftPath(ActorsToLoad), [this](bool bStopped)
+{
+  // Code to run when loading has finished
+});
+
+TArray<TSoftClassPtr<AMyClass>> ActorsClassesToLoad;
+FFlow::LoadObjectsAsync(this, FFlow::ConvertSoftPtrToSoftPath(ActorsClassesToLoad), [this](bool bStopped)
+{
+  // Code to run when loading has finished
+});
+```
+
+
 
 #### Time Lock
 
