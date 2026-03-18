@@ -704,6 +704,7 @@ Coroutines doesn't have BP nodes as they are purely code feature.
 - [Wait Ticks](#wait-ticks)
 - [Wait Until](#wait-until)
 - [Run Async And Wait](#run-async-and-wait)
+- [Wait Load Objects](#wait-load-objects)
 - [Getting FECFHandle from FECFCoroutine](#getting-fecfhandle-from-fecfcoroutine)
 - [Checking for coroutine support](#checking-for-coroutine-support)
 
@@ -787,6 +788,24 @@ FECFCoroutine UMyClass::SuspandableFunction()
   // Do something after the above code has finished.
 }
 ```
+
+#### Wait Load Objects
+
+Starts loading the list of soft objects and waits until they are all loaded.  
+You can convert the list of `TSoftObjectPtr` and `TSoftClassPtr` to the list of `FSoftObjectPath` using the `FFlow::ConvertSoftPtrToSoftPath` as described in [Load Objects Async](#load-objects-async).
+
+``` cpp
+TArray<FSoftObjectPath> ObjectsToLoad;
+FECFCoroutine UMyClass::SuspandableFunction()
+{
+  // Do something
+  bool bStopped = co_await FFlow::WaitLoadObjects(this, ObjectsToLoad);
+  // Do something after objects are loaded
+}
+```
+
+[Back to coroutines](#coroutines-experimental)  
+[Back to top](#table-of-content)
 
 ## Getting FECFHandle from FECFCoroutine
 
