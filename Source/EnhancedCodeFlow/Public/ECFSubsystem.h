@@ -70,11 +70,11 @@ protected:
 #if (ECF_LOGS && ECF_LOGS_VERBOSE)
 			if (InstanceId.IsValid())
 			{
-				UE_LOG(LogECF, Verbose, TEXT("Started Instanced Action of class: %s, with HandleId: %s, and InstanceId: %s"), *NewAction->GetName(), *LastHandleId.ToString(), *InstanceId.ToString());
+				UE_LOG(LogECF, Verbose, TEXT("Started Instanced Action of class: %s, with HandleId: %s, and InstanceId: %s, Label: %s"), *NewAction->GetName(), *LastHandleId.ToString(), *InstanceId.ToString(), *Settings.Label);
 			}
 			else
 			{
-				UE_LOG(LogECF, Verbose, TEXT("Started Action of class: %s, with HandleId: %s"), *NewAction->GetName(), *LastHandleId.ToString());
+				UE_LOG(LogECF, Verbose, TEXT("Started Action of class: %s, with HandleId: %s, Label: %s"), *NewAction->GetName(), *LastHandleId.ToString(), *Settings.Label);
 			}
 #endif
 			return NewAction->GetHandleId();
@@ -82,7 +82,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("Failed to Setup Action of class: %s"), *NewAction->GetName());
+			UE_LOG(LogECF, Error, TEXT("Failed to Setup Action of class: %s, Label: %s"), *NewAction->GetName(), *Settings.Label);
 #endif
 		}
 
@@ -111,20 +111,38 @@ protected:
 		{
 			NewAction->Init();
 #if (ECF_LOGS && ECF_LOGS_VERBOSE)
-			UE_LOG(LogECF, Verbose, TEXT("Started Coroutine Action of class: %s"), *NewAction->GetName());
+			UE_LOG(LogECF, Verbose, TEXT("Started Coroutine Action of class: %s, Label: %s"), *NewAction->GetName(), *Settings.Label);
 #endif
 			PendingAddActions.Add(NewAction);
 		}
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("Failed to Setup Coroutine Action of class: %s"), *NewAction->GetName());
+			UE_LOG(LogECF, Error, TEXT("Failed to Setup Coroutine Action of class: %s, Label: %s"), *NewAction->GetName(), *Settings.Label);
 #endif
 		}
 	}
 
-	// Try to find running or pending action.
+	// Try to find running or pending action based on it's handle.
 	UECFActionBase* FindAction(const FECFHandle& HandleId) const;
+
+	// Finds handles of running or pending action of the given Class its FECFHandles.
+	TArray<FECFHandle> GetActionsHandlesByClass(TSubclassOf<UECFActionBase> Class) const;
+	
+	template<typename T>
+	TArray<FECFHandle> GetActionsHandlesByClass() const
+	{
+		return GetActionsHandlesByClass(T::StaticClass());
+	}
+
+	// Finds handles of running or pending action of the given Label its FECFHandles.
+	TArray<FECFHandle> GetActionsHandlesByLabel(const FString& Label) const;
+
+	// Returns the array of all running and pending actions. Use it mostly for debugging purposes.
+	TArray<UECFActionBase*> GetAllActions() const;
+
+	// Returns the number of all running and pending actions. Use it mostly for debugging purposes.
+	int32 GetActionsCount() const;
 
 	// Check if the action is running or pending to run.
 	bool HasAction(const FECFHandle& HandleId) const;
@@ -138,8 +156,10 @@ protected:
 	// Checks if this action is not paused. Returns false if there is no action.
 	bool IsActionPaused(const FECFHandle& HandleId, bool &bIsPaused) const;
 
-	// Resets the action
-	void ResetAction(const FECFHandle& HandleId, bool bCallUpdate);
+	// Resets the action. 
+	// Returns false if there was no action or action doesn't support resetting. 
+	// If bCallUpdate is true - the action should run an update event (if there is any) after it's reset.
+	bool ResetAction(const FECFHandle& HandleId, bool bCallUpdate);
 
 	// Remove Action of given HandleId from list. 
 	void RemoveAction(FECFHandle& HandleId, bool bComplete);
@@ -153,6 +173,9 @@ protected:
 	{
 		RemoveActionsOfClass(T::StaticClass(), bComplete, InOwner);
 	}
+
+	// Remove all Actions of async tasks with the given Label from list.
+	void RemoveActionsOfLabel(const FString& Label, bool bComplete, UObject* InOwner);
 
 	// Remove action with the given InstanceId.
 	void RemoveInstancedAction(const FECFInstanceId& InstanceId, bool bComplete);

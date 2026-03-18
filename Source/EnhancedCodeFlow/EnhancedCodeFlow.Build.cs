@@ -59,7 +59,7 @@ public class EnhancedCodeFlow : ModuleRules
 
         // Enable or disable logs displayed 
         bool bShowLogs = true;
-        bool bShowVerboseLogs = true;
+        bool bShowVerboseLogs = false;
         if (bShowLogs)
         {
             PublicDefinitions.Add("ECF_LOGS=1");

@@ -29,6 +29,8 @@ struct FECFCoroutinePromise
 	void return_void() { bHasFinished = true; }
 	void unhandled_exception() {}
 	bool bHasFinished = false;
+	bool bStopped = false;
+	bool bTimedOut = false;
 	FECFHandle ActionHandle;
 };
 
@@ -47,6 +49,8 @@ using FECFCoroutine = void;
 struct FECFCoroutinePromise
 {
 	bool bHasFinished = false;
+	bool bStopped = false;
+	bool bTimedOut = false;
 	FECFHandle ActionHandle;
 };
 

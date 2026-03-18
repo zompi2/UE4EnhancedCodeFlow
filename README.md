@@ -3,7 +3,7 @@
 This code plugin provides functions that drastically improve the quality of life during the implementation of game flow in C++.  
 It works very well with gameplay programming, UI programming with a lot of transitions or in any other situation.
 
-The plugin works on Unreal Engine: 4.27, 5.2, 5.3, 5.4, 5.5, 5.6.
+The plugin works on Unreal Engine: 4.27, 5.2-5.7.
 
 # Table of content
 
@@ -22,6 +22,7 @@ The plugin works on Unreal Engine: 4.27, 5.2, 5.3, 5.4, 5.5, 5.6.
 - [Extra Settings](#extra-settings)
 - [Instanced Actions](#instanced-actions)
 - [Coroutines (experimental)](#coroutines-experimental)
+- [Getting Running Actions](#getting-running-actions)
 - [Pausing and Resuming](#pausing-and-resuming)
 - [Stopping Actions](#stopping-actions)
 - [Resetting Actions](#resetting-actions)
@@ -36,11 +37,12 @@ If you don't want to build the plugin from the source you can get the prebuilt b
 
 | UE version | Plugin version | Link |
 | :--------- | :------------- | :--- |
-| 4.27       | 3.5.3          | [Zip](https://github.com/zompi2/UE4EnhancedCodeFlow/raw/packs/Packs/EnhancedCodeFlow-3.5.3-4.27-Prebuild.zip) |
-| 5.3        | 3.5.3          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
-| 5.4        | 3.5.3          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
-| 5.5        | 3.5.3          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
-| 5.6        | 3.5.3          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
+| 4.27       | 3.5.4          | [Zip](https://github.com/zompi2/UE4EnhancedCodeFlow/raw/packs/Packs/EnhancedCodeFlow-3.5.4-4.27-Prebuild.zip) |
+| 5.3        | 3.5.4          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
+| 5.4        | 3.5.4          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
+| 5.5        | 3.5.4          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
+| 5.6        | 3.5.4          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
+| 5.7        | 3.5.4          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
 
 [Back to top](#table-of-content)
 
@@ -141,6 +143,7 @@ Check out the **[Example Project](https://github.com/zompi2/UE4EnhancedCodeFlowE
 - [Add Custom Timeline](#add-custom-timeline)
   - [Add Custom Timeline Vector](#add-custom-timeline-vector)
   - [Add Custom Timeline Linear Color](#add-custom-timeline-linear-color)
+- [Load Objects Async](#load-objects-async)
 - [Time Lock](#time-lock)
 - [Do Once](#do-once)
 - [Do N Times](#do-n-times)
@@ -155,7 +158,8 @@ Run the following functions to use enhanced code flow!
 
 Execute specified action after some time. This can be useful in many various situations. Everytime when I was using a Delay node in blueprints I wish there was an equivalent of it in c++.  
 The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.
-If a time parameter is set to 0 it will execute in the next frame. If a time parameter is set less than 0 the action will not execute and will print an error to the log.
+If a time parameter is set to 0 it will execute in the next frame. If a time parameter is set less than 0 the action will not execute and will print an error to the log.  
+Can be resetted.
 
 ``` cpp
 FFlow::Delay(this, 2.f, [this](bool bStopped)
@@ -176,7 +180,8 @@ You can plan to execute delayed code without delaying the whole Blueprint, you c
 
 Execute specified action after some ticks. Can be useful if we want to execute some code in next game tick.  
 The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.
-If a number of ticks parameter is set to 0 it will execute in the next frame. If a number of ticks parameter is set less than 0 the action will not execute and will print an error to the log.
+If a number of ticks parameter is set to 0 it will execute in the next frame. If a number of ticks parameter is set less than 0 the action will not execute and will print an error to the log.  
+Can be resetted.
 
 ``` cpp
 FFlow::DelayTicks(this, 1, [this](bool bStopped)
@@ -193,7 +198,8 @@ FFlow::DelayTicks(this, 1, [this](bool bStopped)
 #### Add Ticker
 
 Creates a ticker. It can tick specified amount of time or until it won't be stopped or when owning object won't be destroyed.  
-Useful for actors and components that you don't want to be tickeable, but needs one tick to do something.
+Useful for actors and components that you don't want to be tickeable, but needs one tick to do something.  
+Can be resetted.
 
 **Run ticker for 10 seconds**
 
@@ -259,7 +265,7 @@ You can specify a timeout, which will stop this action after the given time. Set
 The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.  
 The `bTimedOut` tells if this action has been stopped because it timed out. This argument is optional.
 Perfect solution if code needs a reference to an object, which spawn moment is not clearly defined, or if you can execute a specific code only when the game reaches a specific state. 
-
+Can be resetted. The reset resets the timeout.
 
 ``` cpp
 FFlow::WaitAndExecute(this, [this](float DeltaTime)
@@ -288,6 +294,7 @@ While the specified conditions are true tick the given code.
 This one is useful when you want to write a loop that executes one run every tick until it finishes it's job.  
 You can specify a timeout, which will stop this action after the given time. Setting the timeout value to less or equal 0 will cause this function to run infinitely untill the predicate returns false or when it is explicitly stopped.  
 You can optionally defined what happens when the loop ends.  
+Can be resetted. It resets the timeout.
 
 ``` cpp
 FFlow::WhileTrueExecute(this, [this]()
@@ -323,7 +330,8 @@ You can specify a timeout, which will stop this action after the given time.
 > Have in mind, that the neither the timeout nor stopping the action will not stop the running async thread. It just won't trigger the callback when the async task ends. Handle timeout on the side of the async task itself.  
 
 The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.  
-You can define the priority of the running task as `Normal` (`AnyBackgroundThreadNormalTask`) or `HiPriority` (`AnyBackgroundHiPriTask`).
+You can define the priority of the running task as `Normal` (`AnyBackgroundThreadNormalTask`) or `HiPriority` (`AnyBackgroundHiPriTask`).  
+Can be resetted (it will reset the timeout)
 
 > Have in mind, that you can start this function from GameThread only!
 
@@ -366,6 +374,7 @@ The function requires the following parameters:
 * BlendExp - an exponent defining a shape of EaseIn, EaseOut and EaseInOut function shapes. *(default value: 1.f)*;
 
 The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.  
+Can be resetted.
 
 ``` cpp
 FFlow::AddTimeline(this, 0.f, 1.f, 2.f, [this](float Value, float Time)
@@ -404,7 +413,8 @@ EECFBlendFunc::ECFBlend_Linear, 2.f);
 
 #### Add timeline linear color
 
-The same as `Add timeline`, but with a LinearColor instead of float 
+The same as `Add timeline`, but with a LinearColor instead of float   
+Can be resetted.
 
 ``` cpp
 FFlow::AddTimelineLinearColor(this, FLinearColor(0.f, 0.f, 0.f, 1.f), FLinearColor(1.f, 1.f, 1.f, 1.f), 2.f, [this](FLinearColor Value, float Time)
@@ -422,7 +432,8 @@ EECFBlendFunc::ECFBlend_Linear, 2.f);
 
 #### Add custom timeline
 
-Creates a discrete timeline which shape is based on a **UCurveFloat**. Works like the previously described timeline, but an asset with a curve must be given.
+Creates a discrete timeline which shape is based on a **UCurveFloat**. Works like the previously described timeline, but an asset with a curve must be given.  
+Can be resetted.
 
 ``` cpp
 FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
@@ -442,7 +453,8 @@ FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
 
 #### Add custom timeline vector
 
-The same as `Add custom timeline` but with **UCurveVector** instead of **UCurveFloat**.
+The same as `Add custom timeline` but with **UCurveVector** instead of **UCurveFloat**.  
+Can be resetted.
 
 ``` cpp
 FFlow::AddCustomTimelineVector(this, Curve, [this](FVector Value, float Time)
@@ -462,7 +474,8 @@ FFlow::AddCustomTimelineVector(this, Curve, [this](FVector Value, float Time)
 
 #### Add custom timeline linear color
 
-The same as `Add custom timeline` but with **UCurveLinearColor** instead of **UCurveFloat**.
+The same as `Add custom timeline` but with **UCurveLinearColor** instead of **UCurveFloat**.  
+Can be resetted.
 
 ``` cpp
 FFlow::AddCustomTimelineLinearColor(this, Curve, [this](FLinearColor Value, float Time)
@@ -480,11 +493,45 @@ FFlow::AddCustomTimelineLinearColor(this, Curve, [this](FLinearColor Value, floa
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
 
+#### Load Objects Async
+
+Loads a list of soft objects. The same thing can be achieved by using `FStreamableManager::RequestAsyncLoad` function.  
+However, the plugin exposes this functionality to BP and coroutines.
+
+```cpp
+TArray<FSoftObjectPath> ObjectsToLoad;
+FFlow::LoadObjectsAsync(this, ObjectsToLoad, [this](bool bStopped)
+{
+  // Code to run when loading has finished
+});
+```
+
+You can convert the list of `TSoftObjectPtr` and `TSoftClassPtr` to the list of `FSoftObjectPath` using the provided function:
+
+```cpp
+TArray<TSoftObjectPtr<AMyClass>> ActorsToLoad;
+FFlow::LoadObjectsAsync(this, FFlow::ConvertSoftPtrToSoftPath(ActorsToLoad), [this](bool bStopped)
+{
+  // Code to run when loading has finished
+});
+
+TArray<TSoftClassPtr<AMyClass>> ActorsClassesToLoad;
+FFlow::LoadObjectsAsync(this, FFlow::ConvertSoftPtrToSoftPath(ActorsClassesToLoad), [this](bool bStopped)
+{
+  // Code to run when loading has finished
+});
+```
+![loadas](https://github.com/user-attachments/assets/af3d040a-c5f1-435f-8253-3b5a78d06d07)
+
+[Back to actions list](#usage)  
+[Back to top](#table-of-content)
+
 #### Time Lock
 
 **(Instanced)**
 
-Blocks execution of the block of code until the given time has passed.
+Blocks execution of the block of code until the given time has passed.  
+Can be resetted.
 
 ``` cpp
 static FECFInstanceId InstanceId = FECFInstanceId::NewId();
@@ -505,7 +552,8 @@ BP version of this function requires `InstanceId` too. The BP node will validate
 
 **(Instanced)**
 
-Allow to execute the given block of code only once.
+Allow to execute the given block of code only once.  
+Can be resetted.
 
 ``` cpp
 static FECFInstanceId InstanceId = FECFInstanceId::NewId();
@@ -523,7 +571,8 @@ FFlow::DoOnce(this, [this]()
 
 **(Instanced)**
 
-Allow to execute the given block of code only given amount of times.
+Allow to execute the given block of code only given amount of times.  
+Can be resetted.
 
 ``` cpp
 static FECFInstanceId InstanceId = FECFInstanceId::NewId();
@@ -542,7 +591,8 @@ FFlow::DoNTimes(this, 5, [this](int32 Counter)
 
 **(Instanced)**
 
-It will execute the given block of code immediately, but the next execution will be enqueued and will be called after specified time. There is a parameter which allow to define how many next executions can be enqueued (must be at least 1). If this code will be used when the queue is full - the code will be discarded (not enqueued).
+It will execute the given block of code immediately, but the next execution will be enqueued and will be called after specified time. There is a parameter which allow to define how many next executions can be enqueued (must be at least 1). If this code will be used when the queue is full - the code will be discarded (not enqueued).  
+Can be resetted.
 
 ``` cpp
 static FECFInstanceId InstanceId = FECFInstanceId::NewId();
@@ -568,6 +618,7 @@ You can define extra settings at the end of each action launch. Currently the fo
 * Ignore Game Pause - it will ignore the game pause.
 * Ignore Global Time Dilation - it will ignore global time dilation when ticking.
 * Start Paused - the action will start in paused state and must be resumed manually.
+* Label - the string that can be used to identify the action.
 
 ``` cpp
 FFlow::AddTicker(this, 10.f, [this](float DeltaTime)
@@ -652,6 +703,7 @@ Coroutines doesn't have BP nodes as they are purely code feature.
 - [Wait Ticks](#wait-ticks)
 - [Wait Until](#wait-until)
 - [Run Async And Wait](#run-async-and-wait)
+- [Wait Load Objects](#wait-load-objects)
 - [Getting FECFHandle from FECFCoroutine](#getting-fecfhandle-from-fecfcoroutine)
 - [Checking for coroutine support](#checking-for-coroutine-support)
 
@@ -659,13 +711,15 @@ Coroutines doesn't have BP nodes as they are purely code feature.
 
 #### Wait Seconds
 
-Suspends the coroutine for a specified amount of seconds. It works like Delay in Blueprints.
+Suspends the coroutine for a specified amount of seconds. It works like Delay in Blueprints.  
+Coroutine returns `bStopped` bool informing if the Action has been prematurely terminated.  
+Can be resetted.
 
 ``` cpp
 FECFCoroutine UMyClass::SuspandableFunction()
 {
   // Do something
-  co_await FFlow::WaitSeconds(this, 2.f);
+  bool bStopped = co_await FFlow::WaitSeconds(this, 2.f);
   // Do something after 2 seconds
 }
 ```
@@ -675,13 +729,15 @@ FECFCoroutine UMyClass::SuspandableFunction()
 
 #### Wait Ticks
 
-Suspends the coroutine for a specified amount of tick.
+Suspends the coroutine for a specified amount of tick.  
+Coroutine returns `bStopped` bool informing if the Action has been prematurely terminated.  
+Can be resetted.
 
 ``` cpp
 FECFCoroutine UMyClass::SuspandableFunction()
 {
   // Do something
-  co_await FFlow::WaitTicks(this, 1);
+  bool bStopped = co_await FFlow::WaitTicks(this, 1);
   // Do something after 1 tick
 }
 ```
@@ -691,16 +747,19 @@ FECFCoroutine UMyClass::SuspandableFunction()
 
 #### Wait Until
 
-Suspends the coroutine until the given predicate conditions are met.
+Suspends the coroutine until the given predicate conditions are met.  
+Coroutine returns `bStopped` bool informing if the Action has been prematurely terminated and `bTimedOut` informing if the Action reached it's time out.  
+Can be resetted. It resets the timeout.
 
 ``` cpp
 FECFCoroutine UMyClass::SuspandableFunction()
 {
   // Do something
-  co_await FFlow::WaitUntil(this, [this](float DeltaTime)
+  auto [bStopped, bTimedOut] = co_await FFlow::WaitUntil(this, [this](float DeltaTime)
   {
     // Write your own predicate. 
-    // Return true when you want to resume the coroutine function.
+    // Return true when you want to execute the code below.
+    // The DeltaTime parameter is optional.
     return bIsReadyToUse;
   }, TimeOut);
   // Do something after conditions specified in the predicate are met. 
@@ -712,20 +771,40 @@ FECFCoroutine UMyClass::SuspandableFunction()
 
 #### Run Async And Wait
 
-Runs the given block of code on a background thread and wait for it's completion before moving on.
+Runs the given block of code on a background thread and wait for it's completion before moving on.  
+Coroutine returns `bStopped` bool informing if the Action has been prematurely terminated and `bTimedOut` informing if the Action reached it's time out.  
+Can be resetted. It will reset the timeout.  
 > Have in mind, that you can start this coroutine from GameThread only!
 
 ``` cpp
 FECFCoroutine UMyClass::SuspandableFunction()
 {
   // Do something
-  co_await FFlow::RunAsyncAndWait(this, [this]()
+  auto [bStopped, bTimedOut] = co_await FFlow::RunAsyncAndWait(this, [this]()
   {
     // This code will run on a separate background thread.
   }, TimeOut, EECFAsyncPrio::Normal);
   // Do something after the above code has finished.
 }
 ```
+
+#### Wait Load Objects
+
+Starts loading the list of soft objects and waits until they are all loaded.  
+You can convert the list of `TSoftObjectPtr` and `TSoftClassPtr` to the list of `FSoftObjectPath` using the `FFlow::ConvertSoftPtrToSoftPath` as described in [Load Objects Async](#load-objects-async).
+
+``` cpp
+TArray<FSoftObjectPath> ObjectsToLoad;
+FECFCoroutine UMyClass::SuspandableFunction()
+{
+  // Do something
+  bool bStopped = co_await FFlow::WaitLoadObjects(this, ObjectsToLoad);
+  // Do something after objects are loaded
+}
+```
+
+[Back to coroutines](#coroutines-experimental)  
+[Back to top](#table-of-content)
 
 ## Getting FECFHandle from FECFCoroutine
 
@@ -749,6 +828,27 @@ If you compile your code on multiple platforms and some of them do not support c
 This applies especially to places where you use coroutine keywords, like `co_await` or `.promise()`.
 
 [Back to coroutines](#coroutines-experimental)  
+[Back to top](#table-of-content)
+
+# Getting Running Actions
+To get running action's handles use one of the following functions:
+
+#### Get Actions Handles by Class
+
+```cpp
+TArray<FECFHandle> Handles = FFlow::GetActionsHandlesByClass<UECFDelay>(GetWorld());
+```
+
+<img width="335" height="121" alt="ecffindbyclass" src="https://github.com/user-attachments/assets/c0ed2205-8f6a-4c15-9282-3f21938d0af6" />
+
+#### Get Actions Handles by Label
+
+```cpp
+TArray<FECFHandle> Handles = FFlow::GetActionsHandlesByLabel<UECFDelay>(TEXT("MyLabel"));
+```
+
+<img width="313" height="94" alt="ecffindbylabel" src="https://github.com/user-attachments/assets/5982c741-a064-4e02-a02b-72caa64f49cb" />
+
 [Back to top](#table-of-content)
 
 # Pausing and Resuming
@@ -801,7 +901,15 @@ FFlow::StopAllActions(GetWorld(), false, Owner); // <- stops all of the actions 
 
 When the **completion** callback will run after the Stop Function, the `bStopped` argument in the completion function of the action will be set to `true`.
 
-![stopping](https://user-images.githubusercontent.com/7863125/180849533-03cb9d37-977f-4c9e-8961-aebd60f8ee25.png)
+You can also stop all of the **specific** actions of the given class or with a label. In this case you can also optionally specifiy an owner of this actions, or simply stop all of them.
+You can also specify if stopped actions should launch their **completion** callbacks or not.
+
+``` cpp
+FFlow::StopAllActionsOfClass<UECFDelay>(GetWorld()); // <- stops all Delay actions
+FFlow::StopAllActionsWithLabel(GetWorld(), TEXT("MyLabel")); // <- stops all actions with "MyLabel" label
+```
+
+<img width="1021" height="366" alt="ecfstopall" src="https://github.com/user-attachments/assets/64527bff-38f4-46a2-b8d7-9f1ebb905f8d" />
 
 You can also stop a specific Instanced action with the **`FECFInstanceId`**:
 
@@ -812,36 +920,6 @@ FFlow::StopInstancedAction(GetWorld(), InstanceId, true); // <- stops all action
 
 ![stopinst](https://user-images.githubusercontent.com/7863125/180849970-246f8d85-33c0-406c-af23-da4cd9244019.png)
 
-You can also stop all of the **specific** actions. In this case you can also optionally specifiy an owner of this actions, or simply stop all of them.
-You can also specify if stopped actions should launch their **completion** callbacks or not.
-
-``` cpp
-FFlow::RemoveAllDelays(GetWorld());
-FFlow::RemoveAllTickers(GetWorld());
-FFlow::RemoveAllWaitAndExecutes(GetWorld());
-FFlow::RemoveAllWhileTrueExecutes(GetWorld());
-FFlow::RemoveAllRunAsyncThen(GetWorld());
-FFlow::RemoveAllTimelines(GetWorld());
-FFlow::RemoveAllTimelinesVector(GetWorld());
-FFlow::RemoveAllTimelinesLinearColor(GetWorld());
-FFlow::RemoveAllCustomTimelines(GetWorld());
-FFlow::RemoveAllCustomTimelinesVector(GetWorld());
-FFlow::RemoveAllCustomTimelinesLinearColor(GetWorld());
-FFlow::RemoveAllTimeLocks(GetWorld());
-FFlow::RemoveAllDoNoMoreThanXTimes(GetWorld());
-```
-
-![stopall](https://github.com/user-attachments/assets/953e5379-b403-4400-91ad-31060f84a0a5)
-
-You can also stop all of the running actions that handle coroutines.
-
-``` cpp
-FFlow::RemoveAllWaitSeconds(GetWorld(), true);
-FFlow::RemoveAllWaitTicks(GetWorld(), true);
-FFlow::RemoveAllWaitUntil(GetWorld(), true);
-FFlow::RemoveAllRunAsyncAndWait(GetWorld(), true);
-```
-
 **IMPORTANT!** If you stop the action which handles a coroutine be aware that if you won't set `bComplete` to true, the suspended coroutine will never be resumed!
 
 [Back to top](#table-of-content)
@@ -851,16 +929,29 @@ FFlow::RemoveAllRunAsyncAndWait(GetWorld(), true);
 Every running action, if we know it's handle, can be resetted.
 
 ``` cpp
-FFlow::ResetAction(GetWorld(), ActionHandle, false);
+bool bHasResetted = FFlow::ResetAction(GetWorld(), ActionHandle, false);
 ```
 
 The third parameter tells if after reset the action's callback should run immediately.  
 For example, if we reset Timeline Action, running callback immediately will run the callback with initial Timeline values right after the reset.  
-Otherwise, ECF will wait for the first next update of the Timeline to run callback.
+Otherwise, ECF will wait for the first next update of the Timeline to run callback.  
+The function returns true if the Action has actually resetted. False if it didn't (for example it doesn't support reset or Action is invalid).
 
-There is also a node to run this in Blueprints.
+There is also a node to run this in Blueprints.  
 
-![resa](https://github.com/user-attachments/assets/6acc9703-c68f-4c2b-9976-522dda2150b3)
+![resa](https://github.com/user-attachments/assets/59cc9a27-3223-449c-8bc5-799469362325)
+
+Coroutine Actions also can be resetted. To get their handle you must first get a Coroutine Handle from a suspendable function.
+
+``` cpp
+FECFCoroutine SuspendableFunction()
+{
+	co_await FFlow::WaitSeconds(GetWorld(), 2.f);
+}
+
+FECFCoroutine Handle = SuspendableFunction();
+FFlow::ResetAction(GetWorld(), Handle.promise().ActionHandle, true);
+```
 
 [Back to top](#table-of-content)
 
@@ -892,7 +983,7 @@ You can also display more detailed plugin's performance info with `stat ecfdetai
 You can measure performence using [Unreal Insights](https://docs.unrealengine.com/4.26/en-US/TestingAndOptimization/PerformanceAndProfiling/UnrealInsights/) tool.  
 It measures the overall time the plugin needs to perform one full update and the time every single action needs to perform their ticks.
 
-You can disable Unreal Insights traces for this plugin by setting `bShowLogs` and `bShowVerboseLogs` in `EnhancedCodeFlow.Build.cs` to `false`.
+You can disable Unreal Insights traces for this plugin by setting `bEnableInsightProfiling` in `EnhancedCodeFlow.Build.cs` to `false`.
 
 ![insight](https://github.com/user-attachments/assets/9fdf838a-722a-4e64-bfc9-bf7bc81cb1ea)
 
@@ -908,7 +999,7 @@ To enable verbose logging add the following block to `DefaultEngine.ini`:
 LogECF=Verbose
 ```
 
-You can disable Logs entirely by setting `bEnableInsightProfiling` in `EnhancedCodeFlow.Build.cs` to `false`.
+You can disable Logs entirely for this plugin by setting `bShowLogs` and `bShowVerboseLogs` in `EnhancedCodeFlow.Build.cs` to `false`.
 
 [Back to top](#table-of-content)
 
@@ -1000,6 +1091,7 @@ void FECFCoroutineTask_NewCoroAction::await_suspend(FECFCoroutineHandle CoroHand
 ```cpp
 void Complete(bool bStopped) override
 {
+	CoroutineHandle.promise().bStopped = bStopped;
 	CoroutineHandle.resume();
 }
 ```

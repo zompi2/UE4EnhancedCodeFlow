@@ -17,9 +17,11 @@ class ENHANCEDCODEFLOW_API UECFWaitUntil : public UECFCoroutineActionBase
 protected:
 
 	TUniqueFunction<bool(float)> Predicate;
+	TUniqueFunction<bool()> Predicate_NoDeltaTime;
 	float TimeOut = 0.f;
 	float OriginTimeOut = 0.f;
 	bool bWithTimeOut = false;
+	bool bTimedOut = false;
 
 	bool Setup(TUniqueFunction<bool(float)>&& InPredicate, float InTimeOut)
 	{
@@ -35,6 +37,7 @@ protected:
 			if (InTimeOut > 0.f)
 			{
 				bWithTimeOut = true;
+				bTimedOut = false;
 				TimeOut = InTimeOut;
 				OriginTimeOut = InTimeOut;
 				SetMaxActionTime(TimeOut);
@@ -48,18 +51,38 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF Coroutine - Wait Until failed to start. Are you sure the Predicate is set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF Coroutine [%s] - Wait Until failed to start. Are you sure the Predicate is set properly?"), *Settings.Label);
 #endif
 			return false;
 		}
 	}
 
-	void Reset(bool bCallUpdate) override
+	bool Setup(TUniqueFunction<bool()>&& InPredicate, float InTimeOut)
+	{
+		Predicate_NoDeltaTime = MoveTemp(InPredicate);
+		if (Predicate_NoDeltaTime)
+		{
+			return Setup([this](float DeltaTime)
+			{
+				return Predicate_NoDeltaTime();
+			}, InTimeOut);
+		}
+		else
+		{
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF Coroutine [%s] - Wait Until failed to start. Are you sure the Predicate is set properly?"), *Settings.Label);
+#endif
+			return false;
+		}
+	}
+
+	bool Reset(bool bCallUpdate) override
 	{
 		if (bWithTimeOut)
 		{
 			TimeOut = OriginTimeOut;
 		}
+		return true;
 	}
 
 	void Tick(float DeltaTime) override
@@ -77,6 +100,7 @@ protected:
 			TimeOut -= DeltaTime;
 			if (TimeOut <= 0.f)
 			{
+				bTimedOut = true;
 				MarkAsFinished();
 				Complete(false);
 				return;
@@ -92,6 +116,8 @@ protected:
 
 	void Complete(bool bStopped) override
 	{
+		CoroutineHandle.promise().bTimedOut = bTimedOut;
+		CoroutineHandle.promise().bStopped = bStopped;
 		CoroutineHandle.resume();
 	}
 };
