@@ -30,7 +30,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF - do once failed to start. Are you sure the Exec Function is is set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF - [%s] do once failed to start. Are you sure the Exec Function is is set properly?"), *Settings.Label);
 #endif
 			return false;
 		}
@@ -42,9 +42,10 @@ protected:
 		ExecFunc();
 	}
 
-	void Reset(bool bCallUpdate) override
+	bool Reset(bool bCallUpdate) override
 	{
 		bWasCalled = false;
+		return true;
 	}
 
 	void RetriggeredInstancedAction() override

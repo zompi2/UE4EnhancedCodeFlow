@@ -32,6 +32,7 @@
 #include "ECFActionSettings.h"
 #include "ECFInstanceId.h"
 #include "Coroutines/ECFCoroutineAwaiters.h"
+#include "ECFConcepts.h"
 
 class ENHANCEDCODEFLOW_API FEnhancedCodeFlow
 {
@@ -44,6 +45,42 @@ public:
 	 * Checks if the action pointed by given handle is running.
 	 */
 	static bool IsActionRunning(const UObject* WorldContextObject, const FECFHandle& Handle);
+
+	/**
+	 * Finds handles of running or pending action of the given Class its FECFHandles.
+	 */
+	static TArray<FECFHandle> GetActionsHandlesByClass(const UObject* WorldContextObject, TSubclassOf<UECFActionBase> Class);
+
+	template<typename T>
+	static TArray<FECFHandle> GetActionsHandlesByClass(const UObject* WorldContextObject)
+	{
+		return GetActionsHandlesByClass(WorldContextObject, T::StaticClass());
+	}
+
+	/**
+	 * Finds handles of running or pending action of the given Label its FECFHandles.
+	 */
+	static TArray<FECFHandle> GetActionsHandlesByLabel(const UObject* WorldContextObject, const FString& Label);
+
+	/**
+	 * Returns the array of all running and pending actions. Use it mostly for debugging purposes.
+	 */
+	static TArray<UECFActionBase*> GetAllActions(const UObject* WorldContextObject);
+
+	/**
+	 * Returns the number of all running and pending actions. Use it mostly for debugging purposes.
+	 */
+	static int32 GetActionsCount(const UObject* WorldContextObject);
+
+	/**
+	 * Returns the popinter to the Action. Use it mostly for debugging purposes.
+	 */
+	static UECFActionBase* GetActionFromHandle(const UObject* WorldContextObject, const FECFHandle& Handle);
+
+	/**
+	 * Returns the popinter to the Instanced Action. Use it mostly for debugging purposes.
+	 */
+	static UECFActionBase* GetActionFromInstancedId(const UObject* WorldContextObject, const FECFInstanceId& InstancedId);
 
 	/**
 	 * Pause ticking in the action pointed by given handle.
@@ -62,10 +99,11 @@ public:
 	static bool IsActionPaused(const UObject* WorldContextObject, const FECFHandle& Handle, bool &bIsPaused);
 
 	/**
-	 * 	Resets the action. Have in mind that not every action has reset functionality.
-	 *  If bCallUpdate is true - the action should run an update event (if there is any) after it's reset.
+	 * Resets the action. Have in mind that not every action has reset functionality.
+	 * If bCallUpdate is true - the action should run an update event (if there is any) after it's reset.
+	 * Returns true if the action was reset, false if there is no action or the action doesn't support resetting.
 	 */
-	static void ResetAction(const UObject* WorldContextObject, const FECFHandle& Handle, bool bCallUpdate);
+	static bool ResetAction(const UObject* WorldContextObject, const FECFHandle& Handle, bool bCallUpdate);
 
 	/**
 	 * Sets if the ECF system is paused or not.
@@ -99,6 +137,27 @@ public:
 	 */
 	static void StopAllActions(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
+	/**
+	 * Stops all running actions of the given class.
+	 * If owner is defined it will remove only actions from that given owner.
+	 * bComplete param indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 */
+	static void StopAllActionsOfClass(const UObject* WorldContextObject, TSubclassOf<UECFActionBase> Class, bool bComplete = false, UObject* InOwner = nullptr);
+	
+	template<typename T>
+	static void StopAllActionsOfClass(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr)
+	{
+		StopAllActionsOfClass(WorldContextObject, T::StaticClass(), bComplete, InOwner);
+	}
+
+	/**
+	 * Stops all running actions with the given label.
+	 * If owner is defined it will remove only actions from that given owner.
+	 * bComplete param indicates if the action should be completed when stopped (run callback), or simply stopped.
+	 */
+	static void StopAllActionsWithLabel(const UObject* WorldContextObject, const FString& Label, bool bComplete = false, UObject* InOwner = nullptr);
+
+
 	/*^^^ Ticker ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 	/**
@@ -128,6 +187,7 @@ public:
 	 * @param InOwner [optional] - if defined it will remove tickers only from the given owner. Otherwise
 	 *                             it will remove tickers from everywhere.
 	 */
+	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFTicker> instead.")]]
 	static void RemoveAllTickers(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^ Delay ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -149,6 +209,7 @@ public:
 	 * @param InOwner [optional] - if defined it will remove delayed actions only from the given owner. Otherwise
 	 *                             it will remove delayed actions from everywhere.
 	 */
+	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFDelay> instead.")]]
 	static void RemoveAllDelays(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^ Delay Ticks ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -170,6 +231,7 @@ public:
 	 * @param InOwner [optional] - if defined it will remove delayed actions only from the given owner. Otherwise
 	 *                             it will remove delayed actions from everywhere.
 	 */
+	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFDelayTicks> instead.")]]
 	static void RemoveAllDelayTicks(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^ Wait And Execute ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -201,6 +263,7 @@ public:
 	 * @param InOwner [optional] - if defined it will remove "wait and execute" actions only from the given owner. 
 	 *                             Otherwise it will remove all "wait and execute" actions from everywhere.
 	 */
+	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFWaitAndExecute> instead.")]]
 	static void RemoveAllWaitAndExecutes(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^ While True Execute ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -227,6 +290,7 @@ public:
 	 * @param InOwner [optional] - if defined it will remove "while true execute" actions only from the given owner. 
 	 *							   Otherwise it will remove all "while true execute" actions from everywhere.
 	 */
+	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFWhileTrueExecute> instead.")]]
 	static void RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^ Timeline ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -253,6 +317,7 @@ public:
 	 * @param InOwner [optional] - if defined it will remove timelines only from the given owner. 
 	 *                             Otherwise it will remove all timelines from everywhere.
 	 */
+	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFTimeline> instead.")]]
 	static void RemoveAllTimelines(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^ Timeline Vector ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -273,6 +338,7 @@ public:
 	static FECFHandle AddTimelineVector(const UObject* InOwner, FVector InStartValue, FVector InStopValue, float InTime, TUniqueFunction<void(FVector/* Value*/, float/* Time*/)>&& InTickFunc, TUniqueFunction<void(FVector/* Value*/, float/* Time*/, bool/* bStopped*/)>&& InCallbackFunc = nullptr, EECFBlendFunc InBlendFunc = EECFBlendFunc::ECFBlend_Linear, float InBlendExp = 1.f, const FECFActionSettings& Settings = {});
 	static FECFHandle AddTimelineVector(const UObject* InOwner, FVector InStartValue, FVector InStopValue, float InTime, TUniqueFunction<void(FVector/* Value*/, float/* Time*/)>&& InTickFunc, TUniqueFunction<void(FVector/* Value*/, float/* Time*/)>&& InCallbackFunc = nullptr, EECFBlendFunc InBlendFunc = EECFBlendFunc::ECFBlend_Linear, float InBlendExp = 1.f, const FECFActionSettings& Settings = {});
 
+	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFTimelineVector> instead.")]]
 	static void RemoveAllTimelinesVector(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 	
 	/*^^^ Timeline Linear Color ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -293,6 +359,7 @@ public:
 	static FECFHandle AddTimelineLinearColor(const UObject* InOwner, FLinearColor InStartValue, FLinearColor InStopValue, float InTime, TUniqueFunction<void(FLinearColor/* Value*/, float/* Time*/)>&& InTickFunc, TUniqueFunction<void(FLinearColor/* Value*/, float/* Time*/, bool/* bStopped*/)>&& InCallbackFunc = nullptr, EECFBlendFunc InBlendFunc = EECFBlendFunc::ECFBlend_Linear, float InBlendExp = 1.f, const FECFActionSettings& Settings = {});
 	static FECFHandle AddTimelineLinearColor(const UObject* InOwner, FLinearColor InStartValue, FLinearColor InStopValue, float InTime, TUniqueFunction<void(FLinearColor/* Value*/, float/* Time*/)>&& InTickFunc, TUniqueFunction<void(FLinearColor/* Value*/, float/* Time*/)>&& InCallbackFunc = nullptr, EECFBlendFunc InBlendFunc = EECFBlendFunc::ECFBlend_Linear, float InBlendExp = 1.f, const FECFActionSettings& Settings = {});
 
+	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFTimelineLinearColor> instead.")]]
 	static void RemoveAllTimelinesLinearColor(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^ Custom Timeline ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -315,6 +382,7 @@ public:
 	 * @param InOwner [optional] - if defined it will remove custom timelines only from the given owner. 
 	 *                             Otherwise it will remove all custom timelines from everywhere.
 	 */
+	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFCustomTimeline> instead.")]]
 	static void RemoveAllCustomTimelines(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^ Custom Timeline Vector ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -337,6 +405,7 @@ public:
 	 * @param InOwner [optional] - if defined it will remove custom timelines only from the given owner. 
 	 *                             Otherwise it will remove all custom timelines from everywhere.
 	 */
+	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFCustomTimelineVector> instead.")]]
 	static void RemoveAllCustomTimelinesVector(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^ Custom Timeline LinearColor ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -359,6 +428,7 @@ public:
 	 * @param InOwner [optional] - if defined it will remove custom timelines only from the given owner. 
 	 *                             Otherwise it will remove all custom timelines from everywhere.
 	 */
+	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFCustomTimelineLinearColor> instead.")]]
 	static void RemoveAllCustomTimelinesLinearColor(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^ Time Lock ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -376,6 +446,7 @@ public:
 	 * @param InOwner [optional] - if defined it will remove time locks only from the given owner.
 	 *                             Otherwise it will remove all time locks from everywhere.
 	 */
+	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFTimeLock> instead.")]]
 	static void RemoveAllTimeLocks(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
 	/*^^^ Do Once ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -392,6 +463,7 @@ public:
 	 * @param InOwner [optional] - if defined it will remove time locks only from the given owner.
 	 *                             Otherwise it will remove all time locks from everywhere.
 	 */
+	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFDoOnce> instead.")]]
 	static void RemoveAllDoOnce(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
 	/*^^^ Do N Times ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -409,6 +481,7 @@ public:
 	 * @param InOwner [optional] - if defined it will remove time locks only from the given owner.
 	 *                             Otherwise it will remove all time locks from everywhere.
 	 */
+	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFDoNTimes> instead.")]]
 	static void RemoveAllDoNTimes(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
 	/*^^^ Do No More Than X Time ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -428,6 +501,7 @@ public:
 	 * @param InOwner [optional] - if defined it will remove time locks only from the given owner.
 	 *                             Otherwise it will remove all time locks from everywhere.
 	 */
+	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFDoNoMoreThanXTime> instead.")]]
 	static void RemoveAllDoNoMoreThanXTimes(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
 	/*^^^ Run Async Then ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -455,8 +529,22 @@ public:
 	 * @param InOwner [optional] - if defined it will remove time locks only from the given owner.
 	 *                             Otherwise it will remove all time locks from everywhere.
 	 */
+	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFRunAsyncThen> instead.")]]
 	static void RemoveAllRunAsyncThen(const UObject* WorldContextObject, UObject* InOwner = nullptr);
 
+	/*^^^ Load Objects Async ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Asynchronously loads a list of assets using StreamableManager and calls a callback when all assets are loaded.
+	 * @param InObjectsToLoad		- an array of soft object paths to load.
+	 * @param InCallbackFunc		- a callback function to execute when loading is complete. Can be:
+	 *	[](bool bStopped) -> void.
+	 *	[]() -> void.
+	 * @param Settings [optional]	- an extra settings to apply to this action.
+	 * @return FECFHandle			- handle to the loading action. Can be used to pause, resume, or stop the loading.
+	 */
+	static FECFHandle LoadObjectsAsync(const UObject* InOwner, const TArray<FSoftObjectPath>& InObjectsToLoad, TUniqueFunction<void(bool/* bStopped*/)>&& InCallbackFunc, const FECFActionSettings& Settings = {});
+	static FECFHandle LoadObjectsAsync(const UObject* InOwner, const TArray<FSoftObjectPath>& InObjectsToLoad, TUniqueFunction<void()>&& InCallbackFunc, const FECFActionSettings& Settings = {});
 
 	/*^^^ Wait Seconds (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
@@ -474,6 +562,7 @@ public:
 	 * @param InOwner [optional] - if defined it will remove Wait Seconds actions only from the given owner. Otherwise
 	 *                             it will remove Wait Seconds actions from everywhere.
 	 */
+	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFWaitSeconds> instead.")]]
 	static void RemoveAllWaitSeconds(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^ Wait Ticks (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -492,6 +581,7 @@ public:
 	 * @param InOwner [optional] - if defined it will remove Wait Ticks actions only from the given owner. Otherwise
 	 *                             it will remove Wait Ticks actions from everywhere.
 	 */
+	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFWaitTicks> instead.")]]
 	static void RemoveAllWaitTicks(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^ Wait Until (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -499,11 +589,14 @@ public:
 	/**
 	 * Suspends running coroutine function until the given predicate won't return true.
 	 * @param InPredicate			- a function that decides if the suspended function should be resumed.
-	 *								  If it returns true it means the suspended function must be resumed. Must be: [](float DeltaTime) -> bool
+	 *								  If it returns true it means the suspended function must be resumed. Can be: 
+	 *									[]() -> bool, 
+	 *									[](float DeltaTime) -> bool
 	 * @param InTimeOut				- if greater than 0.f it will apply timeout to this action. After this timeout the suspended function will be resumed.
 	 * @param Settings [optional]	- an extra settings to apply to this action.
 	 */
 	static FECFCoroutineAwaiter_WaitUntil WaitUntil(const UObject* InOwner, TUniqueFunction<bool(float/* DeltaTime*/)>&& InPredicate, float InTimeOut = 0.f, const FECFActionSettings& Settings = {});
+	static FECFCoroutineAwaiter_WaitUntil WaitUntil(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, float InTimeOut = 0.f, const FECFActionSettings& Settings = {});
 
 	/**
 	 * Stops all Wait Until coroutine actions.
@@ -512,6 +605,7 @@ public:
 	 * @param InOwner [optional] - if defined it will remove Wait Until actions only from the given owner. Otherwise
 	 *                             it will remove Wait Until actions from everywhere.
 	 */
+	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFWaitUntil> instead.")]]
 	static void RemoveAllWaitUntil(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
 	/*^^^ Run Async And Wait (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -532,7 +626,34 @@ public:
 	 * @param InOwner [optional] - if defined it will remove Wait Until actions only from the given owner. Otherwise
 	 *                             it will remove Wait Until actions from everywhere.
 	 */
+	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFRunAsyncAndWait> instead.")]]
 	static void RemoveAllRunAsyncAndWait(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
+
+	/*^^^ Wait Load Objects (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Suspends running coroutine function until all assets are loaded.
+	 * @param InObjectsToLoad		- an array of soft object paths to load.
+	 * @param Settings [optional]	- an extra settings to apply to this action.
+	 */
+	static FECFCoroutineAwaiter_WaitLoadObjects WaitLoadObjects(const UObject* InOwner, const TArray<FSoftObjectPath>& InObjectsToLoad, const FECFActionSettings& Settings = {});
+
+	/**
+	 * Utility function for converting an array of soft pointers to an array of soft object paths.
+	 */
+	template<CIsSoftPtrType T>
+	static TArray<FSoftObjectPath> ConvertSoftPtrToSoftPath(const TArray<T>& InSoftPtrs)
+	{
+		TArray<FSoftObjectPath> Paths;
+		for (const auto& SoftPtr : InSoftPtrs)
+		{
+			if (SoftPtr.IsNull() == false)
+			{
+				Paths.Add(SoftPtr.ToSoftObjectPath());
+			}
+		}
+		return Paths;
+	}
 };
 
 using FFlow = FEnhancedCodeFlow;

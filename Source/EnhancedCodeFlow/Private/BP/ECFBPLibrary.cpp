@@ -4,6 +4,7 @@
 
 #include "BP/ECFBPLibrary.h"
 #include "EnhancedCodeFlow.h"
+#include "ECFActionsHeader.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 
@@ -24,6 +25,30 @@ void UECFBPLibrary::ECFIsActionRunning(bool& bIsRunning, const UObject* WorldCon
 	bIsRunning = FFlow::IsActionRunning(WorldContextObject, Handle.Handle);
 }
 
+TArray<FECFHandleBP> UECFBPLibrary::GetActionsHandlesByClass(const UObject* WorldContextObject, TSubclassOf<UECFActionBase> Class)
+{
+	TArray<FECFHandle> Result = FFlow::GetActionsHandlesByClass(WorldContextObject, Class);
+	TArray<FECFHandleBP> ResultBP;
+	ResultBP.Reserve(Result.Num());
+	for (const FECFHandle& Handle : Result)
+	{
+		ResultBP.Add(FECFHandleBP(Handle));
+	}
+	return ResultBP;
+}
+
+TArray<FECFHandleBP> UECFBPLibrary::GetActionsHandlesByLabel(const UObject* WorldContextObject, const FString& Label)
+{
+	TArray<FECFHandle> Result = FFlow::GetActionsHandlesByLabel(WorldContextObject, Label);
+	TArray<FECFHandleBP> ResultBP;
+	ResultBP.Reserve(Result.Num());
+	for (const FECFHandle& Handle : Result)
+	{
+		ResultBP.Add(FECFHandleBP(Handle));
+	}
+	return ResultBP;
+}
+
 void UECFBPLibrary::ECFPauseAction(const UObject* WorldContextObject, const FECFHandleBP& Handle)
 {
 	FFlow::PauseAction(WorldContextObject, Handle.Handle);
@@ -39,9 +64,9 @@ void UECFBPLibrary::ECFIsActionPaused(bool& bIsRunning, bool& bIsPaused, const U
 	bIsRunning = FFlow::IsActionPaused(WorldContextObject, Handle.Handle, bIsPaused);
 }
 
-void UECFBPLibrary::ECFResetAction(const UObject* WorldContextObject, const FECFHandleBP& Handle, bool bCallUpdate)
+bool UECFBPLibrary::ECFResetAction(const UObject* WorldContextObject, const FECFHandleBP& Handle, bool bCallUpdate)
 {
-	FFlow::ResetAction(WorldContextObject, Handle.Handle, bCallUpdate);
+	return FFlow::ResetAction(WorldContextObject, Handle.Handle, bCallUpdate);
 }
 
 /*^^^ Stopping ECF Functions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -59,6 +84,16 @@ void UECFBPLibrary::ECFStopInstancedActions(const UObject* WorldContextObject, F
 void UECFBPLibrary::ECFStopAllActions(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
 	FFlow::StopAllActions(WorldContextObject, bComplete, InOwner);
+}
+
+void UECFBPLibrary::ECFStopAllActionsOfClass(const UObject* WorldContextObject, TSubclassOf<UECFActionBase> Class, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
+{
+	FFlow::StopAllActionsOfClass(WorldContextObject, Class, bComplete, InOwner);
+}
+
+void UECFBPLibrary::ECFStopAllActionsWithLabel(const UObject* WorldContextObject, FString Label, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
+{
+	FFlow::StopAllActionsWithLabel(WorldContextObject, Label, bComplete, InOwner);
 }
 
 /*^^^ Handle and Instance Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
@@ -105,72 +140,72 @@ void UECFBPLibrary::ECFTimeLock(const UObject* WorldContextObject, ETimeLockOutp
 
 void UECFBPLibrary::ECFRemoveAllTimeLocks(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
 {
-	FFlow::RemoveAllTimeLocks(WorldContextObject, InOwner);
+	FFlow::StopAllActionsOfClass<UECFTimeLock>(WorldContextObject, false, InOwner);
 }
 
 /*^^^ Removing Async Actions ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 void UECFBPLibrary::ECFRemoveAllDelays(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
-	FFlow::RemoveAllDelays(WorldContextObject, bComplete, InOwner);
+	FFlow::StopAllActionsOfClass<UECFDelay>(WorldContextObject, bComplete, InOwner);
 }
 
 void UECFBPLibrary::ECFRemoveAllWaitAndExecutes(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
-	FFlow::RemoveAllWaitAndExecutes(WorldContextObject, bComplete, InOwner);
+	FFlow::StopAllActionsOfClass<UECFWaitAndExecute>(WorldContextObject, bComplete, InOwner);
 }
 
 void UECFBPLibrary::RemoveAllWhileTrueExecutes(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
-	FFlow::RemoveAllWhileTrueExecutes(WorldContextObject, bComplete, InOwner);
+	FFlow::StopAllActionsOfClass<UECFWhileTrueExecute>(WorldContextObject, bComplete, InOwner);
 }
 
 void UECFBPLibrary::RemoveAllRunAsyncThen(const UObject* WorldContextObject, UObject* InOwner/* = nullptr*/)
 {
-	FFlow::RemoveAllRunAsyncThen(WorldContextObject, InOwner);
+	FFlow::StopAllActionsOfClass<UECFRunAsyncThen>(WorldContextObject, false, InOwner);
 }
 
 void UECFBPLibrary::ECFRemoveAllTickers(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
-	FFlow::RemoveAllTickers(WorldContextObject, bComplete, InOwner);
+	FFlow::StopAllActionsOfClass<UECFTicker>(WorldContextObject, bComplete, InOwner);
 }
 
 void UECFBPLibrary::ECFRemoveAllTimelines(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
-	FFlow::RemoveAllTimelines(WorldContextObject, bComplete, InOwner);
+	FFlow::StopAllActionsOfClass<UECFTimeline>(WorldContextObject, bComplete, InOwner);
 }
 
 void UECFBPLibrary::ECFRemoveAllTimelinesVector(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
-	FFlow::RemoveAllTimelinesVector(WorldContextObject, bComplete, InOwner);
+	FFlow::StopAllActionsOfClass<UECFTimelineVector>(WorldContextObject, bComplete, InOwner);
 }
 
 void UECFBPLibrary::ECFRemoveAllTimelinesLinearColor(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
-	FFlow::RemoveAllTimelinesLinearColor(WorldContextObject, bComplete, InOwner);
+	FFlow::StopAllActionsOfClass<UECFTimelineLinearColor>(WorldContextObject, bComplete, InOwner);
 }
 
 void UECFBPLibrary::ECFRemoveAllCustomTimelines(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
-	FFlow::RemoveAllCustomTimelines(WorldContextObject, bComplete, InOwner);
+	FFlow::StopAllActionsOfClass<UECFCustomTimeline>(WorldContextObject, bComplete, InOwner);
 }
 
 void UECFBPLibrary::ECFRemoveAllCustomTimelinesVector(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
-	FFlow::RemoveAllCustomTimelinesVector(WorldContextObject, bComplete, InOwner);
+	FFlow::StopAllActionsOfClass<UECFCustomTimelineVector>(WorldContextObject, bComplete, InOwner);
 }
 
 void UECFBPLibrary::ECFRemoveAllCustomTimelinesLinearColor(const UObject* WorldContextObject, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
-	FFlow::RemoveAllCustomTimelinesLinearColor(WorldContextObject, bComplete, InOwner);
+	FFlow::StopAllActionsOfClass<UECFCustomTimelineLinearColor>(WorldContextObject, bComplete, InOwner);
 }
 
 void UECFBPLibrary::ECFRemoveAllDoNoMoreThanXTimes(const UObject* WorldContextObject, UObject* InOwner /*= nullptr*/)
 {
-	FFlow::RemoveAllDoNoMoreThanXTimes(WorldContextObject, InOwner);
+	FFlow::StopAllActionsOfClass<UECFDoNoMoreThanXTime>(WorldContextObject, false,  InOwner);
 }
 
-/*^^^ Casting ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/	
+/*^^^ Casting and converting ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 FString UECFBPLibrary::Conv_ECFHandleToString(const FECFHandleBP& Handle)
 {
@@ -182,6 +217,14 @@ FString UECFBPLibrary::Conv_ECFInstanceIdToString(const FECFInstanceIdBP& Instan
 	return InstanceId.InstanceId.ToString();
 }
 
-/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+TArray<FSoftObjectPath> UECFBPLibrary::ConvertSoftObjectPtrToSoftPath(const TArray<TSoftObjectPtr<UObject>>& InSoftPtrs)
+{
+	return FFlow::ConvertSoftPtrToSoftPath(InSoftPtrs);
+}
+
+TArray<FSoftObjectPath> UECFBPLibrary::ConvertSoftClassPtrToSoftPath(const TArray<TSoftClassPtr<UObject>>& InSoftPtrs)
+{
+	return FFlow::ConvertSoftPtrToSoftPath(InSoftPtrs);
+}
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION

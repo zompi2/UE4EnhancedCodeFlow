@@ -1,3 +1,23 @@
+###### 3.7.0
+* LoadObjectsAsync action added, which allows to load objects asynchronously and wait for their loading to be completed. 
+* WaitLoadObjects coroutine added, which is a coroutine version of LoadObjectsAsync.
+
+###### 3.6.2
+* Coroutines now returns the information if the resumed coroutine Action has been stopped or timed out.
+* Added WaitUntil coroutine variant with a predicate WITHOUT the DeltaTime.
+
+###### 3.6.1
+* ResetAction function now returns true if the Action has actually resetted or false if it didn't. 
+
+###### 3.6.0
+* Added Labels. You can add a Label to every Action which helps with debugging (Labels are displayed in logs) and you 
+  can search for running action's handles by these Labels.
+* GetActionsHandlesByClass and GetActionsHandlesByLabel functions added which returns an array of handles of valid Actions.
+* RemoveAll[FunctionName] is now DEPRECATED! Use StopAllActionsOfClass or StopAllActionsWithLabel functions.
+* GetAllActions, GetActionsCount, GetActionFromHandle, and GetActionFromInstancedId functions has been added for C++, which
+  returns pointers to actual Actions  objects. Use them for DEBUGGING purposes only!
+* MarkAsFinished function is now protected
+
 ###### 3.5.4
 * Better detection of if the compiler supports coroutines or not.
 * ECF_WITH_COROUTINES macro added for excluding coroutine code for compilers that do not support them.

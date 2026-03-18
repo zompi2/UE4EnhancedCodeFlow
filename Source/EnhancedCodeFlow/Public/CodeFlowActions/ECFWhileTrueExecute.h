@@ -61,7 +61,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF - While True Execute failed to start. Are you sure the Predicate and Function are set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF - [%s] While True Execute failed to start. Are you sure the Predicate and Function are set properly?"), *Settings.Label);
 #endif
 			return false;
 		}
@@ -91,12 +91,13 @@ protected:
 		}, InTimeOut);
 	}
 
-	void Reset(bool bCallUpdate) override
+	bool Reset(bool bCallUpdate) override
 	{
 		if (bWithTimeOut)
 		{
 			TimeOut = OriginTimeOut;
 		}
+		return true;
 	}
 
 	void Tick(float DeltaTime) override 

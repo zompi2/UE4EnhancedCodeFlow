@@ -138,12 +138,78 @@ UECFActionBase* UECFSubsystem::FindAction(const FECFHandle& HandleId) const
 	return nullptr;
 }
 
+TArray<FECFHandle> UECFSubsystem::GetActionsHandlesByClass(TSubclassOf<UECFActionBase> Class) const
+{
+	TArray<FECFHandle> Result;
+	if (Class == nullptr)
+	{
+		return Result;
+	}
+	// Search in active actions
+	for (UECFActionBase* Action : Actions)
+	{
+		if (IsActionValid(Action) && (Action->GetClass() == Class))
+		{
+			Result.Add(Action->GetHandleId());
+		}
+	}
+	// Search in pending actions
+	for (UECFActionBase* PendingAction : PendingAddActions)
+	{
+		if (IsActionValid(PendingAction) && (PendingAction->GetClass() == Class))
+		{
+			Result.Add(PendingAction->GetHandleId());
+		}
+	}
+	return Result;
+}
+
+TArray<FECFHandle> UECFSubsystem::GetActionsHandlesByLabel(const FString& Label) const
+{
+	TArray<FECFHandle> Result;
+	if (Label.IsEmpty())
+	{
+		return Result;
+	}
+	// Search in active actions
+	for (UECFActionBase* Action : Actions)
+	{
+		if (IsActionValid(Action) && (Action->Settings.Label == Label))
+		{
+			Result.Add(Action->GetHandleId());
+		}
+	}
+	// Search in pending actions
+	for (UECFActionBase* PendingAction : PendingAddActions)
+	{
+		if (IsActionValid(PendingAction) && (PendingAction->Settings.Label == Label))
+		{
+			Result.Add(PendingAction->GetHandleId());
+		}
+	}
+	return Result;
+}
+
+TArray<UECFActionBase*> UECFSubsystem::GetAllActions() const
+{
+	TArray<UECFActionBase*> Result;
+	Result.Reserve(GetActionsCount());
+	Result.Append(Actions);
+	Result.Append(PendingAddActions);
+	return Result;
+}
+
+int32 UECFSubsystem::GetActionsCount() const
+{
+	return Actions.Num() + PendingAddActions.Num();
+}
+
 void UECFSubsystem::PauseAction(const FECFHandle& HandleId)
 {
 	if (UECFActionBase* ActionFound = FindAction(HandleId))
 	{
 #if (ECF_LOGS && ECF_LOGS_VERBOSE)
-		UE_LOG(LogECF, Verbose, TEXT("Paused Action of class: %s"), *ActionFound->GetName());
+		UE_LOG(LogECF, Verbose, TEXT("Paused Action of class: %s, Label: %s"), *ActionFound->GetName(), *ActionFound->GetLabel());
 #endif
 		ActionFound->bIsPaused = true;
 	}
@@ -160,7 +226,7 @@ void UECFSubsystem::ResumeAction(const FECFHandle& HandleId)
 	if (UECFActionBase* ActionFound = FindAction(HandleId))
 	{
 #if (ECF_LOGS && ECF_LOGS_VERBOSE)
-		UE_LOG(LogECF, Verbose, TEXT("Resume Action of class: %s"), *ActionFound->GetName());
+		UE_LOG(LogECF, Verbose, TEXT("Resume Action of class: %s, Label: %s"), *ActionFound->GetName(), *ActionFound->GetLabel());
 #endif
 		ActionFound->bIsPaused = false;
 	}
@@ -182,23 +248,24 @@ bool UECFSubsystem::IsActionPaused(const FECFHandle& HandleId, bool& bIsPaused) 
 	return false;
 }
 
-void UECFSubsystem::ResetAction(const FECFHandle& HandleId, bool bCallUpdate)
+bool UECFSubsystem::ResetAction(const FECFHandle& HandleId, bool bCallUpdate)
 {
 	if (UECFActionBase* ActionFound = FindAction(HandleId))
 	{
 		if (IsActionValid(ActionFound))
 		{
 #if (ECF_LOGS && ECF_LOGS_VERBOSE)
-			UE_LOG(LogECF, Verbose, TEXT("Reset Action of class: %s"), *ActionFound->GetName());
+			UE_LOG(LogECF, Verbose, TEXT("Reset Action of class: %s, Label: %s"), *ActionFound->GetName(), *ActionFound->GetLabel());
 #endif
-			ActionFound->Reset(bCallUpdate);
-			return;
+			return ActionFound->Reset(bCallUpdate);
 		}
 	}
 
 #if ECF_LOGS
 	UE_LOG(LogECF, Error, TEXT("Can't find Action of id %s to reset"), *HandleId.ToString());
 #endif
+
+	return false;
 }
 
 void UECFSubsystem::RemoveAction(FECFHandle& HandleId, bool bComplete)
@@ -206,7 +273,7 @@ void UECFSubsystem::RemoveAction(FECFHandle& HandleId, bool bComplete)
 	if (UECFActionBase* ActionFound = FindAction(HandleId))
 	{
 #if (ECF_LOGS && ECF_LOGS_VERBOSE)
-		UE_LOG(LogECF, Verbose, TEXT("Remove Action of class: %s"), *ActionFound->GetName());
+		UE_LOG(LogECF, Verbose, TEXT("Remove Action of class: %s, Label: %s"), *ActionFound->GetName(), *ActionFound->GetLabel());
 #endif
 		FinishAction(ActionFound, bComplete);
 		HandleId.Invalidate();
@@ -221,6 +288,14 @@ void UECFSubsystem::RemoveAction(FECFHandle& HandleId, bool bComplete)
 
 void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass, bool bComplete, UObject* InOwner)
 {
+	if (ActionClass == nullptr)
+	{
+#if (ECF_LOGS && ECF_LOGS_VERBOSE)
+		UE_LOG(LogECF, Warning, TEXT("Trying to remove Actions of empty class!"));
+#endif
+		return;
+	}
+
 #if (ECF_LOGS && ECF_LOGS_VERBOSE)
 	UE_LOG(LogECF, Verbose, TEXT("Removing Actions of class: %s"), *ActionClass->GetName());
 #endif
@@ -246,6 +321,51 @@ void UECFSubsystem::RemoveActionsOfClass(TSubclassOf<UECFActionBase> ActionClass
 		if (IsActionValid(PendingAction))
 		{
 			if (PendingAction->IsA(ActionClass))
+			{
+				if (InOwner == nullptr || InOwner == PendingAction->Owner)
+				{
+					FinishAction(PendingAction, bComplete);
+				}
+			}
+		}
+	}
+}
+
+void UECFSubsystem::RemoveActionsOfLabel(const FString& Label, bool bComplete, UObject* InOwner)
+{
+	if (Label.IsEmpty())
+	{
+#if (ECF_LOGS && ECF_LOGS_VERBOSE)
+		UE_LOG(LogECF, Warning, TEXT("Trying to remove Actions of Label, but Label is empty!"));
+#endif
+		return;
+	}
+
+#if (ECF_LOGS && ECF_LOGS_VERBOSE)
+	UE_LOG(LogECF, Verbose, TEXT("Removing Actions of Label: %s"), *Label);
+#endif
+
+	// Find running actions of given class assigned to a specific owner (if specified) and set it as finished.
+	for (UECFActionBase* Action : Actions)
+	{
+		if (IsActionValid(Action))
+		{
+			if (Action->GetLabel() == Label)
+			{
+				if (InOwner == nullptr || InOwner == Action->Owner)
+				{
+					FinishAction(Action, bComplete);
+				}
+			}
+		}
+	}
+
+	// Also check pending actions to prevent from launching it.
+	for (UECFActionBase* PendingAction : PendingAddActions)
+	{
+		if (IsActionValid(PendingAction))
+		{
+			if (PendingAction->GetLabel() == Label)
 			{
 				if (InOwner == nullptr || InOwner == PendingAction->Owner)
 				{

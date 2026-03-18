@@ -33,7 +33,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF - delay ticks failed to start. Are you sure the DelayTicks is not negative and Callback Function is set properly?"));
+			UE_LOG(LogECF, Error, TEXT("ECF - [%s] delay ticks failed to start. Are you sure the DelayTicks is not negative and Callback Function is set properly?"), *Settings.Label);
 #endif
 			return false;
 		}
@@ -63,9 +63,10 @@ protected:
 		CurrentTicks = 0;
 	}
 
-	void Reset(bool bCallUpdate) override
+	bool Reset(bool bCallUpdate) override
 	{
 		CurrentTicks = 0;
+		return true;
 	}
 
 	void Tick(float DeltaTime) override
