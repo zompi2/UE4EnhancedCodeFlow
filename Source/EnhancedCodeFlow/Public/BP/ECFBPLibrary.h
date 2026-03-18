@@ -293,14 +293,14 @@ public:
 	 * Converts the array of soft object pointers to the array of soft object paths. Useful for async loading.
 	 */
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "ECF - Convert Soft Objects To Soft Paths"), Category = "ECF")
-	static TArray<FSoftObjectPath> ConvertSoftObjectPtrToSoftPath(const TArray<TSoftObjectPtr<UObject>>& InSoftPtrs);
+	static TArray<FSoftObjectPath> ConvertSoftObjectPtrToSoftPath(const TArray<TSoftObjectPtr<UObject>>& InSoftObjectPtrs);
 
 	/**
 	 * Converts the array of soft class pointers to the array of soft object paths. Useful for async loading.
 	 * Classes can be loaded also by using their object paths, instead of class paths.
 	 */
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "ECF - Convert Soft Classes To Soft Paths"), Category = "ECF")
-	static TArray<FSoftObjectPath> ConvertSoftClassPtrToSoftPath(const TArray<TSoftClassPtr<UObject>>& InSoftPtrs);
+	static TArray<FSoftObjectPath> ConvertSoftClassPtrToSoftPath(const TArray<TSoftClassPtr<UObject>>& InSoftClassPtrs);
 
 	/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 };
