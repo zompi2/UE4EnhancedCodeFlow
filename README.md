@@ -521,8 +521,7 @@ FFlow::LoadObjectsAsync(this, FFlow::ConvertSoftPtrToSoftPath(ActorsClassesToLoa
   // Code to run when loading has finished
 });
 ```
-
-![loadas](https://github.com/user-attachments/assets/a7a11e9d-8760-462b-b308-fd8918c87f4f)
+![loadas](https://github.com/user-attachments/assets/af3d040a-c5f1-435f-8253-3b5a78d06d07)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
