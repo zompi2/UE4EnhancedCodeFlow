@@ -143,6 +143,7 @@ Check out the **[Example Project](https://github.com/zompi2/UE4EnhancedCodeFlowE
 - [Add Custom Timeline](#add-custom-timeline)
   - [Add Custom Timeline Vector](#add-custom-timeline-vector)
   - [Add Custom Timeline Linear Color](#add-custom-timeline-linear-color)
+- [Load Objects Async](#load-objects-async)
 - [Time Lock](#time-lock)
 - [Do Once](#do-once)
 - [Do N Times](#do-n-times)
@@ -491,6 +492,10 @@ FFlow::AddCustomTimelineLinearColor(this, Curve, [this](FLinearColor Value, floa
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
+
+#### Load Objects Async
+
+Loads a list of soft objects. The same 
 
 #### Time Lock
 
