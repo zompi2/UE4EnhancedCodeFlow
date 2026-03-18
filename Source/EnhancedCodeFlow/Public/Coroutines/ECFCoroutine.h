@@ -49,6 +49,8 @@ using FECFCoroutine = void;
 struct FECFCoroutinePromise
 {
 	bool bHasFinished = false;
+	bool bStopped = false;
+	bool bTimedOut = false;
 	FECFHandle ActionHandle;
 };
 
