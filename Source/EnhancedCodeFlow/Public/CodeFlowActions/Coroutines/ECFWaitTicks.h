@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2026 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -69,6 +69,25 @@ protected:
 	{
 		CoroutineHandle.promise().bStopped = bStopped;
 		CoroutineHandle.resume();
+	}
+
+	float GetActionTime() const override
+	{
+		return (float)CurrentTicks;
+	}
+
+	bool SetActionTime(float NewTime, bool bCallUpdate) override
+	{
+		CurrentTicks = FMath::TruncToInt(NewTime);
+		if (bCallUpdate)
+		{
+			if (CurrentTicks > WaitTicks)
+			{
+				MarkAsFinished();
+				Complete(false);
+			}
+		}
+		return true;
 	}
 };
 

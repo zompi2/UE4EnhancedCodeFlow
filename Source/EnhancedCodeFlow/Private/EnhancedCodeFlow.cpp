@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2026 Damian Nowakowski. All rights reserved.
 
 #include "EnhancedCodeFlow.h"
 #include "ECFSubsystem.h"
@@ -129,6 +129,22 @@ void FFlow::StopAllActionsWithLabel(const UObject* WorldContextObject, const FSt
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
 		ECF->RemoveActionsOfLabel(Label, bComplete, InOwner);
+}
+
+/*^^^ Timing mods ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+float FFlow::GetActionTime(const UObject* WorldContextObject, const FECFHandle& Handle)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		return ECF->GetActionTime(Handle);
+	return -1.f;
+}
+
+bool FFlow::SetActionTime(const UObject* WorldContextObject, const FECFHandle& Handle, float NewTime, bool bCallUpdate)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+		return ECF->SetActionTime(Handle, NewTime, bCallUpdate);
+	return false;
 }
 
 /*^^^ Ticker ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/

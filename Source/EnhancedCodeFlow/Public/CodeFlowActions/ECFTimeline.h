@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2026 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -116,7 +116,7 @@ protected:
 
 		TickFunc(CurrentValue, CurrentTime);
 
-		if ((StopValue > StartValue && CurrentValue >= StopValue) || (StopValue < StartValue && CurrentValue <= StopValue))
+		if (CurrentTime >= Time)
 		{
 			MarkAsFinished();
 			Complete(false);
@@ -129,6 +129,27 @@ protected:
 		{
 			CallbackFunc(CurrentValue, CurrentTime, bStopped);
 		}
+	}
+
+	float GetActionTime() const override
+	{
+		return CurrentTime;
+	}
+
+	bool SetActionTime(float NewTime, bool bCallUpdate) override
+	{
+		CurrentTime = FMath::Clamp(CurrentTime + NewTime, 0.f, Time);
+		CurrentValue = GetValue();
+		if (bCallUpdate)
+		{
+			TickFunc(CurrentValue, CurrentTime);
+			if (CurrentTime >= Time)
+			{
+				MarkAsFinished();
+				Complete(false);
+			}
+		}
+		return true;
 	}
 };
 

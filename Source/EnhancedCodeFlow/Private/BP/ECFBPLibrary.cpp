@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2026 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -94,6 +94,19 @@ void UECFBPLibrary::ECFStopAllActionsOfClass(const UObject* WorldContextObject, 
 void UECFBPLibrary::ECFStopAllActionsWithLabel(const UObject* WorldContextObject, FString Label, bool bComplete/* = false*/, UObject* InOwner /*= nullptr*/)
 {
 	FFlow::StopAllActionsWithLabel(WorldContextObject, Label, bComplete, InOwner);
+}
+
+
+/*^^^ Timing mods ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+float UECFBPLibrary::GetActionTime(const UObject* WorldContextObject, const FECFHandleBP& Handle)
+{
+	return FFlow::GetActionTime(WorldContextObject, Handle.Handle);
+}
+
+bool UECFBPLibrary::SetActionTime(const UObject* WorldContextObject, const FECFHandleBP& Handle, float NewTime, bool bCallUpdate)
+{
+	return FFlow::SetActionTime(WorldContextObject, Handle.Handle, NewTime, bCallUpdate);
 }
 
 /*^^^ Handle and Instance Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/

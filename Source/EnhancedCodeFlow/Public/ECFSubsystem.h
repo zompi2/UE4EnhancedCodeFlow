@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2026 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -182,6 +182,12 @@ protected:
 
 	// Remove all Actions of async tasks.
 	void RemoveAllActions(bool bComplete, UObject* InOwner);
+
+	// Get the time value associated with the action. Returns -1 if there is no action or if that action doesn't support time tracking.
+	float GetActionTime(const FECFHandle& HandleId);
+
+	// Set the time value associated with the action. Returns false if there is no action or if that action doesn't support time tracking.
+	bool SetActionTime(const FECFHandle& HandleId, float NewTime, bool bCallUpdate);
 
 	// Check if there is an instanced action running with the given instance id and returns it.
 	UECFActionBase* GetInstancedAction(const FECFInstanceId& InstanceId, bool bPrintErrorIfFailed = true) const;
