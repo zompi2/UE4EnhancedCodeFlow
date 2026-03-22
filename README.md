@@ -976,11 +976,11 @@ const float CurrentTime = FFlow::GetActionTime(this, ActionHandle);
 
 ## Set Action Time
 
-Sets the action time. It's not CurrentTime, but the time value used by this action. If the action doesn't support time or there is no valid action, it will return false. If parameter `bCallUpdate` is set to true the action will run an update event (if there is any) immediately after it's time changed.
+Sets the action time. It's not CurrentTime, but the time value used by this action. If the action doesn't support time or there is no valid action, it will return false. If parameter `bCallUpdate` is set to `true` the action will run an update event (if there is any) immediately after it's time changed.
 
 ```cpp
 const float NewTime = 0.f;
-const bool bTimeSet = FFlow::SetActionTime(this, DelayHandle, NewTime, true);
+const bool bTimeSet = FFlow::SetActionTime(this, DelayHandle, NewTime, false);
 ```
 
 ![settime](https://github.com/user-attachments/assets/471415c6-b9f0-4126-b497-9d3309d67ff5)
@@ -1073,7 +1073,8 @@ FECFHandle FEnhancedCodeFlow::NewAction(const UObject* InOwner, int32 Param1, in
     return FECFHandle();
 }
 ```
-9. You can optionally add the stats counter to your action's `Tick` function, in order to measure it's performence  with `stat ecfdetails`.
+9. If your action can be resetted or users can alter it's time, override the `Reset(bool bCallUpdate)`, `float GetActionTime() const` and `bool SetActionTime(float NewTime, bool bCallUpdate)` functions in your action class.
+10. You can optionally add the stats counter to your action's `Tick` function, in order to measure it's performence  with `stat ecfdetails`.
 ```cpp
 DECLARE_SCOPE_CYCLE_COUNTER(TEXT("NewAction - Tick"), STAT_ECFDETAILS_NEWACTION, STATGROUP_ECFDETAILS);
 ```
@@ -1134,6 +1135,7 @@ FECFCoroutineTask_NewCoroAction FEnhancedCodeFlow::NewCoroAction(const UObject* 
 	return FECFCoroutineTask_NewCoroAction(InOwner, Settings, InParam1);
 }
 ```
+6. The rest of the implementation is the same as with the normal action.
 
 [Back to top](#table-of-content)
 
