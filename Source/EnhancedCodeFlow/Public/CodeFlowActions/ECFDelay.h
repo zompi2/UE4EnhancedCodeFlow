@@ -95,6 +95,25 @@ protected:
 	{
 		CallbackFunc(bStopped);
 	}
+
+	float GetActionTime() const override
+	{
+		return CurrentTime;
+	}
+
+	bool SetActionTime(float NewTime, bool bCallUpdate) override
+	{
+		CurrentTime = NewTime;
+		if (bCallUpdate)
+		{
+			if (CurrentTime > DelayTime)
+			{
+				MarkAsFinished();
+				Complete(false);
+			}
+		}
+		return true;
+	}
 };
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION

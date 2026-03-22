@@ -125,6 +125,23 @@ public:
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bComplete, InOwner", DisplayName = "ECF - Stop All Actions With Label"), Category = "ECF")
 	static void ECFStopAllActionsWithLabel(const UObject* WorldContextObject, FString Label, bool bComplete = false, UObject* InOwner = nullptr);
 
+	/*^^^ Timing mods ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Gets the action time. It's not CurrentTime, but the time value used by this action, like in delay or timeline.
+	 * If the action doesn't support time or there is no action, it will return -1.
+	 */
+	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject", DisplayName = "ECF - Get Action Time"), Category = "ECF")
+	static float GetActionTime(const UObject* WorldContextObject, const FECFHandleBP& Handle);
+
+	/**
+	 * Sets the action time. It's not CurrentTime, but the time value used by this action, like in delay or timeline.
+	 * If the action doesn't support time or there is no action, it will return false.
+	 * If bCallUpdate is true - the action should run an update event (if there is any) immediately after it's time change.
+	 */
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", DisplayName = "ECF - Get Action Time"), Category = "ECF")
+	static bool SetActionTime(const UObject* WorldContextObject, const FECFHandleBP& Handle, float NewTime, UPARAM(DisplayName = "CallUpdate") bool bCallUpdate);
+
 	/*^^^ Handle and Instance Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 	
 	/**
