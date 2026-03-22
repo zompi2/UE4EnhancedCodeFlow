@@ -31,6 +31,7 @@ The plugin works on Unreal Engine: 4.27, 5.2-5.7.
 - [Pausing and Resuming](#pausing-and-resuming)
 - [Stopping Actions](#stopping-actions)
 - [Resetting Actions](#resetting-actions)
+- [Altering Actions Time](#altering-actions-time)
 - [Measuring Performance](#measuring-performance)
 - [Logs](#logs)
 - [Extending Plugin](#extending-plugin)
@@ -159,12 +160,14 @@ Run the following functions to use enhanced code flow!
 > Note that every function must receive a pointer to an owner that runs this function in it's first argument.  
 > The owner must be able to return a World via **GetWorld()** function.
 
+Some of the Actions can be resetted (about - [Resetting Actions](#resetting-actions)) and their times can be altered (about - [Altering Actions Time](#altering-actions-time)).
+
 #### Delay
 
 Execute specified action after some time. This can be useful in many various situations. Everytime when I was using a Delay node in blueprints I wish there was an equivalent of it in c++.  
 The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.
 If a time parameter is set to 0 it will execute in the next frame. If a time parameter is set less than 0 the action will not execute and will print an error to the log.  
-Can be resetted.
+Can be resetted. It's time values can be altered.
 
 ``` cpp
 FFlow::Delay(this, 2.f, [this](bool bStopped)
@@ -186,7 +189,7 @@ You can plan to execute delayed code without delaying the whole Blueprint, you c
 Execute specified action after some ticks. Can be useful if we want to execute some code in next game tick.  
 The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.
 If a number of ticks parameter is set to 0 it will execute in the next frame. If a number of ticks parameter is set less than 0 the action will not execute and will print an error to the log.  
-Can be resetted.
+Can be resetted. It's time values can be altered.
 
 ``` cpp
 FFlow::DelayTicks(this, 1, [this](bool bStopped)
@@ -204,7 +207,7 @@ FFlow::DelayTicks(this, 1, [this](bool bStopped)
 
 Creates a ticker. It can tick specified amount of time or until it won't be stopped or when owning object won't be destroyed.  
 Useful for actors and components that you don't want to be tickeable, but needs one tick to do something.  
-Can be resetted.
+Can be resetted. It's time values can be altered.
 
 **Run ticker for 10 seconds**
 
@@ -379,7 +382,7 @@ The function requires the following parameters:
 * BlendExp - an exponent defining a shape of EaseIn, EaseOut and EaseInOut function shapes. *(default value: 1.f)*;
 
 The `bStopped` tells if this action has been stopped by a Stop function. This argument is optional.  
-Can be resetted.
+Can be resetted. It's time values can be altered.
 
 ``` cpp
 FFlow::AddTimeline(this, 0.f, 1.f, 2.f, [this](float Value, float Time)
@@ -419,7 +422,7 @@ EECFBlendFunc::ECFBlend_Linear, 2.f);
 #### Add timeline linear color
 
 The same as `Add timeline`, but with a LinearColor instead of float   
-Can be resetted.
+Can be resetted. It's time values can be altered.
 
 ``` cpp
 FFlow::AddTimelineLinearColor(this, FLinearColor(0.f, 0.f, 0.f, 1.f), FLinearColor(1.f, 1.f, 1.f, 1.f), 2.f, [this](FLinearColor Value, float Time)
@@ -438,7 +441,7 @@ EECFBlendFunc::ECFBlend_Linear, 2.f);
 #### Add custom timeline
 
 Creates a discrete timeline which shape is based on a **UCurveFloat**. Works like the previously described timeline, but an asset with a curve must be given.  
-Can be resetted.
+Can be resetted. It's time values can be altered.
 
 ``` cpp
 FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
@@ -459,7 +462,7 @@ FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
 #### Add custom timeline vector
 
 The same as `Add custom timeline` but with **UCurveVector** instead of **UCurveFloat**.  
-Can be resetted.
+Can be resetted. It's time values can be altered.
 
 ``` cpp
 FFlow::AddCustomTimelineVector(this, Curve, [this](FVector Value, float Time)
@@ -480,7 +483,7 @@ FFlow::AddCustomTimelineVector(this, Curve, [this](FVector Value, float Time)
 #### Add custom timeline linear color
 
 The same as `Add custom timeline` but with **UCurveLinearColor** instead of **UCurveFloat**.  
-Can be resetted.
+Can be resetted. It's time values can be altered.
 
 ``` cpp
 FFlow::AddCustomTimelineLinearColor(this, Curve, [this](FLinearColor Value, float Time)
@@ -536,7 +539,7 @@ FFlow::LoadObjectsAsync(this, FFlow::ConvertSoftPtrToSoftPath(ActorsClassesToLoa
 **(Instanced)**
 
 Blocks execution of the block of code until the given time has passed.  
-Can be resetted.
+Can be resetted. It's time values can be altered.
 
 ``` cpp
 static FECFInstanceId InstanceId = FECFInstanceId::NewId();
@@ -718,7 +721,7 @@ Coroutines doesn't have BP nodes as they are purely code feature.
 
 Suspends the coroutine for a specified amount of seconds. It works like Delay in Blueprints.  
 Coroutine returns `bStopped` bool informing if the Action has been prematurely terminated.  
-Can be resetted.
+Can be resetted. It's time values can be altered.
 
 ``` cpp
 FECFCoroutine UMyClass::SuspandableFunction()
@@ -736,7 +739,7 @@ FECFCoroutine UMyClass::SuspandableFunction()
 
 Suspends the coroutine for a specified amount of tick.  
 Coroutine returns `bStopped` bool informing if the Action has been prematurely terminated.  
-Can be resetted.
+Can be resetted. It's time values can be altered.
 
 ``` cpp
 FECFCoroutine UMyClass::SuspandableFunction()
@@ -957,6 +960,35 @@ FECFCoroutine SuspendableFunction()
 FECFCoroutine Handle = SuspendableFunction();
 FFlow::ResetAction(GetWorld(), Handle.promise().ActionHandle, true);
 ```
+
+[Back to top](#table-of-content)
+
+# Altering Actions Time
+
+For some actions you can alter the time. For example, for the [Delay Action](#delay) you can get the amount of seconds how long this Action is running and you can set the running time to shorten or extend the time of the Delay. 
+
+Coroutine Actions also can have altered times. To get their handle you must first get a Coroutine Handle from a suspendable function.
+
+## Get Action Time
+
+Returns the action time. It's not the CurrentTime, but the time value used by this action. If the action doesn't support time or there is no valid action, it will return -1.
+
+```cpp
+const float CurrentTime = FFlow::GetActionTime(this, ActionHandle);
+```
+
+
+
+## Set Action Time
+
+Sets the action time. It's not CurrentTime, but the time value used by this action. If the action doesn't support time or there is no valid action, it will return false. If parameter `bCallUpdate` is set to true the action will run an update event (if there is any) immediately after it's time changed.
+
+```cpp
+const float NewTime = 0.f;
+const bool bTimeSet = FFlow::SetActionTime(this, DelayHandle, NewTime, true);
+```
+
+
 
 [Back to top](#table-of-content)
 
