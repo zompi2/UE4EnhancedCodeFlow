@@ -91,6 +91,25 @@ protected:
 	{
 		CallbackFunc(bStopped);
 	}
+
+	float GetActionTime() const override
+	{
+		return (float)CurrentTicks;
+	}
+
+	bool SetActionTime(float NewTime, bool bCallUpdate) override
+	{
+		CurrentTicks = FMath::TruncToInt(NewTime);
+		if (bCallUpdate)
+		{
+			if (CurrentTicks > DelayTicks)
+			{
+				MarkAsFinished();
+				Complete(false);
+			}
+		}
+		return true;
+	}
 };
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION

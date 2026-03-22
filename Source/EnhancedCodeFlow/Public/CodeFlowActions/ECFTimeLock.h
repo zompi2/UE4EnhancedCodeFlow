@@ -67,6 +67,24 @@ protected:
 			MarkAsFinished();
 		}
 	}
+
+	float GetActionTime() const override
+	{
+		return CurrentTime;
+	}
+
+	bool SetActionTime(float NewTime, bool bCallUpdate) override
+	{
+		CurrentTime = NewTime;
+		if (bCallUpdate)
+		{
+			if(CurrentTime >= LockTime)
+			{
+				MarkAsFinished();
+			}
+		}
+		return true;
+	}
 };
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION

@@ -96,6 +96,19 @@ void UECFBPLibrary::ECFStopAllActionsWithLabel(const UObject* WorldContextObject
 	FFlow::StopAllActionsWithLabel(WorldContextObject, Label, bComplete, InOwner);
 }
 
+
+/*^^^ Timing mods ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+float UECFBPLibrary::GetActionTime(const UObject* WorldContextObject, const FECFHandleBP& Handle)
+{
+	return FFlow::GetActionTime(WorldContextObject, Handle.Handle);
+}
+
+bool UECFBPLibrary::SetActionTime(const UObject* WorldContextObject, const FECFHandleBP& Handle, float NewTime, bool bCallUpdate)
+{
+	return FFlow::SetActionTime(WorldContextObject, Handle.Handle, NewTime, bCallUpdate);
+}
+
 /*^^^ Handle and Instance Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 void UECFBPLibrary::IsECFHandleValid(bool& bOutIsValid, const FECFHandleBP& Handle)

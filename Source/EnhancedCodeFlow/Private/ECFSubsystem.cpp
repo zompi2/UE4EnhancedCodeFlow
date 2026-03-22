@@ -434,6 +434,36 @@ void UECFSubsystem::RemoveAllActions(bool bComplete, UObject* InOwner)
 	}
 }
 
+float UECFSubsystem::GetActionTime(const FECFHandle& HandleId)
+{
+	if (UECFActionBase* ActionFound = FindAction(HandleId))
+	{
+		return ActionFound->GetActionTime();
+	}
+	else
+	{
+#if ECF_LOGS
+		UE_LOG(LogECF, Error, TEXT("GetActionTime can't be called, because of action that can't be found. Id: %s"), *HandleId.ToString());
+		return -1.f;
+#endif
+	}
+}
+
+bool UECFSubsystem::SetActionTime(const FECFHandle& HandleId, float NewTime, bool bCallUpdate)
+{
+	if (UECFActionBase* ActionFound = FindAction(HandleId))
+	{
+		return ActionFound->SetActionTime(NewTime, bCallUpdate);
+	}
+	else
+	{
+#if ECF_LOGS
+		UE_LOG(LogECF, Error, TEXT("SetActionTime can't be called, because of action that can't be found. Id: %s"), *HandleId.ToString());
+		return false;
+#endif
+	}
+}
+
 bool UECFSubsystem::HasAction(const FECFHandle& HandleId) const
 {
 	if (UECFActionBase* ActionFound = FindAction(HandleId))

@@ -105,6 +105,23 @@ protected:
 		}
 	}
 
+	float GetActionTime() const override
+	{
+		return CurrentTime;
+	}
+
+	bool SetActionTime(float NewTime, bool bCallUpdate) override
+	{
+		CurrentTime = NewTime;
+		MyTimeline.SetPlaybackPosition(CurrentTime, false, false);
+		CurrentValue = CurveVector->GetVectorValue(CurrentTime);
+		if (bCallUpdate)
+		{
+			TickFunc(CurrentValue, CurrentTime);
+		}
+		return true;
+	}
+
 private:
 
 	void HandleProgress(FVector Value)
