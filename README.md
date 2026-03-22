@@ -3,6 +3,7 @@
 <img width="295" height="195" alt="obraz" src="https://github.com/user-attachments/assets/9035f0f4-507b-4f4f-baab-343d575d42b3" />
 
 <img width="237" height="85" alt="obraz" src="https://github.com/user-attachments/assets/4b6401b9-9d82-4b35-a682-034dd46fa102" />
+<img width="282" height="193" alt="obraz" src="https://github.com/user-attachments/assets/471415c6-b9f0-4126-b497-9d3309d67ff5" />
 
 
 This code plugin provides functions that drastically improve the quality of life during the implementation of game flow in C++.  
