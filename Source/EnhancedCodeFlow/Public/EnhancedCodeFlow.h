@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2026 Damian Nowakowski. All rights reserved.
 
 /**
  * Library of static functions used to launch Code Flow Actions.
@@ -157,6 +157,20 @@ public:
 	 */
 	static void StopAllActionsWithLabel(const UObject* WorldContextObject, const FString& Label, bool bComplete = false, UObject* InOwner = nullptr);
 
+	/*^^^ Timing mods ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Gets the action time. It's not CurrentTime, but the time value used by this action, like in delay or timeline.
+	 * If the action doesn't support time or there is no action, it will return -1.
+	 */
+	static float GetActionTime(const UObject* WorldContextObject, const FECFHandle& Handle);
+	
+	/**
+	 * Sets the action time. It's not CurrentTime, but the time value used by this action, like in delay or timeline.
+	 * If the action doesn't support time or there is no action, it will return false. 
+	 * If bCallUpdate is true - the action should run an update event (if there is any) immediately after it's time change.
+	 */
+	static bool SetActionTime(const UObject* WorldContextObject, const FECFHandle& Handle, float NewTime, bool bCallUpdate);
 
 	/*^^^ Ticker ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 

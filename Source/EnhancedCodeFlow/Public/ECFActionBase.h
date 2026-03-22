@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2026 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -163,6 +163,24 @@ protected:
 		{
 			bIsPaused = true;
 		}
+	}
+
+	// Gets the action time. It's not CurrentTime, but the time value used by this action, like in delay or timeline.
+	virtual float GetActionTime() const
+	{
+#if ECF_LOGS
+		UE_LOG(LogECF, Error, TEXT("ECF - [%s] GetActionTime - this action does not support time tracking."), *Settings.Label);
+#endif
+		return -1.f;
+	}
+
+	// Sets the action time. It's not CurrentTime, but the time value used by this action, like in delay or timeline.
+	virtual bool SetActionTime(float NewTime, bool bCallUpdate)
+	{
+#if ECF_LOGS
+		UE_LOG(LogECF, Error, TEXT("ECF - [%s] SetActionTime - this action does not support time tracking."), *Settings.Label);
+#endif
+		return false;
 	}
 
 private:

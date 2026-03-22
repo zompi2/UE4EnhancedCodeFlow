@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2026 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -103,6 +103,23 @@ protected:
 		{
 			CallbackFunc(CurrentValue, CurrentTime, bStopped);
 		}
+	}
+
+	float GetActionTime() const override
+	{
+		return CurrentTime;
+	}
+
+	bool SetActionTime(float NewTime, bool bCallUpdate) override
+	{
+		CurrentTime = NewTime;
+		MyTimeline.SetPlaybackPosition(CurrentTime, false, false);
+		CurrentValue = CurveFloat->GetFloatValue(CurrentTime);
+		if (bCallUpdate)
+		{
+			TickFunc(CurrentValue, CurrentTime);
+		}
+		return true;
 	}
 
 private:

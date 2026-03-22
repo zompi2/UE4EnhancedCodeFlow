@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Damian Nowakowski. All rights reserved.
+// Copyright (c) 2026 Damian Nowakowski. All rights reserved.
 
 #pragma once
 
@@ -94,6 +94,25 @@ protected:
 	void Complete(bool bStopped) override
 	{
 		CallbackFunc(bStopped);
+	}
+
+	float GetActionTime() const override
+	{
+		return CurrentTime;
+	}
+
+	bool SetActionTime(float NewTime, bool bCallUpdate) override
+	{
+		CurrentTime = NewTime;
+		if (bCallUpdate)
+		{
+			if (CurrentTime > DelayTime)
+			{
+				MarkAsFinished();
+				Complete(false);
+			}
+		}
+		return true;
 	}
 };
 
