@@ -1,3 +1,9 @@
+###### 3.8.0
+* GetActionTime and SetActionTime functions added, which allows to obtain and set the current time of the Action.
+  It works for all time dependent actions (Delay, Timeline, etc.) and can be used to alter the flow of the Action in runtime. 
+  For example, you can set the Action time to 0 to restart it, or set it to the end to finish it immediately.
+* Changed the condition of when ECFTimeline action is finished. Now it uses the time value instead of the timeline value.
+
 ###### 3.7.0
 * LoadObjectsAsync action added, which allows to load objects asynchronously and wait for their loading to be completed. 
 * WaitLoadObjects coroutine added, which is a coroutine version of LoadObjectsAsync.
