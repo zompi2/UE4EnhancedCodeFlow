@@ -1,11 +1,5 @@
 # Enhanced Code Flow for Unreal Engine
 
-<img width="295" height="195" alt="obraz" src="https://github.com/user-attachments/assets/9035f0f4-507b-4f4f-baab-343d575d42b3" />
-
-<img width="237" height="85" alt="obraz" src="https://github.com/user-attachments/assets/4b6401b9-9d82-4b35-a682-034dd46fa102" />
-<img width="282" height="193" alt="obraz" src="https://github.com/user-attachments/assets/471415c6-b9f0-4126-b497-9d3309d67ff5" />
-
-
 This code plugin provides functions that drastically improve the quality of life during the implementation of game flow in C++.  
 It works very well with gameplay programming, UI programming with a lot of transitions or in any other situation.
 
@@ -978,7 +972,7 @@ Returns the action time. It's not the CurrentTime, but the time value used by th
 const float CurrentTime = FFlow::GetActionTime(this, ActionHandle);
 ```
 
-
+![gettime](https://github.com/user-attachments/assets/9035f0f4-507b-4f4f-baab-343d575d42b3)
 
 ## Set Action Time
 
@@ -989,7 +983,7 @@ const float NewTime = 0.f;
 const bool bTimeSet = FFlow::SetActionTime(this, DelayHandle, NewTime, true);
 ```
 
-
+![settime](https://github.com/user-attachments/assets/471415c6-b9f0-4126-b497-9d3309d67ff5)
 
 [Back to top](#table-of-content)
 

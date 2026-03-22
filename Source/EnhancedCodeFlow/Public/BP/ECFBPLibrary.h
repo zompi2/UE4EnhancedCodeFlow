@@ -139,7 +139,7 @@ public:
 	 * If the action doesn't support time or there is no action, it will return false.
 	 * If bCallUpdate is true - the action should run an update event (if there is any) immediately after it's time change.
 	 */
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", DisplayName = "ECF - Get Action Time"), Category = "ECF")
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", DisplayName = "ECF - Set Action Time"), Category = "ECF")
 	static bool SetActionTime(const UObject* WorldContextObject, const FECFHandleBP& Handle, float NewTime, UPARAM(DisplayName = "CallUpdate") bool bCallUpdate);
 
 	/*^^^ Handle and Instance Id ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
