@@ -171,10 +171,24 @@ FFlow::Delay(this, 2.f, [this](bool bStopped)
 });
 ```
 
-An ECF-Delay BP node has few advantages over the built in Unreal's Delay node.  
-You can plan to execute delayed code without delaying the whole Blueprint, you can cancel the delayed code's execution or make the dilation game pause and time dilation independent. 
-
 ![Delay](https://user-images.githubusercontent.com/7863125/218276143-db9554f2-abb3-40a1-ad83-ad1132812bb7.png)
+
+**IMPORTANT** Neither the C++ and BP version of ECF-Delay DO NOT pause the code execution flow! They simply enqueue the Action to be executed after some time.  
+This means that tricks like Delay in Tick to run Tick at given intervals won't work. To achieve such result, use Action Handles to determine if the Delay code has already been executed.
+
+```cpp
+void AMyActor::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	if (FFlow::IsActionRunning(GetWorld(), DelayHandle) == false)
+    {
+	    DelayHandle = FFlow::Delay(this, 5.f, [this]()
+        {
+		    // Do something every 5 seconds in Tick.
+		});
+	}
+}
+```
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
