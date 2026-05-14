@@ -44,6 +44,7 @@ If you don't want to build the plugin from the source you can get the prebuilt b
 | 5.5        | 3.8.0          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
 | 5.6        | 3.8.0          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
 | 5.7        | 3.8.0          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
+| 5.8        | 3.8.0          | Soon |
 
 [Back to top](#table-of-content)
 
