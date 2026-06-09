@@ -3,7 +3,7 @@
 This code plugin provides functions that drastically improve the quality of life during the implementation of game flow in C++.  
 It works very well with gameplay programming, UI programming with a lot of transitions or in any other situation.
 
-The plugin works on Unreal Engine: 4.27, 5.2-5.7.
+The plugin works on Unreal Engine: 4.27, 5.2-5.8.
 
 # Table of content
 
@@ -38,12 +38,13 @@ If you don't want to build the plugin from the source you can get the prebuilt b
 
 | UE version | Plugin version | Link |
 | :--------- | :------------- | :--- |
-| 4.27       | 3.7.0          | [Zip](https://github.com/zompi2/UE4EnhancedCodeFlow/raw/packs/Packs/EnhancedCodeFlow-3.7.0-4.27-Prebuild.zip) |
-| 5.3        | 3.7.0          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
-| 5.4        | 3.7.0          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
-| 5.5        | 3.7.0          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
-| 5.6        | 3.7.0          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
-| 5.7        | 3.7.0          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
+| 4.27       | 3.8.0          | [Zip](https://github.com/zompi2/UE4EnhancedCodeFlow/raw/packs/Packs/EnhancedCodeFlow-3.8.0-4.27-Prebuild.zip) |
+| 5.3        | 3.8.0          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
+| 5.4        | 3.8.0          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
+| 5.5        | 3.8.0          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
+| 5.6        | 3.8.0          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
+| 5.7        | 3.8.0          | [Fab](https://www.fab.com/listings/c7a13871-0671-45d5-971c-2f5b3d53d3c0) |
+| 5.8        | 3.8.0          | Soon |
 
 [Back to top](#table-of-content)
 
@@ -171,10 +172,24 @@ FFlow::Delay(this, 2.f, [this](bool bStopped)
 });
 ```
 
-An ECF-Delay BP node has few advantages over the built in Unreal's Delay node.  
-You can plan to execute delayed code without delaying the whole Blueprint, you can cancel the delayed code's execution or make the dilation game pause and time dilation independent. 
-
 ![Delay](https://user-images.githubusercontent.com/7863125/218276143-db9554f2-abb3-40a1-ad83-ad1132812bb7.png)
+
+**IMPORTANT** Neither the C++ and BP version of ECF-Delay DO NOT pause the code execution flow! They simply enqueue the Action to be executed after some time.  
+This means that tricks like Delay in Tick to run Tick at given intervals won't work. To achieve such result, use Action Handles to determine if the Delay code has already been executed.
+
+```cpp
+void AMyActor::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	if (FFlow::IsActionRunning(GetWorld(), DelayHandle) == false)
+    {
+	    DelayHandle = FFlow::Delay(this, 5.f, [this]()
+        {
+		    // Do something every 5 seconds in Tick.
+		});
+	}
+}
+```
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
