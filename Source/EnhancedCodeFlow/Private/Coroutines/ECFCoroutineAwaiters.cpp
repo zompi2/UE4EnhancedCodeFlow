@@ -5,6 +5,7 @@
 #include "CodeFlowActions/Coroutines/ECFWaitSeconds.h"
 #include "CodeFlowActions/Coroutines/ECFWaitTicks.h"
 #include "CodeFlowActions/Coroutines/ECFWaitUntil.h"
+#include "CodeFlowActions/Coroutines/ECFWaitForFlag.h"
 #include "CodeFlowActions/Coroutines/ECFRunAsyncAndWait.h"
 #include "CodeFlowActions/Coroutines/ECFWaitLoadObjects.h"
 
@@ -70,6 +71,22 @@ void FECFCoroutineAwaiter_WaitUntil::await_suspend(FECFCoroutineHandle InCoroHan
 	{
 		AddCoroutineAction<UECFWaitUntil>(Owner, InCoroHandle, Settings, MoveTemp(PredicateHasFinishedDeltaTime), TimeOut);
 	}
+}
+
+/*^^^ Wait For Flag Coroutine Awaiter ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFCoroutineAwaiter_WaitForFlag::FECFCoroutineAwaiter_WaitForFlag(const UObject* InOwner, const FECFActionSettings& InSettings, bool* bInFlag, float InTimeOut)
+{
+	Owner = InOwner;
+	Settings = InSettings;
+
+	bFlag = bInFlag;
+	TimeOut = InTimeOut;
+}
+
+void FECFCoroutineAwaiter_WaitForFlag::await_suspend(FECFCoroutineHandle InCoroHandle)
+{
+	AddCoroutineAction<UECFWaitForFlag>(Owner, InCoroHandle, Settings, bFlag, TimeOut);
 }
 
 /*^^^ Run Async And Wait Coroutine Awaiter ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/

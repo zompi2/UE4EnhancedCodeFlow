@@ -125,6 +125,33 @@ private:
 	float TimeOut = 0.f;
 };
 
+/*^^^ Wait For Flag Coroutine Awaiter ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+class ENHANCEDCODEFLOW_API FECFCoroutineAwaiter_WaitForFlag : public FECFCoroutineAwaiter
+{
+public:
+
+	// C-tor
+	FECFCoroutineAwaiter_WaitForFlag(const UObject* InOwner, const FECFActionSettings& InSettings, bool* bInFlag, float InTimeOut);
+
+	// Called when the suspension begins
+	void await_suspend(FECFCoroutineHandle InCoroHandle);
+
+	// Returns the state of the corotuine after it's resumed.
+	FECFCoroutineAwaiter_ResultWithTimeout await_resume()
+	{
+		return FECFCoroutineAwaiter_ResultWithTimeout(
+			CoroHandle.promise().bStopped,
+			CoroHandle.promise().bTimedOut);
+	}
+
+private:
+
+	// Storing values in order to use them when await_suspend is called
+	bool* bFlag = nullptr;
+	float TimeOut = 0.f;
+};
+
 /*^^^ Run Async And Wait Coroutine Awaiter ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 class ENHANCEDCODEFLOW_API FECFCoroutineAwaiter_RunAsyncAndWait : public FECFCoroutineAwaiter

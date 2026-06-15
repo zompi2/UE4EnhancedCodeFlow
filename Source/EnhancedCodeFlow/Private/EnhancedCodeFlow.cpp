@@ -51,6 +51,18 @@ UECFActionBase* FEnhancedCodeFlow::GetActionFromHandle(const UObject* WorldConte
 	return nullptr;
 }
 
+FString FEnhancedCodeFlow::GetActionLabelFromHandle(const UObject* WorldContextObject, const FECFHandle& Handle)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+	{
+		if (UECFActionBase* FoundAction = ECF->FindAction(Handle))
+		{
+			return  FoundAction->GetLabel();
+		}
+	}
+	return TEXT("");
+}
+
 UECFActionBase* FEnhancedCodeFlow::GetActionFromInstancedId(const UObject* WorldContextObject, const FECFInstanceId& InstancedId)
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
@@ -644,6 +656,13 @@ void FEnhancedCodeFlow::RemoveAllWaitUntil(const UObject* WorldContextObject, bo
 {
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
 		ECF->RemoveActionsOfClass<UECFWaitUntil>(bComplete, InOwner);
+}
+
+/*^^^ Wait For Flag (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFCoroutineAwaiter_WaitForFlag FEnhancedCodeFlow::WaitForFlag(const UObject* InOwner, bool* bInFlag, float InTimeOut /*= 0.f*/, const FECFActionSettings& Settings /*= {}*/)
+{
+	return FECFCoroutineAwaiter_WaitForFlag(InOwner, Settings, bInFlag, InTimeOut);
 }
 
 /*^^^ Run Async And Wait (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/

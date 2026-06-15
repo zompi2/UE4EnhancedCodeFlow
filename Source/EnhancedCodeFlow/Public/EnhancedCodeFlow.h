@@ -78,6 +78,11 @@ public:
 	static UECFActionBase* GetActionFromHandle(const UObject* WorldContextObject, const FECFHandle& Handle);
 
 	/**
+	 * Returns the label to the Action. Use it mostly for debugging purposes.
+	 */
+	static FString GetActionLabelFromHandle(const UObject* WorldContextObject, const FECFHandle& Handle);
+
+	/**
 	 * Returns the popinter to the Instanced Action. Use it mostly for debugging purposes.
 	 */
 	static UECFActionBase* GetActionFromInstancedId(const UObject* WorldContextObject, const FECFInstanceId& InstancedId);
@@ -621,6 +626,16 @@ public:
 	 */
 	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFWaitUntil> instead.")]]
 	static void RemoveAllWaitUntil(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
+
+	/*^^^ Wait For Flag (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Suspends running coroutine function until the given flag won't return true.
+	 * @param InFlag				- a pointer to a boolean flag that decides if the suspended function should be resumed.	
+	 * @param InTimeOut				- if greater than 0.f it will apply timeout to this action. After this timeout the suspended function will be resumed.
+	 * @param Settings [optional]	- an extra settings to apply to this action.
+	 */
+	static FECFCoroutineAwaiter_WaitForFlag WaitForFlag(const UObject* InOwner, bool* bInFlag, float InTimeOut = 0.f, const FECFActionSettings& Settings = {});
 
 	/*^^^ Run Async And Wait (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 	
