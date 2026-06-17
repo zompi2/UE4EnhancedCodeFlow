@@ -685,4 +685,9 @@ FECFCoroutineAwaiter_WaitLoadObjects FEnhancedCodeFlow::WaitLoadObjects(const UO
 	return FECFCoroutineAwaiter_WaitLoadObjects(InOwner, Settings, InObjectsToLoad);
 }
 
+FECFCoroutineAwaiter_WaitLoadObjects FEnhancedCodeFlow::WaitLoadObjects(const UObject* InOwner, const TArray<FPrimaryAssetId>& InPrimaryAssetsToLoad, const FECFActionSettings& Settings /*= {}*/)
+{
+	return FECFCoroutineAwaiter_WaitLoadObjects(InOwner, Settings, InPrimaryAssetsToLoad);
+}
+
 ECF_PRAGMA_ENABLE_OPTIMIZATION

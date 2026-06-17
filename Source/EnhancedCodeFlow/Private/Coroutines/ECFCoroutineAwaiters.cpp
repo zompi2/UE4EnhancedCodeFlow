@@ -115,9 +115,32 @@ FECFCoroutineAwaiter_WaitLoadObjects::FECFCoroutineAwaiter_WaitLoadObjects(const
 	ObjectsToLoad = InObjectsToLoad;
 }
 
+
+FECFCoroutineAwaiter_WaitLoadObjects::FECFCoroutineAwaiter_WaitLoadObjects(const UObject* InOwner, const FECFActionSettings& InSettings, const TArray<FPrimaryAssetId>& InPrimaryAssetsToLoad)
+{
+	Owner = InOwner;
+	Settings = InSettings;
+	PrimaryAssetsToLoad = InPrimaryAssetsToLoad;
+}
+
 void FECFCoroutineAwaiter_WaitLoadObjects::await_suspend(FECFCoroutineHandle InCoroHandle)
 {
-	AddCoroutineAction<UECFWaitLoadObjects>(Owner, InCoroHandle, Settings, ObjectsToLoad);
+	if (ObjectsToLoad.Num() > 0)
+	{
+		AddCoroutineAction<UECFWaitLoadObjects>(Owner, InCoroHandle, Settings, ObjectsToLoad);
+	}
+	else if (PrimaryAssetsToLoad.Num() > 0)
+	{
+		AddCoroutineAction<UECFWaitLoadObjects>(Owner, InCoroHandle, Settings, PrimaryAssetsToLoad);
+	}
+	else
+	{
+#if ECF_LOGS
+		UE_LOG(LogECF, Error, TEXT("ECF Coroutine [%s] - wait load objects failed to start. Objects or Assets Id array is empty."), *Settings.Label);
+#endif
+		// If no objects or primary assets to load, we can immediately resume the coroutine, so it won't stuck in a suspended state.
+		InCoroHandle.resume();
+	}
 }
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION
