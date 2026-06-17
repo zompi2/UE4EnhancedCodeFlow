@@ -80,6 +80,7 @@ struct FECFCoroutinePromise
 	bool bStopped = false;
 	bool bTimedOut = false;
 	FECFHandle ActionHandle;
+	void AssignHandle(const FECFHandle& NewHandle) {}
 };
 
 struct FECFCoroutineHandle 
@@ -92,5 +93,6 @@ struct FECFCoroutineHandle
 };
 
 #define co_await static_assert(false, "Trying to use co_await without coroutine support!")
+#define co_return static_assert(false, "Trying to use co_return without coroutine support!")
 
 #endif
