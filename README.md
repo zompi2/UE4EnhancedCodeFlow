@@ -1,4 +1,3 @@
-<img width="288" height="93" alt="actionfromlabel" src="https://github.com/user-attachments/assets/31a74403-84b9-4c82-8316-3fb747678f96" />
 # Enhanced Code Flow for Unreal Engine
 
 This code plugin provides functions that drastically improve the quality of life during the implementation of game flow in C++.  
@@ -663,7 +662,27 @@ FFlow::AddTicker(this, 10.f, [this](float DeltaTime)
 }, nullptr, FECFActionSettings(1.f, 5.f, true, true, false));
 ```
 
-To make defining these settings easier there are few macros that creates a settings structure with just one option:
+To make defining these settings easier you can use the method chaining when constructing it.    
+This example ignores pause, global time dilation and adds label to the action.
+``` cpp
+FECFActionSettings()
+  .WithIgnorePause()
+  .WithIgnoreGlobalTimeDilation()
+  .WithLabel(TEXT("MyAction"));
+```
+
+The full list of possible chainable methods:
+```cpp
+FECFActionSettings()
+  .WithTickInterval(1.f)
+  .WithFirstDelay(5.f)
+  .WithIgnorePause()
+  .WithIgnoreGlobalTimeDilation()
+  .WithStartPaused()
+  .WithLabel(TEXT("MyAction"));
+```
+
+There are also few macros with some of the most commonly used settings:
 
 * `ECF_TICKINTERVAL(5.f)` - settings which sets tick interval to 5 second
 * `ECF_DELAYFIRST(1.f)` - settings which makes this action to run after 1 second delay
@@ -671,6 +690,7 @@ To make defining these settings easier there are few macros that creates a setti
 * `ECF_IGNORETIMEDILATION` - settings which makes this action ignore global time dilation
 * `ECF_IGNOREPAUSEDILATION` - settings which makes this action ignore pause and global time dilation
 * `ECF_STARTPAUSED` - settings which makes this action started in paused state
+* `ECF_LABEL` - settings which adds the label to this action
 
 ``` cpp
 FFlow::Delay(this, 2.f, [this]()
@@ -868,6 +888,14 @@ TArray<FECFHandle> Handles = FFlow::GetActionsHandlesByLabel<UECFDelay>(TEXT("My
 
 <img width="313" height="94" alt="ecffindbylabel" src="https://github.com/user-attachments/assets/5982c741-a064-4e02-a02b-72caa64f49cb" />
 
+#### Get Action Label from Handle
+
+```cpp
+FString Label = FFlow::GetActionLabelFromHandle(Handle);
+```
+
+<img width="288" height="93" alt="actionfromlabel" src="https://github.com/user-attachments/assets/31a74403-84b9-4c82-8316-3fb747678f96" />
+
 [Back to top](#table-of-content)
 
 # Pausing and Resuming
@@ -1058,7 +1086,8 @@ You have a source code of this plugin you can easily extend it's functionalities
 > Check how other actions are made to easier understand how to extend the plugin.
 
 1. Create a class that inherits from `UECFActionBase`
-2. Implement `Setup` function, which accepts all parameters you want to pass to this action. 
+2. Add include to the new class header to the `ECFActionsHeader.h` file.
+3. Implement `Setup` function, which accepts all parameters you want to pass to this action. 
    `Setup` function must return true if the given parameters are valid.  
 ```cpp
 bool Setup(int32 Param1, int32 Param2, TUniqueFunction<void(bool)>&& Callback)
@@ -1070,14 +1099,14 @@ bool Setup(int32 Param1, int32 Param2, TUniqueFunction<void(bool)>&& Callback)
 ```
 > Any callback must be passed as an r-value reference and be moved to the action's variable.
 
-3. Override `Init` and `Tick` functions if needed.
-4. If you want this action to be stopped while ticking - use `MarkAsFinished()` function.
-5. If you want to launch a callback when this action is stopped by `StopAction` method with `bComplete` set to true - override `Complete(bool bStopped)` function.
-6. If this is an instanced action you can optionally override `RetriggeredInstancedAction()` function to add any logic that should be executed when the instanced action is called while already existing.
-7. You can optionally run `SetMaxActionTime` in action's `Init` function to determine the maximum time in seconds this action should run. 
+4. Override `Init` and `Tick` functions if needed.
+5. If you want this action to be stopped while ticking - use `MarkAsFinished()` function.
+6. If you want to launch a callback when this action is stopped by `StopAction` method with `bComplete` set to true - override `Complete(bool bStopped)` function.
+7. If this is an instanced action you can optionally override `RetriggeredInstancedAction()` function to add any logic that should be executed when the instanced action is called while already existing.
+8. You can optionally run `SetMaxActionTime` in action's `Init` function to determine the maximum time in seconds this action should run. 
 >IMMPORTANT! SetMaxActionTime is only to help ticker run ticks with proper delta times.  
 >It will not stop the action itself!
-8. In the `FEnhancedCodeFlow` class implement static function that launches the action using `AddAction` function.
+9. In the `FEnhancedCodeFlow` class implement static function that launches the action using `AddAction` function.
    The function must receive a pointer to the launching `UObject`, `FECFActionSettings`, `FECFInstanceId` (use invalid one if the action shouldn't be instanced) and every other argument that is used in the action's `Setup` function in the same order.
    It must return `FECFHandle`.
 ```cpp
@@ -1089,8 +1118,8 @@ FECFHandle FEnhancedCodeFlow::NewAction(const UObject* InOwner, int32 Param1, in
     return FECFHandle();
 }
 ```
-9. If your action can be resetted or users can alter it's time, override the `Reset(bool bCallUpdate)`, `float GetActionTime() const` and `bool SetActionTime(float NewTime, bool bCallUpdate)` functions in your action class.
-10. You can optionally add the stats counter to your action's `Tick` function, in order to measure it's performence  with `stat ecfdetails`.
+10. If your action can be resetted or users can alter it's time, override the `Reset(bool bCallUpdate)`, `float GetActionTime() const` and `bool SetActionTime(float NewTime, bool bCallUpdate)` functions in your action class.
+11. You can optionally add the stats counter to your action's `Tick` function, in order to measure it's performence  with `stat ecfdetails`.
 ```cpp
 DECLARE_SCOPE_CYCLE_COUNTER(TEXT("NewAction - Tick"), STAT_ECFDETAILS_NEWACTION, STATGROUP_ECFDETAILS);
 ```
@@ -1108,7 +1137,8 @@ FFlow::NewAction(this, 1, 2, [this](bool bStopped)
 Adding actions that supports coroutine is simillar to adding new actions but there are few steps that must be made:
 
 1. Action class must inherits from `UECFCoroutineActionBase` instead of `UECFActionBase`.
-2. Add coroutine task to `ECFCoroutineTasks.h`
+2. Add include to the new class header to the `ECFActionsHeaderCoroutine.h` file.
+3. Add coroutine task to `ECFCoroutineTasks.h`
 ```cpp
 class ENHANCEDCODEFLOW_API FECFCoroutineTask_NewCoroAction : public FECFCoroutineTask
 {
@@ -1122,7 +1152,7 @@ private:
 	int32 Param1 = 0;
 };
 ```
-3. Implement coroutine task in `ECFCoroutineTasks.cpp`. Use `AddCoroutineAction`` function there.
+4. Implement coroutine task in `ECFCoroutineTasks.cpp`. Use `AddCoroutineAction`` function there.
 ```cpp
 FECFCoroutineTask_NewCoroAction::FECFCoroutineTask_NewCoroAction(const UObject* InOwner, const FECFActionSettings& InSettings, int32 InParam1)
 {
@@ -1136,7 +1166,7 @@ void FECFCoroutineTask_NewCoroAction::await_suspend(FECFCoroutineHandle CoroHand
 	AddCoroutineAction<UNewCoroAction>(Owner, CoroHandle, Settings, Param1);
 }
 ```
-4. Coroutine action implementation must resume coroutine in `Complete` function:
+5. Coroutine action implementation must resume coroutine in `Complete` function:
 ```cpp
 void Complete(bool bStopped) override
 {
@@ -1144,14 +1174,14 @@ void Complete(bool bStopped) override
 	CoroutineHandle.resume();
 }
 ```
-5. The coroutine should be called from `FEnhancedCodeFlow` class and it's implementation should return the defined coroutine task:
+6. The coroutine should be called from `FEnhancedCodeFlow` class and it's implementation should return the defined coroutine task:
 ```cpp
 FECFCoroutineTask_NewCoroAction FEnhancedCodeFlow::NewCoroAction(const UObject* InOwner, int32 InParam1, const FECFActionSettings& Settings)
 {
 	return FECFCoroutineTask_NewCoroAction(InOwner, Settings, InParam1);
 }
 ```
-6. The rest of the implementation is the same as with the normal action.
+7. The rest of the implementation is the same as with the normal action.
 
 [Back to top](#table-of-content)
 

@@ -3,6 +3,7 @@
 * WaitLoadObjects variant for loading assets using FPrimaryAssetId list added. 
   Only coroutine, because AssetManager has the lambda callback already.
 * WaitForFlag coroutine added (works similar to WaitUntil, but accepts only one bool flag to check for completion)
+* Action Settings can now be constructed using the method chaining, like: FECFActionSettings().WithIgnorePause().WithLabel(TEXT("MyAction"));
 * GetActionLabelFromHandle function added
 * Fixed crash that could occur when running multiple co_awaits in one coroutine function.
 * Fixed dandling coroutine handles that could be created if the coroutine action setup failed.
