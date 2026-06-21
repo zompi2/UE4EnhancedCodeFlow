@@ -120,6 +120,9 @@ protected:
 #if ECF_LOGS
 			UE_LOG(LogECF, Error, TEXT("Failed to Setup Coroutine Action of class: %s, Label: %s"), *NewAction->GetName(), *Settings.Label);
 #endif
+			// Immediately resume the coroutine if the action couldn't be created for any reason, 
+			// so that it can continue executing and not be stuck in a suspended state.
+			InCoroutineHandle.resume();
 		}
 	}
 

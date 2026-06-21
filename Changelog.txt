@@ -1,3 +1,13 @@
+###### 3.9.0
+* LoopAndWait coroutine added, which works like WhileTrueExecute but in a form of a coroutine.
+* WaitLoadObjects variant for loading assets using FPrimaryAssetId list added. 
+  Only coroutine, because AssetManager has the lambda callback already.
+* WaitForFlag coroutine added (works similar to WaitUntil, but accepts only one bool flag to check for completion)
+* Action Settings can now be constructed using the method chaining, like: FECFActionSettings().WithIgnorePause().WithLabel(TEXT("MyAction"));
+* GetActionLabelFromHandle function added
+* Fixed crash that could occur when running multiple co_awaits in one coroutine function.
+* Fixed dandling coroutine handles that could be created if the coroutine action setup failed.
+
 ###### 3.8.0
 * GetActionTime and SetActionTime functions added, which allows to obtain and set the current time of the Action.
   It works for all time dependent actions (Delay, Timeline, etc.) and can be used to alter the flow of the Action in runtime. 

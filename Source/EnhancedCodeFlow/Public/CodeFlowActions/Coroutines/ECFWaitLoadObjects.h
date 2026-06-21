@@ -18,6 +18,7 @@ class ENHANCEDCODEFLOW_API UECFWaitLoadObjects : public UECFCoroutineActionBase
 protected:
 
 	TArray<FSoftObjectPath> ObjectsToLoad;
+	TArray<FPrimaryAssetId> PrimaryAssetsToLoad;
 	TSharedPtr<FStreamableHandle> StreamableHandle;
 
 	bool Setup(const TArray<FSoftObjectPath>& InObjectsToLoad)
@@ -39,27 +40,77 @@ protected:
 		return true;
 	}
 
+	bool Setup(const TArray<FPrimaryAssetId>& InObjectsToLoad)
+	{
+		if (InObjectsToLoad.Num() == 0)
+		{
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF Coroutine [%s] - wait load objects (Primary Assets) failed to start. Objects array is empty."), *Settings.Label);
+#endif
+			return false;
+		}
+
+		PrimaryAssetsToLoad = InObjectsToLoad;
+
+#if ECF_LOGS
+		UE_LOG(LogECF, Log, TEXT("ECF Coroutine [%s] - Loading %d objects (Primary Assets) asynchronously."), *Settings.Label, PrimaryAssetsToLoad.Num());
+#endif
+
+		return true;
+	}
+
 	void Init() override
 	{
 		TWeakObjectPtr<ThisClass> WeakThis(this);
-		FStreamableManager& StreamableManager = UAssetManager::GetStreamableManager();
-		StreamableHandle = StreamableManager.RequestAsyncLoad(
-			ObjectsToLoad,
-			[WeakThis]()
-			{
-				if (ThisClass* StrongThis = WeakThis.Get())
+
+		if (ObjectsToLoad.Num() > 0)
+		{
+			FStreamableManager& StreamableManager = UAssetManager::GetStreamableManager();
+			StreamableHandle = StreamableManager.RequestAsyncLoad(
+				ObjectsToLoad,
+				[WeakThis]()
 				{
-					if (StrongThis->IsValid())
+					if (ThisClass* StrongThis = WeakThis.Get())
 					{
+						if (StrongThis->IsValid())
+						{
 #if ECF_LOGS
-						UE_LOG(LogECF, Log, TEXT("ECF Coroutine [%s] - Finished loading %d objects."), *StrongThis->Settings.Label, StrongThis->ObjectsToLoad.Num());
+							UE_LOG(LogECF, Log, TEXT("ECF Coroutine [%s] - Finished loading %d objects."), *StrongThis->Settings.Label, StrongThis->ObjectsToLoad.Num());
 #endif
-						StrongThis->MarkAsFinished();
-						StrongThis->Complete(false);
+							StrongThis->MarkAsFinished();
+							StrongThis->Complete(false);
+						}
 					}
 				}
-			}
-		);
+			);
+		}
+		else if (PrimaryAssetsToLoad.Num() > 0)
+		{
+			StreamableHandle = UAssetManager::Get().LoadPrimaryAssets(
+				PrimaryAssetsToLoad,
+				{},
+				FStreamableDelegate::CreateLambda([WeakThis]()
+				{
+					if (ThisClass* StrongThis = WeakThis.Get())
+					{
+						if (StrongThis->IsValid())
+						{
+#if ECF_LOGS
+							UE_LOG(LogECF, Log, TEXT("ECF Coroutine [%s] - Finished loading %d objects (Primary Assets)."), *StrongThis->Settings.Label, StrongThis->PrimaryAssetsToLoad.Num());
+#endif
+							StrongThis->MarkAsFinished();
+							StrongThis->Complete(false);
+						}
+					}
+				}
+			));
+		}
+		else
+		{
+#if ECF_LOGS
+			UE_LOG(LogECF, Error, TEXT("ECF Coroutine [%s] - wait load objects failed to initialize. Objects arrays are empty."), *Settings.Label);
+#endif
+		}
 	}
 
 	void Complete(bool bStopped) override

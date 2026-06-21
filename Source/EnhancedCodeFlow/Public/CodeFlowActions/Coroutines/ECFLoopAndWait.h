@@ -3,12 +3,12 @@
 #pragma once
 
 #include "Coroutines/ECFCoroutineActionBase.h"
-#include "ECFWaitUntil.generated.h"
+#include "ECFLoopAndWait.generated.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 
 UCLASS()
-class ENHANCEDCODEFLOW_API UECFWaitUntil : public UECFCoroutineActionBase
+class ENHANCEDCODEFLOW_API UECFLoopAndWait : public UECFCoroutineActionBase
 {
 	GENERATED_BODY()
 
@@ -16,20 +16,22 @@ class ENHANCEDCODEFLOW_API UECFWaitUntil : public UECFCoroutineActionBase
 
 protected:
 
-	TUniqueFunction<bool(float)> Predicate;
-	TUniqueFunction<bool()> Predicate_NoDeltaTime;
+	TUniqueFunction<bool()> Predicate;
+	TUniqueFunction<void(float)> TickFunc;
+
 	float TimeOut = 0.f;
 	float OriginTimeOut = 0.f;
 	bool bWithTimeOut = false;
 	bool bTimedOut = false;
 
-	bool Setup(TUniqueFunction<bool(float)>&& InPredicate, float InTimeOut)
+	bool Setup(TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, float InTimeOut)
 	{
 		Predicate = MoveTemp(InPredicate);
+		TickFunc = MoveTemp(InTickFunc);
 
-		if (Predicate)
+		if (Predicate && TickFunc)
 		{
-			if (Predicate(0.f))
+			if (Predicate() == false)
 			{
 				// Coroutine will resume after Setup has failed
 				return false;
@@ -37,40 +39,22 @@ protected:
 			if (InTimeOut > 0.f)
 			{
 				bWithTimeOut = true;
-				bTimedOut = false;
 				TimeOut = InTimeOut;
 				OriginTimeOut = InTimeOut;
+				bTimedOut = false;
 				SetMaxActionTime(TimeOut);
 			}
 			else
 			{
 				bWithTimeOut = false;
+				bTimedOut = false;
 			}
 			return true;
 		}
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF Coroutine [%s] - Wait Until failed to start. Are you sure the Predicate is set properly?"), *Settings.Label);
-#endif
-			return false;
-		}
-	}
-
-	bool Setup(TUniqueFunction<bool()>&& InPredicate, float InTimeOut)
-	{
-		Predicate_NoDeltaTime = MoveTemp(InPredicate);
-		if (Predicate_NoDeltaTime)
-		{
-			return Setup([this](float DeltaTime)
-			{
-				return Predicate_NoDeltaTime();
-			}, InTimeOut);
-		}
-		else
-		{
-#if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF Coroutine [%s] - Wait Until failed to start. Are you sure the Predicate is set properly?"), *Settings.Label);
+			UE_LOG(LogECF, Error, TEXT("ECF Coroutine [%s] - Loop and Wait failed to start. Are you sure the Predicate and TickFunction are set properly?"), *Settings.Label);
 #endif
 			return false;
 		}
@@ -88,11 +72,11 @@ protected:
 	void Tick(float DeltaTime) override
 	{
 #if STATS
-		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("WaitUntil - Tick"), STAT_ECFDETAILS_WAITUNTIL, STATGROUP_ECFDETAILS);
+		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("LoopAndWait - Tick"), STAT_ECFDETAILS_LOOPANDWAIT, STATGROUP_ECFDETAILS);
 #endif
 
 #if ECF_INSIGHT_PROFILING
-		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - WaitUntil Tick");
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - LoopAndWait Tick");
 #endif
 
 		if (bWithTimeOut)
@@ -107,7 +91,11 @@ protected:
 			}
 		}
 
-		if (Predicate(DeltaTime))
+		if (Predicate())
+		{
+			TickFunc(DeltaTime);
+		}
+		else
 		{
 			MarkAsFinished();
 			Complete(false);

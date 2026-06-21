@@ -8,6 +8,7 @@
 
 #include <coroutine>
 #include "ECFHandle.h"
+#include "ECFLogs.h"
 
 /**
  * Defining coroutine handlers and promises in order to get coroutines work.
@@ -23,15 +24,42 @@ struct FECFCoroutine : FECFCoroutineHandle
 
 struct FECFCoroutinePromise
 {
+	FECFCoroutinePromise()
+	{
+#if (ECF_LOGS && ECF_LOGS_VERBOSE)
+		UE_LOG(LogECF, Log, TEXT("Coroutine Created"));
+#endif
+	}
+
+	~FECFCoroutinePromise()
+	{
+#if (ECF_LOGS && ECF_LOGS_VERBOSE)
+		UE_LOG(LogECF, Log, TEXT("Coroutine Destroyed"));
+#endif
+	}
+
 	FECFCoroutine get_return_object() { return { FECFCoroutine::from_promise(*this) }; }
 	std::suspend_never initial_suspend() noexcept { return {}; }
 	std::suspend_never final_suspend() noexcept { return {}; }
-	void return_void() { bHasFinished = true; }
+	void return_void() 
+	{
+#if (ECF_LOGS && ECF_LOGS_VERBOSE)
+		UE_LOG(LogECF, Log, TEXT("Coroutine return_void with ActionHandle: %s"), *ActionHandle.ToString());
+#endif
+		bHasFinished = true;
+	}
 	void unhandled_exception() {}
 	bool bHasFinished = false;
 	bool bStopped = false;
 	bool bTimedOut = false;
 	FECFHandle ActionHandle;
+	void AssignHandle(const FECFHandle& NewHandle)
+	{
+		ActionHandle = NewHandle;
+		bHasFinished = false;
+		bStopped = false;
+		bTimedOut = false;
+	}
 };
 
 #else
@@ -52,6 +80,7 @@ struct FECFCoroutinePromise
 	bool bStopped = false;
 	bool bTimedOut = false;
 	FECFHandle ActionHandle;
+	void AssignHandle(const FECFHandle& NewHandle) {}
 };
 
 struct FECFCoroutineHandle 
@@ -64,5 +93,6 @@ struct FECFCoroutineHandle
 };
 
 #define co_await static_assert(false, "Trying to use co_await without coroutine support!")
+#define co_return static_assert(false, "Trying to use co_return without coroutine support!")
 
 #endif
