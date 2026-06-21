@@ -60,6 +60,12 @@ public:
 	static TArray<FECFHandleBP> GetActionsHandlesByLabel(const UObject* WorldContextObject, const FString& Label);
 
 	/**
+	 * Returns the Label of the action pointed by given handle. Returns empty string if there is no action running.
+	 */
+	UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject", DisplayName = "ECF - Get Action Label By Handle"), Category = "ECF")
+	static UPARAM(DisplayName = "Label") FString GetActionLabelFromHandle(const UObject* WorldContextObject, const FECFHandleBP& Handle);
+
+	/**
 	 * Pause running action.
 	 */
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", DisplayName = "ECF - Pause Action"), Category = "ECF")

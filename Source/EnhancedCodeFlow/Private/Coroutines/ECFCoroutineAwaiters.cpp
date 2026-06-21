@@ -1,12 +1,7 @@
 // Copyright (c) 2026 Damian Nowakowski. All rights reserved.
 
 #include "Coroutines/ECFCoroutineAwaiters.h"
-
-#include "CodeFlowActions/Coroutines/ECFWaitSeconds.h"
-#include "CodeFlowActions/Coroutines/ECFWaitTicks.h"
-#include "CodeFlowActions/Coroutines/ECFWaitUntil.h"
-#include "CodeFlowActions/Coroutines/ECFRunAsyncAndWait.h"
-#include "CodeFlowActions/Coroutines/ECFWaitLoadObjects.h"
+#include "ECFActionsHeaderCoroutine.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 
@@ -72,6 +67,22 @@ void FECFCoroutineAwaiter_WaitUntil::await_suspend(FECFCoroutineHandle InCoroHan
 	}
 }
 
+/*^^^ Wait For Flag Coroutine Awaiter ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFCoroutineAwaiter_WaitForFlag::FECFCoroutineAwaiter_WaitForFlag(const UObject* InOwner, const FECFActionSettings& InSettings, bool* bInFlag, float InTimeOut)
+{
+	Owner = InOwner;
+	Settings = InSettings;
+
+	bFlag = bInFlag;
+	TimeOut = InTimeOut;
+}
+
+void FECFCoroutineAwaiter_WaitForFlag::await_suspend(FECFCoroutineHandle InCoroHandle)
+{
+	AddCoroutineAction<UECFWaitForFlag>(Owner, InCoroHandle, Settings, bFlag, TimeOut);
+}
+
 /*^^^ Run Async And Wait Coroutine Awaiter ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 FECFCoroutineAwaiter_RunAsyncAndWait::FECFCoroutineAwaiter_RunAsyncAndWait(const UObject* InOwner, const FECFActionSettings& InSettings, TUniqueFunction<void()>&& InAsyncTaskFunc, float InTimeOut, EECFAsyncPrio InThreadPriority)
@@ -98,9 +109,48 @@ FECFCoroutineAwaiter_WaitLoadObjects::FECFCoroutineAwaiter_WaitLoadObjects(const
 	ObjectsToLoad = InObjectsToLoad;
 }
 
+
+FECFCoroutineAwaiter_WaitLoadObjects::FECFCoroutineAwaiter_WaitLoadObjects(const UObject* InOwner, const FECFActionSettings& InSettings, const TArray<FPrimaryAssetId>& InPrimaryAssetsToLoad)
+{
+	Owner = InOwner;
+	Settings = InSettings;
+	PrimaryAssetsToLoad = InPrimaryAssetsToLoad;
+}
+
 void FECFCoroutineAwaiter_WaitLoadObjects::await_suspend(FECFCoroutineHandle InCoroHandle)
 {
-	AddCoroutineAction<UECFWaitLoadObjects>(Owner, InCoroHandle, Settings, ObjectsToLoad);
+	if (ObjectsToLoad.Num() > 0)
+	{
+		AddCoroutineAction<UECFWaitLoadObjects>(Owner, InCoroHandle, Settings, ObjectsToLoad);
+	}
+	else if (PrimaryAssetsToLoad.Num() > 0)
+	{
+		AddCoroutineAction<UECFWaitLoadObjects>(Owner, InCoroHandle, Settings, PrimaryAssetsToLoad);
+	}
+	else
+	{
+#if ECF_LOGS
+		UE_LOG(LogECF, Error, TEXT("ECF Coroutine [%s] - wait load objects failed to start. Objects or Assets Id array is empty."), *Settings.Label);
+#endif
+		// If no objects or primary assets to load, we can immediately resume the coroutine, so it won't stuck in a suspended state.
+		InCoroHandle.resume();
+	}
+}
+
+/*^^^ Wait And Loop Coroutine Awaiter ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFCoroutineAwaiter_LoopAndWait::FECFCoroutineAwaiter_LoopAndWait(const UObject* InOwner, const FECFActionSettings& InSettings, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, float InTimeOut)
+{
+	Owner = InOwner;
+	Settings = InSettings;
+	Predicate = MoveTemp(InPredicate);
+	TickFunc = MoveTemp(InTickFunc);
+	TimeOut = InTimeOut;
+}
+
+void FECFCoroutineAwaiter_LoopAndWait::await_suspend(FECFCoroutineHandle InCoroHandle)
+{
+	AddCoroutineAction<UECFLoopAndWait>(Owner, InCoroHandle, Settings, MoveTemp(Predicate), MoveTemp(TickFunc), TimeOut);
 }
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION

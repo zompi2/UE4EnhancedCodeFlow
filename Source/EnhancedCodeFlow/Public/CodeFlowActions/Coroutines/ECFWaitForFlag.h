@@ -3,12 +3,12 @@
 #pragma once
 
 #include "Coroutines/ECFCoroutineActionBase.h"
-#include "ECFWaitUntil.generated.h"
+#include "ECFWaitForFlag.generated.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 
 UCLASS()
-class ENHANCEDCODEFLOW_API UECFWaitUntil : public UECFCoroutineActionBase
+class ENHANCEDCODEFLOW_API UECFWaitForFlag : public UECFCoroutineActionBase
 {
 	GENERATED_BODY()
 
@@ -16,20 +16,18 @@ class ENHANCEDCODEFLOW_API UECFWaitUntil : public UECFCoroutineActionBase
 
 protected:
 
-	TUniqueFunction<bool(float)> Predicate;
-	TUniqueFunction<bool()> Predicate_NoDeltaTime;
+	bool* bFlag = nullptr;
 	float TimeOut = 0.f;
 	float OriginTimeOut = 0.f;
 	bool bWithTimeOut = false;
 	bool bTimedOut = false;
 
-	bool Setup(TUniqueFunction<bool(float)>&& InPredicate, float InTimeOut)
+	bool Setup(bool* bInFlag, float InTimeOut)
 	{
-		Predicate = MoveTemp(InPredicate);
-
-		if (Predicate)
+		bFlag = bInFlag;
+		if (bFlag)
 		{
-			if (Predicate(0.f))
+			if (*bFlag)
 			{
 				// Coroutine will resume after Setup has failed
 				return false;
@@ -51,26 +49,7 @@ protected:
 		else
 		{
 #if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF Coroutine [%s] - Wait Until failed to start. Are you sure the Predicate is set properly?"), *Settings.Label);
-#endif
-			return false;
-		}
-	}
-
-	bool Setup(TUniqueFunction<bool()>&& InPredicate, float InTimeOut)
-	{
-		Predicate_NoDeltaTime = MoveTemp(InPredicate);
-		if (Predicate_NoDeltaTime)
-		{
-			return Setup([this](float DeltaTime)
-			{
-				return Predicate_NoDeltaTime();
-			}, InTimeOut);
-		}
-		else
-		{
-#if ECF_LOGS
-			UE_LOG(LogECF, Error, TEXT("ECF Coroutine [%s] - Wait Until failed to start. Are you sure the Predicate is set properly?"), *Settings.Label);
+			UE_LOG(LogECF, Error, TEXT("ECF Coroutine [%s] - Wait For Flag failed to start. Are you sure the Flag is set properly?"), *Settings.Label);
 #endif
 			return false;
 		}
@@ -88,11 +67,11 @@ protected:
 	void Tick(float DeltaTime) override
 	{
 #if STATS
-		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("WaitUntil - Tick"), STAT_ECFDETAILS_WAITUNTIL, STATGROUP_ECFDETAILS);
+		DECLARE_SCOPE_CYCLE_COUNTER(TEXT("WaitForFlag - Tick"), STAT_ECFDETAILS_WAITFORFLAG, STATGROUP_ECFDETAILS);
 #endif
 
 #if ECF_INSIGHT_PROFILING
-		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - WaitUntil Tick");
+		TRACE_CPUPROFILER_EVENT_SCOPE("ECF - WaitForFlag Tick");
 #endif
 
 		if (bWithTimeOut)
@@ -107,7 +86,7 @@ protected:
 			}
 		}
 
-		if (Predicate(DeltaTime))
+		if (bFlag && *bFlag)
 		{
 			MarkAsFinished();
 			Complete(false);

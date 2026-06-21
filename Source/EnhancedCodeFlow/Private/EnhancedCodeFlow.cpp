@@ -3,6 +3,7 @@
 #include "EnhancedCodeFlow.h"
 #include "ECFSubsystem.h"
 #include "ECFActionsHeader.h"
+#include "ECFActionsHeaderCoroutine.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 
@@ -49,6 +50,18 @@ UECFActionBase* FEnhancedCodeFlow::GetActionFromHandle(const UObject* WorldConte
 	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
 		return ECF->FindAction(Handle);
 	return nullptr;
+}
+
+FString FEnhancedCodeFlow::GetActionLabelFromHandle(const UObject* WorldContextObject, const FECFHandle& Handle)
+{
+	if (UECFSubsystem* ECF = UECFSubsystem::Get(WorldContextObject))
+	{
+		if (UECFActionBase* FoundAction = ECF->FindAction(Handle))
+		{
+			return FoundAction->GetLabel();
+		}
+	}
+	return TEXT("");
 }
 
 UECFActionBase* FEnhancedCodeFlow::GetActionFromInstancedId(const UObject* WorldContextObject, const FECFInstanceId& InstancedId)
@@ -646,6 +659,13 @@ void FEnhancedCodeFlow::RemoveAllWaitUntil(const UObject* WorldContextObject, bo
 		ECF->RemoveActionsOfClass<UECFWaitUntil>(bComplete, InOwner);
 }
 
+/*^^^ Wait For Flag (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFCoroutineAwaiter_WaitForFlag FEnhancedCodeFlow::WaitForFlag(const UObject* InOwner, bool* bInFlag, float InTimeOut /*= 0.f*/, const FECFActionSettings& Settings /*= {}*/)
+{
+	return FECFCoroutineAwaiter_WaitForFlag(InOwner, Settings, bInFlag, InTimeOut);
+}
+
 /*^^^ Run Async And Wait (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 FECFCoroutineAwaiter_RunAsyncAndWait FEnhancedCodeFlow::RunAsyncAndWait(const UObject* InOwner, TUniqueFunction<void()>&& InAsyncTaskFunc, float InTimeOut, EECFAsyncPrio InThreadPriority, const FECFActionSettings& Settings)
@@ -664,6 +684,18 @@ void FEnhancedCodeFlow::RemoveAllRunAsyncAndWait(const UObject* WorldContextObje
 FECFCoroutineAwaiter_WaitLoadObjects FEnhancedCodeFlow::WaitLoadObjects(const UObject* InOwner, const TArray<FSoftObjectPath>& InObjectsToLoad, const FECFActionSettings& Settings)
 {
 	return FECFCoroutineAwaiter_WaitLoadObjects(InOwner, Settings, InObjectsToLoad);
+}
+
+FECFCoroutineAwaiter_WaitLoadObjects FEnhancedCodeFlow::WaitLoadObjects(const UObject* InOwner, const TArray<FPrimaryAssetId>& InPrimaryAssetsToLoad, const FECFActionSettings& Settings /*= {}*/)
+{
+	return FECFCoroutineAwaiter_WaitLoadObjects(InOwner, Settings, InPrimaryAssetsToLoad);
+}
+
+/*^^^ Loop And Wait (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFCoroutineAwaiter_LoopAndWait FEnhancedCodeFlow::LoopAndWait(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, float InTimeOut, const FECFActionSettings& Settings /*= {}*/)
+{
+	return FECFCoroutineAwaiter_LoopAndWait(InOwner, Settings, MoveTemp(InPredicate), MoveTemp(InTickFunc), InTimeOut);
 }
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION
