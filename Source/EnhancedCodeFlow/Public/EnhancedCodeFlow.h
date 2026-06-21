@@ -78,6 +78,11 @@ public:
 	static UECFActionBase* GetActionFromHandle(const UObject* WorldContextObject, const FECFHandle& Handle);
 
 	/**
+	 * Returns the label to the Action. Use it mostly for debugging purposes.
+	 */
+	static FString GetActionLabelFromHandle(const UObject* WorldContextObject, const FECFHandle& Handle);
+
+	/**
 	 * Returns the popinter to the Instanced Action. Use it mostly for debugging purposes.
 	 */
 	static UECFActionBase* GetActionFromInstancedId(const UObject* WorldContextObject, const FECFInstanceId& InstancedId);
@@ -622,6 +627,16 @@ public:
 	[[deprecated("Function deprecated. Use StopAllActionsOfClass<UECFWaitUntil> instead.")]]
 	static void RemoveAllWaitUntil(const UObject* WorldContextObject, bool bComplete = false, UObject* InOwner = nullptr);
 
+	/*^^^ Wait For Flag (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Suspends running coroutine function until the given flag won't return true.
+	 * @param InFlag				- a pointer to a boolean flag that decides if the suspended function should be resumed.	
+	 * @param InTimeOut				- if greater than 0.f it will apply timeout to this action. After this timeout the suspended function will be resumed.
+	 * @param Settings [optional]	- an extra settings to apply to this action.
+	 */
+	static FECFCoroutineAwaiter_WaitForFlag WaitForFlag(const UObject* InOwner, bool* bInFlag, float InTimeOut = 0.f, const FECFActionSettings& Settings = {});
+
 	/*^^^ Run Async And Wait (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 	
 	/**
@@ -653,6 +668,13 @@ public:
 	static FECFCoroutineAwaiter_WaitLoadObjects WaitLoadObjects(const UObject* InOwner, const TArray<FSoftObjectPath>& InObjectsToLoad, const FECFActionSettings& Settings = {});
 
 	/**
+	 * Suspends running coroutine function until all primary assets are loaded.
+	 * @param InPrimaryAssetsToLoad	- an array of primary asset IDs to load.
+	 * @param Settings [optional]	- an extra settings to apply to this action.
+	 */
+	static FECFCoroutineAwaiter_WaitLoadObjects WaitLoadObjects(const UObject* InOwner, const TArray<FPrimaryAssetId>& InPrimaryAssetsToLoad, const FECFActionSettings& Settings = {});
+
+	/**
 	 * Utility function for converting an array of soft pointers to an array of soft object paths.
 	 */
 	template<CIsSoftPtrType T>
@@ -668,6 +690,18 @@ public:
 		}
 		return Paths;
 	}
+
+	/*^^^ Loop And Wait (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Suspends running coroutine function until the given predicate won't return true.
+	 * @param InPredicate			- a function that decides if the suspended function should be resumed.
+	 *								  If it returns true it means the suspended function must be resumed. Must be: []() -> bool
+	 * @param InTickFunc			- a ticking function that will be called every tick while waiting. Must be: [](float DeltaTime) -> void
+	 * @param InTimeOut				- if greater than 0.f it will apply timeout to this action. After this timeout the suspended function will be resumed.
+	 * @param Settings [optional]	- an extra settings to apply to this action.
+	 */
+	static FECFCoroutineAwaiter_LoopAndWait LoopAndWait(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, float InTimeOut = 0.f, const FECFActionSettings& Settings = {});
 };
 
 using FFlow = FEnhancedCodeFlow;

@@ -49,6 +49,11 @@ TArray<FECFHandleBP> UECFBPLibrary::GetActionsHandlesByLabel(const UObject* Worl
 	return ResultBP;
 }
 
+FString UECFBPLibrary::GetActionLabelFromHandle(const UObject* WorldContextObject, const FECFHandleBP& Handle)
+{
+	return FFlow::GetActionLabelFromHandle(WorldContextObject, Handle.Handle);
+}
+
 void UECFBPLibrary::ECFPauseAction(const UObject* WorldContextObject, const FECFHandleBP& Handle)
 {
 	FFlow::PauseAction(WorldContextObject, Handle.Handle);
