@@ -3,6 +3,7 @@
 #include "EnhancedCodeFlow.h"
 #include "ECFSubsystem.h"
 #include "ECFActionsHeader.h"
+#include "ECFActionsHeaderCoroutine.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 
@@ -57,7 +58,7 @@ FString FEnhancedCodeFlow::GetActionLabelFromHandle(const UObject* WorldContextO
 	{
 		if (UECFActionBase* FoundAction = ECF->FindAction(Handle))
 		{
-			return  FoundAction->GetLabel();
+			return FoundAction->GetLabel();
 		}
 	}
 	return TEXT("");
@@ -688,6 +689,13 @@ FECFCoroutineAwaiter_WaitLoadObjects FEnhancedCodeFlow::WaitLoadObjects(const UO
 FECFCoroutineAwaiter_WaitLoadObjects FEnhancedCodeFlow::WaitLoadObjects(const UObject* InOwner, const TArray<FPrimaryAssetId>& InPrimaryAssetsToLoad, const FECFActionSettings& Settings /*= {}*/)
 {
 	return FECFCoroutineAwaiter_WaitLoadObjects(InOwner, Settings, InPrimaryAssetsToLoad);
+}
+
+/*^^^ Loop And Wait (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFCoroutineAwaiter_LoopAndWait FEnhancedCodeFlow::LoopAndWait(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, float InTimeOut, const FECFActionSettings& Settings /*= {}*/)
+{
+	return FECFCoroutineAwaiter_LoopAndWait(InOwner, Settings, MoveTemp(InPredicate), MoveTemp(InTickFunc), InTimeOut);
 }
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION

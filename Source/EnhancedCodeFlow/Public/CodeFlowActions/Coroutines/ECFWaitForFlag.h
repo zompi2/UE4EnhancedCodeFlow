@@ -29,7 +29,7 @@ protected:
 		{
 			if (*bFlag)
 			{
-				CoroutineHandle.resume();
+				// Coroutine will resume after Setup has failed
 				return false;
 			}
 			if (InTimeOut > 0.f)

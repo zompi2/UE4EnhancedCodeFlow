@@ -1,13 +1,7 @@
 // Copyright (c) 2026 Damian Nowakowski. All rights reserved.
 
 #include "Coroutines/ECFCoroutineAwaiters.h"
-
-#include "CodeFlowActions/Coroutines/ECFWaitSeconds.h"
-#include "CodeFlowActions/Coroutines/ECFWaitTicks.h"
-#include "CodeFlowActions/Coroutines/ECFWaitUntil.h"
-#include "CodeFlowActions/Coroutines/ECFWaitForFlag.h"
-#include "CodeFlowActions/Coroutines/ECFRunAsyncAndWait.h"
-#include "CodeFlowActions/Coroutines/ECFWaitLoadObjects.h"
+#include "ECFActionsHeaderCoroutine.h"
 
 ECF_PRAGMA_DISABLE_OPTIMIZATION
 
@@ -141,6 +135,22 @@ void FECFCoroutineAwaiter_WaitLoadObjects::await_suspend(FECFCoroutineHandle InC
 		// If no objects or primary assets to load, we can immediately resume the coroutine, so it won't stuck in a suspended state.
 		InCoroHandle.resume();
 	}
+}
+
+/*^^^ Wait And Loop Coroutine Awaiter ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+FECFCoroutineAwaiter_LoopAndWait::FECFCoroutineAwaiter_LoopAndWait(const UObject* InOwner, const FECFActionSettings& InSettings, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, float InTimeOut)
+{
+	Owner = InOwner;
+	Settings = InSettings;
+	Predicate = MoveTemp(InPredicate);
+	TickFunc = MoveTemp(InTickFunc);
+	TimeOut = InTimeOut;
+}
+
+void FECFCoroutineAwaiter_LoopAndWait::await_suspend(FECFCoroutineHandle InCoroHandle)
+{
+	AddCoroutineAction<UECFLoopAndWait>(Owner, InCoroHandle, Settings, MoveTemp(Predicate), MoveTemp(TickFunc), TimeOut);
 }
 
 ECF_PRAGMA_ENABLE_OPTIMIZATION

@@ -199,3 +199,31 @@ private:
 	TArray<FSoftObjectPath> ObjectsToLoad;
 	TArray<FPrimaryAssetId> PrimaryAssetsToLoad;
 };
+
+/*^^^ Wait And Loop Coroutine Awaiter ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+class ENHANCEDCODEFLOW_API FECFCoroutineAwaiter_LoopAndWait : public FECFCoroutineAwaiter
+{
+public:
+
+	// C-tor
+	FECFCoroutineAwaiter_LoopAndWait(const UObject* InOwner, const FECFActionSettings& InSettings, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, float InTimeOut);
+
+	// Called when the suspension begins
+	void await_suspend(FECFCoroutineHandle InCoroHandle);
+
+	// Returns the state of the corotuine after it's resumed.
+	FECFCoroutineAwaiter_ResultWithTimeout await_resume()
+	{
+		return FECFCoroutineAwaiter_ResultWithTimeout(
+			CoroHandle.promise().bStopped,
+			CoroHandle.promise().bTimedOut);
+	}
+
+private:
+
+	// Storing values in order to use them when await_suspend is called
+	TUniqueFunction<bool()> Predicate;
+	TUniqueFunction<void(float)> TickFunc;
+	float TimeOut = 0.f;
+};

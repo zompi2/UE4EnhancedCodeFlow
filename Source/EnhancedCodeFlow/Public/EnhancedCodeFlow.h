@@ -690,6 +690,18 @@ public:
 		}
 		return Paths;
 	}
+
+	/*^^^ Loop And Wait (Coroutine) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+	/**
+	 * Suspends running coroutine function until the given predicate won't return true.
+	 * @param InPredicate			- a function that decides if the suspended function should be resumed.
+	 *								  If it returns true it means the suspended function must be resumed. Must be: []() -> bool
+	 * @param InTickFunc			- a ticking function that will be called every tick while waiting. Must be: [](float DeltaTime) -> void
+	 * @param InTimeOut				- if greater than 0.f it will apply timeout to this action. After this timeout the suspended function will be resumed.
+	 * @param Settings [optional]	- an extra settings to apply to this action.
+	 */
+	static FECFCoroutineAwaiter_LoopAndWait LoopAndWait(const UObject* InOwner, TUniqueFunction<bool()>&& InPredicate, TUniqueFunction<void(float)>&& InTickFunc, float InTimeOut = 0.f, const FECFActionSettings& Settings = {});
 };
 
 using FFlow = FEnhancedCodeFlow;
