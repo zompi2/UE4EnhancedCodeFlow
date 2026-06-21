@@ -1,4 +1,3 @@
-<img width="368" height="286" alt="ecfsettomgs2" src="https://github.com/user-attachments/assets/33dbf68c-c563-40d1-8533-ac6a9e83d0ae" />
 # Enhanced Code Flow for Unreal Engine
 
 This code plugin provides functions that drastically improve the quality of life during the implementation of game flow in C++.  
@@ -700,7 +699,7 @@ FFlow::Delay(this, 2.f, [this]()
 }, ECF_IGNOREPAUSE);
 ```
 
-![sett](https://user-images.githubusercontent.com/7863125/180844848-3dc7106a-02af-421a-ab9e-4190ab3a4477.png)
+<img width="368" height="286" alt="ecfsettomgs2" src="https://github.com/user-attachments/assets/33dbf68c-c563-40d1-8533-ac6a9e83d0ae" />
 
 [Back to top](#table-of-content)
 
@@ -742,6 +741,8 @@ Coroutines doesn't have BP nodes as they are purely code feature.
 - [Wait Seconds](#wait-seconds)
 - [Wait Ticks](#wait-ticks)
 - [Wait Until](#wait-until)
+- [Wait For Flag](#wait-for-flag)
+- [Loop And Wait](#loop-and-wait)
 - [Run Async And Wait](#run-async-and-wait)
 - [Wait Load Objects](#wait-load-objects)
 - [Getting FECFHandle from FECFCoroutine](#getting-fecfhandle-from-fecfcoroutine)
@@ -809,6 +810,54 @@ FECFCoroutine UMyClass::SuspandableFunction()
 [Back to coroutines](#coroutines-experimental)  
 [Back to top](#table-of-content)
 
+#### Wait For Flag
+
+Suspends the coroutine until the given flag is set to true.  
+Coroutine returns `bStopped` bool informing if the Action has been prematurely terminated and `bTimedOut` informing if the Action reached it's time out.  
+Can be resetted. It resets the timeout.
+
+``` cpp
+bool bMyFlag = false; // This flag is set up somewhere
+FECFCoroutine UMyClass::SuspandableFunction()
+{
+  auto [bStopped, bTimedOut] = co_await FFlow::WaitForFlag(this, &bMyFlag, TimeOut);
+  // Do something after the bMyFlag is set to true. 
+}
+```
+
+[Back to coroutines](#coroutines-experimental)  
+[Back to top](#table-of-content)
+
+#### Loop And Wait
+
+Suspends the coroutine and runs a function in a loop. The coroutine is resumed once the predicate function returns true.  
+Coroutine returns `bStopped` bool informing if the Action has been prematurely terminated and `bTimedOut` informing if the Action reached it's time out.  
+Can be resetted. It resets the timeout.
+
+``` cpp
+bool bMyFlag = false; // This flag is set up somewhere
+FECFCoroutine UMyClass::SuspandableFunction()
+{
+  auto [bStopped, bTimedOut] = co_await FFlow::LoopAndWait(this,
+	[this]()
+	{
+		// Write your own predicate. 
+    // Return true when you want this action to continue.
+    return bIsRunning;
+	},
+	[this](float DeltaTime)
+	{
+    // Implement code to tick when predicate returns true.
+	}, TimeOut);
+  // Runs this part when we escape the LoopAndWait
+}
+```
+
+[Back to coroutines](#coroutines-experimental)  
+[Back to top](#table-of-content)
+
+LoopAndWait
+
 #### Run Async And Wait
 
 Runs the given block of code on a background thread and wait for it's completion before moving on.  
@@ -830,8 +879,8 @@ FECFCoroutine UMyClass::SuspandableFunction()
 
 #### Wait Load Objects
 
-Starts loading the list of soft objects and waits until they are all loaded.  
-You can convert the list of `TSoftObjectPtr` and `TSoftClassPtr` to the list of `FSoftObjectPath` using the `FFlow::ConvertSoftPtrToSoftPath` as described in [Load Objects Async](#load-objects-async).
+Starts loading the list of soft objects or list of Primary Asset Ids and waits until they are all loaded.  
+You can convert the list of `TSoftObjectPtr` and `TSoftClassPtr` to the list of `FSoftObjectPath` using the `FFlow::ConvertSoftPtrToSoftPath` as described in [Load Objects Async](#load-objects-async).  
 
 ``` cpp
 TArray<FSoftObjectPath> ObjectsToLoad;
@@ -840,6 +889,16 @@ FECFCoroutine UMyClass::SuspandableFunction()
   // Do something
   bool bStopped = co_await FFlow::WaitLoadObjects(this, ObjectsToLoad);
   // Do something after objects are loaded
+}
+```
+
+``` cpp
+TArray<FPrimaryAssetId> IdsToLoad;
+FECFCoroutine UMyClass::SuspandableFunction()
+{
+  // Do something
+  bool bStopped = co_await FFlow::WaitLoadObjects(this, IdsToLoad);
+  // Do something after assets are loaded
 }
 ```
 
