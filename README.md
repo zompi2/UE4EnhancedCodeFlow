@@ -9,7 +9,6 @@ It works very well with gameplay programming, UI programming with a lot of trans
 
 - [Plugin prebuilt binaries](#plugin-prebuilt-binaries)
 - [Other platforms support](#other-platforms-support)
-- [Example Project](#example-project)
 - [Used in...](#used-in)
 - [Contact](#contact)
 - [Support and Contribution](#support-and-contribution)
@@ -60,17 +59,6 @@ However, the coroutines requires at least the `NDK r26`, but the target can stil
 Feel free to test the source code on any platforms you can imagine :)  
 
 [Back to top](#table-of-content)  
-
-# Example Project
-
-The example project wich uses this plugin can be found in **[this repository](https://github.com/zompi2/UE4EnhancedCodeFlowExample)**. Example project is compatible with the newest version of the plugin only.
-
-> !!!IMPORTANT!!!  
-> Currently Example Project will work with **Unreal Engine 5**! The last version of the example project that can be run on UE4 can be found **[here](https://github.com/zompi2/UE4EnhancedCodeFlowExample/tree/Legacy-3.1.1)**. This is a legacy example project which works with ECF 3.1.1. It is not guaranteed that it will work with the newest version of ECF.
-
-![](ReadmeImgs/278105023-87bf7f3f-2db6-42d5-9195-208a401d84d9.png)
-
-[Back to top](#table-of-content)
 
 # Used In
 
@@ -126,8 +114,6 @@ Version `1.6.1` can be found on a separate branch here: **[Legacy-1.6](https://g
 2. Add "EnhancedCodeFlow" entry to the `PublicDependencyModuleNames` list in your project's `.Build.cs` file.
 3. Enable the plugin in the Editor's Plugins manager (or by changing manually your project's `.uproject` file).
 4. If you want to use this plugin in your code add `#include "EnhancedCodeFlow.h` to the file in which you want to use the plugin.
-
-Check out the **[Example Project](https://github.com/zompi2/UE4EnhancedCodeFlowExample)** to see how the plugin is integrated into it.
 
 [Back to top](#table-of-content)
 
