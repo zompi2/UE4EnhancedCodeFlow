@@ -1,3 +1,6 @@
+###### 3.9.1
+* Fixed the engine version checks.
+
 ###### 3.9.0
 * LoopAndWait coroutine added, which works like WhileTrueExecute but in a form of a coroutine.
 * WaitLoadObjects variant for loading assets using FPrimaryAssetId list added. 
