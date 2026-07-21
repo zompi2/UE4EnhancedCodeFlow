@@ -29,7 +29,7 @@ public class EnhancedCodeFlow : ModuleRules
         bool bDisableOptimization = false;
         if (bDisableOptimization && (Target.Configuration != UnrealTargetConfiguration.Shipping))
         {
-            if (Target.Version.MajorVersion == 5 && Target.Version.MinorVersion >= 2)
+            if (Target.Version.MajorVersion == 6 || (Target.Version.MajorVersion == 5 && Target.Version.MinorVersion >= 2))
             {
                 PublicDefinitions.Add("ECF_PRAGMA_DISABLE_OPTIMIZATION=UE_DISABLE_OPTIMIZATION");
                 PublicDefinitions.Add("ECF_PRAGMA_ENABLE_OPTIMIZATION=UE_ENABLE_OPTIMIZATION");

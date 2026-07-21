@@ -48,7 +48,7 @@ void UECFActionBP::Activate()
 void UECFActionBP::ClearAsyncBPAction()
 {
 	SetReadyToDestroy();
-#if (ENGINE_MAJOR_VERSION == 5)
+#if (ENGINE_MAJOR_VERSION >= 5)
 	MarkAsGarbage();
 #else
 	MarkPendingKill();
