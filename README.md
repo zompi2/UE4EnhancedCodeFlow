@@ -68,7 +68,7 @@ The example project wich uses this plugin can be found in **[this repository](ht
 > !!!IMPORTANT!!!  
 > Currently Example Project will work with **Unreal Engine 5**! The last version of the example project that can be run on UE4 can be found **[here](https://github.com/zompi2/UE4EnhancedCodeFlowExample/tree/Legacy-3.1.1)**. This is a legacy example project which works with ECF 3.1.1. It is not guaranteed that it will work with the newest version of ECF.
 
-![Main](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/87bf7f3f-2db6-42d5-9195-208a401d84d9)
+![](ReadmeImgs/278105023-87bf7f3f-2db6-42d5-9195-208a401d84d9.png)
 
 [Back to top](#table-of-content)
 
@@ -172,7 +172,7 @@ FFlow::Delay(this, 2.f, [this](bool bStopped)
 });
 ```
 
-![Delay](https://user-images.githubusercontent.com/7863125/218276143-db9554f2-abb3-40a1-ad83-ad1132812bb7.png)
+![](ReadmeImgs/218276143-db9554f2-abb3-40a1-ad83-ad1132812bb7.png)
 
 **IMPORTANT** Neither the C++ and BP version of ECF-Delay DO NOT pause the code execution flow! They simply enqueue the Action to be executed after some time.  
 This means that tricks like Delay in Tick to run Tick at given intervals won't work. To achieve such result, use Action Handles to determine if the Delay code has already been executed.
@@ -208,7 +208,7 @@ FFlow::DelayTicks(this, 1, [this](bool bStopped)
 });
 ```
 
-![ecfticks](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/39d1b743-f373-435c-befc-290c90dd720c)
+![](ReadmeImgs/275323086-39d1b743-f373-435c-befc-290c90dd720c.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -270,7 +270,7 @@ FFlow::StopAction(this, TickerHandle);
 > Note 2: You can check if the ticker (or any other action) is running using **FFlow::IsActionRunning(TickerHandle)**  
 > Note 3: You can also run ticker infinitely by setting Ticking Time to -1
 
-![Ticker](https://user-images.githubusercontent.com/7863125/218276146-fe27c97e-911d-4af1-980e-54556efc4f08.png)
+![](ReadmeImgs/218276146-fe27c97e-911d-4af1-980e-54556efc4f08.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -301,7 +301,7 @@ FFlow::WaitAndExecute(this, [this](float DeltaTime)
 
 BP version of this function uses a `Predicate` function which controls when the `On Execution` pin will execute.
 
-![WaitAndExecute](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/882f7637-5f2a-4e7d-b0ef-093da3693a33)
+![](ReadmeImgs/274696921-882f7637-5f2a-4e7d-b0ef-093da3693a33.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -335,7 +335,7 @@ FFlow::WhileTrueExecute(this, [this]()
 
 BP version of this function uses a `Predicate` function which controls when the `On Execution` pin with `Delta Time` will execute.
 
-![WhileTrueExecute](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/999b064d-9ea9-4a15-9998-8c15bbd10ff0)
+![](ReadmeImgs/274696929-999b064d-9ea9-4a15-9998-8c15bbd10ff0.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -367,7 +367,7 @@ FFlow::RunAsyncThen(this, [this]()
 
 The BP node exists for this function, but have in mind that Unreal does not allow for many non-gamethread operations in Blueprints! Use this node with caution!
 
-![runathen](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/ff9c423e-7a8f-4c33-af6e-d860f3940d82)
+![](ReadmeImgs/309893959-ff9c423e-7a8f-4c33-af6e-d860f3940d82.jpg)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -406,7 +406,7 @@ FFlow::AddTimeline(this, 0.f, 1.f, 2.f, [this](float Value, float Time)
 EECFBlendFunc::ECFBlend_Linear, 2.f);
 ```
 
-![Timeline](https://user-images.githubusercontent.com/7863125/218276147-80928cc9-5455-4edd-bd7c-2f50ae819ca3.png)
+![](ReadmeImgs/218276147-80928cc9-5455-4edd-bd7c-2f50ae819ca3.png)
 
 #### Add timeline vector
 
@@ -424,7 +424,7 @@ FFlow::AddTimelineVector(this, FVector(0.f, 0.f, 0.f), FVector(1.f, 1.f, 1.f), 2
 EECFBlendFunc::ECFBlend_Linear, 2.f);
 ```
 
-![tlvec](https://github.com/user-attachments/assets/a98d8352-1fab-43fb-a15d-2cd9b1fbe0bd)
+![](ReadmeImgs/395887603-a98d8352-1fab-43fb-a15d-2cd9b1fbe0bd.jpg)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -446,7 +446,7 @@ FFlow::AddTimelineLinearColor(this, FLinearColor(0.f, 0.f, 0.f, 1.f), FLinearCol
 EECFBlendFunc::ECFBlend_Linear, 2.f);
 ```
 
-![tllc](https://github.com/user-attachments/assets/9555d519-8894-4c7e-a207-e58278abf97e)
+![](ReadmeImgs/395887605-9555d519-8894-4c7e-a207-e58278abf97e.jpg)
 
 #### Add custom timeline
 
@@ -464,7 +464,7 @@ FFlow::AddCustomTimeline(this, Curve, [this](float Value, float Time)
 });
 ```
 
-![CustomTimeline](https://user-images.githubusercontent.com/7863125/218276141-1168dd7d-24ab-43bd-901a-bedb3fb9664b.png)
+![](ReadmeImgs/218276141-1168dd7d-24ab-43bd-901a-bedb3fb9664b.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -485,7 +485,7 @@ FFlow::AddCustomTimelineVector(this, Curve, [this](FVector Value, float Time)
 });
 ```
 
-![ctlc](https://github.com/user-attachments/assets/08109d0f-112e-4664-ae4f-c5a7c59dedd4)
+![](ReadmeImgs/395887608-08109d0f-112e-4664-ae4f-c5a7c59dedd4.jpg)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -506,7 +506,7 @@ FFlow::AddCustomTimelineLinearColor(this, Curve, [this](FLinearColor Value, floa
 });
 ```
 
-![ctv](https://github.com/user-attachments/assets/e4b88d37-d3ee-4f5a-9b37-4f3ea83fe523)
+![](ReadmeImgs/395887607-e4b88d37-d3ee-4f5a-9b37-4f3ea83fe523.jpg)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -539,7 +539,7 @@ FFlow::LoadObjectsAsync(this, FFlow::ConvertSoftPtrToSoftPath(ActorsClassesToLoa
   // Code to run when loading has finished
 });
 ```
-![loadas](https://github.com/user-attachments/assets/af3d040a-c5f1-435f-8253-3b5a78d06d07)
+![](ReadmeImgs/565864586-af3d040a-c5f1-435f-8253-3b5a78d06d07.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -561,7 +561,7 @@ FFlow::TimeLock(this, 2.f, [this]()
 
 BP version of this function requires `InstanceId` too. The BP node will validate the `InstandeId` from the handler so it just need to be passed into it.
 
-![tlock1](https://user-images.githubusercontent.com/7863125/201354732-26bd20b3-f6b1-433e-8eef-19d0e6e4189d.png)
+![](ReadmeImgs/201354732-26bd20b3-f6b1-433e-8eef-19d0e6e4189d.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -623,7 +623,7 @@ FFlow::DoNoMoreThanXTime(this, [this]()
 
 BP version of this function requires `InstanceId` too. The BP node will validate the `InstandeId` from the handler so it just need to be passed into it.
 
-![donomor](https://user-images.githubusercontent.com/7863125/201354730-e444acc0-c327-48c1-b0f6-3d6cc5855362.png)
+![](ReadmeImgs/201354730-e444acc0-c327-48c1-b0f6-3d6cc5855362.png)
 
 [Back to actions list](#usage)  
 [Back to top](#table-of-content)
@@ -699,7 +699,7 @@ FFlow::Delay(this, 2.f, [this]()
 }, ECF_IGNOREPAUSE);
 ```
 
-<img width="368" height="286" alt="ecfsettomgs2" src="https://github.com/user-attachments/assets/33dbf68c-c563-40d1-8533-ac6a9e83d0ae" />
+![](ReadmeImgs/610858125-33dbf68c-c563-40d1-8533-ac6a9e83d0ae.png)
 
 [Back to top](#table-of-content)
 
@@ -719,7 +719,7 @@ FECFInstanceId::NewId();
 
 There is additional BP node which will validate an `InstanceId` if it is not valid. 
 
-![instid](https://user-images.githubusercontent.com/7863125/180844002-8741634d-7c7e-4407-9736-f73417b366c7.png)
+![](ReadmeImgs/180844002-8741634d-7c7e-4407-9736-f73417b366c7.png)
 
 [Back to top](#table-of-content)
 
@@ -938,7 +938,7 @@ To get running action's handles use one of the following functions:
 TArray<FECFHandle> Handles = FFlow::GetActionsHandlesByClass<UECFDelay>(GetWorld());
 ```
 
-<img width="335" height="121" alt="ecffindbyclass" src="https://github.com/user-attachments/assets/c0ed2205-8f6a-4c15-9282-3f21938d0af6" />
+![](ReadmeImgs/540166220-c0ed2205-8f6a-4c15-9282-3f21938d0af6.png)
 
 #### Get Actions Handles by Label
 
@@ -946,7 +946,7 @@ TArray<FECFHandle> Handles = FFlow::GetActionsHandlesByClass<UECFDelay>(GetWorld
 TArray<FECFHandle> Handles = FFlow::GetActionsHandlesByLabel<UECFDelay>(TEXT("MyLabel"));
 ```
 
-<img width="313" height="94" alt="ecffindbylabel" src="https://github.com/user-attachments/assets/5982c741-a064-4e02-a02b-72caa64f49cb" />
+![](ReadmeImgs/540166219-5982c741-a064-4e02-a02b-72caa64f49cb.png)
 
 #### Get Action Label from Handle
 
@@ -954,7 +954,7 @@ TArray<FECFHandle> Handles = FFlow::GetActionsHandlesByLabel<UECFDelay>(TEXT("My
 FString Label = FFlow::GetActionLabelFromHandle(Handle);
 ```
 
-<img width="288" height="93" alt="actionfromlabel" src="https://github.com/user-attachments/assets/31a74403-84b9-4c82-8316-3fb747678f96" />
+![](ReadmeImgs/610856730-31a74403-84b9-4c82-8316-3fb747678f96.png)
 
 [Back to top](#table-of-content)
 
@@ -972,7 +972,7 @@ bool bIsPaused;
 bool bIsRunning = FFlow::IsActionPaused(WorldContextObject, Handle, bIsPaused);
 ```
 
-![pauseas](https://user-images.githubusercontent.com/7863125/180850860-c6548e29-9678-4e22-b70d-f3c22cd74dc7.png)
+![](ReadmeImgs/180850860-c6548e29-9678-4e22-b70d-f3c22cd74dc7.png)
 
 ## Subsystem
 Whole Enhanced Code Subsystem can be paused and resumed as well.
@@ -983,7 +983,7 @@ FFlow::SetPause(GetWorld(), false); // Unpauses the whole ECF Subsystem
 FFlow::GetPause(GetWorld()); // Check if the whole ECF Subsystem is paused or not
 ```
 
-![pausesub](https://user-images.githubusercontent.com/7863125/180851156-863f90f2-07f1-4082-9c46-dd22944d4686.png)
+![](ReadmeImgs/180851156-863f90f2-07f1-4082-9c46-dd22944d4686.png)
 
 [Back to top](#table-of-content)
 
@@ -1016,7 +1016,7 @@ FFlow::StopAllActionsOfClass<UECFDelay>(GetWorld()); // <- stops all Delay actio
 FFlow::StopAllActionsWithLabel(GetWorld(), TEXT("MyLabel")); // <- stops all actions with "MyLabel" label
 ```
 
-<img width="1021" height="366" alt="ecfstopall" src="https://github.com/user-attachments/assets/64527bff-38f4-46a2-b8d7-9f1ebb905f8d" />
+![](ReadmeImgs/540171005-64527bff-38f4-46a2-b8d7-9f1ebb905f8d.png)
 
 You can also stop a specific Instanced action with the **`FECFInstanceId`**:
 
@@ -1025,7 +1025,7 @@ FFlow::StopInstancedAction(GetWorld(), InstanceId); // <- stops all actions with
 FFlow::StopInstancedAction(GetWorld(), InstanceId, true); // <- stops all actions with this InstanceId and launch their callbacks
 ```
 
-![stopinst](https://user-images.githubusercontent.com/7863125/180849970-246f8d85-33c0-406c-af23-da4cd9244019.png)
+![](ReadmeImgs/180849970-246f8d85-33c0-406c-af23-da4cd9244019.png)
 
 **IMPORTANT!** If you stop the action which handles a coroutine be aware that if you won't set `bComplete` to true, the suspended coroutine will never be resumed!
 
@@ -1046,7 +1046,7 @@ The function returns true if the Action has actually resetted. False if it didn'
 
 There is also a node to run this in Blueprints.  
 
-![resa](https://github.com/user-attachments/assets/59cc9a27-3223-449c-8bc5-799469362325)
+![](ReadmeImgs/559952147-59cc9a27-3223-449c-8bc5-799469362325.png)
 
 Coroutine Actions also can be resetted. To get their handle you must first get a Coroutine Handle from a suspendable function.
 
@@ -1076,7 +1076,7 @@ Returns the action time. It's not the CurrentTime, but the time value used by th
 const float CurrentTime = FFlow::GetActionTime(this, ActionHandle);
 ```
 
-![gettime](https://github.com/user-attachments/assets/9035f0f4-507b-4f4f-baab-343d575d42b3)
+![](ReadmeImgs/567403779-9035f0f4-507b-4f4f-baab-343d575d42b3.png)
 
 ## Set Action Time
 
@@ -1087,7 +1087,7 @@ const float NewTime = 0.f;
 const bool bTimeSet = FFlow::SetActionTime(this, DelayHandle, NewTime, false);
 ```
 
-![settime](https://github.com/user-attachments/assets/471415c6-b9f0-4126-b497-9d3309d67ff5)
+![](ReadmeImgs/567404030-471415c6-b9f0-4126-b497-9d3309d67ff5.png)
 
 [Back to top](#table-of-content)
 
@@ -1096,7 +1096,7 @@ const bool bTimeSet = FFlow::SetActionTime(this, DelayHandle, NewTime, false);
 ## Stats
 
 To measure plugin's performance you can use the stat command designed for it: `stat ecf`  
-![stat](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/ccd5ab03-d1b1-423a-837d-cdd828605508)
+![](ReadmeImgs/265197872-ccd5ab03-d1b1-423a-837d-cdd828605508.png)
 There are the following stats:  
 * Tick - the time in `ms` the plugin needs to perform one full update.  
 * Actions - the amount of actions that are currently running.
@@ -1110,7 +1110,7 @@ There are the following stats:
 
 You can also display more detailed plugin's performance info with `stat ecfdetails`. It will display the time needed by every type of action.
 
-![image](https://github.com/zompi2/UE4EnhancedCodeFlow/assets/7863125/98e13279-52ba-424f-9100-1e1405ed04f3)
+![](ReadmeImgs/266414459-98e13279-52ba-424f-9100-1e1405ed04f3.png)
 
 > Have in mind that custom tick intervals might alter the values of stats, especially the `CallCounts`.
 
@@ -1121,7 +1121,7 @@ It measures the overall time the plugin needs to perform one full update and the
 
 You can disable Unreal Insights traces for this plugin by setting `bEnableInsightProfiling` in `EnhancedCodeFlow.Build.cs` to `false`.
 
-![insight](https://github.com/user-attachments/assets/9fdf838a-722a-4e64-bfc9-bf7bc81cb1ea)
+![](ReadmeImgs/425863725-9fdf838a-722a-4e64-bfc9-bf7bc81cb1ea.jpg)
 
 [Back to top](#table-of-content)
 
