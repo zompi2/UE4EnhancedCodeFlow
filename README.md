@@ -3,8 +3,6 @@
 This code plugin provides functions that drastically improve the quality of life during the implementation of game flow in C++.  
 It works very well with gameplay programming, UI programming with a lot of transitions or in any other situation.
 
-> To use this plugin with Unreal Enngine 4.27 use the `ue4.27` branch.
-
 # Table of content
 
 - [Plugin prebuilt binaries](#plugin-prebuilt-binaries)
