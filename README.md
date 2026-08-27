@@ -8,8 +8,6 @@ It works very well with gameplay programming, UI programming with a lot of trans
 - [Plugin prebuilt binaries](#plugin-prebuilt-binaries)
 - [Other platforms support](#other-platforms-support)
 - [Used in...](#used-in)
-- [Contact](#contact)
-- [Support and Contribution](#support-and-contribution)
 - [Changelog](#changelog)
 - [LEGACY VERSIONS](#legacy-versions)
 
@@ -67,19 +65,6 @@ Enhanced Code Flow has been used in the following projects:
 - [The Neon Hook](https://zompi.itch.io/the-neon-hook)
 
 If you are using ECF in your project, let me know :)
-
-[Back to top](#table-of-content)
-
-# Contact
-
-If you have any question or suggestion regardles this plugin simply add an **Issue** to the github project. I will try my best to answer it quickly :) You can also write an e-mail to me: **zompi2@gmail.com**, however there is a risk that it will be filtered as spam.
-
-[Back to top](#table-of-content)
-
-# Support and Contribution
-
-This plugin is free and open source forever. However, if you want to show appretiation to my work any support will warm my heart.  
-If you have any suggestions on how to fix or improve this plugin feel free to create a Pull Request.  
 
 [Back to top](#table-of-content)
 
